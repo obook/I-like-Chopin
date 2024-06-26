@@ -1,0 +1,9 @@
+{
+    "files": [
+        "mainwindow.py",
+        "form.ui",
+        "midimain.py",
+        "settings.py",
+        "midi_numbers.py"
+    ]
+}

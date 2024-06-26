@@ -1,0 +1,30 @@
+digraph G {
+        fontname="Helvetica,Arial,sans-serif"
+        node [fontname="Helvetica,Arial,sans-serif"]
+        edge [fontname="Helvetica,Arial,sans-serif"]
+        /* layout=neato */
+
+        subgraph cluster_0 {
+                label = "Computer";
+                style=filled;
+                color=lightgrey;
+                node [style=filled,color=white];
+                ILC -> QSynth [label="Midi"]
+                {"Midi File"} -> ILC [label="Midi"]
+        }
+
+        subgraph cluster_1 {
+                label = "Physical";
+                style=filled;
+                color=lightgrey;
+                node [style=filled,color=white];
+                {"Midi Keyboard"} -> ILC [label="USB"]
+                color=grey
+        }
+
+
+        QSynth -> {"Sound Device"} [label="Audio"]
+
+        /* layout=neato */
+
+}
