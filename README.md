@@ -3,7 +3,7 @@ Funny program for play like Chopin.
 (tribute to Gazebo)
 
 <p align="center">
-    <img src="20240626_203609.png"  width="320">
+    <img src="20240626_203609.png"  width="420">
 </p>
 
 Is a very special midi player, use Python3, Mido midi library and Qt6.
