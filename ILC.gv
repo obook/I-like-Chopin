@@ -9,8 +9,8 @@ digraph G {
                 style=filled;
                 color=lightgrey;
                 node [style=filled,color=white];
-                ILC -> QSynth [label="Midi"]
-                {"Midi File"} -> ILC [label="Midi"]
+                ILC -> QSynth [label="Correct Key"]
+                {"Midi File"} -> ILC [label="MIDI"]
         }
 
         subgraph cluster_1 {
@@ -18,13 +18,14 @@ digraph G {
                 style=filled;
                 color=lightgrey;
                 node [style=filled,color=white];
-                {"Midi Keyboard"} -> ILC [label="USB"]
+                {"Midi Keyboard"} -> ILC [label="Any Key"]
                 color=grey
         }
 
 
         QSynth -> {"Sound Device"} [label="Audio"]
 
-        /* layout=neato */
+        "Sound Device" [shape=Msquare];
+
 
 }
