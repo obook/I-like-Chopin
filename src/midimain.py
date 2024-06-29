@@ -121,22 +121,19 @@ def ThreadPlayer(in_device, out_device, midifile, pParent): # pParent = QMainWin
     for msg in mido.MidiFile(midifile):
         time.sleep(msg.time)
 
-        # meta messages can't be send to ports
-        # Play
-        try:
-            if not msg.is_meta :
-                if pParent.ChannelIsActive(msg.channel):
-                    outport.send(msg)
-        except:
-            print(f"exception msg={msg}")
-            pass
-
         # Pause ?
         if msg.type == 'note_on':
             while not keys['note_on']:
                time.sleep(msg.time)
-            # print("note_on")
-            # msg.time = 0;
+
+        # meta messages can't be send to ports
+        # Play
+        try:
+            if pParent.ChannelIsActive(msg.channel):
+                outport.send(msg)
+        except:
+            # print(f"exception msg={msg}")
+            pass
 
         # Stop ?
         if not keys['run']:
