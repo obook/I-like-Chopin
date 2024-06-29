@@ -120,6 +120,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Start.setEnabled(True)
         self.ui.pushButton_Stop.setEnabled(False)
         self.ShowDevices()
+        self.ui.statusbar.showMessage(u"Press any key on piano for stop...")
 
     def Timer(self):
         ThreadPlayerStatus, ThreadKeyBoardStatus = MidiStatus()
@@ -145,7 +146,7 @@ class MainWindow(QMainWindow):
             self.ui.InputDeviceCombo.setEnabled(True)
             self.ui.OutputDeviceCombo.setEnabled(True)
             self.ui.FileCombo.setEnabled(True)
-            self.ui.statusbar.showMessage(u"Ready.")
+            self.ui.statusbar.showMessage(u"Ready")
             self.bGlobalStatusRun = False
 
     def Quit(self):

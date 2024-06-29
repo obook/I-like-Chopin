@@ -8,6 +8,7 @@ import glob
 from threading import Thread
 import time
 from midi_numbers import number_to_note
+from mido import MidiFile
 
 outport = False
 inport = True # permet de quitter (sortir de la boucle) sans
@@ -118,6 +119,10 @@ def ThreadPlayer(in_device, out_device, midifile, pParent): # pParent = QMainWin
 
     keys['ThreadPlayer'] = True
 
+    midi = MidiFile(midifile)
+
+    print("Duration=", round(midi.length/60,2), "min")
+
     for msg in mido.MidiFile(midifile):
         time.sleep(msg.time)
 
@@ -130,9 +135,10 @@ def ThreadPlayer(in_device, out_device, midifile, pParent): # pParent = QMainWin
         # Play
         try:
             if pParent.ChannelIsActive(msg.channel):
+                #print("SEND", msg)
                 outport.send(msg)
         except:
-            # print(f"exception msg={msg}")
+            #print("NOTSEND", msg)
             pass
 
         # Stop ?
