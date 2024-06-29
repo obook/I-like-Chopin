@@ -10,7 +10,7 @@ pip3 install pyside6
 import sys
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
-from PySide6.QtCore import QTimer, QThread
+from PySide6.QtCore import QTimer
 from PySide6.QtGui import QIcon
 
 #from midi_numbers import number_to_note
@@ -23,53 +23,6 @@ from ui_form import Ui_MainWindow
 from threading import Thread
 from midimain import GetDevices, GetMidiFiles, ThreadPlayer, MidiStop, MidiStatus, MidiPanic
 from settings import GetInputDeviceId, SaveInputDeviceId, GetOutputDeviceId,SaveOutputDeviceId,GetmidifileId,SavemidifileId
-import time
-
-class FireAndForget(QThread):
-    bGlobalStatusRun = False
-
-    def __init__(self, max, sleep, label):
-        super().__init__()
-        self.label = label
-        self.max = max
-        self.sleep = sleep
-        print("FireAndForget __init__")
-
-    def run(self):
-        print("FireAndForget run")
-        '''
-        while True:
-            print("FireAndForget run")
-
-            ThreadPlayerStatus, ThreadKeyBoardStatus = MidiStatus()
-            if ThreadPlayerStatus or ThreadKeyBoardStatus: # All running
-                if self.bGlobalStatusRun == False :
-                    self.ui.pushButton_Quit.setEnabled(False)
-                    self.ui.pushButton_Start.setEnabled(False)
-                    self.ui.InputDeviceCombo.setEnabled(False)
-                    self.ui.OutputDeviceCombo.setEnabled(False)
-                    self.ui.FileCombo.setEnabled(False)
-                    self.bGlobalStatusRun = True
-            elif not ThreadPlayerStatus and not ThreadKeyBoardStatus: # All stopped
-                if self.bGlobalStatusRun == True:
-                    self.ui.pushButton_Quit.setEnabled(True)
-                    self.ui.pushButton_Start.setEnabled(True)
-                    self.ui.InputDeviceCombo.setEnabled(True)
-                    self.ui.OutputDeviceCombo.setEnabled(True)
-                    self.ui.FileCombo.setEnabled(True)
-                    self.ui.statusbar.showMessage(u"Ready.")
-                    self.bGlobalStatusRun = False
-            '''
-        time.sleep(3)
-
-    '''
-        print("FireAndForget run")
-        self.label.setText(f"{self.max} {self.sleep}")
-
-        for x in range(self.max):
-            self.label.text = f"Count {x}"
-            time.sleep(self.sleep)  # or use self.msleep(ms) as alternative
-    '''
 
 class MainWindow(QMainWindow):
     bGlobalStatusRun = False
@@ -80,18 +33,11 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
 
         self.ui = Ui_MainWindow()
-        # self.ui.setFixedSize(self.ui.sizeHint())
-        # self.ui.setWindowFlags(QMainWindow.Dialog | QMainWindow.MSWindowsFixedSizeDialogHint)
-        # vérrouille mais pas à la bonne taille
-        # self.setFixedSize(self.size())
-
-        # Ok
         self.setFixedSize(509,413)
-
         self.ui.setupUi(self)
 
-        # Wayland -> not implemented yet :
         # X.org -> correct
+        # Wayland -> not implemented yet :
         my_icon = QIcon()
         my_icon.addFile('dummy_piano_player.png')
         self.setWindowIcon(my_icon)
@@ -153,39 +99,6 @@ class MainWindow(QMainWindow):
         timer.timeout.connect(self.Timer)
         timer.start(3000) # Refesh Rate in milliseconds, problems with QSampler ?
 
-        '''
-        self.thread = QThread()
-        self.worker = Worker()
-        self.worker.moveToThread(self.thread)
-        # Connect signals and slots
-        self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-        #self.worker.progress.connect(self.reportProgress)
-        # Start the thread
-        self.thread.start()
-        # Final resets
-        #self.longRunningBtn.setEnabled(False)
-        self.thread.finished.connect(
-            #lambda: self.longRunningBtn.setEnabled(True)
-            lambda: print("SetEnabled(True)")
-        )
-        self.thread.finished.connect(
-            lambda: print("finished.connect")
-        )
-        '''
-
-        '''
-        self.ui.label1.setText("LABEL #1")
-        self.ui.label2.setText("LABEL #2")
-
-        self.t = FireAndForget(7, 1, self.ui.label1)
-        self.t2 = FireAndForget(50, .15, self.ui.label2)
-        self.t.run()
-        self.t2.run()
-        '''
-
     def Start(self):
         in_device = self.ui.InputDeviceCombo.currentText()
         out_device = self.ui.OutputDeviceCombo.currentText()
@@ -239,30 +152,8 @@ class MainWindow(QMainWindow):
         self.Stop()
         app.quit()
 
-    def Mode(self):
+    def Mode(self): # not used
         print("Mode")
-
-    def Led(self, iChannel,sStatus, notenum):
-        '''
-        # On a de zéro à ?
-        #
-        try:
-
-            note, octave = number_to_note(notenum)
-            # print("Channel ", iChannel, "status", sStatus,"note", notenum)
-            self.ui.statusbar.showMessage(f"CH{iChannel+1} {note}{octave}" )
-
-            # BOF self.ChannelButtonsList[iChannel].setChecked(True) # prend trop de temps, on loupe des notes du clavier
-
-            # Crash because come from other thread
-            if sStatus == 'note_on':
-                self.ChannelButtonsList[iChannel].setStyleSheet('QPushButton {color: red;}')
-            elif sStatus == 'note_off':
-                self.ChannelButtonsList[iChannel].setStyleSheet('QPushButton {color: normal;}')
-
-        except:
-            '''
-        pass
 
     def ChannelNone(self):
         for n in range(len(self.ChannelButtonsList)):
@@ -298,10 +189,7 @@ if __name__ == "__main__":
     else:
         app = QApplication.instance()
     widget = MainWindow()
-    widget.setWindowTitle("Dummy Piano Player")
-    print("desktopFileName=", app.desktopFileName())
-    app.setDesktopFileName("dummy_piano_player")
-    print("desktopFileName=", app.desktopFileName())
+    widget.setWindowTitle("I Like Chopin")
     widget.show()
     sys.exit(app.exec())
 

@@ -84,12 +84,6 @@ class Ui_MainWindow(object):
         self.pushButton_Panic = QPushButton(self.centralwidget)
         self.pushButton_Panic.setObjectName(u"pushButton_Panic")
         self.pushButton_Panic.setGeometry(QRect(220, 360, 97, 30))
-        self.label1 = QLabel(self.centralwidget)
-        self.label1.setObjectName(u"label1")
-        self.label1.setGeometry(QRect(42, 345, 71, 17))
-        self.label2 = QLabel(self.centralwidget)
-        self.label2.setObjectName(u"label2")
-        self.label2.setGeometry(QRect(398, 345, 71, 17))
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -116,7 +110,5 @@ class Ui_MainWindow(object):
         self.pushButton_ChannelFirst.setText(QCoreApplication.translate("MainWindow", u"First", None))
         self.pushButton_ChannelNone.setText(QCoreApplication.translate("MainWindow", u"None", None))
         self.pushButton_Panic.setText(QCoreApplication.translate("MainWindow", u"Panic", None))
-        self.label1.setText(QCoreApplication.translate("MainWindow", u"TextLabel 1", None))
-        self.label2.setText(QCoreApplication.translate("MainWindow", u"TextLabel 2", None))
     # retranslateUi
 
