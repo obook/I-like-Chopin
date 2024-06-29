@@ -26,10 +26,10 @@ def GetDevices():
 
     return Inputs, Outputs
 
-# List of midifiles from current path
+# List of midifiles from folder midi
 def GetMidiFiles():
     midifiles = []
-    for file in sorted(glob.glob("*.mid")):
+    for file in sorted(glob.glob("midi/*.mid")):
         midifiles.append(file)
     return midifiles
 
@@ -121,6 +121,23 @@ def ThreadPlayer(in_device, out_device, midifile, pParent): # pParent = QMainWin
     for msg in mido.MidiFile(midifile):
         time.sleep(msg.time)
 
+        # meta messages can't be send to ports
+        # Play
+        try:
+            if not msg.is_meta :
+                if pParent.ChannelIsActive(msg.channel):
+                    outport.send(msg)
+        except:
+            print(f"exception msg={msg}")
+            pass
+
+        # Pause ?
+        if msg.type == 'note_on':
+            while not keys['note_on']:
+               time.sleep(msg.time)
+            # print("note_on")
+            # msg.time = 0;
+
         # Stop ?
         if not keys['run']:
             print('ThreadPlayer closing port and stop.')
@@ -129,21 +146,12 @@ def ThreadPlayer(in_device, out_device, midifile, pParent): # pParent = QMainWin
             keys['ThreadPlayer'] = False
             return
 
-        # Pause ?
-        if msg.type == 'note_on':
-            while not keys['note_on']:
-               time.sleep(msg.time)
-
-        # meta messages can't be send to ports
-        # Play
-        if not msg.is_meta and pParent.ChannelIsActive(msg.channel):
-            outport.send(msg)
-
     # End of song
     keys['run'] = False
     keys['ThreadPlayer'] = False
     outport.panic()
     outport.close()
+    print("ThreadPlayer:Mdifile ended.")
 
 def MidiStop():
     keys['note_on'] = 1
