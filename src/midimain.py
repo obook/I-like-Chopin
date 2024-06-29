@@ -154,7 +154,7 @@ def ThreadPlayer(in_device, out_device, midifile, pParent): # pParent = QMainWin
     keys['ThreadPlayer'] = False
     outport.panic()
     outport.close()
-    print("ThreadPlayer:Mdifile ended.")
+    print("ThreadPlayer:Midifile ended.")
 
 def MidiStop():
     keys['note_on'] = 1
