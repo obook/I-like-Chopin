@@ -7,7 +7,7 @@ import mido
 import glob
 from threading import Thread
 import time
-from midi_numbers import number_to_note
+#from midi_numbers import number_to_note
 from mido import MidiFile
 
 outport = False
@@ -34,12 +34,17 @@ def GetMidiFiles():
         midifiles.append(file)
     return midifiles
 
+# ??
+def ThreadNote(pParent):
+    if keys['ThreadKeyBoard']:
+        pParent.Notes()
+        pass
+
 # Wait keys from keyboard
-def ThreadKeyBoard(in_device, keys):
+def ThreadKeyBoard(in_device, keys, pParent):
     global inport
 
     keys['ThreadKeyBoard'] = True
-
 
     # NON-BLOCKING
     inport = mido.open_input(in_device)
@@ -52,6 +57,7 @@ def ThreadKeyBoard(in_device, keys):
             return
 
         for key in inport.iter_pending():
+
             if key.type == 'note_on':
                 keys['note_on'] +=1
                 # Security ; press key C#4 (49) for pause
@@ -64,7 +70,9 @@ def ThreadKeyBoard(in_device, keys):
             if keys['note_on'] <0 : # rare, in case of missing key on
                 keys['note_on'] = 0
 
-            print(f"keys on:{keys['note_on']}\r", end="")
+
+            #print(f"keys on:{keys['note_on']}\r", end="")
+            pParent.PrintKeys(str(keys['note_on']))
 
             #if key.type == 'note_on' or key.type == 'note_off':
             #    note, octave = number_to_note(key.note)
@@ -107,6 +115,8 @@ def ThreadKeyBoard(in_device, keys):
 def ThreadPlayer(in_device, out_device, midifile, pParent): # pParent = QMainWindow
     global outport
 
+    print("ThreadPlayer")
+
     keys['run'] = True
     keys['note_on'] = 0
 
@@ -117,9 +127,6 @@ def ThreadPlayer(in_device, out_device, midifile, pParent): # pParent = QMainWin
         exit()
 
     print(f'Connected to "{out_device}"')
-
-    keyboard_thread = Thread(target=ThreadKeyBoard, args=(in_device, keys))
-    keyboard_thread.start()
 
     keys['ThreadPlayer'] = True
 
@@ -159,6 +166,13 @@ def ThreadPlayer(in_device, out_device, midifile, pParent): # pParent = QMainWin
     outport.panic()
     outport.close()
     print("ThreadPlayer:Midifile ended.")
+
+def MidiStart(in_device, out_device, midifile, pParent):
+    print("MidiStart")
+    player_thread = Thread(target=ThreadPlayer, args=(in_device, out_device, midifile,pParent))
+    player_thread.start()
+    keyboard_thread = Thread(target=ThreadKeyBoard, args=(in_device, keys, pParent))
+    keyboard_thread.start()
 
 def MidiStop():
     keys['note_on'] = 1

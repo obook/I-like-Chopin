@@ -8,9 +8,7 @@ pip3 install pyside6
 
 '''
 import sys
-
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
-from PySide6.QtCore import QTimer
 from PySide6.QtGui import QIcon
 
 #from midi_numbers import number_to_note
@@ -20,8 +18,7 @@ from PySide6.QtGui import QIcon
 #     pyside6-uic form.ui -o ui_form.py, or
 #     pyside2-uic form.ui -o ui_form.py
 from ui_form import Ui_MainWindow
-from threading import Thread
-from midimain import GetDevices, GetMidiFiles, ThreadPlayer, MidiStop, MidiStatus, MidiPanic
+from midimain import GetDevices, GetMidiFiles, MidiStart, MidiStop, MidiStatus, MidiPanic
 from settings import GetInputDeviceId, SaveInputDeviceId, GetOutputDeviceId,SaveOutputDeviceId,GetmidifileId,SavemidifileId
 
 class MainWindow(QMainWindow):
@@ -95,22 +92,23 @@ class MainWindow(QMainWindow):
 
         self.ChannelFirst()
 
-        timer = QTimer(self)
-        timer.timeout.connect(self.Timer)
-        timer.start(3000) # Refesh Rate in milliseconds, problems with QSampler ?
+        # Not used in non-blocking mode
+        # timer = QTimer(self)
+        # timer.timeout.connect(self.Timer)
+        # timer.start(3000) # Refesh Rate in milliseconds, problems with QSampler ?
 
     def Start(self):
-        in_device = self.ui.InputDeviceCombo.currentText()
-        out_device = self.ui.OutputDeviceCombo.currentText()
-        midifile = self.ui.FileCombo.currentText()
-
-        player_thread = Thread(target=ThreadPlayer, args=(in_device, out_device, midifile,self))
-        player_thread.start()
 
         self.ui.pushButton_Stop.setEnabled(True)
         self.ui.pushButton_Start.setEnabled(False)
         self.ui.pushButton_Quit.setEnabled(False)
         self.HideDevices()
+
+        in_device = self.ui.InputDeviceCombo.currentText()
+        out_device = self.ui.OutputDeviceCombo.currentText()
+        midifile = self.ui.FileCombo.currentText()
+
+        MidiStart(in_device, out_device, midifile, self)
 
     def Stop(self):
         MidiStop()
@@ -120,7 +118,8 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Start.setEnabled(True)
         self.ui.pushButton_Stop.setEnabled(False)
         self.ShowDevices()
-        self.ui.statusbar.showMessage(u"Press any key on piano for stop...")
+        # Only on blocking mode
+        # self.ui.statusbar.showMessage(u"Press any key on piano for stop...")
 
     def Timer(self):
         ThreadPlayerStatus, ThreadKeyBoardStatus = MidiStatus()
@@ -155,6 +154,9 @@ class MainWindow(QMainWindow):
 
     def Mode(self): # not used
         print("Mode")
+
+    def PrintKeys(self,n):
+        self.ui.statusbar.showMessage("Keys:"+str(n))
 
     def ChannelNone(self):
         for n in range(len(self.ChannelButtonsList)):
