@@ -40,7 +40,7 @@ def ThreadKeyBoard(in_device, keys):
 
     keys['ThreadKeyBoard'] = True
 
-    '''
+
     # NON-BLOCKING
     inport = mido.open_input(in_device)
     print(f'Wait keys from "{in_device}...')
@@ -52,9 +52,11 @@ def ThreadKeyBoard(in_device, keys):
             return
 
         for key in inport.iter_pending():
-            print(f"KEY = {key}")
             if key.type == 'note_on':
                 keys['note_on'] +=1
+                # Security ; press key C#4 (49) for pause
+                if key.note == 49 :
+                    keys['note_on'] = 0
 
             elif key.type == 'note_off':
                 keys['note_on'] -=1
@@ -62,11 +64,13 @@ def ThreadKeyBoard(in_device, keys):
             if keys['note_on'] <0 : # rare, in case of missing key on
                 keys['note_on'] = 0
 
+            print(f"keys on:{keys['note_on']}\r", end="")
+
             #if key.type == 'note_on' or key.type == 'note_off':
             #    note, octave = number_to_note(key.note)
             #    print(f"{key.type} {note}{octave} ({key.note}) [{keys['note_on']} keys on]")
-    '''
 
+    '''
     # BLOCKING
     try:
         with mido.open_input(in_device) as inport:
@@ -81,8 +85,8 @@ def ThreadKeyBoard(in_device, keys):
 
                 elif key.type == 'note_on':
                     keys['note_on'] +=1
-                    note, octave = number_to_note(key.note)
-                    print(f"{key.note}={note}{octave}")
+                    # note, octave = number_to_note(key.note)
+                    # print(f"{key.note}={note}{octave}")
                     # Security ; press key C#4 (49) for pause
                     if key.note == 49 :
                         keys['note_on'] = 0
@@ -93,10 +97,10 @@ def ThreadKeyBoard(in_device, keys):
                 if keys['note_on'] <0 : # rare, in case of missing key on
                     keys['note_on'] = 0
 
-                print(f"keys on:{keys['note_on']}")
+                print(f"keys on:{keys['note_on']}\r", end="")
     except:
         print(f'Error connect to input "{in_device}"')
-
+  '''
     keys['ThreadKeyBoard'] = False
 
 # Send midi to synth if keys from keyboard are on
