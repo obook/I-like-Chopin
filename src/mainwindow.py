@@ -18,7 +18,7 @@ from PySide6.QtGui import QIcon
 #     pyside6-uic form.ui -o ui_form.py, or
 #     pyside2-uic form.ui -o ui_form.py
 from ui_form import Ui_MainWindow
-from midimain import GetDevices, GetMidiFiles, MidiStart, MidiStop, MidiStatus, MidiPanic
+from midi_main import GetDevices, GetMidiFiles, MidiStart, MidiStop, MidiStatus, MidiPanic
 from settings import GetInputDeviceId, SaveInputDeviceId, GetOutputDeviceId,SaveOutputDeviceId,GetmidifileId,SavemidifileId
 
 class MainWindow(QMainWindow):

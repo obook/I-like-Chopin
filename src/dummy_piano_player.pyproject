@@ -2,8 +2,10 @@
     "files": [
         "mainwindow.py",
         "form.ui",
-        "midimain.py",
+        "midi_main.py",
         "settings.py",
-        "midi_numbers.py"
+        "midi_numbers.py",
+        "midi_keyboard.py",
+        "midi_player.py"
     ]
 }
