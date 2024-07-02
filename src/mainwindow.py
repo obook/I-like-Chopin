@@ -6,6 +6,13 @@ CapLinux:
 ! Passer par QTCreator ou (moins bien)
 pip3 install pyside6
 
+Windows
+-------
+pip uninstall rtmidi
+pip uninstall python-rtmidi
+pip install mido
+pip install python-rtmidi
+
 '''
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
