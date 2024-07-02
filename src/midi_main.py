@@ -5,10 +5,10 @@
 
 import mido
 import glob
-from threading import Thread
+from os import path
 #from midi_numbers import number_to_note
-from midi_keyboard import ThreadKeyBoard
-from midi_player import ThreadPlayer
+from midi_keyboard import MidiKeyboard
+from midi_player import MidiPlayer
 
 # wHAt?!
 outport = False
@@ -32,14 +32,16 @@ def GetDevices():
 def GetMidiFiles():
     midifiles = []
     for file in sorted(glob.glob("midi/*.mid")):
-        midifiles.append(file)
+        midifiles.append(path.splitext(path.basename(file))[0])
     return midifiles
 
 def MidiStart(in_device, out_device, midifile, pParent):
     print("MidiStart")
-    player_thread = Thread(target=ThreadPlayer, args=(out_device, midifile, keys, pParent))
+
+    player_thread = MidiPlayer(out_device, midifile, keys, pParent)
     player_thread.start()
-    keyboard_thread = Thread(target=ThreadKeyBoard, args=(in_device, keys, pParent))
+
+    keyboard_thread = MidiKeyboard(in_device, keys, pParent)
     keyboard_thread.start()
 
 def MidiStop():

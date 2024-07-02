@@ -115,7 +115,7 @@ class MainWindow(QMainWindow):
         out_device = self.ui.OutputDeviceCombo.currentText()
         midifile = self.ui.FileCombo.currentText()
 
-        MidiStart(in_device, out_device, midifile, self)
+        MidiStart(in_device, out_device, "midi/"+midifile+".mid", self)
 
     def Stop(self):
         MidiStop()

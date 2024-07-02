@@ -1,4 +1,3 @@
 PySide6
 mido
-rtmidi
-
+python-rtmidi

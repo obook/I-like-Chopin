@@ -5,58 +5,68 @@
 
 from mido import MidiFile, open_output
 import time
+from threading import Thread
 
 # Send midi to synth if keys from keyboard are on
-def ThreadPlayer(out_device, midifile,  keys, pParent): # pParent = QMainWindow
-    global outport
+class MidiPlayer( Thread ):
 
-    print("ThreadPlayer")
+    def __init__( self, out_device, midifile,  keys, pParent ):
+        Thread.__init__( self )
+        self.out_device = out_device
+        self.midifile = midifile
+        self.keys = keys
+        self.pParent = pParent
 
-    keys['run'] = True
-    keys['key_on'] = 0
+    def run( self ):
+        global outport
 
-    try:
-        outport = open_output(out_device)
-    except:
-        print(f'Error connect to output "{out_device}"')
-        exit()
+        print("ThreadPlayer")
 
-    print(f'Connected to "{out_device}"')
+        self.keys['run'] = True
+        self.keys['key_on'] = 0
 
-    keys['ThreadPlayer'] = True
-
-    midi = MidiFile(midifile)
-
-    print("Duration=", round(midi.length/60,2), "min")
-
-    for msg in MidiFile(midifile):
-        time.sleep(msg.time)
-
-        # Pause ?
-        if msg.type == 'note_on':
-            while not keys['key_on']:
-               time.sleep(msg.time)
-
-        # meta messages can't be send to ports
-        # Play
         try:
-            if pParent.ChannelIsActive(msg.channel):
-                outport.send(msg)
+            outport = open_output(self.out_device)
         except:
-            pass
+            print(f'Error connect to output "{self.out_device}"')
+            exit()
 
-        # Stop ?
-        if not keys['run']:
-            print('ThreadPlayer closing port and stop.')
-            outport.panic()
-            outport.close()
-            keys['ThreadPlayer'] = False
-            return
+        print(f'Connected to "{self.out_device}"')
 
-    # End of song
-    keys['run'] = False
-    keys['ThreadPlayer'] = False
-    outport.panic()
-    outport.close()
-    print("ThreadPlayer:Midifile ended.")
-    pParent.Stop()
+        self.keys['ThreadPlayer'] = True
+
+        midi = MidiFile(self.midifile)
+
+        print("Duration=", round(midi.length/60,2), "min")
+
+        for msg in MidiFile(self.midifile):
+            time.sleep(msg.time)
+
+            # Pause ?
+            if msg.type == 'note_on':
+                while not self.keys['key_on']:
+                   time.sleep(msg.time)
+
+            # meta messages can't be send to ports
+            # Play
+            try:
+                if self.pParent.ChannelIsActive(msg.channel):
+                    outport.send(msg)
+            except:
+                pass
+
+            # Stop ?
+            if not self.keys['run']:
+                print('ThreadPlayer closing port and stop.')
+                outport.panic()
+                outport.close()
+                self.keys['ThreadPlayer'] = False
+                return
+
+        # End of song
+        self.keys['run'] = False
+        self.keys['ThreadPlayer'] = False
+        outport.panic()
+        outport.close()
+        print("ThreadPlayer:Midifile ended.")
+        self.pParent.Stop()
