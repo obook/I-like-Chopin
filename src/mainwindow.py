@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
 
         self.ui = Ui_MainWindow()
-        self.setFixedSize(509,413)
+        self.setFixedSize(509,504)
         self.ui.setupUi(self)
 
         # X.org -> correct
@@ -101,6 +101,8 @@ class MainWindow(QMainWindow):
 
         self.ChannelFirst()
 
+        self.ui.textBrowser.append("Welcome")
+
     def Start(self):
 
         self.ui.pushButton_Stop.setEnabled(True)
@@ -154,6 +156,11 @@ class MainWindow(QMainWindow):
 
     def PrintKeys(self,n):
         self.ui.statusbar.showMessage("Keys:"+str(n))
+
+    def PrintBrowser(self, text):
+        # crash en sortie self.ui.textBrowser.insertPlainText(text)
+        # test self.ui.textBrowser.moveCursor(QTextCursor.End)
+        print(text)
 
     def ChannelNone(self):
         for n in range(len(self.ChannelButtonsList)):

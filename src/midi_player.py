@@ -1,4 +1,5 @@
-# This Python file uses the following encoding: utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 # if __name__ == "__main__":
 #     pass
@@ -16,28 +17,26 @@ class MidiPlayer( Thread ):
         self.midifile = midifile
         self.keys = keys
         self.pParent = pParent
+        self.outport = None
 
     def run( self ):
-        global outport
-
-        print("ThreadPlayer")
 
         self.keys['run'] = True
         self.keys['key_on'] = 0
 
         try:
-            outport = open_output(self.out_device)
+            self.outport = open_output(self.out_device)
         except:
-            print(f'Error connect to output "{self.out_device}"')
+            self.pParent.PrintBrowser(f"Error connect to output {self.out_device}")
             exit()
 
-        print(f'Connected to "{self.out_device}"')
+        self.pParent.PrintBrowser(f'MidiPlayer to [{self.out_device}]')
 
         self.keys['MidiPlayerRunning'] = True
 
         midi = MidiFile(self.midifile)
 
-        print("Duration=", round(midi.length/60,2), "min")
+        self.pParent.PrintBrowser(f"{self.midifile} = {round(midi.length/60,2)} minutes ")
 
         for msg in MidiFile(self.midifile):
             time.sleep(msg.time)
@@ -45,28 +44,32 @@ class MidiPlayer( Thread ):
             # Pause ?
             if msg.type == 'note_on':
                 while not self.keys['key_on']:
-                   time.sleep(msg.time)
+                    # Stop while pausing ?
+                    if not self.keys['run']:
+                        break
+                    time.sleep(msg.time)
 
-            # meta messages can't be send to ports
             # Play
-            try:
+            try: # meta messages can't be send to ports
                 if self.pParent.ChannelIsActive(msg.channel):
-                    outport.send(msg)
+                    self.outport.send(msg)
             except:
                 pass
 
-            # Stop ?
+            # Stop while running ?
             if not self.keys['run']:
-                print('MidiPlayer closing port and stop.')
-                outport.panic()
-                outport.close()
-                self.keys['MidiPlayerRunning'] = False
-                return
+                break
 
         # End of song
-        self.keys['run'] = False
-        self.keys['MidiPlayerRunning'] = False
-        outport.panic()
-        outport.close()
-        print("MidiPlayer:Midifile ended.")
+        self.Stop()
         self.pParent.Stop()
+
+    def Panic(self):
+            self.outport.panic()
+
+    def Stop(self):
+        self.pParent.PrintBrowser('MidiPlayer stop.')
+        self.outport.panic()
+        self.outport.close()
+        self.keys['MidiPlayerRunning'] = False
+

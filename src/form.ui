@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>509</width>
-    <height>413</height>
+    <height>504</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>360</y>
+      <y>450</y>
       <width>97</width>
       <height>30</height>
      </rect>
@@ -34,7 +34,7 @@
     <property name="geometry">
      <rect>
       <x>120</x>
-      <y>360</y>
+      <y>450</y>
       <width>97</width>
       <height>30</height>
      </rect>
@@ -47,7 +47,7 @@
     <property name="geometry">
      <rect>
       <x>384</x>
-      <y>360</y>
+      <y>450</y>
       <width>97</width>
       <height>30</height>
      </rect>
@@ -231,13 +231,26 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>360</y>
+      <y>450</y>
       <width>97</width>
       <height>30</height>
      </rect>
     </property>
     <property name="text">
      <string>Panic</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="textBrowser">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>350</y>
+      <width>461</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
    </widget>
   </widget>

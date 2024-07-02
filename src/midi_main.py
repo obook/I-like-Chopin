@@ -11,9 +11,8 @@ from os import path
 from midi_keyboard import MidiKeyboard
 from midi_player import MidiPlayer
 
-# wHAt?!
-outport = False
-inport = True # permet de quitter (sortir de la boucle) sans
+player_thread = None
+keyboard_thread = None
 
 keys={"key_on":0,'run':False,'MidiPlayerRunning':False,'MidiKeyboardRunning':False}
 
@@ -37,7 +36,8 @@ def GetMidiFiles():
     return midifiles
 
 def MidiStart(in_device, out_device, midifile, pParent):
-    print("MidiStart")
+
+    keys['key_on'] = 0
 
     player_thread = MidiPlayer(out_device, midifile, keys, pParent)
     player_thread.start()
@@ -46,14 +46,19 @@ def MidiStart(in_device, out_device, midifile, pParent):
     keyboard_thread.start()
 
 def MidiStop():
-    keys['key_on'] = 1 # get midifile first data
+    global player_thread
+    global keyboard_thread
+
+    keys['key_on'] = 0
     keys['run'] = False
+    player_thread = None
+    keyboard_thread = None
 
 def MidiStatus():
     return keys['MidiPlayerRunning'],keys['MidiKeyboardRunning']
 
 def MidiPanic():
     keys['key_on'] = 0
-    if outport :
-        outport.panic()
+    if player_thread :
+        player_thread.Panic()
 

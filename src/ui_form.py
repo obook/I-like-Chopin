@@ -17,25 +17,25 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QGroupBox,
     QLabel, QMainWindow, QPushButton, QSizePolicy,
-    QStatusBar, QWidget)
+    QStatusBar, QTextBrowser, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(509, 413)
+        MainWindow.resize(509, 504)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.pushButton_Start = QPushButton(self.centralwidget)
         self.pushButton_Start.setObjectName(u"pushButton_Start")
-        self.pushButton_Start.setGeometry(QRect(20, 360, 97, 30))
+        self.pushButton_Start.setGeometry(QRect(20, 450, 97, 30))
         self.pushButton_Stop = QPushButton(self.centralwidget)
         self.pushButton_Stop.setObjectName(u"pushButton_Stop")
-        self.pushButton_Stop.setGeometry(QRect(120, 360, 97, 30))
+        self.pushButton_Stop.setGeometry(QRect(120, 450, 97, 30))
         self.pushButton_Quit = QPushButton(self.centralwidget)
         self.pushButton_Quit.setObjectName(u"pushButton_Quit")
-        self.pushButton_Quit.setGeometry(QRect(384, 360, 97, 30))
+        self.pushButton_Quit.setGeometry(QRect(384, 450, 97, 30))
         self.groupBox = QGroupBox(self.centralwidget)
         self.groupBox.setObjectName(u"groupBox")
         self.groupBox.setGeometry(QRect(10, 0, 481, 201))
@@ -83,7 +83,11 @@ class Ui_MainWindow(object):
         self.pushButton_ChannelNone.setGeometry(QRect(375, 30, 97, 30))
         self.pushButton_Panic = QPushButton(self.centralwidget)
         self.pushButton_Panic.setObjectName(u"pushButton_Panic")
-        self.pushButton_Panic.setGeometry(QRect(220, 360, 97, 30))
+        self.pushButton_Panic.setGeometry(QRect(220, 450, 97, 30))
+        self.textBrowser = QTextBrowser(self.centralwidget)
+        self.textBrowser.setObjectName(u"textBrowser")
+        self.textBrowser.setGeometry(QRect(20, 350, 461, 91))
+        self.textBrowser.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")

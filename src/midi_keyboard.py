@@ -15,6 +15,7 @@ class MidiKeyboard( Thread ):
         self.in_device = in_device
         self.keys = keys
         self.pParent = pParent
+        self.inport = None
 
     def run( self ):
         global inport
@@ -22,16 +23,14 @@ class MidiKeyboard( Thread ):
         self.keys['MidiKeyboardRunning'] = True
 
         # NON-BLOCKING
-        inport = open_input(self.in_device)
-        print(f'Wait keys from "{self.in_device}...')
+        self.inport = open_input(self.in_device)
+        self.pParent.PrintBrowser(f'MidiKeyboard from [{self.in_device}]')
         while True: # non-blocking
-            if not self.keys['run']:
-                print('MidiKeyboard closing port and stop.')
-                inport.close()
-                self.keys['MidiKeyboardRunning'] = False
-                return
 
-            for key in inport.iter_pending():
+            if not self.keys['run']:
+                break
+
+            for key in self.inport.iter_pending():
 
                 if key.type == 'note_on':
                     self.keys['key_on'] +=1
@@ -56,14 +55,12 @@ class MidiKeyboard( Thread ):
         '''
         # BLOCKING
         try:
-            with open_input(self.in_device) as inport:
+            with open_input(self.in_device) as self.inport:
                 print(f'Wait keys from "{self.in_device}...')
-                for key in inport: # attente clavier
+                for key in self.inport: # attente clavier
 
                     if not self.keys['run']:
-                        print('MidiKeyboard closing port and stop.')
-                        inport.close()
-                        self.keys['MidiKeyboardRunning'] = False
+                        self.Stop()
                         return
 
                     elif key.type == 'note_on':
@@ -85,5 +82,12 @@ class MidiKeyboard( Thread ):
         except:
             print(f'Error connect to input "{self.in_device}"')
       '''
+
+        self.Stop()
+
+    def Stop(self):
+        self.pParent.PrintBrowser('MidiKeyboard stop.')
+        self.inport.close()
         self.keys['MidiKeyboardRunning'] = False
+
 
