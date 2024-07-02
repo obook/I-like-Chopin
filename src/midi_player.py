@@ -3,8 +3,7 @@
 # if __name__ == "__main__":
 #     pass
 
-import mido
-from mido import MidiFile
+from mido import MidiFile, open_output
 import time
 
 # Send midi to synth if keys from keyboard are on
@@ -14,10 +13,10 @@ def ThreadPlayer(out_device, midifile,  keys, pParent): # pParent = QMainWindow
     print("ThreadPlayer")
 
     keys['run'] = True
-    keys['note_on'] = 0
+    keys['key_on'] = 0
 
     try:
-        outport = mido.open_output(out_device)
+        outport = open_output(out_device)
     except:
         print(f'Error connect to output "{out_device}"')
         exit()
@@ -30,12 +29,12 @@ def ThreadPlayer(out_device, midifile,  keys, pParent): # pParent = QMainWindow
 
     print("Duration=", round(midi.length/60,2), "min")
 
-    for msg in mido.MidiFile(midifile):
+    for msg in MidiFile(midifile):
         time.sleep(msg.time)
 
         # Pause ?
         if msg.type == 'note_on':
-            while not keys['note_on']:
+            while not keys['key_on']:
                time.sleep(msg.time)
 
         # meta messages can't be send to ports
@@ -60,3 +59,4 @@ def ThreadPlayer(out_device, midifile,  keys, pParent): # pParent = QMainWindow
     outport.panic()
     outport.close()
     print("ThreadPlayer:Midifile ended.")
+    pParent.Stop()

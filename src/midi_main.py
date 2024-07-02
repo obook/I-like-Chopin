@@ -10,9 +10,11 @@ from threading import Thread
 from midi_keyboard import ThreadKeyBoard
 from midi_player import ThreadPlayer
 
+# wHAt?!
 outport = False
 inport = True # permet de quitter (sortir de la boucle) sans
-keys={"note_on":0,'run':False,'ThreadPlayer':False,'ThreadKeyBoard':False}
+
+keys={"key_on":0,'run':False,'ThreadPlayer':False,'ThreadKeyBoard':False}
 
 def GetDevices():
 
@@ -41,14 +43,14 @@ def MidiStart(in_device, out_device, midifile, pParent):
     keyboard_thread.start()
 
 def MidiStop():
-    keys['note_on'] = 1
+    keys['key_on'] = 1
     keys['run'] = False
 
 def MidiStatus():
     return keys['ThreadPlayer'],keys['ThreadKeyBoard']
 
 def MidiPanic():
-    keys['note_on'] = 0
+    keys['key_on'] = 0
     if outport :
         outport.panic()
 
