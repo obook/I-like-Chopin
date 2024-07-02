@@ -33,7 +33,7 @@ class MidiPlayer( Thread ):
 
         print(f'Connected to "{self.out_device}"')
 
-        self.keys['ThreadPlayer'] = True
+        self.keys['MidiPlayerRunning'] = True
 
         midi = MidiFile(self.midifile)
 
@@ -57,16 +57,16 @@ class MidiPlayer( Thread ):
 
             # Stop ?
             if not self.keys['run']:
-                print('ThreadPlayer closing port and stop.')
+                print('MidiPlayer closing port and stop.')
                 outport.panic()
                 outport.close()
-                self.keys['ThreadPlayer'] = False
+                self.keys['MidiPlayerRunning'] = False
                 return
 
         # End of song
         self.keys['run'] = False
-        self.keys['ThreadPlayer'] = False
+        self.keys['MidiPlayerRunning'] = False
         outport.panic()
         outport.close()
-        print("ThreadPlayer:Midifile ended.")
+        print("MidiPlayer:Midifile ended.")
         self.pParent.Stop()

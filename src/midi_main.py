@@ -1,4 +1,5 @@
-# This Python file uses the following encoding: utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 # if __name__ == "__main__":
 #     pass
@@ -14,7 +15,7 @@ from midi_player import MidiPlayer
 outport = False
 inport = True # permet de quitter (sortir de la boucle) sans
 
-keys={"key_on":0,'run':False,'ThreadPlayer':False,'ThreadKeyBoard':False}
+keys={"key_on":0,'run':False,'MidiPlayerRunning':False,'MidiKeyboardRunning':False}
 
 def GetDevices():
 
@@ -45,11 +46,11 @@ def MidiStart(in_device, out_device, midifile, pParent):
     keyboard_thread.start()
 
 def MidiStop():
-    keys['key_on'] = 1
+    keys['key_on'] = 1 # get midifile first data
     keys['run'] = False
 
 def MidiStatus():
-    return keys['ThreadPlayer'],keys['ThreadKeyBoard']
+    return keys['MidiPlayerRunning'],keys['MidiKeyboardRunning']
 
 def MidiPanic():
     keys['key_on'] = 0

@@ -1,4 +1,5 @@
-# This Python file uses the following encoding: utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 '''
 PySide6
 
@@ -13,19 +14,20 @@ pip uninstall python-rtmidi
 pip install mido
 pip install python-rtmidi
 
+Important but not user under QTCreator :
+You need to run the following command to generate the ui_form.py file
+pyside6-uic form.ui -o ui_form.py, or
+pyside2-uic form.ui -o ui_form.py
 '''
+
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from PySide6.QtGui import QIcon
-
 #from midi_numbers import number_to_note
 
-# Important but not user under QTCreator :
-# You need to run the following command to generate the ui_form.py file
-#     pyside6-uic form.ui -o ui_form.py, or
-#     pyside2-uic form.ui -o ui_form.py
+
 from ui_form import Ui_MainWindow
-from midi_main import GetDevices, GetMidiFiles, MidiStart, MidiStop, MidiStatus, MidiPanic
+from midi_main import GetDevices, GetMidiFiles, MidiStart, MidiStop, MidiPanic
 from settings import GetInputDeviceId, SaveInputDeviceId, GetOutputDeviceId,SaveOutputDeviceId,GetmidifileId,SavemidifileId
 
 class MainWindow(QMainWindow):
@@ -99,11 +101,6 @@ class MainWindow(QMainWindow):
 
         self.ChannelFirst()
 
-        # Not used in non-blocking mode
-        # timer = QTimer(self)
-        # timer.timeout.connect(self.Timer)
-        # timer.start(3000) # Refesh Rate in milliseconds, problems with QSampler ?
-
     def Start(self):
 
         self.ui.pushButton_Stop.setEnabled(True)
@@ -128,13 +125,6 @@ class MainWindow(QMainWindow):
         # Only on blocking mode
         # self.ui.statusbar.showMessage(u"Press any key on piano for stop...")
 
-    def Timer(self):
-        ThreadPlayerStatus, ThreadKeyBoardStatus = MidiStatus()
-        if ThreadPlayerStatus or ThreadKeyBoardStatus: # All running
-            self.HideDevices()
-        elif not ThreadPlayerStatus and not ThreadKeyBoardStatus: # All stopped
-            self.ShowDevices()
-
     def HideDevices(self):
         if self.bGlobalStatusRun == False :
             self.ui.pushButton_Quit.setEnabled(False)
@@ -142,7 +132,7 @@ class MainWindow(QMainWindow):
             self.ui.InputDeviceCombo.setEnabled(False)
             self.ui.OutputDeviceCombo.setEnabled(False)
             self.ui.FileCombo.setEnabled(False)
-            self.ui.statusbar.showMessage(u"Running...")
+            self.ui.statusbar.showMessage(u"Waiting:"+self.ui.InputDeviceCombo.currentText()+"...")
             self.bGlobalStatusRun = True
 
     def ShowDevices(self):

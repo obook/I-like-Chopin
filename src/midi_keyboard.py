@@ -1,4 +1,5 @@
-# This Python file uses the following encoding: utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 # if __name__ == "__main__":
 #     pass
@@ -18,16 +19,16 @@ class MidiKeyboard( Thread ):
     def run( self ):
         global inport
 
-        self.keys['ThreadKeyBoard'] = True
+        self.keys['MidiKeyboardRunning'] = True
 
         # NON-BLOCKING
         inport = open_input(self.in_device)
         print(f'Wait keys from "{self.in_device}...')
         while True: # non-blocking
             if not self.keys['run']:
-                print('ThreadKeyBoard closing port and stop.')
+                print('MidiKeyboard closing port and stop.')
                 inport.close()
-                self.keys['ThreadKeyBoard'] = False
+                self.keys['MidiKeyboardRunning'] = False
                 return
 
             for key in inport.iter_pending():
@@ -60,9 +61,9 @@ class MidiKeyboard( Thread ):
                 for key in inport: # attente clavier
 
                     if not self.keys['run']:
-                        print('ThreadKeyBoard closing port and stop.')
+                        print('MidiKeyboard closing port and stop.')
                         inport.close()
-                        self.keys['ThreadKeyBoard'] = False
+                        self.keys['MidiKeyboardRunning'] = False
                         return
 
                     elif key.type == 'note_on':
@@ -84,5 +85,5 @@ class MidiKeyboard( Thread ):
         except:
             print(f'Error connect to input "{self.in_device}"')
       '''
-        self.keys['ThreadKeyBoard'] = False
+        self.keys['MidiKeyboardRunning'] = False
 
