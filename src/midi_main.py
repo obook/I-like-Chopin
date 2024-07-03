@@ -11,54 +11,52 @@ from os import path
 from midi_keyboard import MidiKeyboard
 from midi_player import MidiPlayer
 
-player_thread = None
-keyboard_thread = None
-
-keys={"key_on":0,'run':False,'MidiPlayerRunning':False,'MidiKeyboardRunning':False}
-
-def GetDevices():
-
-    Inputs = []
-    Outputs = []
-
-    for i, port_name in enumerate(mido.get_output_names()):
-        Outputs.append(port_name)
-    for i, port_name in enumerate(mido.get_input_names()):
-        Inputs.append(port_name)
-
-    return Inputs, Outputs
-
-# List of midifiles from folder midi
-def GetMidiFiles():
-    midifiles = []
-    for file in sorted(glob.glob("midi/*.mid")):
-        midifiles.append(path.splitext(path.basename(file))[0])
-    return midifiles
-
-def MidiStart(in_device, out_device, midifile, pParent):
-
-    keys['key_on'] = 0
-
-    player_thread = MidiPlayer(out_device, midifile, keys, pParent)
-    player_thread.start()
-
-    keyboard_thread = MidiKeyboard(in_device, keys, pParent)
-    keyboard_thread.start()
-
-def MidiStop():
-    global player_thread
-    global keyboard_thread
-
-    keys['key_on'] = 0
-    keys['run'] = False
+class MidiMain():
     player_thread = None
     keyboard_thread = None
+    keys = None
 
-def MidiStatus():
-    return keys['MidiPlayerRunning'],keys['MidiKeyboardRunning']
+    def __init__( self, pParent ):
+        self.pParent = pParent
+        self.keys={"key_on":0,'run':False,'MidiPlayerRunning':False,'MidiKeyboardRunning':False}
 
-def MidiPanic():
-    keys['key_on'] = 0
-    if player_thread :
-        player_thread.Panic()
+    def GetDevices(self):
+        Inputs = []
+        Outputs = []
+        for i, port_name in enumerate(mido.get_output_names()):
+            Outputs.append(port_name)
+        for i, port_name in enumerate(mido.get_input_names()):
+            Inputs.append(port_name)
 
+        return Inputs, Outputs
+
+    # List of midifiles from folder midi
+    def GetMidiFiles(self):
+        midifiles = []
+        for file in sorted(glob.glob("midi/*.mid")):
+            midifiles.append(path.splitext(path.basename(file))[0])
+        return midifiles
+
+    def MidiStart(self, in_device, out_device, midifile, pParent):
+
+        self.keys['key_on'] = 0
+
+        self.player_thread = MidiPlayer(out_device, midifile, self.keys, pParent)
+        self.player_thread.start()
+
+        keyboard_thread = MidiKeyboard(in_device, self.keys, self.pParent)
+        keyboard_thread.start()
+
+    def MidiStop(self):
+        self.keys['key_on'] = 0
+        self.keys['run'] = False
+        self.player_thread = None
+        self.keyboard_thread = None
+
+    def MidiStatus(self):
+        return self.keys['MidiPlayerRunning'],self.keys['MidiKeyboardRunning']
+
+    def MidiPanic(self):
+        self.keys['key_on'] = 0
+        if self.player_thread :
+            self.player_thread.Panic()

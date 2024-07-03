@@ -6,6 +6,7 @@
         "settings.py",
         "midi_numbers.py",
         "midi_keyboard.py",
-        "midi_player.py"
+        "midi_player.py",
+        "logger.py"
     ]
 }

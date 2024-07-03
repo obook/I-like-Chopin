@@ -21,7 +21,7 @@ import json
 
 config = {"InputDeviceId": 0, "OutputDeviceId": 0, "Midifile":""}
 
-settingsfile = 'dummy_piano_player.json'
+settingsfile = 'i-like-chopin.json'
 
 def LoadConfig():
     global config

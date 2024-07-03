@@ -38,6 +38,9 @@ class MidiPlayer( Thread ):
 
         self.pParent.PrintBrowser(f"{self.midifile} = {round(midi.length/60,2)} minutes ")
 
+        for i, track in enumerate(midi.tracks):
+            self.pParent.PrintBrowser('Track {}: {}'.format(i, track.name))
+
         for msg in MidiFile(self.midifile):
             time.sleep(msg.time)
 

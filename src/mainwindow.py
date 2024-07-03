@@ -27,8 +27,9 @@ from PySide6.QtGui import QIcon
 
 
 from ui_form import Ui_MainWindow
-from midi_main import GetDevices, GetMidiFiles, MidiStart, MidiStop, MidiPanic
+from midi_main import MidiMain
 from settings import GetInputDeviceId, SaveInputDeviceId, GetOutputDeviceId,SaveOutputDeviceId,GetmidifileId,SavemidifileId
+from logger import QPlainTextEditLogger
 
 class MainWindow(QMainWindow):
     bGlobalStatusRun = False
@@ -38,6 +39,8 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
+        self.midi = MidiMain(self)
+
         self.ui = Ui_MainWindow()
         self.setFixedSize(509,504)
         self.ui.setupUi(self)
@@ -45,7 +48,7 @@ class MainWindow(QMainWindow):
         # X.org -> correct
         # Wayland -> not implemented yet :
         my_icon = QIcon()
-        my_icon.addFile('dummy_piano_player.png')
+        my_icon.addFile('i-like-chopin.png')
         self.setWindowIcon(my_icon)
 
         self.ui.pushButton_Start.clicked.connect(self.Start)
@@ -61,7 +64,7 @@ class MainWindow(QMainWindow):
 
         self.ui.pushButton_Stop.setEnabled(False)
 
-        Inputs, Outputs = GetDevices()
+        Inputs, Outputs = self.midi.GetDevices()
 
         self.ui.InputDeviceCombo.addItems(Inputs)
         try:
@@ -75,7 +78,7 @@ class MainWindow(QMainWindow):
         except:
             pass
 
-        MidiFiles = GetMidiFiles()
+        MidiFiles = self.midi.GetMidiFiles()
         self.ui.FileCombo.addItems(MidiFiles)
         try:
             self.ui.FileCombo.setCurrentIndex(GetmidifileId())
@@ -101,7 +104,11 @@ class MainWindow(QMainWindow):
 
         self.ChannelFirst()
 
-        self.ui.textBrowser.append("Welcome")
+        # self.ui.textBrowser.setAcceptRichText(False)
+        # self.ui.textBrowser.append("Welcome")
+
+        # log_handler = QPlainTextEditLogger(self)
+        # logging.getLogger().addHandler(log_handler)
 
     def Start(self):
 
@@ -114,10 +121,10 @@ class MainWindow(QMainWindow):
         out_device = self.ui.OutputDeviceCombo.currentText()
         midifile = self.ui.FileCombo.currentText()
 
-        MidiStart(in_device, out_device, "midi/"+midifile+".mid", self)
+        self.midi.MidiStart(in_device, out_device, "midi/"+midifile+".mid", self)
 
     def Stop(self):
-        MidiStop()
+        self.midi.MidiStop()
         SaveInputDeviceId(self.ui.InputDeviceCombo.currentIndex())
         SaveOutputDeviceId(self.ui.OutputDeviceCombo.currentIndex())
         SavemidifileId(self.ui.FileCombo.currentIndex())
@@ -158,8 +165,10 @@ class MainWindow(QMainWindow):
         self.ui.statusbar.showMessage("Keys:"+str(n))
 
     def PrintBrowser(self, text):
-        # crash en sortie self.ui.textBrowser.insertPlainText(text)
-        # test self.ui.textBrowser.moveCursor(QTextCursor.End)
+        # crash en sortie
+        # self.ui.textBrowser.insertPlainText(text)
+        # test
+        # self.ui.textBrowser.moveCursor(QTextCursor.End)
         print(text)
 
     def ChannelNone(self):
@@ -188,7 +197,7 @@ class MainWindow(QMainWindow):
         return(self.ChannelList[n])
 
     def Panic(self):
-        MidiPanic()
+        self.midi.MidiPanic()
 
 if __name__ == "__main__":
     if not QApplication.instance():
