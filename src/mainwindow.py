@@ -86,7 +86,7 @@ class MainWindow(QMainWindow):
         except:
             pass
 
-        self.ui.pushButton_Mode.setText(u"Midi Auto Player")
+        self.ui.pushButton_Mode.setText(u"AutoPlay")
 
         # grid
         grid = self.ui.gridLayout
@@ -142,6 +142,7 @@ class MainWindow(QMainWindow):
             self.ui.InputDeviceCombo.setEnabled(False)
             self.ui.OutputDeviceCombo.setEnabled(False)
             self.ui.FileCombo.setEnabled(False)
+            self.ui.pushButton_Mode.setEnabled(False)
             self.ui.statusbar.showMessage(u"Waiting:"+self.ui.InputDeviceCombo.currentText()+"...")
             self.bGlobalStatusRun = True
 
@@ -152,6 +153,7 @@ class MainWindow(QMainWindow):
             self.ui.InputDeviceCombo.setEnabled(True)
             self.ui.OutputDeviceCombo.setEnabled(True)
             self.ui.FileCombo.setEnabled(True)
+            self.ui.pushButton_Mode.setEnabled(True)
             self.ui.statusbar.showMessage(u"Ready")
             self.bGlobalStatusRun = False
 
@@ -162,12 +164,14 @@ class MainWindow(QMainWindow):
     def Mode(self): # not used
         if not self.bPassthrough:
             print("Passthrough ON")
+            self.ui.pushButton_Mode.setText("Passthrough")
             in_device = self.ui.InputDeviceCombo.currentText()
             out_device = self.ui.OutputDeviceCombo.currentText()
             self.midi.MidiPassthroughStart(in_device, out_device)
             self.bPassthrough = True
         else:
             print("Passthrough OFF")
+            self.ui.pushButton_Mode.setText("AutoPlay")
             self.midi.MidiPassthroughStop()
             self.bPassthrough = False
 
