@@ -10,10 +10,12 @@ from os import path
 #from midi_numbers import number_to_note
 from midi_keyboard import MidiKeyboard
 from midi_player import MidiPlayer
+from midi_passthrough import MidiPassthrough
 
 class MidiMain():
     player_thread = None
     keyboard_thread = None
+    passthrough_thread = None
     keys = None
 
     def __init__( self, pParent ):
@@ -39,7 +41,7 @@ class MidiMain():
 
     def MidiStart(self, in_device, out_device, midifile, pParent):
 
-        self.keys['key_on'] = 0
+        self.keys['key_on'] = 0 # 1 ?
 
         self.player_thread = MidiPlayer(out_device, midifile, self.keys, pParent)
         self.player_thread.start()
@@ -52,6 +54,15 @@ class MidiMain():
         self.keys['run'] = False
         self.player_thread = None
         self.keyboard_thread = None
+
+    def MidiPassthroughStart(self, in_device, out_device):
+        self.keys['run'] = True
+        self.passthrough_thread = MidiPassthrough(in_device, out_device, self.keys, self.pParent)
+        self.passthrough_thread.start()
+
+    def MidiPassthroughStop(self):
+        self.passthrough_thread.Stop()
+        self.keys['run'] = False
 
     def MidiStatus(self):
         return self.keys['MidiPlayerRunning'],self.keys['MidiKeyboardRunning']

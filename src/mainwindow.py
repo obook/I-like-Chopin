@@ -33,6 +33,7 @@ from settings import GetInputDeviceId, SaveInputDeviceId, GetOutputDeviceId,Save
 
 class MainWindow(QMainWindow):
     bGlobalStatusRun = False
+    bPassthrough = False
     ChannelButtonsList = []
     ChannelList = [False]*16
 
@@ -159,6 +160,17 @@ class MainWindow(QMainWindow):
         app.quit()
 
     def Mode(self): # not used
+        if not self.bPassthrough:
+            print("Passthrough ON")
+            in_device = self.ui.InputDeviceCombo.currentText()
+            out_device = self.ui.OutputDeviceCombo.currentText()
+            self.midi.MidiPassthroughStart(in_device, out_device)
+            self.bPassthrough = True
+        else:
+            print("Passthrough OFF")
+            self.midi.MidiPassthroughStop()
+            self.bPassthrough = False
+
         print("Mode")
 
     def PrintKeys(self,n):
