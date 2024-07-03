@@ -29,7 +29,7 @@ from PySide6.QtGui import QIcon
 from ui_form import Ui_MainWindow
 from midi_main import MidiMain
 from settings import GetInputDeviceId, SaveInputDeviceId, GetOutputDeviceId,SaveOutputDeviceId,GetmidifileId,SavemidifileId
-from logger import QPlainTextEditLogger
+#from logger import QPlainTextEditLogger
 
 class MainWindow(QMainWindow):
     bGlobalStatusRun = False
