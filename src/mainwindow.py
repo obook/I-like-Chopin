@@ -6,6 +6,9 @@ PySide6
 CapLinux:
 ! Passer par QTCreator ou (moins bien)
 pip3 install pyside6
+or
+pipx ensurepath
+pipx install pyside6 --include-deps
 
 Windows
 -------
