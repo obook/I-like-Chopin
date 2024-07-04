@@ -6,9 +6,12 @@ PySide6
 CapLinux:
 ! Passer par QTCreator ou (moins bien)
 pip3 install pyside6
-or
-pipx ensurepath
-pipx install pyside6 --include-deps
+
+or (24.04LTS)
+
+cd /usr/lib/python3.XX
+sudo rm EXTERNALLY-MANAGED
+pip3 install pyside6
 
 Windows
 -------
