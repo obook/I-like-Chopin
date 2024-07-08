@@ -74,14 +74,17 @@ class MainWindow(QMainWindow):
         Inputs, Outputs = self.midi.GetDevices()
 
         self.ui.InputDeviceCombo.addItems(Inputs)
+
         try:
             self.ui.InputDeviceCombo.setCurrentIndex(GetInputDeviceId())
+            self.ui.InputDeviceCombo.activated.connect(self.InputDeviceChanged)
         except:
             pass
 
         self.ui.OutputDeviceCombo.addItems(Outputs)
         try:
             self.ui.OutputDeviceCombo.setCurrentIndex(GetOutputDeviceId())
+            self.ui.OutputDeviceCombo.activated.connect(self.OuputDeviceChanged)
         except:
             pass
 
@@ -167,21 +170,24 @@ class MainWindow(QMainWindow):
         self.Stop()
         app.quit()
 
-    def Mode(self): # not used
+
+    def InputDeviceChanged(self):
+        print("InputDeviceChanged")
+
+    def OuputDeviceChanged(self):
+         print("OuputDeviceChanged")
+
+    def Mode(self):
         if not self.bPassthrough:
-            print("Passthrough ON")
             self.ui.pushButton_Mode.setText("Passthrough")
             in_device = self.ui.InputDeviceCombo.currentText()
             out_device = self.ui.OutputDeviceCombo.currentText()
             self.midi.MidiPassthroughStart(in_device, out_device)
             self.bPassthrough = True
         else:
-            print("Passthrough OFF")
             self.ui.pushButton_Mode.setText("AutoPlay")
             self.midi.MidiPassthroughStop()
             self.bPassthrough = False
-
-        print("Mode")
 
     def PrintKeys(self,n):
         self.ui.statusbar.showMessage("Keys:"+str(n))

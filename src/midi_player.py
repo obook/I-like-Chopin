@@ -27,8 +27,8 @@ class MidiPlayer( Thread ):
         try:
             self.outport = open_output(self.out_device)
         except:
-            self.pParent.PrintBrowser(f"Error connect to output {self.out_device}")
-            exit()
+            self.pParent.PrintBrowser(f"MidiPlayer:Error connect to {self.out_device}")
+            return
 
         self.pParent.PrintBrowser(f'MidiPlayer to [{self.out_device}]')
 
@@ -65,7 +65,7 @@ class MidiPlayer( Thread ):
 
         # End of song
         self.Stop()
-        self.pParent.Stop()
+
 
     def Panic(self):
             self.outport.panic()
@@ -75,4 +75,4 @@ class MidiPlayer( Thread ):
         self.outport.panic()
         self.outport.close()
         self.keys['MidiPlayerRunning'] = False
-
+        self.pParent.Stop()

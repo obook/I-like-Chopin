@@ -50,12 +50,6 @@ class MidiMain():
         keyboard_thread = MidiKeyboard(in_device, self.keys, self.pParent)
         keyboard_thread.start()
 
-    def MidiStop(self):
-        self.keys['key_on'] = 0
-        self.keys['run'] = False
-        self.player_thread = None
-        self.keyboard_thread = None
-
     def MidiPassthroughStart(self, in_device, out_device):
         self.keys['run'] = True
         self.passthrough_thread = MidiPassthrough(in_device, out_device, self.keys, self.pParent)
@@ -72,3 +66,20 @@ class MidiMain():
         self.keys['key_on'] = 0
         if self.player_thread :
             self.player_thread.Panic()
+
+    def MidiStop(self):
+        print("MidiStop")
+        self.keys['key_on'] = 0
+        self.keys['run'] = False
+
+        if self.player_thread:
+            self.player_thread.Stop
+            self.player_thread = None
+
+        if self.keyboard_thread :
+            self.keyboard_thread.Stop()
+            self.keyboard_thread = None
+
+        if self.passthrough_thread:
+            self.passthrough_thread.Stop()
+            self.passthrough_thread = None

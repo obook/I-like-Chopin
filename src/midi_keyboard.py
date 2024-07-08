@@ -23,8 +23,14 @@ class MidiKeyboard( Thread ):
         self.keys['MidiKeyboardRunning'] = True
 
         # NON-BLOCKING
-        self.inport = open_input(self.in_device)
+        try:
+            self.inport = open_input(self.in_device)
+        except:
+            self.pParent.PrintBrowser(f"MidiKeyboard:Error connect from {self.in_device}")
+            return
+
         self.pParent.PrintBrowser(f'MidiKeyboard from [{self.in_device}]')
+
         while True: # non-blocking
 
             if not self.keys['run']:
