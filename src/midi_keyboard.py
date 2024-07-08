@@ -43,6 +43,7 @@ class MidiKeyboard( Thread ):
                     # Security ; press key C#4 (49) for pause
                     if key.note == 49 :
                         self.keys['key_on'] = 0
+                        self.pParent.PrintBrowser("MidiKeyboard:reset to zero key")
 
                 elif key.type == 'note_off':
                     self.keys['key_on'] -=1
