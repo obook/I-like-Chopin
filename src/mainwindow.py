@@ -7,6 +7,12 @@ CapLinux:
 ! Passer par QTCreator ou (moins bien)
 pip3 install pyside6
 
+or (24.04LTS)
+
+cd /usr/lib/python3.XX
+sudo rm EXTERNALLY-MANAGED
+pip3 install pyside6
+
 Windows
 -------
 pip uninstall rtmidi
@@ -28,7 +34,7 @@ from PySide6.QtGui import QIcon
 
 from ui_form import Ui_MainWindow
 from midi_main import MidiMain
-from settings import GetInputDeviceId, SaveInputDeviceId, GetOutputDeviceId,SaveOutputDeviceId,GetmidifileId,SavemidifileId
+from settings import GetInputDeviceId, SaveInputDeviceId, GetOutputDeviceId,SaveOutputDeviceId,GetMidifileId,SaveMidifileId, GetMidiPath
 #from logger import QPlainTextEditLogger
 
 class MainWindow(QMainWindow):
@@ -82,7 +88,7 @@ class MainWindow(QMainWindow):
         MidiFiles = self.midi.GetMidiFiles()
         self.ui.FileCombo.addItems(MidiFiles)
         try:
-            self.ui.FileCombo.setCurrentIndex(GetmidifileId())
+            self.ui.FileCombo.setCurrentIndex(GetMidifileId())
         except:
             pass
 
@@ -122,13 +128,13 @@ class MainWindow(QMainWindow):
         out_device = self.ui.OutputDeviceCombo.currentText()
         midifile = self.ui.FileCombo.currentText()
 
-        self.midi.MidiStart(in_device, out_device, "midi/"+midifile+".mid", self)
+        self.midi.MidiStart(in_device, out_device, GetMidiPath()+"/"+midifile+".mid", self)
 
     def Stop(self):
         self.midi.MidiStop()
         SaveInputDeviceId(self.ui.InputDeviceCombo.currentIndex())
         SaveOutputDeviceId(self.ui.OutputDeviceCombo.currentIndex())
-        SavemidifileId(self.ui.FileCombo.currentIndex())
+        SaveMidifileId(self.ui.FileCombo.currentIndex())
         self.ui.pushButton_Start.setEnabled(True)
         self.ui.pushButton_Stop.setEnabled(False)
         self.ShowDevices()

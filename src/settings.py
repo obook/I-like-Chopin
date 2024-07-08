@@ -19,7 +19,7 @@ Projet NSI 2023-2024 Sainte-Marie Bastide/Bordeaux
 
 import json
 
-config = {"InputDeviceId": 0, "OutputDeviceId": 0, "Midifile":""}
+config = {"InputDeviceId": 0, "OutputDeviceId": 0, "Midifile":"", "MidiPath":"./midi"}
 
 settingsfile = 'i-like-chopin.json'
 
@@ -55,12 +55,18 @@ def SaveOutputDeviceId(n):
     config['OutputDeviceId'] = n
     return SaveConfig()
 
-def GetmidifileId():
+def GetMidifileId():
     LoadConfig()
     return config['Midifile']
 
-def SavemidifileId(n):
+def SaveMidifileId(n):
     config['Midifile'] = n
     return SaveConfig()
 
-    
+def GetMidiPath():
+    LoadConfig()
+    if not config.get('MidiPath'):
+        config['MidiPath'] = "./midi"
+        SaveConfig()
+    return config['MidiPath']
+
