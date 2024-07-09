@@ -18,7 +18,7 @@ class MidiKeyboard( Thread ):
         self.inport = None
 
     def run( self ):
-        global inport
+        # global inport
 
         self.keys['MidiKeyboardRunning'] = True
 
