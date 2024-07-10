@@ -6,7 +6,7 @@
 
 from mido import open_input
 from threading import Thread
-
+from  midi_numbers import number_to_note
 # Wait keys from keyboard
 class MidiKeyboard( Thread ):
 
@@ -46,15 +46,24 @@ class MidiKeyboard( Thread ):
 
 
         # print(f"keys on:{self.keys['key_on']}\r", end="")
-        self.pParent.PrintKeys(str(self.keys['key_on']))
+        if message.type == 'note_on' or message.type == 'note_off':
+            note, octave = number_to_note(message.note)
+            print=f" {note}{octave} ({message.note}) {message.type}"
+        else:
+            print=f" {message.type}"
 
-        #if key.type == 'key_on' or key.type == 'note_off':
-        #    note, octave = number_to_note(key.note)
+        self.pParent.PrintKeys(str(self.keys['key_on'])+print)
+
+        #
+        #    note, octave = number_to_note(message.note)
+        #    self.pParent.PrintKeys(f"{note}{octave} ({message.note}) [{self.keys['key_on']}]")
         #    print(f"{key.type} {note}{octave} ({key.note}) [{keys['key_on']} keys on]")
+        #    self.pParent.PrintKeys(f"{message.type} {note}{octave} ({message.note}) [{self.keys['key_on']} keys on]")
 
     def Stop(self):
-        # self.pParent.PrintBrowser('MidiKeyboard stop.')
+
         if self.inport :
+            self.pParent.PrintBrowser('MidiKeyboard stop')
             self.inport.close()
             self.inport = None
 

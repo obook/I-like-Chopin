@@ -72,7 +72,6 @@ class MidiMain():
             self.player_thread.Panic()
 
     def MidiStop(self):
-        print("MidiStop")
         self.keys['key_on'] = 0
         self.keys['run'] = False
 

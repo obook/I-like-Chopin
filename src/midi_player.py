@@ -71,11 +71,11 @@ class MidiPlayer( Thread ):
             self.outport.panic()
 
     def Stop(self):
-        self.pParent.PrintBrowser('MidiPlayer stop.')
 
         if self.outport:
+            self.pParent.PrintBrowser('MidiPlayer stop')
             self.outport.panic()
-            self.outport.close() # crash
+            self.outport.close()
             self.outport = None
 
         self.keys['MidiPlayerRunning'] = False
