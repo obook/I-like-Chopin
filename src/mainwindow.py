@@ -141,8 +141,6 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Start.setEnabled(True)
         self.ui.pushButton_Stop.setEnabled(False)
         self.ShowDevices()
-        # Only on blocking mode
-        # self.ui.statusbar.showMessage(u"Press any key on piano for stop...")
 
     def HideDevices(self):
         if self.bGlobalStatusRun == False :

@@ -10,6 +10,7 @@ from threading import Thread
 
 # Send midi to synth if keys from keyboard are on
 class MidiPlayer( Thread ):
+    outport = None
 
     def __init__( self, out_device, midifile,  keys, pParent ):
         Thread.__init__( self )
@@ -17,7 +18,6 @@ class MidiPlayer( Thread ):
         self.midifile = midifile
         self.keys = keys
         self.pParent = pParent
-        self.outport = None
 
     def run( self ):
 
@@ -26,11 +26,10 @@ class MidiPlayer( Thread ):
 
         try:
             self.outport = open_output(self.out_device)
+            self.pParent.PrintBrowser(f'MidiPlayer to [{self.out_device}]')
         except:
             self.pParent.PrintBrowser(f"MidiPlayer:Error connect to {self.out_device}")
             return
-
-        self.pParent.PrintBrowser(f'MidiPlayer to [{self.out_device}]')
 
         self.keys['MidiPlayerRunning'] = True
 
@@ -68,11 +67,16 @@ class MidiPlayer( Thread ):
 
 
     def Panic(self):
+        if self.outport:
             self.outport.panic()
 
     def Stop(self):
         self.pParent.PrintBrowser('MidiPlayer stop.')
-        self.outport.panic()
-        self.outport.close()
+
+        if self.outport:
+            self.outport.panic()
+            self.outport.close() # crash
+            self.outport = None
+
         self.keys['MidiPlayerRunning'] = False
-        self.pParent.Stop()
+
