@@ -5,6 +5,7 @@ from threading import Thread
 
 class midi_input(Thread):
     inport = None
+    running = False
 
     def __init__(self, keys, pParent):
         Thread.__init__( self )
@@ -15,16 +16,47 @@ class midi_input(Thread):
         self.in_device = in_device
 
     def run(self):
-        if self.inport :
-            self.inport.close()
+        self.stop()
+
+        '''
         try:
             self.inport = open_input(self.in_device)
         except:
             self.inport = None
+            print(f"midi_input open [{self.in_device}] ERROR")
+            return
 
-        print("midi_input:run open_input")
+        print(f"midi_input:run open_input [{self.in_device}] READY")
+        '''
 
-        while True: # non-blocking
-            for key in self.inport.iter_pending():
-                if key.type == 'note_on':
-                    print(f"NOTE={key.note}")
+        self.inport = open_input(self.in_device, callback=self.callback)
+        self.running = True
+
+        '''
+        try:
+            while self.running == True : # non-blocking
+                for key in self.inport.iter_pending():
+                    if key.type == 'note_on':
+                        print(f"NOTE={key.note}")
+        except:
+            print(f"midi_input:run open_input [{self.in_device}] CLOSED")
+        '''
+
+    def callback(self, message):
+        print(message)
+        '''
+        for key in self.inport:
+            if key.type == 'note_on':
+                print(f"NOTE={key.note}")
+        '''
+
+    def stop(self):
+        self.running = False
+        if self.inport :
+            self.inport.close()
+            self.inport = None
+
+    def quit(self):
+        print("midi_input:quit")
+        self.stop()
+        exit(0)

@@ -16,16 +16,20 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        self.midi = midi_main(self)
+
+        Inputs, Outputs = self.midi.GetDevices()
+        self.ui.InputDeviceCombo.addItems(Inputs)
+
         self.ui.pushButton_Quit.clicked.connect(self.Quit)
         self.ui.textBrowser.insertPlainText("HELLO")
-
-        self.midi = midi_main(self)
 
         self.midi.NewInput()
         self.midi.NewOutput()
 
     def Quit(self):
-       app.quit()
+        self.midi.quit()
+        app.quit()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

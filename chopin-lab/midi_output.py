@@ -14,9 +14,23 @@ class midi_output(Thread):
         self.out_device = out_device
 
     def run(self):
-        print("midi_output:run")
+
+        self.stop()
+        try:
+            self.outport = open_output(self.out_device)
+        except:
+            self.inport = None
+            print(f"midi_output open [{self.out_device}] ERROR")
+            return
+
+        print(f"midi_output:run open_output [{self.out_device}] READY")
+
+    def stop(self):
         if self.outport :
             self.outport.close()
-        self.outport = open_output(self.out_device)
+            self.outport = None
 
-
+    def quit(self):
+        print("midi_output:quit")
+        self.stop()
+        exit(0)

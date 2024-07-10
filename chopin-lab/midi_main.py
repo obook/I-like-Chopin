@@ -23,16 +23,26 @@ class midi_main:
         return Inputs, Outputs
 
     def NewInput(self):
-        print("New NewInput")
+        # print("New NewInput")
 
         self.midi_input = midi_input(self.keys, self.pParent)
-        self.midi_input.SetInput('Arturia KeyStep 37:Arturia KeyStep 37 MIDI 1 28:0')
+        # self.midi_input.SetInput('Arturia KeyStep 37:Arturia KeyStep 37 MIDI 1 28:0') # 28:0 peut changer !
+        #self.midi_input.SetInput('Arturia KeyStep 37 MIDI 1')
+        self.midi_input.SetInput('Arturia KeyStep 37:Arturia KeyStep 37 MIDI 1')
         self.midi_input.start()
 
     def NewOutput(self):
-        print("New NewOutput")
+        # print("New NewOutput")
 
         self.midi_output = midi_output(self.keys, self.pParent)
-        self.midi_output.SetOutput('FLUID Synth (Titanic):Synth input port (Titanic:0) 131:0')
+        #self.midi_output.SetOutput('FLUID Synth (Titanic):Synth input port (Titanic:0) 131:0') # 131:0 peut changer !
+        #self.midi_output.SetOutput('Synth input port (Titanic:0)')
+        self.midi_output.SetOutput('FLUID Synth (Titanic):Synth input port (Titanic:0)')
         self.midi_output.start()
+
+    def quit(self):
+        print("midi_main:quit")
+        self.midi_input.quit()
+        self.midi_output.quit()
+        exit(0)
 
