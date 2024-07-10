@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-# if __name__ == "__main__":
-#     pass
+"""
+Created on Wed Jun  5 18:19:14 2024
+@author: obooklage
+"""
 
 import mido
 import glob

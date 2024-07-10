@@ -1,4 +1,9 @@
-# This Python file uses the following encoding: utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun  5 18:19:14 2024
+@author: obooklage
+"""
 
 from PySide6.QtWidgets import QPlainTextEdit
 import logging

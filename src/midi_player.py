@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-# if __name__ == "__main__":
-#     pass
-
+"""
+Created on Wed Jun  5 18:19:14 2024
+@author: obooklage
+"""
 from mido import MidiFile, open_output
 import time
 from threading import Thread
 
-# Send midi to synth if keys from keyboard are on
+# Send midi to synth while keys from keyboard are on
 class MidiPlayer( Thread ):
     outport = None
 
@@ -45,8 +45,7 @@ class MidiPlayer( Thread ):
 
             # Pause ?
             if msg.type == 'note_on':
-                while not self.keys['key_on']:
-                    # Stop while pausing ?
+                while not self.keys['key_on']: # Loop waiting keyboard
                     if not self.keys['run']:
                         break
                     time.sleep(msg.time)
@@ -71,7 +70,6 @@ class MidiPlayer( Thread ):
             self.outport.panic()
 
     def Stop(self):
-
         if self.outport:
             self.pParent.PrintBrowser('MidiPlayer stop')
             self.outport.panic()

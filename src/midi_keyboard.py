@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-# if __name__ == "__main__":
-#     pass
+"""
+Created on Wed Jun  5 18:19:14 2024
+@author: obooklage
+"""
 
 from mido import open_input
 from threading import Thread
@@ -41,11 +42,9 @@ class MidiKeyboard( Thread ):
         elif message.type == 'note_off':
             self.keys['key_on'] -=1
 
-        if self.keys['key_on'] <0 : # rare, in case of missing key on
+        if self.keys['key_on'] <0 : # rare case of missing key on
             self.keys['key_on'] = 0
 
-
-        # print(f"keys on:{self.keys['key_on']}\r", end="")
         if message.type == 'note_on' or message.type == 'note_off':
             note, octave = number_to_note(message.note)
             print=f" {note}{octave} ({message.note}) {message.type}"
@@ -54,11 +53,6 @@ class MidiKeyboard( Thread ):
 
         self.pParent.PrintKeys(str(self.keys['key_on'])+print)
 
-        #
-        #    note, octave = number_to_note(message.note)
-        #    self.pParent.PrintKeys(f"{note}{octave} ({message.note}) [{self.keys['key_on']}]")
-        #    print(f"{key.type} {note}{octave} ({key.note}) [{keys['key_on']} keys on]")
-        #    self.pParent.PrintKeys(f"{message.type} {note}{octave} ({message.note}) [{self.keys['key_on']} keys on]")
 
     def Stop(self):
 

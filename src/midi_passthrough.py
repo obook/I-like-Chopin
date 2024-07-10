@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-# This Python file uses the following encoding: utf-8
+"""
+Created on Wed Jun  5 18:19:14 2024
+@author: obooklage
+"""
 
 from threading import Thread
 from mido import open_input, open_output

@@ -1,20 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-# if __name__ == "__main__":
-#     pass
-
 """
 Created on Wed Jun  5 18:19:14 2024
-
 @author: obooklage
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Jun 2 2024
-Projet NSI 2023-2024 Sainte-Marie Bastide/Bordeaux
-@author: obook
 """
 
 import json
