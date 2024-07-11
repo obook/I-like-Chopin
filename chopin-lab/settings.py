@@ -9,7 +9,7 @@ import json
 
 class Settings:
 
-    config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"", "MidiPath":"./midi"}
+    config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"(None)", "MidiPath":"./midi"}
     settingsfile = 'chopin-lab.json'
     def __init__(self):
         pass
@@ -43,13 +43,21 @@ class Settings:
     def SaveOutputDevice(self,name):
         self.config['OutputDevice'] = name
         return self.SaveConfig()
-
+    '''
     def GetMidifileId(self):
+        self.LoadConfig()
+        return self.config['MidifileId']
+
+    def SaveMidifileId(self,id):
+        self.config['MidifileId'] = id
+        return self.SaveConfig()
+    '''
+    def GetMidifile(self):
         self.LoadConfig()
         return self.config['Midifile']
 
-    def SaveMidifileId(n,self):
-        self.config['Midifile'] = n
+    def SaveMidifile(self,name):
+        self.config['Midifile'] = name
         return self.SaveConfig()
 
     def GetMidiPath(self):

@@ -15,26 +15,26 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QGroupBox, QLabel,
-    QMainWindow, QMenuBar, QPushButton, QSizePolicy,
+from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QGroupBox,
+    QLabel, QMainWindow, QPushButton, QSizePolicy,
     QStatusBar, QTextBrowser, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(536, 520)
+        MainWindow.resize(511, 495)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.textBrowser = QTextBrowser(self.centralwidget)
         self.textBrowser.setObjectName(u"textBrowser")
-        self.textBrowser.setGeometry(QRect(10, 220, 511, 181))
+        self.textBrowser.setGeometry(QRect(10, 360, 481, 71))
         self.pushButton_Quit = QPushButton(self.centralwidget)
         self.pushButton_Quit.setObjectName(u"pushButton_Quit")
-        self.pushButton_Quit.setGeometry(QRect(440, 440, 80, 25))
+        self.pushButton_Quit.setGeometry(QRect(410, 440, 80, 31))
         self.groupBox = QGroupBox(self.centralwidget)
         self.groupBox.setObjectName(u"groupBox")
-        self.groupBox.setGeometry(QRect(20, 20, 481, 201))
+        self.groupBox.setGeometry(QRect(10, 0, 481, 201))
         self.pushButton_Mode = QPushButton(self.groupBox)
         self.pushButton_Mode.setObjectName(u"pushButton_Mode")
         self.pushButton_Mode.setGeometry(QRect(70, 150, 401, 30))
@@ -59,11 +59,28 @@ class Ui_MainWindow(object):
         self.FileCombo = QComboBox(self.groupBox)
         self.FileCombo.setObjectName(u"FileCombo")
         self.FileCombo.setGeometry(QRect(70, 110, 401, 30))
+        self.groupBox_2 = QGroupBox(self.centralwidget)
+        self.groupBox_2.setObjectName(u"groupBox_2")
+        self.groupBox_2.setGeometry(QRect(10, 200, 481, 141))
+        self.gridLayoutWidget = QWidget(self.groupBox_2)
+        self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
+        self.gridLayoutWidget.setGeometry(QRect(10, 70, 461, 71))
+        self.gridLayout = QGridLayout(self.gridLayoutWidget)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.pushButton_ChannelAll = QPushButton(self.groupBox_2)
+        self.pushButton_ChannelAll.setObjectName(u"pushButton_ChannelAll")
+        self.pushButton_ChannelAll.setGeometry(QRect(190, 30, 97, 30))
+        self.pushButton_ChannelFirst = QPushButton(self.groupBox_2)
+        self.pushButton_ChannelFirst.setObjectName(u"pushButton_ChannelFirst")
+        self.pushButton_ChannelFirst.setGeometry(QRect(10, 30, 91, 30))
+        self.pushButton_ChannelNone = QPushButton(self.groupBox_2)
+        self.pushButton_ChannelNone.setObjectName(u"pushButton_ChannelNone")
+        self.pushButton_ChannelNone.setGeometry(QRect(375, 30, 97, 30))
+        self.pushButton_Panic = QPushButton(self.centralwidget)
+        self.pushButton_Panic.setObjectName(u"pushButton_Panic")
+        self.pushButton_Panic.setGeometry(QRect(10, 440, 97, 30))
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QMenuBar(MainWindow)
-        self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 536, 22))
-        MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
@@ -82,5 +99,10 @@ class Ui_MainWindow(object):
         self.label_Mode.setText(QCoreApplication.translate("MainWindow", u"Mode", None))
         self.label_Ouput.setText(QCoreApplication.translate("MainWindow", u"Ouput", None))
         self.label_Input.setText(QCoreApplication.translate("MainWindow", u"Input", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"Channels", None))
+        self.pushButton_ChannelAll.setText(QCoreApplication.translate("MainWindow", u"All", None))
+        self.pushButton_ChannelFirst.setText(QCoreApplication.translate("MainWindow", u"First", None))
+        self.pushButton_ChannelNone.setText(QCoreApplication.translate("MainWindow", u"None", None))
+        self.pushButton_Panic.setText(QCoreApplication.translate("MainWindow", u"Panic", None))
     # retranslateUi
 

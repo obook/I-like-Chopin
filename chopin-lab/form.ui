@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>536</width>
-    <height>520</height>
+    <width>511</width>
+    <height>495</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,19 +18,19 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>220</y>
-      <width>511</width>
-      <height>181</height>
+      <y>360</y>
+      <width>481</width>
+      <height>71</height>
      </rect>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_Quit">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>410</x>
       <y>440</y>
       <width>80</width>
-      <height>25</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
@@ -40,8 +40,8 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>20</y>
+      <x>10</x>
+      <y>0</y>
       <width>481</width>
       <height>201</height>
      </rect>
@@ -145,16 +145,82 @@
      </property>
     </widget>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>536</width>
-     <height>22</height>
-    </rect>
-   </property>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>200</y>
+      <width>481</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Channels</string>
+    </property>
+    <widget class="QWidget" name="gridLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>461</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout"/>
+    </widget>
+    <widget class="QPushButton" name="pushButton_ChannelAll">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>30</y>
+       <width>97</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>All</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_ChannelFirst">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>91</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>First</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_ChannelNone">
+     <property name="geometry">
+      <rect>
+       <x>375</x>
+       <y>30</y>
+       <width>97</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>None</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Panic">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>440</y>
+      <width>97</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Panic</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

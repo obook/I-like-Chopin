@@ -1,5 +1,9 @@
-# This Python file uses the following encoding: utf-8
-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun  5 18:19:14 2024
+@author: obooklage
+"""
 from threading import Thread
 from mido import open_output
 
@@ -14,7 +18,6 @@ class midi_output(Thread):
         self.out_device = out_device
 
     def run(self):
-
         self.stop()
         try:
             self.outport = open_output(self.out_device)
