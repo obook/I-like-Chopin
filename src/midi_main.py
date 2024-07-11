@@ -24,6 +24,13 @@ class MidiMain():
         self.pParent = pParent
         self.keys={"key_on":0,'run':False,'MidiPlayerRunning':False,'MidiKeyboardRunning':False}
 
+        mido.set_backend('mido.backends.rtmidi/LINUX_ALSA')
+        print(mido.backend)
+
+        #mido.set_backend('mido.backends.rtmidi/UNIX_JACK')
+        #print(mido.backend)
+
+
     def GetDevices(self):
         Inputs = []
         Outputs = []

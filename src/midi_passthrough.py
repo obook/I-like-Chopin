@@ -7,6 +7,7 @@ Created on Wed Jun  5 18:19:14 2024
 
 from threading import Thread
 from mido import open_input, open_output
+from  midi_numbers import number_to_note
 
 class MidiPassthrough(Thread):
     inport = None
@@ -20,28 +21,37 @@ class MidiPassthrough(Thread):
         self.pParent = pParent
 
     def run( self ):
+
         try:
-            self.inport = open_input(self.in_device)
-            self.outport = open_output(self.out_device)
+            self.inport = open_input(self.in_device, callback=self.callback)
         except:
-            self.pParent.PrintBrowser("Passthrough:Error open ports.")
+            self.pParent.PrintBrowser(f"Passthrough:Error open input [{self.in_device}]")
             self.Stop()
             return
 
-        self.pParent.PrintBrowser("Passthrough Started")
+        try:
+            self.outport = open_output(self.out_device)
+        except:
+            self.pParent.PrintBrowser(f"Passthrough:Error open ouput [{self.out_device}]")
+            self.Stop()
+            return
 
-        while True: # non-blocking
+        self.pParent.PrintBrowser("Passthrough started")
 
-            if not self.keys['run']:
-                break
+    def callback(self, message):
+        if not self.keys['run']:
+            return
+        try:
+            self.outport.send(message)
+            if message.type == 'note_on' : # or message.type == 'note_off':
+                note, octave = number_to_note(message.note)
+                print=f" {note}{octave} ({message.note}) {message.type}"
+            else:
+                print=f" {message.type}"
 
-            for key in self.inport.iter_pending():
-                # Play
-                try:
-                    self.outport.send(key)
-                    self.pParent.PrintKeys(str(self.keys['key_on']))
-                except:
-                    pass
+            self.pParent.PrintKeys(str(self.keys['key_on'])+print)
+        except:
+            pass
 
     def Stop(self):
         if self.inport :
