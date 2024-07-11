@@ -7,9 +7,10 @@ class midi_input(Thread):
     inport = None
     running = False
 
-    def __init__(self, keys, pParent):
+    def __init__(self, keys, CallbackInput, pParent):
         Thread.__init__( self )
         self.keys = keys
+        self.CallbackInput = CallbackInput
         self.pParent = pParent
 
     def SetInput(self, in_device):
@@ -17,38 +18,8 @@ class midi_input(Thread):
 
     def run(self):
         self.stop()
-
-        '''
-        try:
-            self.inport = open_input(self.in_device)
-        except:
-            self.inport = None
-            print(f"midi_input open [{self.in_device}] ERROR")
-            return
-
-        print(f"midi_input:run open_input [{self.in_device}] READY")
-        '''
-
-        self.inport = open_input(self.in_device, callback=self.callback)
+        self.inport = open_input(self.in_device, callback=self.CallbackInput)
         self.running = True
-
-        '''
-        try:
-            while self.running == True : # non-blocking
-                for key in self.inport.iter_pending():
-                    if key.type == 'note_on':
-                        print(f"NOTE={key.note}")
-        except:
-            print(f"midi_input:run open_input [{self.in_device}] CLOSED")
-        '''
-
-    def callback(self, message):
-        print(message)
-        '''
-        for key in self.inport:
-            if key.type == 'note_on':
-                print(f"NOTE={key.note}")
-        '''
 
     def stop(self):
         self.running = False

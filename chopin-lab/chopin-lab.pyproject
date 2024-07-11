@@ -4,6 +4,7 @@
         "form.ui",
         "midi_main.py",
         "midi_input.py",
-        "midi_output.py"
+        "midi_output.py",
+        "settings.py"
     ]
 }

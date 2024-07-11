@@ -34,10 +34,14 @@ class MidiMain():
     def GetDevices(self):
         Inputs = []
         Outputs = []
+
         for i, port_name in enumerate(mido.get_output_names()):
-            Outputs.append(port_name)
+            clean_port_name = port_name[:port_name.rfind(' ')]
+            Outputs.append(clean_port_name)
+
         for i, port_name in enumerate(mido.get_input_names()):
-            Inputs.append(port_name)
+            clean_port_name = port_name[:port_name.rfind(' ')]
+            Inputs.append(clean_port_name)
 
         return Inputs, Outputs
 

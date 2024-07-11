@@ -78,17 +78,16 @@ class MainWindow(QMainWindow):
         Inputs, Outputs = self.midi.GetDevices()
 
         self.ui.InputDeviceCombo.addItems(Inputs)
-
         try:
             self.ui.InputDeviceCombo.setCurrentIndex(GetInputDeviceId())
-            self.ui.InputDeviceCombo.activated.connect(self.InputDeviceChanged)
+            self.ui.InputDeviceCombo.currentIndexChanged.connect(self.InputDeviceChanged)
         except:
             pass
 
         self.ui.OutputDeviceCombo.addItems(Outputs)
         try:
             self.ui.OutputDeviceCombo.setCurrentIndex(GetOutputDeviceId())
-            self.ui.OutputDeviceCombo.activated.connect(self.OuputDeviceChanged)
+            self.ui.OutputDeviceCombo.currentIndexChanged.connect(self.OuputDeviceChanged)
         except:
             pass
 

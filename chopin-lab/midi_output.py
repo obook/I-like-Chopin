@@ -19,7 +19,7 @@ class midi_output(Thread):
         try:
             self.outport = open_output(self.out_device)
         except:
-            self.inport = None
+            self.outport = None
             print(f"midi_output open [{self.out_device}] ERROR")
             return
 
@@ -29,6 +29,9 @@ class midi_output(Thread):
         if self.outport :
             self.outport.close()
             self.outport = None
+
+    def send(self, message):
+        self.outport.send(message)
 
     def quit(self):
         print("midi_output:quit")
