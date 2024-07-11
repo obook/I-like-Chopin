@@ -31,6 +31,9 @@ class MidiKeyboard( Thread ):
         self.keys['MidiKeyboardRunning'] = True
 
     def callback(self,message):
+        filter =['clock','stop','note_on','note_off']
+        if message.type not in filter:
+            print(message)
 
         if message.type == 'note_on':
             self.keys['key_on'] +=1
@@ -47,8 +50,8 @@ class MidiKeyboard( Thread ):
 
         if message.type == 'note_on' : # or message.type == 'note_off':
             note, octave = number_to_note(message.note)
-            print=f" {note}{octave} [{message.note}]"
-            self.pParent.PrintKeys(str(self.keys['key_on'])+print)
+            text=f" {note}{octave} [{message.note}]"
+            self.pParent.PrintKeys(str(self.keys['key_on'])+text)
         elif message.type != 'note_off' :
             self.pParent.PrintKeys(message)
 
