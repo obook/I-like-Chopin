@@ -37,6 +37,9 @@ class ClassThreadOutput(Thread):
     def send(self, message):
         self.outport.send(message)
 
+    def getport(self):
+        return self.outport
+
     def quit(self):
         print("midi_output:quit")
         self.stop()

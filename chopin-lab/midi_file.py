@@ -25,17 +25,16 @@ class ClassThreadMidiFile(Thread):
             for i, track in enumerate(midi.tracks):
                 print('Track {}: {}'.format(i, track.name))
         except:
-            print(f"midi_file:Cannot read {self.midifile}")
+            print(f"ClassThreadMidiFile:Cannot read {self.midifile}")
+
+    def SetMidiPort(self,port_out):
+        self.port_out = port_out
 
     def run(self):
-        pass
-
-    def play(self, port_out):
-        self.port_out = port_out
-        print(f"midi_file:run : [{self.midifile}]")
+        print(f"ClassThreadMidiFile:run : [{self.midifile}]")
         # self.keys['play'] = True
         for msg in MidiFile(self.midifile):
-            print("midi_file:msg =",msg, "self.keys['play']=", self.keys['play'], "keys=",self.keys['key_on'] )
+            print("ClassThreadMidiFile:msg =",msg, "self.keys['play']=", self.keys['play'], "keys=",self.keys['key_on'] )
 
             time.sleep(msg.time)
 
@@ -52,7 +51,8 @@ class ClassThreadMidiFile(Thread):
                 #if self.pParent.ChannelIsActive(msg.channel):
                 self.port_out.send(msg)
             except:
-                print("ClassThreadMidiFile:ERROR port_out.send")
+                # print("ClassThreadMidiFile:ERROR port_out.send type=", type(self.port_out), "msg=", msg)
+                pass
 
             # Stop while running ?
             if not self.keys['play']:
@@ -60,8 +60,12 @@ class ClassThreadMidiFile(Thread):
                 break
 
         # End of song
-        self.stop()
+        self.quit()
 
-    def stop(self):
-        print("midi_file:stop")
+    def play(self, port_out):
+        pass
+
+    def quit(self):
+        print("midi_file:quit")
+
 

@@ -17,7 +17,7 @@ from midi_numbers import number_to_note
 from mido import MidiFile
 import time
 
-class midi_main:
+class ClassMidiMain:
     ThreadInput = None
     ThreadOutput = None
     ThreadMidiFile = None
@@ -50,20 +50,6 @@ class midi_main:
             Inputs.append(clean_port_name)
 
         return Inputs, Outputs
-
-    # List of midifiles from folder midi
-    def GetMidiFiles(self):
-        midifiles = []
-        for file in sorted(glob.glob(self.settings.GetMidiPath()+"/*.mid")):
-            midifiles.append(path.basename(file))
-        return midifiles
-
-    def SetMidifile(self, filename):
-        self.ThreadMidiFile.SetMidiFile(filename)
-        self.temp_midifile = filename
-
-        self.keys['play']=True
-        self.ThreadMidiFile.play(self.port_out)
 
     def ConnectInput(self, in_device):
         # print("New NewInput")
@@ -147,8 +133,29 @@ class midi_main:
         self.ThreadOutput.SetOutput(out_device)
         self.port_out = self.ThreadOutput.start()
 
+    # List of midifiles from folder midi
+    def GetMidiFiles(self):
+        midifiles = []
+        for file in sorted(glob.glob(self.settings.GetMidiPath()+"/*.mid")):
+            midifiles.append(path.basename(file))
+        return midifiles
+
+    def SetMidifile(self, filename):
+        self.ThreadMidiFile.SetMidiFile(filename)
+        self.temp_midifile = filename
+        port = self.ThreadOutput.getport()
+        self.ThreadMidiFile.SetMidiPort(port)
+
     def Playback(self):
-        self.midi_file.start()
+        self.keys['play']=True
+        self.ThreadMidiFile.start() # Une seule fois
+        pass
+
+    def Stop(self):
+        self.keys['play']=False
+        if self.ThreadMidiFile :
+            self.ThreadMidiFile.quit()
+            #self.ThreadMidiFile = None
 
     def quit(self):
         print("midi_main:quit")

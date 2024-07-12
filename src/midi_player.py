@@ -62,8 +62,7 @@ class MidiPlayer( Thread ):
                 break
 
         # End of song
-        self.Stop()
-
+        self.pParent.Stop()
 
     def Panic(self):
         if self.outport:

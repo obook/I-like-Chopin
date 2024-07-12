@@ -7,7 +7,7 @@ Created on Wed Jun  5 18:19:14 2024
 import sys
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
-from midi_main import midi_main
+from midi_main import ClassMidiMain
 from settings import ClassSettings
 
 # Important:
@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.midi = midi_main(self)
+        self.midi = ClassMidiMain(self)
 
         Inputs, Outputs = self.midi.GetDevices()
         Input = self.settings.GetInputDevice()
@@ -141,8 +141,12 @@ class MainWindow(QMainWindow):
 
     def Start(self):
         print("Start")
+        self.midi.Playback()
+
     def Stop(self):
         print("Stop")
+        self.midi.Stop()
+
     def Panic(self):
         print("Panic")
 
