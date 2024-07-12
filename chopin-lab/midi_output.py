@@ -7,7 +7,7 @@ Created on Wed Jun  5 18:19:14 2024
 from threading import Thread
 from mido import open_output
 
-class midi_output(Thread):
+class ClassThreadOutput(Thread):
     outport = None
     def __init__(self, keys, pParent):
         Thread.__init__( self )
@@ -27,6 +27,7 @@ class midi_output(Thread):
             return
 
         print(f"midi_output:run open_output [{self.out_device}] READY")
+        return(self.outport)
 
     def stop(self):
         if self.outport :

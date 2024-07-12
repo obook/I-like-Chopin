@@ -7,7 +7,7 @@ Created on Wed Jun  5 18:19:14 2024
 
 import json
 
-class Settings:
+class ClassSettings:
 
     config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"(None)", "MidiPath":"./midi"}
     settingsfile = 'chopin-lab.json'

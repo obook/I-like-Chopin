@@ -7,13 +7,13 @@ Created on Wed Jun  5 18:19:14 2024
 from mido import open_input
 from threading import Thread
 
-class midi_input(Thread):
+class ClassThreadInput(Thread):
     inport = None
     running = False
 
-    def __init__(self, CallbackInput, pParent):
+    def __init__(self, keys, pParent):
         Thread.__init__( self )
-        self.CallbackInput = CallbackInput
+        self.keys = keys
         self.pParent = pParent
 
     def SetInput(self, in_device):
@@ -22,7 +22,8 @@ class midi_input(Thread):
     def run(self):
         self.stop()
         try:
-            self.inport = open_input(self.in_device, callback=self.CallbackInput)
+            #self.inport = open_input(self.in_device, callback=self.CallbackInput)
+            self.inport = open_input(self.in_device, callback=self.callback)
             self.running = True
         except:
             print(f"midi_input:Error connect from {self.in_device}")
@@ -35,6 +36,18 @@ class midi_input(Thread):
         if self.inport :
             self.inport.close()
             self.inport = None
+
+    def callback(self, message):
+        '''
+        filter =['clock','stop','note_off']
+        if message.type not in filter:
+            print(f"ClassThreadInput:{message}")
+        '''
+        # Counter
+        if message.type == 'note_on':
+            self.keys['key_on'] +=1
+        elif message.type == 'note_off':
+            self.keys['key_on'] -=1
 
     def quit(self):
         print("midi_input:quit")

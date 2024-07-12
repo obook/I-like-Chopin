@@ -79,7 +79,13 @@ class Ui_MainWindow(object):
         self.pushButton_ChannelNone.setGeometry(QRect(375, 30, 97, 30))
         self.pushButton_Panic = QPushButton(self.centralwidget)
         self.pushButton_Panic.setObjectName(u"pushButton_Panic")
-        self.pushButton_Panic.setGeometry(QRect(10, 440, 97, 30))
+        self.pushButton_Panic.setGeometry(QRect(250, 440, 97, 30))
+        self.pushButton_Stop = QPushButton(self.centralwidget)
+        self.pushButton_Stop.setObjectName(u"pushButton_Stop")
+        self.pushButton_Stop.setGeometry(QRect(110, 440, 97, 30))
+        self.pushButton_Start = QPushButton(self.centralwidget)
+        self.pushButton_Start.setObjectName(u"pushButton_Start")
+        self.pushButton_Start.setGeometry(QRect(10, 440, 97, 30))
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -104,5 +110,7 @@ class Ui_MainWindow(object):
         self.pushButton_ChannelFirst.setText(QCoreApplication.translate("MainWindow", u"First", None))
         self.pushButton_ChannelNone.setText(QCoreApplication.translate("MainWindow", u"None", None))
         self.pushButton_Panic.setText(QCoreApplication.translate("MainWindow", u"Panic", None))
+        self.pushButton_Stop.setText(QCoreApplication.translate("MainWindow", u"Stop", None))
+        self.pushButton_Start.setText(QCoreApplication.translate("MainWindow", u"Start", None))
     # retranslateUi
 

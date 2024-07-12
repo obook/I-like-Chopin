@@ -8,7 +8,7 @@ import sys
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from midi_main import midi_main
-from settings import Settings
+from settings import ClassSettings
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -18,7 +18,7 @@ from ui_form import Ui_MainWindow
 
 class MainWindow(QMainWindow):
 
-    settings = Settings()
+    settings = ClassSettings()
     ChannelButtonsList = []
     ChannelList = [False]*16
 
@@ -89,6 +89,10 @@ class MainWindow(QMainWindow):
         midifile = self.settings.GetMidifile()
         self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+midifile)
 
+        self.ui.pushButton_Start.clicked.connect(self.Start)
+        self.ui.pushButton_Stop.clicked.connect(self.Stop)
+        self.ui.pushButton_Panic.clicked.connect(self.Panic)
+
 
     def InputDeviceChanged(self):
         in_device = self.ui.InputDeviceCombo.currentText()
@@ -135,8 +139,12 @@ class MainWindow(QMainWindow):
     def PrintKeys(self,n):
         self.ui.statusbar.showMessage("Keys:"+str(n))
 
+    def Start(self):
+        print("Start")
+    def Stop(self):
+        print("Stop")
     def Panic(self):
-        pass
+        print("Panic")
 
     def Quit(self):
         self.midi.quit()

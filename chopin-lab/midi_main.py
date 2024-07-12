@@ -8,25 +8,34 @@ Created on Wed Jun  5 18:19:14 2024
 import mido
 import glob
 from os import path
-from midi_input import midi_input
-from midi_output import midi_output
-from midi_file import midi_file
-from settings import Settings
-from  midi_numbers import number_to_note
+from midi_input import ClassThreadInput
+from midi_output import ClassThreadOutput
+from midi_file import ClassThreadMidiFile
+from settings import ClassSettings
+from midi_numbers import number_to_note
+
+from mido import MidiFile
+import time
 
 class midi_main:
-    midi_input = None
-    midi_output = None
-    midi_file =  midi_file()
-    keys={"key_on":0}
-    settings = Settings()
+    ThreadInput = None
+    ThreadOutput = None
+    ThreadMidiFile = None
+    port_out = None
+    keys={"key_on":0,"play":False}
 
-    PassThrough = False
+    settings = ClassSettings()
+
+    PassThrough = True
+
+    temp_midifile = None
 
     def __init__(self, pParent):
         self.pParent = pParent
         self.GetDevices()
-        self.keys={"key_on":0}
+        self.keys={"key_on":0,"play":False}
+
+        self.ThreadMidiFile = ClassThreadMidiFile(self.keys)
 
     def GetDevices(self):
         Inputs = []
@@ -50,17 +59,21 @@ class midi_main:
         return midifiles
 
     def SetMidifile(self, filename):
-        self.midi_file.SetMidiFile(filename)
+        self.ThreadMidiFile.SetMidiFile(filename)
+        self.temp_midifile = filename
+
+        self.keys['play']=True
+        self.ThreadMidiFile.play(self.port_out)
 
     def ConnectInput(self, in_device):
         # print("New NewInput")
-        if self.midi_input:
-            self.midi_input.stop()
+        if self.ThreadInput:
+            self.ThreadInput.stop()
 
-        self.midi_input = midi_input(self.CallbackInput, self.pParent)
-        self.midi_input.SetInput(in_device)
-        self.midi_input.start()
-
+        self.ThreadInput = ClassThreadInput(self.keys, self.pParent)
+        self.ThreadInput.SetInput(in_device)
+        self.ThreadInput.start()
+    '''
     def CallbackInput(self, message):
 
         filter =['clock','stop','note_off']
@@ -80,14 +93,40 @@ class midi_main:
             except:
                 print("ERROR")
 
-        '''
+
         for key in self.inport:
             if key.type == 'note_on':
                 print(f"NOTE={key.note}")
-        '''
+
 
         # Playback
 
+        self.keys['play'] = True
+
+        for msg in MidiFile(self.temp_midifile):
+            time.sleep(msg.time)
+
+            # Pause ?
+
+            if msg.type == 'note_on':
+                while not self.keys['key_on']: # Loop waiting keyboard
+                    if not self.keys['play']:
+                        break
+                    time.sleep(msg.time)
+
+            # Play
+            try: # meta messages can't be send to ports
+                if self.pParent.ChannelIsActive(msg.channel):
+                    self.outport.send(msg)
+            except:
+                pass
+
+            # Stop while running ?
+            if not self.keys['play']:
+                break
+
+        # End of song
+        self.Stop()
 
 
         # Informations
@@ -98,22 +137,22 @@ class midi_main:
             self.pParent.PrintKeys(str(self.keys['key_on'])+text)
         elif message.type != 'note_off' :
             self.pParent.PrintKeys(message)
-
+        '''
     def ConnectOutput(self, out_device):
         # print("New NewOutput")
-        if self.midi_output:
-            self.midi_output.stop()
+        if self.ThreadOutput:
+            self.ThreadOutput.stop()
 
-        self.midi_output = midi_output(self.keys, self.pParent)
-        self.midi_output.SetOutput(out_device)
-        self.midi_output.start()
+        self.ThreadOutput = ClassThreadOutput(self.keys, self.pParent)
+        self.ThreadOutput.SetOutput(out_device)
+        self.port_out = self.ThreadOutput.start()
 
     def Playback(self):
         self.midi_file.start()
 
     def quit(self):
         print("midi_main:quit")
-        self.midi_input.quit()
-        self.midi_output.quit()
+        self.ThreadInput.quit()
+        self.ThreadOutput.quit()
         exit(0)
 
