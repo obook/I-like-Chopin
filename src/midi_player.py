@@ -52,7 +52,7 @@ class MidiPlayer( Thread ):
 
             # Play
             try: # meta messages can't be send to ports
-                if self.pParent.ChannelIsActive(msg.channel):
+                if self.pParent.TracksIsActive(msg.channel):
                     self.outport.send(msg)
             except:
                 pass

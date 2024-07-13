@@ -62,10 +62,13 @@ class ClassThreadMidiFile(Thread):
         # End of song
         self.quit()
 
+        return # end of thread
+
     def play(self, port_out):
         pass
 
     def quit(self):
         print("midi_file:quit")
+        return(0) # end oh tread
 
 

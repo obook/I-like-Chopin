@@ -19,8 +19,8 @@ from ui_form import Ui_MainWindow
 class MainWindow(QMainWindow):
 
     settings = ClassSettings()
-    ChannelButtonsList = []
-    ChannelList = [False]*16
+    TracksButtonsList = []
+    TracksList = [False]*16
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -44,9 +44,9 @@ class MainWindow(QMainWindow):
         self.ui.OutputDeviceCombo.currentIndexChanged.connect(self.OuputDeviceChanged)
         self.ui.pushButton_Quit.clicked.connect(self.Quit)
 
-        self.ui.pushButton_ChannelNone.clicked.connect(self.ChannelNone)
-        self.ui.pushButton_ChannelAll.clicked.connect(self.ChannelAll)
-        self.ui.pushButton_ChannelFirst.clicked.connect(self.ChannelFirst)
+        self.ui.pushButton_TracksNone.clicked.connect(self.TracksNone)
+        self.ui.pushButton_TracksAll.clicked.connect(self.TracksAll)
+        self.ui.pushButton_TracksFirst.clicked.connect(self.TracksFirst)
 
         self.ui.textBrowser.insertPlainText("Ready")
 
@@ -70,19 +70,19 @@ class MainWindow(QMainWindow):
         # grid
         grid = self.ui.gridLayout
         for n in range(8):
-            self.ChannelButtonsList.append(QPushButton(str(n+1)))
-            self.ChannelButtonsList[n].setCheckable(True);
-            self.ChannelButtonsList[n].clicked.connect(self.ReadChannel)
-            self.ChannelButtonsList[n].setStyleSheet("QPushButton:checked { background-color: rgb(0,200,0); }\n")
-            grid.addWidget(self.ChannelButtonsList[n],1,n)
+            self.TracksButtonsList.append(QPushButton(str(n+1)))
+            self.TracksButtonsList[n].setCheckable(True);
+            self.TracksButtonsList[n].clicked.connect(self.ReadTracks)
+            self.TracksButtonsList[n].setStyleSheet("QPushButton:checked { background-color: rgb(0,200,0); }\n")
+            grid.addWidget(self.TracksButtonsList[n],1,n)
         for n in range(8):
-            self.ChannelButtonsList.append(QPushButton(str(n+8+1)))
-            self.ChannelButtonsList[n+8].setCheckable(True);
-            self.ChannelButtonsList[n+8].clicked.connect(self.ReadChannel)
-            self.ChannelButtonsList[n+8].setStyleSheet("QPushButton:checked { background-color: rgb(0,200,0); }\n")
-            grid.addWidget(self.ChannelButtonsList[n+8],2,n)
+            self.TracksButtonsList.append(QPushButton(str(n+8+1)))
+            self.TracksButtonsList[n+8].setCheckable(True);
+            self.TracksButtonsList[n+8].clicked.connect(self.ReadTracks)
+            self.TracksButtonsList[n+8].setStyleSheet("QPushButton:checked { background-color: rgb(0,200,0); }\n")
+            grid.addWidget(self.TracksButtonsList[n+8],2,n)
 
-        self.ChannelFirst()
+        self.TracksFirst()
 
         self.ui.pushButton_Panic.clicked.connect(self.Panic)
 
@@ -111,30 +111,30 @@ class MainWindow(QMainWindow):
         self.settings.SaveMidifile(file)
         self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+file)
 
-    def ChannelNone(self):
-        for n in range(len(self.ChannelButtonsList)):
-            self.ChannelButtonsList[n].setChecked(False)
-        self.ReadChannel()
+    def TracksNone(self):
+        for n in range(len(self.TracksButtonsList)):
+            self.TracksButtonsList[n].setChecked(False)
+        self.ReadTracks()
 
-    def ChannelAll(self):
-        for n in range(len(self.ChannelButtonsList)):
-            self.ChannelButtonsList[n].setChecked(True)
-        self.ReadChannel()
+    def TracksAll(self):
+        for n in range(len(self.TracksButtonsList)):
+            self.TracksButtonsList[n].setChecked(True)
+        self.ReadTracks()
 
-    def ChannelFirst(self):
-        self.ChannelNone()
-        self.ChannelButtonsList[0].setChecked(True)
-        self.ReadChannel()
+    def TracksFirst(self):
+        self.TracksNone()
+        self.TracksButtonsList[0].setChecked(True)
+        self.ReadTracks()
 
-    def ReadChannel(self):
-        for n in range(len(self.ChannelButtonsList)):
-            if self.ChannelButtonsList[n].isChecked():
-                self.ChannelList[n] = True
+    def ReadTracks(self):
+        for n in range(len(self.TracksButtonsList)):
+            if self.TracksButtonsList[n].isChecked():
+                self.TracksList[n] = True
             else:
-                self.ChannelList[n] = False
+                self.TracksList[n] = False
 
-    def ChannelIsActive(self,n):
-        return(self.ChannelList[n])
+    def TracksIsActive(self,n):
+        return(self.TracksList[n])
 
     def PrintKeys(self,n):
         self.ui.statusbar.showMessage("Keys:"+str(n))

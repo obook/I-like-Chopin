@@ -174,7 +174,7 @@
      </rect>
     </property>
     <property name="title">
-     <string>Channels</string>
+     <string>Tracks</string>
     </property>
     <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">
@@ -187,7 +187,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout"/>
     </widget>
-    <widget class="QPushButton" name="pushButton_ChannelAll">
+    <widget class="QPushButton" name="pushButton_TracksAll">
      <property name="geometry">
       <rect>
        <x>190</x>
@@ -200,7 +200,7 @@
       <string>All</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_ChannelFirst">
+    <widget class="QPushButton" name="pushButton_TracksFirst">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -213,7 +213,7 @@
       <string>First</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_ChannelNone">
+    <widget class="QPushButton" name="pushButton_TracksNone">
      <property name="geometry">
       <rect>
        <x>375</x>
