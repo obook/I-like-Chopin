@@ -67,8 +67,12 @@ class ClassThreadMidiFile(Thread):
     def play(self, port_out):
         pass
 
+    def Alive(self):
+        print("midi_file:ALIVE")
+        exit
+
     def quit(self):
-        print("midi_file:quit")
-        return(0) # end oh tread
+        print("midi_file:return")
+        return(0) # end of tread
 
 

@@ -148,7 +148,7 @@ class ClassMidiMain:
 
     def Playback(self):
         self.keys['play']=True
-        self.ThreadMidiFile.start() # Une seule fois
+        self.ThreadMidiFile.start() # !!!!!!!!!!!!!!!!!!!!!!!!!! Une seule fois
         pass
 
     def Stop(self):
@@ -156,6 +156,11 @@ class ClassMidiMain:
         if self.ThreadMidiFile :
             self.ThreadMidiFile.quit()
             #self.ThreadMidiFile = None
+
+        self.ThreadMidiFile.Alive() # normalement impossible
+
+    def Panic(self):
+        self.ThreadMidiFile.Alive() # normalement impossible
 
     def quit(self):
         print("midi_main:quit")

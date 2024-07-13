@@ -149,6 +149,7 @@ class MainWindow(QMainWindow):
 
     def Panic(self):
         print("Panic")
+        self.midi.Panic()
 
     def Quit(self):
         self.midi.quit()
