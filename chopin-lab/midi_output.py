@@ -30,6 +30,7 @@ class ClassThreadOutput(Thread):
             return
 
         print(f"midi_output:run open_output [{self.out_device}] READY")
+        return self.outport
 
     def send(self, message):
         if self.outport :
@@ -42,12 +43,14 @@ class ClassThreadOutput(Thread):
         if self.outport :
             self.outport.panic()
 
+    def active(self):
+        if self.outport :
+            return True
+        return False
+
     def stop(self):
+        print("midi_output:stop")
         if self.outport :
             self.outport.close()
             self.outport = None
-
-    def quit(self):
-        print("midi_output:quit")
-        self.stop()
 

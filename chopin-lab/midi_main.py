@@ -56,18 +56,26 @@ class ClassMidiMain:
         self.ThreadInput.SetInput(in_device)
         self.ThreadInput.start()
 
+    def ConnectInputState(self):
+        if self.ThreadInput:
+            return self.ThreadInput.active()
+        return False
+
     def ConnectOutput(self, out_device):
+
         if self.ThreadOutput:
             self.ThreadOutput.stop()
-        if self.ThreadMidiFile:
-            self.ThreadMidiFile.quit()
 
         self.ThreadOutput = ClassThreadOutput(self.keys, self.pParent)
         self.ThreadOutput.SetOutput(out_device)
         self.port_out = self.ThreadOutput.start()
 
-        if self.SetMidifile :
-            self.SetMidifile(self.midifile)
+        self.SetMidifile(self.midifile)
+
+    def ConnectOutputState(self):
+        if self.ThreadOutput:
+            return self.ThreadOutput.active()
+        return False
 
     # List of midifiles from folder midi (see json file created)
     def GetMidiFiles(self):
@@ -77,18 +85,24 @@ class ClassMidiMain:
         return midifiles
 
     def SetMidifile(self, filename):
+        self.midifile = filename
+
         if self.ThreadMidiFile:
-            self.ThreadMidiFile.quit()
+            self.ThreadMidiFile.stop()
             self.ThreadMidiFile = None
 
         self.ThreadMidiFile = ClassThreadMidiFile(self.keys)
         self.ThreadMidiFile.SetMidiFile(filename, self.tracks)
-        self.midifile = filename
 
         if self.ThreadOutput:
             port = self.ThreadOutput.getport()
             self.ThreadMidiFile.SetMidiPort(port)
             self.ThreadMidiFile.start()
+
+    def MidifileState(self):
+        if self.ThreadMidiFile:
+            return(self.ThreadMidiFile.active())
+        return False
 
     def Playback(self):
         self.ThreadMidiFile.start()
@@ -108,16 +122,16 @@ class ClassMidiMain:
 
         if self.ThreadMidiFile:
             self.ThreadMidiFile.SetMidiPort(None) # stop send
-            self.ThreadMidiFile.quit()
+            self.ThreadMidiFile.stop()
             self.ThreadMidiFile = None
 
         if self.ThreadInput:
-            self.ThreadInput.quit()
+            self.ThreadInput.stop()
             self.ThreadInput = None
 
         if self.ThreadOutput:
             self.ThreadOutput.panic
-            self.ThreadOutput.quit()
+            self.ThreadOutput.stop()
             self.ThreadOutput = None
 
 

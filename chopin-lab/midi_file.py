@@ -7,6 +7,7 @@ Created on Wed Jun  5 18:19:14 2024
 from mido import MidiFile
 from threading import Thread
 import time
+import os
 
 class ClassThreadMidiFile(Thread):
     midifile = None
@@ -17,7 +18,7 @@ class ClassThreadMidiFile(Thread):
     def __init__(self,keys):
         Thread.__init__( self )
         self.keys = keys
-        self.running = True
+        self.running = False
         self.tracks = None
 
     def __del__(self):
@@ -35,14 +36,25 @@ class ClassThreadMidiFile(Thread):
             print(f"ClassThreadMidiFile:Cannot read {self.midifile}")
 
     def SetMidiPort(self,port_out):
+        print("ClassThreadMidiFile:SetMidiPort")
         self.port_out = port_out
 
     def run(self):
 
         print(f"ClassThreadMidiFile:run : [{self.midifile}]")
+        if self.midifile:
+            if not os.path.isfile(self.midifile):
+                print("ClassThreadMidiFile:midifile not found")
+                return
+
+        self.running = True
 
         for msg in MidiFile(self.midifile):
-            print("ClassThreadMidiFile:msg =",msg, "keys=",self.keys['key_on'] )
+            # ("ClassThreadMidiFile:msg =",msg, "keys=",self.keys['key_on'] )
+
+            # Stop while running ?
+            if not self.running:
+                break
 
             time.sleep(msg.time)
 
@@ -50,7 +62,8 @@ class ClassThreadMidiFile(Thread):
             if msg.type == 'note_on':
                 while not self.keys['key_on']: # Loop waiting keyboard
                     if not self.running:
-                        break
+                        self.stop()
+                        return
                     time.sleep(msg.time)
 
             # Play
@@ -58,18 +71,17 @@ class ClassThreadMidiFile(Thread):
                 if self.port_out and self.tracks[msg.channel]:
                     self.port_out.send(msg)
             except:
-                # print("ClassThreadMidiFile:ERROR port_out.send type=", type(self.port_out), "msg=", msg)
+                # print("ERROR->ClassThreadMidiFile:port_out.send type=", type(self.port_out), "msg=", msg)
                 pass
 
-            # Stop while running ?
-            if not self.running:
-                break
-
         # End of song
-        self.quit()
+        self.stop()
 
-    def quit(self):
-        print("midi_file:return")
+    def active(self):
+        return self.running
+
+    def stop(self):
+        print("midi_file:stop")
         self.running = False
-        return
+
 

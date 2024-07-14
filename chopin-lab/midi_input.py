@@ -35,10 +35,11 @@ class ClassThreadInput(Thread):
         print(f"midi_input:run open_output [{self.in_device}] READY")
 
     def callback(self, message):
-
+        '''
         filter =['clock','stop','note_off']
         if message.type not in filter:
             print(f"ClassThreadInput:{message}")
+        '''
 
         # Counter
         if message.type == 'note_on':
@@ -46,13 +47,15 @@ class ClassThreadInput(Thread):
         elif message.type == 'note_off':
             self.keys['key_on'] -=1
 
+    def active(self):
+        if self.inport :
+            return True
+        return False
+
     def stop(self):
+        print("midi_input:stop")
         self.running = False
         if self.inport :
             self.inport.close()
             self.inport = None
-
-    def quit(self):
-        print("midi_input:quit")
-        self.stop()
 
