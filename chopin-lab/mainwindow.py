@@ -15,11 +15,10 @@ from settings import ClassSettings
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
-#     pyside6-uic form.ui -o ui_form.py, or
-#     pyside2-uic form.ui -o ui_form.py
+#     pyside6-uic form.ui -o ui_form.py
 from ui_form import Ui_MainWindow
 
-# Define status icons (available in the resource file built with "pyrcc5"
+# Define status icons
 ICON_RED_LED = "./icons/led-red-on.png"
 ICON_GREEN_LED = "./icons/green-led-on.png"
 ICON_LED_OFF = "./icons/led-off.png"
@@ -96,13 +95,13 @@ class MainWindow(QMainWindow):
             self.TracksButtonsList.append(QPushButton(str(n+1)))
             self.TracksButtonsList[n].setCheckable(True);
             self.TracksButtonsList[n].clicked.connect(self.ReadTracks)
-            self.TracksButtonsList[n].setStyleSheet("QPushButton:checked { background-color: rgb(0,200,200); }\n")
+            self.TracksButtonsList[n].setStyleSheet("QPushButton:checked { background-color: rgb(200,0,200); }\n")
             grid.addWidget(self.TracksButtonsList[n],1,n)
         for n in range(8):
             self.TracksButtonsList.append(QPushButton(str(n+8+1)))
             self.TracksButtonsList[n+8].setCheckable(True);
             self.TracksButtonsList[n+8].clicked.connect(self.ReadTracks)
-            self.TracksButtonsList[n+8].setStyleSheet("QPushButton:checked { background-color: rgb(0,200,200); }\n")
+            self.TracksButtonsList[n+8].setStyleSheet("QPushButton:checked { background-color: rgb(200,0,200); }\n")
             grid.addWidget(self.TracksButtonsList[n+8],2,n)
 
         self.TracksFirst()

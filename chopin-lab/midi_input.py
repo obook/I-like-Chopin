@@ -6,6 +6,7 @@ Created on Wed Jun  5 18:19:14 2024
 """
 from mido import open_input
 from threading import Thread
+from  midi_numbers import number_to_note
 
 class ClassThreadInput(Thread):
     in_device = None
@@ -46,6 +47,12 @@ class ClassThreadInput(Thread):
             self.keys['key_on'] +=1
         elif message.type == 'note_off':
             self.keys['key_on'] -=1
+
+        text = str(self.keys['key_on'])
+        if message.type == 'note_on': # or message.type == 'note_off':
+            note, octave = number_to_note(message.note)
+            text = text + f"\t\t {note}{octave} \t\t [{message.note}]"
+        self.pParent.PrintKeys(text)
 
     def active(self):
         if self.inport :
