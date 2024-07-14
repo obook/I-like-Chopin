@@ -14,6 +14,9 @@ class ClassThreadOutput(Thread):
         self.keys = keys
         self.pParent = pParent
 
+    def __del__(self):
+        print("ClassThreadOutput destroyed")
+
     def SetOutput(self, out_device):
         self.out_device = out_device
 
@@ -27,20 +30,24 @@ class ClassThreadOutput(Thread):
             return
 
         print(f"midi_output:run open_output [{self.out_device}] READY")
-        return(self.outport)
+
+    def send(self, message):
+        if self.outport :
+            self.outport.send(message)
+
+    def getport(self):
+        return self.outport
+
+    def panic(self):
+        if self.outport :
+            self.outport.panic()
 
     def stop(self):
         if self.outport :
             self.outport.close()
             self.outport = None
 
-    def send(self, message):
-        self.outport.send(message)
-
-    def getport(self):
-        return self.outport
-
     def quit(self):
         print("midi_output:quit")
         self.stop()
-        exit(0)
+

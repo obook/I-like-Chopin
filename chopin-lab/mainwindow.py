@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.midi = ClassMidiMain(self)
+        self.midi = ClassMidiMain(self,self.TracksList)
 
         Inputs, Outputs = self.midi.GetDevices()
         Input = self.settings.GetInputDevice()
@@ -90,7 +90,11 @@ class MainWindow(QMainWindow):
         self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+midifile)
 
         self.ui.pushButton_Start.clicked.connect(self.Start)
+        self.ui.pushButton_Start.setEnabled(False)
+
         self.ui.pushButton_Stop.clicked.connect(self.Stop)
+        self.ui.pushButton_Stop.setEnabled(False)
+
         self.ui.pushButton_Panic.clicked.connect(self.Panic)
 
 
@@ -148,7 +152,6 @@ class MainWindow(QMainWindow):
         self.midi.Stop()
 
     def Panic(self):
-        print("Panic")
         self.midi.Panic()
 
     def Quit(self):

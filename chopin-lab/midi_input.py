@@ -15,6 +15,10 @@ class ClassThreadInput(Thread):
         Thread.__init__( self )
         self.keys = keys
         self.pParent = pParent
+        self.running = True
+
+    def __del__(self):
+            print("ClassThreadInput destroyed")
 
     def SetInput(self, in_device):
         self.in_device = in_device
@@ -22,7 +26,6 @@ class ClassThreadInput(Thread):
     def run(self):
         self.stop()
         try:
-            #self.inport = open_input(self.in_device, callback=self.CallbackInput)
             self.inport = open_input(self.in_device, callback=self.callback)
             self.running = True
         except:
@@ -31,25 +34,25 @@ class ClassThreadInput(Thread):
 
         print(f"midi_input:run open_output [{self.in_device}] READY")
 
-    def stop(self):
-        self.running = False
-        if self.inport :
-            self.inport.close()
-            self.inport = None
-
     def callback(self, message):
-        '''
+
         filter =['clock','stop','note_off']
         if message.type not in filter:
             print(f"ClassThreadInput:{message}")
-        '''
+
         # Counter
         if message.type == 'note_on':
             self.keys['key_on'] +=1
         elif message.type == 'note_off':
             self.keys['key_on'] -=1
 
+    def stop(self):
+        self.running = False
+        if self.inport :
+            self.inport.close()
+            self.inport = None
+
     def quit(self):
         print("midi_input:quit")
         self.stop()
-        exit(0)
+
