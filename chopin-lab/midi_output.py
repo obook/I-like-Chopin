@@ -8,17 +8,17 @@ from threading import Thread
 from mido import open_output
 
 class ClassThreadOutput(Thread):
+    out_device = None
     outport = None
-    def __init__(self, keys, pParent):
+    def __init__(self, out_device, keys, pParent):
         Thread.__init__( self )
+        self.out_device = out_device
         self.keys = keys
         self.pParent = pParent
+        print("ClassThreadOutput created")
 
     def __del__(self):
         print("ClassThreadOutput destroyed")
-
-    def SetOutput(self, out_device):
-        self.out_device = out_device
 
     def run(self):
         self.stop()

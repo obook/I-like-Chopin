@@ -30,6 +30,10 @@ class MainWindow(QMainWindow):
     TracksButtonsList = []
     TracksList = [False]*16
 
+    ConnectInputState = False
+    ConnectOutputState = False
+    MidifileState = False
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
@@ -53,6 +57,7 @@ class MainWindow(QMainWindow):
         # Push Buttons
         self.ui.pushButton_Panic.clicked.connect(self.Panic)
         self.ui.pushButton_Quit.clicked.connect(self.Quit)
+        self.ui.pushButton_Mode.setEnabled(False)
 
         # ComboBoxes
         self.ui.InputDeviceCombo.addItem(Input)
@@ -104,11 +109,7 @@ class MainWindow(QMainWindow):
 
         # Connections
         self.midi.ConnectInput(Input)
-
-        #self.midi_output.SetOutput('FLUID Synth (Titanic):Synth input port (Titanic:0) 131:0') # 131:0 peut changer !
-        #self.midi_output.SetOutput('Synth input port (Titanic:0)')
         self.midi.ConnectOutput(Output)
-
         midifile = self.settings.GetMidifile()
         self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+midifile)
 
@@ -121,32 +122,37 @@ class MainWindow(QMainWindow):
 
     def timer(self):
 
-        if self.midi.ConnectInputState():
+        if self.midi.ConnectInputState() and not self.ConnectInputState :
             self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
-        else:
+            self.ConnectInputState = True
+        elif not self.midi.ConnectInputState():
             self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+            self.ConnectInputState = False
 
-        if self.midi.ConnectOutputState():
+        if self.midi.ConnectOutputState() and not self.ConnectOutputState:
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
-        else:
+            self.ConnectOutputState = True
+        elif not self.midi.ConnectOutputState():
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+            self.ConnectOutputState = False
 
-        if self.midi.MidifileState():
+        if self.midi.MidifileState() and not self.MidifileState:
             self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
-        else:
+            self.MidifileState = True
+        elif not self.midi.MidifileState():
             self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+            self.MidifileState = False
 
     def InputDeviceChanged(self):
         self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+        self.ConnectInputState = False
         in_device = self.ui.InputDeviceCombo.currentText()
         self.settings.SaveInputDevice(in_device)
-        if self.midi.ConnectInput(in_device):
-            self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
-        else:
-            self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+        self.midi.ConnectInput(in_device)
 
     def OuputDeviceChanged(self):
         self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+        self.ConnectOutputState = False
         out_device = self.ui.OutputDeviceCombo.currentText()
         print(out_device)
         self.settings.SaveOutputDevice(out_device)
@@ -154,6 +160,7 @@ class MainWindow(QMainWindow):
 
     def MidifileChanged(self):
         self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+        self.MidifileState = False
         file = self.ui.FileCombo.currentText()
         print(f"MidifileChanged:[{file}]")
         self.settings.SaveMidifile(file)

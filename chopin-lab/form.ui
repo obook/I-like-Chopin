@@ -54,12 +54,12 @@
       <rect>
        <x>70</x>
        <y>150</y>
-       <width>401</width>
+       <width>371</width>
        <height>30</height>
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>Playback</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_File">

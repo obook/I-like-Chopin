@@ -8,20 +8,20 @@ from mido import open_input
 from threading import Thread
 
 class ClassThreadInput(Thread):
+    in_device = None
     inport = None
     running = False
 
-    def __init__(self, keys, pParent):
+    def __init__(self, in_device, keys, pParent):
         Thread.__init__( self )
+        self.in_device = in_device
         self.keys = keys
         self.pParent = pParent
         self.running = True
+        print("ClassThreadInput created")
 
     def __del__(self):
             print("ClassThreadInput destroyed")
-
-    def SetInput(self, in_device):
-        self.in_device = in_device
 
     def run(self):
         self.stop()

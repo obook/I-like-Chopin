@@ -20,6 +20,7 @@ class ClassThreadMidiFile(Thread):
         self.keys = keys
         self.running = False
         self.tracks = None
+        print("ClassThreadMidiFile created")
 
     def __del__(self):
             print("ClassThreadMidiFile destroyed")

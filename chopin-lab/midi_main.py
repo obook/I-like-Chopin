@@ -17,16 +17,16 @@ class ClassMidiMain:
 
     keys={"key_on":0}
 
+    # Threads
     ThreadInput = None
     ThreadOutput = None
     ThreadMidiFile = None
+
     midifile = None
     port_out = None
     tracks = None
 
     settings = ClassSettings()
-
-    PassThrough = True
 
     def __init__(self, pParent, tracks):
         self.pParent = pParent
@@ -52,8 +52,7 @@ class ClassMidiMain:
         if self.ThreadInput:
             self.ThreadInput.stop()
 
-        self.ThreadInput = ClassThreadInput(self.keys, self.pParent)
-        self.ThreadInput.SetInput(in_device)
+        self.ThreadInput = ClassThreadInput(in_device, self.keys, self.pParent)
         self.ThreadInput.start()
 
     def ConnectInputState(self):
@@ -66,8 +65,7 @@ class ClassMidiMain:
         if self.ThreadOutput:
             self.ThreadOutput.stop()
 
-        self.ThreadOutput = ClassThreadOutput(self.keys, self.pParent)
-        self.ThreadOutput.SetOutput(out_device)
+        self.ThreadOutput = ClassThreadOutput(out_device, self.keys, self.pParent)
         self.port_out = self.ThreadOutput.start()
 
         self.SetMidifile(self.midifile)
