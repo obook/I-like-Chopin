@@ -19,6 +19,9 @@ class MidiPlayer( Thread ):
         self.keys = keys
         self.pParent = pParent
 
+    def __del__(self):
+            print("MidiPlayer destroyed")
+
     def run( self ):
 
         self.keys['run'] = True

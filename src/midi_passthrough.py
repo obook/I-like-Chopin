@@ -20,6 +20,9 @@ class MidiPassthrough(Thread):
         self.keys = keys
         self.pParent = pParent
 
+    def __del__(self):
+            print("MidiPassthrough destroyed")
+
     def run( self ):
 
         try:

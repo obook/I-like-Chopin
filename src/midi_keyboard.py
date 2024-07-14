@@ -19,6 +19,9 @@ class MidiKeyboard( Thread ):
         self.keys = keys
         self.pParent = pParent
 
+    def __del__(self):
+            print("MidiKeyboard destroyed")
+
     def run( self ):
 
         try:
