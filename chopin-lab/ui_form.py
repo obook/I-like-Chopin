@@ -137,7 +137,7 @@ class Ui_MainWindow(object):
         self.pushButton_Panic.setText(QCoreApplication.translate("MainWindow", u"Panic", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("MainWindow", u"Commands", None))
         self.pushButton_TracksAll_2.setText(QCoreApplication.translate("MainWindow", u"Humanize", None))
-        self.pushButton_Slow.setText(QCoreApplication.translate("MainWindow", u"Slow", None))
+        self.pushButton_Slow.setText(QCoreApplication.translate("MainWindow", u"Slow 0", None))
         self.pushButton_TracksNone_2.setText(QCoreApplication.translate("MainWindow", u"Random", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"(MIDI:77)", None))
     # retranslateUi
