@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.1
+## Created by: Qt User Interface Compiler version 6.7.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -16,28 +16,28 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QGroupBox,
-    QLabel, QMainWindow, QPushButton, QSizePolicy,
-    QStatusBar, QTextBrowser, QWidget)
+    QLabel, QLineEdit, QMainWindow, QPushButton,
+    QSizePolicy, QStatusBar, QTextBrowser, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(504, 558)
+        MainWindow.resize(504, 598)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.textBrowser = QTextBrowser(self.centralwidget)
         self.textBrowser.setObjectName(u"textBrowser")
-        self.textBrowser.setGeometry(QRect(10, 440, 481, 51))
+        self.textBrowser.setGeometry(QRect(10, 480, 481, 51))
         self.pushButton_Quit = QPushButton(self.centralwidget)
         self.pushButton_Quit.setObjectName(u"pushButton_Quit")
-        self.pushButton_Quit.setGeometry(QRect(410, 500, 80, 31))
+        self.pushButton_Quit.setGeometry(QRect(410, 540, 80, 31))
         self.groupBox = QGroupBox(self.centralwidget)
         self.groupBox.setObjectName(u"groupBox")
-        self.groupBox.setGeometry(QRect(10, 0, 481, 201))
+        self.groupBox.setGeometry(QRect(10, 0, 481, 241))
         self.pushButton_Mode = QPushButton(self.groupBox)
         self.pushButton_Mode.setObjectName(u"pushButton_Mode")
-        self.pushButton_Mode.setGeometry(QRect(70, 150, 371, 30))
+        self.pushButton_Mode.setGeometry(QRect(70, 187, 371, 30))
         self.label_File = QLabel(self.groupBox)
         self.label_File.setObjectName(u"label_File")
         self.label_File.setGeometry(QRect(30, 114, 71, 22))
@@ -49,7 +49,7 @@ class Ui_MainWindow(object):
         self.OutputDeviceCombo.setGeometry(QRect(70, 70, 371, 30))
         self.label_Mode = QLabel(self.groupBox)
         self.label_Mode.setObjectName(u"label_Mode")
-        self.label_Mode.setGeometry(QRect(18, 154, 71, 22))
+        self.label_Mode.setGeometry(QRect(18, 191, 71, 22))
         self.label_Ouput = QLabel(self.groupBox)
         self.label_Ouput.setObjectName(u"label_Ouput")
         self.label_Ouput.setGeometry(QRect(15, 74, 71, 22))
@@ -68,9 +68,13 @@ class Ui_MainWindow(object):
         self.labelStatusMidifile = QLabel(self.groupBox)
         self.labelStatusMidifile.setObjectName(u"labelStatusMidifile")
         self.labelStatusMidifile.setGeometry(QRect(450, 113, 20, 20))
+        self.lineEdit_MidiPath = QLineEdit(self.groupBox)
+        self.lineEdit_MidiPath.setObjectName(u"lineEdit_MidiPath")
+        self.lineEdit_MidiPath.setGeometry(QRect(70, 150, 371, 25))
+        self.lineEdit_MidiPath.setReadOnly(True)
         self.groupBox_2 = QGroupBox(self.centralwidget)
         self.groupBox_2.setObjectName(u"groupBox_2")
-        self.groupBox_2.setGeometry(QRect(10, 200, 481, 141))
+        self.groupBox_2.setGeometry(QRect(10, 240, 481, 141))
         self.gridLayoutWidget = QWidget(self.groupBox_2)
         self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
         self.gridLayoutWidget.setGeometry(QRect(10, 70, 461, 71))
@@ -88,10 +92,10 @@ class Ui_MainWindow(object):
         self.pushButton_TracksNone.setGeometry(QRect(375, 30, 97, 30))
         self.pushButton_Panic = QPushButton(self.centralwidget)
         self.pushButton_Panic.setObjectName(u"pushButton_Panic")
-        self.pushButton_Panic.setGeometry(QRect(10, 500, 97, 30))
+        self.pushButton_Panic.setGeometry(QRect(10, 540, 97, 30))
         self.groupBox_3 = QGroupBox(self.centralwidget)
         self.groupBox_3.setObjectName(u"groupBox_3")
-        self.groupBox_3.setGeometry(QRect(10, 340, 481, 91))
+        self.groupBox_3.setGeometry(QRect(10, 380, 481, 91))
         self.pushButton_TracksAll_2 = QPushButton(self.groupBox_3)
         self.pushButton_TracksAll_2.setObjectName(u"pushButton_TracksAll_2")
         self.pushButton_TracksAll_2.setEnabled(False)
@@ -130,6 +134,7 @@ class Ui_MainWindow(object):
         self.labelStatusInput.setText(QCoreApplication.translate("MainWindow", u"LED", None))
         self.labelStatusOuput.setText(QCoreApplication.translate("MainWindow", u"LED", None))
         self.labelStatusMidifile.setText(QCoreApplication.translate("MainWindow", u"LED", None))
+        self.lineEdit_MidiPath.setText(QCoreApplication.translate("MainWindow", u"MIDIFILES PATH", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"Tracks", None))
         self.pushButton_TracksAll.setText(QCoreApplication.translate("MainWindow", u"All", None))
         self.pushButton_TracksFirst.setText(QCoreApplication.translate("MainWindow", u"First", None))

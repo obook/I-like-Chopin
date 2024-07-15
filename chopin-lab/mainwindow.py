@@ -110,8 +110,11 @@ class MainWindow(QMainWindow):
         # Connections
         self.midi.ConnectInput(Input)
         self.midi.ConnectOutput(Output)
+
+        # Midifiles
         midifile = self.settings.GetMidifile()
         self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+midifile)
+        self.ui.lineEdit_MidiPath.setText(self.settings.GetMidiPath())
 
         # Timer
         timer = QTimer(self)
