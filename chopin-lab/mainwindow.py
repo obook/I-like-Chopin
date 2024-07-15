@@ -18,10 +18,11 @@ from settings import ClassSettings
 #     pyside6-uic form.ui -o ui_form.py
 from ui_form import Ui_MainWindow
 
+ICON_APPLICATION = './icons/i-like-chopin.svg'
 # Define status icons
-ICON_RED_LED = "./icons/led-red-on.png"
-ICON_GREEN_LED = "./icons/green-led-on.png"
-ICON_LED_OFF = "./icons/led-off.png"
+ICON_RED_LED = './icons/led-red-on.png'
+ICON_GREEN_LED = './icons/green-led-on.png'
+ICON_LED_OFF = './icons/led-off.png'
 
 class MainWindow(QMainWindow):
 
@@ -40,7 +41,7 @@ class MainWindow(QMainWindow):
 
         # Application icon X.org->correct - Wayland->not implemented
         my_icon = QIcon()
-        my_icon.addFile('i-like-chopin.png')
+        my_icon.addFile(ICON_APPLICATION)
         self.setWindowIcon(my_icon)
 
         # Midi class

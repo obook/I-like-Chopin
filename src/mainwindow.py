@@ -33,13 +33,13 @@ pyside2-uic form.ui -o ui_form.py
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from PySide6.QtGui import QIcon
-#from midi_numbers import number_to_note
-
 
 from ui_form import Ui_MainWindow
 from midi_main import MidiMain
 from settings import GetInputDeviceId, SaveInputDeviceId, GetOutputDeviceId,SaveOutputDeviceId,GetMidifileId,SaveMidifileId, GetMidiPath
 #from logger import QPlainTextEditLogger
+
+app = None
 
 class MainWindow(QMainWindow):
     bGlobalStatusRun = False
@@ -228,16 +228,17 @@ class MainWindow(QMainWindow):
     def Panic(self):
         self.midi.MidiPanic()
 
-if __name__ == "__main__":
+def start():
+    global app
+
     if not QApplication.instance():
         app = QApplication(sys.argv)
     else:
         app = QApplication.instance()
     widget = MainWindow()
     widget.setWindowTitle("I Like Chopin")
+    # m_icon = pParent->windowIcon().pixmap(32, 32);
     widget.show()
     sys.exit(app.exec())
-
-
 
 

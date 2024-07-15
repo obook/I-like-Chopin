@@ -1,0 +1,27 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=I-Like-Chopin
+Version=1.0
+GenericName=I-Like-Chopin
+GenericName[de]=Funny Midi Auto Player
+GenericName[fr]=Funny Midi Auto Player
+GenericName[it]=Funny Midi Auto Player
+GenericName[ru]=Funny Midi Auto Player
+GenericName[uk]=Funny Midi Auto Player
+Comment=It is a very special ALSA MIDI player that uses Python 3, the Mido MIDI library, and Qt6. Any random key pressed on a physical MIDI piano or keyboard plays the correct note from the MIDI file.
+Comment[de]=It is a very special ALSA MIDI player that uses Python 3, the Mido MIDI library, and Qt6. Any random key pressed on a physical MIDI piano or keyboard plays the correct note from the MIDI file.
+Comment[fr]=It is a very special ALSA MIDI player that uses Python 3, the Mido MIDI library, and Qt6. Any random key pressed on a physical MIDI piano or keyboard plays the correct note from the MIDI file.
+Comment[it]=It is a very special ALSA MIDI player that uses Python 3, the Mido MIDI library, and Qt6. Any random key pressed on a physical MIDI piano or keyboard plays the correct note from the MIDI file.
+Comment[ru]=It is a very special ALSA MIDI player that uses Python 3, the Mido MIDI library, and Qt6. Any random key pressed on a physical MIDI piano or keyboard plays the correct note from the MIDI file.
+Comment[sk]=It is a very special ALSA MIDI player that uses Python 3, the Mido MIDI library, and Qt6. Any random key pressed on a physical MIDI piano or keyboard plays the correct note from the MIDI file.
+Comment[uk]=It is a very special ALSA MIDI player that uses Python 3, the Mido MIDI library, and Qt6. Any random key pressed on a physical MIDI piano or keyboard plays the correct note from the MIDI file.
+Exec=i-like-chopin.py
+Icon=i-like-chopin
+Categories=Audio;AudioVideo;Midi;X-Alsa;X-Jack;Qt;
+Keywords=Audio;MIDI;ALSA;JACK;LV2;Qt;
+Keywords[uk]=Audio;MIDI;ALSA;JACK;LV2;Qt;Звук;міді;алса;джек;
+Terminal=false
+Type=Application
+StartupWMClass=I-Like-Chopin
+X-Window-Icon=I-Like-Chopin
+X-SuSE-translate=true

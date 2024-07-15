@@ -8,6 +8,7 @@
         "midi_keyboard.py",
         "midi_player.py",
         "logger.py",
-        "midi_passthrough.py"
+        "midi_passthrough.py",
+        "i-like-chopin.py"
     ]
 }

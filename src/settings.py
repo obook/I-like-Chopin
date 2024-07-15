@@ -6,10 +6,18 @@ Created on Wed Jun  5 18:19:14 2024
 """
 
 import json
+import os
 
-config = {"InputDeviceId": 0, "OutputDeviceId": 0, "Midifile":"", "MidiPath":"./midi"}
+'''
+NOTICE
+------
+settings file 'i-like-chopin.json' is located to ~/.config
+midifiles folder 'midi' is located to ~/.local/share/i-like-chopin
+'''
 
-settingsfile = 'i-like-chopin.json'
+settingsfile = os.path.expanduser("~") + "/.config/i-like-chopin.json"
+defaultmidipath = os.path.expanduser("~") + "/.local/share/i-like-chopin/midi"
+config = {"InputDeviceId": 0, "OutputDeviceId": 0, "Midifile":"", "MidiPath":None}
 
 def LoadConfig():
     global config
@@ -54,7 +62,9 @@ def SaveMidifileId(n):
 def GetMidiPath():
     LoadConfig()
     if not config.get('MidiPath'):
-        config['MidiPath'] = "./midi"
+        os.makedirs(defaultmidipath, exist_ok=True)
+        print(f"WARNING : Copy midifiles to {defaultmidipath}")
+        config['MidiPath'] = defaultmidipath
         SaveConfig()
     return config['MidiPath']
 
