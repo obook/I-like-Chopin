@@ -15,7 +15,7 @@ class ClassSettings:
     defaultmidipath = os.path.expanduser("~") + "/.local/share/chopin-lab/midi"
 
     def __init__(self):
-        print(f"Loading settings = [{self.settingsfile}]")
+        print(f"Settings file = [{self.settingsfile}]")
 
     def LoadConfig(self):
         try:
