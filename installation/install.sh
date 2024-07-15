@@ -2,9 +2,9 @@
 
 # Program
 rm -R ../src/__pycache__ 2> /dev/null
-sudo mkdir -p /usr/share/I-Like-Chopin
-sudo cp ../src/*.py /usr/share/I-Like-Chopin
-sudo cp bin/I-Like-Chopin /usr/bin
+sudo mkdir -p /usr/share/i-like-chopin
+sudo cp ../src/*.py /usr/share/i-like-chopin
+sudo cp bin/i-like-chopin /usr/bin
 
 # Midifile
 cp -r ../src/midi ~/.local/share/i-like-chopin
