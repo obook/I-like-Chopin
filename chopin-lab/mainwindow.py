@@ -18,11 +18,11 @@ from settings import ClassSettings
 #     pyside6-uic form.ui -o ui_form.py
 from ui_form import Ui_MainWindow
 
-ICON_APPLICATION = './icons/i-like-chopin.svg'
+ICON_APPLICATION = './icons/svg/i-like-chopin.svg'
 # Define status icons
-ICON_RED_LED = './icons/led-red-on.png'
-ICON_GREEN_LED = './icons/green-led-on.png'
-ICON_LED_OFF = './icons/led-off.png'
+ICON_RED_LED = './icons/led/led-red-on.png'
+ICON_GREEN_LED = './icons/led/green-led-on.png'
+ICON_LED_OFF = './icons/led/led-off.png'
 
 class MainWindow(QMainWindow):
 

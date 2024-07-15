@@ -21,6 +21,8 @@ config = {"InputDeviceId": 0, "OutputDeviceId": 0, "Midifile":"", "MidiPath":Non
 
 def LoadConfig():
     global config
+
+    print(f"Loading settings = [{settingsfile}]")
     
     try:
         with open(settingsfile, 'r') as f:
@@ -69,5 +71,5 @@ def GetMidiPath():
     return config['MidiPath']
 
 def WarningNoMidifile():
-    print(f"WARNING : Copy midifiles to {defaultmidipath}")
+    print(f"WARNING : Copy midifiles to {config['MidiPath']}")
 

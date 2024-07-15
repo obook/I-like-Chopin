@@ -6,16 +6,18 @@ Created on Wed Jun  5 18:19:14 2024
 """
 
 import json
+import os
 
 class ClassSettings:
 
-    config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"(None)", "MidiPath":"./midi"}
-    settingsfile = 'chopin-lab.json'
+    config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"(None)", "MidiPath":None}
+    settingsfile = os.path.expanduser("~") + "/.config/chopin-lab.json"
+    defaultmidipath = os.path.expanduser("~") + "/.local/share/chopin-lab/midi"
+
     def __init__(self):
-        pass
+        print(f"Loading settings = [{self.settingsfile}]")
 
     def LoadConfig(self):
-
         try:
             with open(self.settingsfile, 'r') as f:
                 self.config = json.load(f)
@@ -63,7 +65,13 @@ class ClassSettings:
     def GetMidiPath(self):
         self.LoadConfig()
         if not self.config.get('MidiPath'):
-            self.config['MidiPath'] = "./midi"
+            os.makedirs(self.defaultmidipath, exist_ok=True)
+            self.WarningNoMidifile()
+            self.config['MidiPath'] = self.defaultmidipath
             self.SaveConfig()
         return self.config['MidiPath']
+
+    def WarningNoMidifile(self):
+        print(f"WARNING : Copy midifiles to {self.config['MidiPath']}")
+
 
