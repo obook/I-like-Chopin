@@ -12,7 +12,7 @@ from os import path
 from midi_keyboard import MidiKeyboard
 from midi_player import MidiPlayer
 from midi_passthrough import MidiPassthrough
-from settings import GetMidiPath
+from settings import GetMidiPath, WarningNoMidifile
 
 class MidiMain():
     player_thread = None
@@ -50,6 +50,8 @@ class MidiMain():
         midifiles = []
         for file in sorted(glob.glob(GetMidiPath()+"/*.mid")):
             midifiles.append(path.splitext(path.basename(file))[0])
+        if not midifiles:
+            WarningNoMidifile()
         return midifiles
 
     def MidiStart(self, in_device, out_device, midifile, pParent):

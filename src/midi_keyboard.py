@@ -53,7 +53,7 @@ class MidiKeyboard( Thread ):
 
         if message.type == 'note_on' : # or message.type == 'note_off':
             note, octave = number_to_note(message.note)
-            text=f" {note}{octave} [{message.note}]"
+            text=f"\t\t{note}{octave}\t\t[{message.note}]"
             self.pParent.PrintKeys(str(self.keys['key_on'])+text)
         elif message.type != 'note_off' :
             self.pParent.PrintKeys(message)

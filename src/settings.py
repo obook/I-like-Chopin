@@ -63,8 +63,11 @@ def GetMidiPath():
     LoadConfig()
     if not config.get('MidiPath'):
         os.makedirs(defaultmidipath, exist_ok=True)
-        print(f"WARNING : Copy midifiles to {defaultmidipath}")
+        WarningNoMidifile()
         config['MidiPath'] = defaultmidipath
         SaveConfig()
     return config['MidiPath']
+
+def WarningNoMidifile():
+    print(f"WARNING : Copy midifiles to {defaultmidipath}")
 

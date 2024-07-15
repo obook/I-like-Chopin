@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
         self.midi = MidiMain(self)
 
         self.ui = Ui_MainWindow()
-        self.setFixedSize(509,504)
+        self.setFixedSize(502,534)
         self.ui.setupUi(self)
 
         # X.org -> correct
@@ -99,6 +99,8 @@ class MainWindow(QMainWindow):
             pass
 
         self.ui.pushButton_Mode.setText(u"AutoPlay")
+
+        self.ui.label_midipath.setText(GetMidiPath())
 
         # grid
         grid = self.ui.gridLayout
