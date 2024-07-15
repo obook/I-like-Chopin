@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
         self.midi = ClassMidiMain(self,self.TracksList)
 
         # Datas
-        Inputs, Outputs = self.midi.GetDevices()
+        Inputs, Outputs, IOPorts = self.midi.GetDevices()
         Input = self.settings.GetInputDevice()
         Output = self.settings.GetOutputDevice()
         MidiFiles = self.midi.GetMidiFiles()
@@ -191,7 +191,10 @@ class MainWindow(QMainWindow):
         return(self.TracksList[n])
 
     def PrintKeys(self,n):
-        self.ui.statusbar.showMessage("Keys:"+str(n))
+        self.ui.statusbar.showMessage("Keys\t"+str(n))
+
+    def PrintSlow(self,speed): #0 to 126
+        self.ui.pushButton_Slow.setText("Slow "+str(speed))
 
     def Panic(self):
         self.midi.Panic()

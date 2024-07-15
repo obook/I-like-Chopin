@@ -23,7 +23,7 @@ class ClassThreadOutput(Thread):
     def run(self):
         self.stop()
         try:
-            self.outport = open_output(self.out_device)
+            self.outport = open_output(self.out_device,autoreset=True)
         except:
             self.outport = None
             print(f"midi_output open [{self.out_device}] ERROR")

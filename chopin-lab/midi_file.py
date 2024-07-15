@@ -15,22 +15,21 @@ class ClassThreadMidiFile(Thread):
     port_out = None
     running = False
 
-    def __init__(self,keys):
+    def __init__(self,keys,tracks):
         Thread.__init__( self )
         self.keys = keys
         self.running = False
-        self.tracks = None
+        self.tracks = tracks
         print("ClassThreadMidiFile created")
 
     def __del__(self):
             print("ClassThreadMidiFile destroyed")
 
-    def SetMidiFile(self, filename, tracks):
+    def SetMidiFile(self, filename):
         self.midifile = filename
-        self.tracks = tracks
         try:
             midi = MidiFile(self.midifile)
-            print(f"{self.midifile} = {round(midi.length/60,2)} minutes ")
+            print(f"{self.midifile} = {round(midi.length/60,2)} minutes")
             for i, track in enumerate(midi.tracks):
                 print('Track {}: {}'.format(i, track.name))
         except:
@@ -56,6 +55,10 @@ class ClassThreadMidiFile(Thread):
             # Stop while running ?
             if not self.running:
                 break
+
+            # Speed controlled by knob, see midi_input
+            if msg.type == 'note_on':
+                msg.time = msg.time + self.keys['tempo']/5000
 
             time.sleep(msg.time)
 

@@ -15,7 +15,7 @@ from settings import ClassSettings
 
 class ClassMidiMain:
 
-    keys={"key_on":0}
+    keys={"key_on":0,"tempo":0}
 
     # Threads
     ThreadInput = None
@@ -30,13 +30,12 @@ class ClassMidiMain:
 
     def __init__(self, pParent, tracks):
         self.pParent = pParent
-        self.GetDevices()
         self.tracks = tracks
-        self.keys={"key_on":0}
 
     def GetDevices(self):
         Inputs = []
         Outputs = []
+        IOPorts = []
 
         for i, port_name in enumerate(mido.get_output_names()):
             clean_port_name = port_name[:port_name.rfind(' ')]
@@ -46,7 +45,13 @@ class ClassMidiMain:
             clean_port_name = port_name[:port_name.rfind(' ')]
             Inputs.append(clean_port_name)
 
-        return Inputs, Outputs
+        for i, port_name in enumerate(mido.get_ioport_names()):
+            clean_port_name = port_name[:port_name.rfind(' ')]
+            IOPorts.append(clean_port_name)
+
+        print("IOPorts=",IOPorts)
+
+        return Inputs, Outputs, IOPorts
 
     def ConnectInput(self, in_device):
         if self.ThreadInput:
@@ -89,8 +94,8 @@ class ClassMidiMain:
             self.ThreadMidiFile.stop()
             self.ThreadMidiFile = None
 
-        self.ThreadMidiFile = ClassThreadMidiFile(self.keys)
-        self.ThreadMidiFile.SetMidiFile(filename, self.tracks)
+        self.ThreadMidiFile = ClassThreadMidiFile(self.keys, self.tracks)
+        self.ThreadMidiFile.SetMidiFile(filename)
 
         if self.ThreadOutput:
             port = self.ThreadOutput.getport()
