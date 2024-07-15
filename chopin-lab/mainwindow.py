@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Quit.clicked.connect(self.Quit)
         self.ui.pushButton_Mode.setEnabled(False)
 
-        # ComboBoxes
+        # ComboBoxes Inputs/Outputs
         self.ui.InputDeviceCombo.addItem(Input)
         self.ui.InputDeviceCombo.addItems(Inputs)
         self.ui.InputDeviceCombo.currentIndexChanged.connect(self.InputDeviceChanged)
@@ -67,14 +67,6 @@ class MainWindow(QMainWindow):
         self.ui.OutputDeviceCombo.addItem(Output)
         self.ui.OutputDeviceCombo.addItems(Outputs)
         self.ui.OutputDeviceCombo.currentIndexChanged.connect(self.OuputDeviceChanged)
-
-        self.ui.FileCombo.addItem(Midifile)
-        self.ui.FileCombo.addItems(MidiFiles)
-        try:
-            self.ui.FileCombo.setCurrentIndex(self.settings.GetMidifileId())
-        except:
-            pass
-        self.ui.FileCombo.currentIndexChanged.connect(self.MidifileChanged)
 
         # Leds
         self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_LED_OFF))
@@ -115,6 +107,9 @@ class MainWindow(QMainWindow):
         midifile = self.settings.GetMidifile()
         self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+midifile)
         self.ui.lineEdit_MidiPath.setText(self.settings.GetMidiPath())
+        self.ui.FileCombo.addItem(Midifile)
+        self.ui.FileCombo.addItems(MidiFiles)
+        self.ui.FileCombo.currentIndexChanged.connect(self.MidifileChanged)
 
         # Timer
         timer = QTimer(self)

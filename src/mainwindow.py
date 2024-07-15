@@ -31,6 +31,7 @@ pyside2-uic form.ui -o ui_form.py
 '''
 
 import sys
+import os
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from PySide6.QtGui import QIcon
 
@@ -59,7 +60,10 @@ class MainWindow(QMainWindow):
         # X.org -> correct
         # Wayland -> not implemented yet :
         my_icon = QIcon()
-        my_icon.addFile('i-like-chopin.png')
+
+        print("CURRENT ICON=",os.path.dirname(os.path.realpath(__file__))+'/icons/i-like-chopin.png')
+
+        my_icon.addFile(os.path.dirname(os.path.realpath(__file__))+'/icons/svg/i-like-chopin.svg')
         self.setWindowIcon(my_icon)
 
         self.ui.pushButton_Start.clicked.connect(self.Start)
