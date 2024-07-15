@@ -15,8 +15,8 @@ settings file 'i-like-chopin.json' is located to ~/.config
 midifiles folder 'midi' is located to ~/.local/share/i-like-chopin
 '''
 
-settingsfile = os.path.expanduser("~") + "/.config/i-like-chopin.json"
-defaultmidipath = os.path.expanduser("~") + "/.local/share/i-like-chopin/midi"
+settingsfile = os.path.join(os.path.expanduser("~"), ".config", "i-like-chopin.json")
+defaultmidipath =os.path.join( os.path.expanduser("~"), ".local","share","i-like-chopin","midi")
 config = {"InputDeviceId": 0, "OutputDeviceId": 0, "Midifile":"", "MidiPath":None}
 
 def LoadConfig():
@@ -28,14 +28,20 @@ def LoadConfig():
         with open(settingsfile, 'r') as f:
             config = json.load(f)
     except:
+        path = os.path.join(os.path.expanduser("~"), ".config")
+        os.makedirs(path, exist_ok=True)
         SaveConfig()
         
     return True
 
 def SaveConfig():
-    with open(settingsfile, 'w') as f:
-        json.dump(config, f)
-    return True
+    try:
+        with open(settingsfile, 'w') as f:
+            json.dump(config, f)
+        return True
+    except:
+        print(f"ERROR write settings = [{settingsfile}]")
+    return False
 
 def GetInputDeviceId():
     LoadConfig()

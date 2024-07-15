@@ -13,6 +13,7 @@ from midi_keyboard import MidiKeyboard
 from midi_player import MidiPlayer
 from midi_passthrough import MidiPassthrough
 from settings import GetMidiPath, WarningNoMidifile
+import platform
 
 class MidiMain():
     player_thread = None
@@ -23,25 +24,21 @@ class MidiMain():
     def __init__( self, pParent ):
         self.pParent = pParent
         self.keys={"key_on":0,'run':False,'MidiPlayerRunning':False,'MidiKeyboardRunning':False}
-
-        #mido.set_backend('mido.backends.rtmidi/LINUX_ALSA')
-        #print(mido.backend)
-
-        #mido.set_backend('mido.backends.rtmidi/UNIX_JACK')
-        #print(mido.backend)
-
+        print(f"MidiMain:platform.system()=[{platform.system()}]")
 
     def GetDevices(self):
         Inputs = []
         Outputs = []
 
         for i, port_name in enumerate(mido.get_output_names()):
-            clean_port_name = port_name[:port_name.rfind(' ')]
-            Outputs.append(clean_port_name)
+            if platform.system() != "Windows": # cleanup linux ports
+                port_name = port_name[:port_name.rfind(' ')]
+            Outputs.append(port_name)
 
         for i, port_name in enumerate(mido.get_input_names()):
-            clean_port_name = port_name[:port_name.rfind(' ')]
-            Inputs.append(clean_port_name)
+            if platform.system() != "Windows": # cleanup linux ports
+                port_name = port_name[:port_name.rfind(' ')]
+            Inputs.append(port_name)
 
         return Inputs, Outputs
 
