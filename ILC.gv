@@ -1,31 +1,28 @@
-digraph G {
-        fontname="Helvetica,Arial,sans-serif"
-        node [fontname="Helvetica,Arial,sans-serif"]
-        edge [fontname="Helvetica,Arial,sans-serif"]
-        /* layout=neato */
+digraph {
+        splines=false;
+        ranksep=0.5;
+        fontname="Helvetica,Arial,sans-serif";
+        node[shape=box, color=black, style=filled, fillcolor=white];
+        edge [fontname="Helvetica,Arial,sans-serif", color=black];
 
         subgraph cluster_0 {
                 label = "Computer";
-                style=filled;
-                color=lightgrey;
-                node [style=filled,color=white];
-                ILC -> QSynth [label="Correct Key"]
-                {"Midi File"} -> ILC [label="MIDI"]
+                color=blue;
+                MIDIFILE [label="Midi File"];
+                ILC [label="I-Like-Chopin"];
+                QSYNTH [label="QSynth"];
         }
+
+        MIDIFILE -> ILC
+        ILC -> QSYNTH [label="Correct Key"];
 
         subgraph cluster_1 {
                 label = "Physical";
-                style=filled;
-                color=lightgrey;
-                node [style=filled,color=white];
-                {"Midi Keyboard"} -> ILC [label="Any Key"]
-                color=grey
+                color=red;
+                KEYBOARD[label="Midi Keyboard"];
         }
 
-
-        QSynth -> {"Sound Device"} [label="Audio"]
-
-        "Sound Device" [shape=Msquare];
-
-
+        KEYBOARD -> ILC [label="Any Key"];
+        SOUNDEVICE[label="Sound Device", shape=square];
+        QSYNTH -> SOUNDEVICE [label="Audio"];
 }
