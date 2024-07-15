@@ -24,19 +24,19 @@ class MidiMain():
     def __init__( self, pParent ):
         self.pParent = pParent
         self.keys={"key_on":0,'run':False,'MidiPlayerRunning':False,'MidiKeyboardRunning':False}
-        print(f"MidiMain:platform.system()=[{platform.system()}]")
+        print(f"MidiMain:platform.system()=[{platform.system()}]") # tested = "Linux" , "Windows"
 
     def GetDevices(self):
         Inputs = []
         Outputs = []
 
         for i, port_name in enumerate(mido.get_output_names()):
-            if platform.system() != "Windows": # cleanup linux ports
+            if platform.system() == "Linux": # cleanup linux ports
                 port_name = port_name[:port_name.rfind(' ')]
             Outputs.append(port_name)
 
         for i, port_name in enumerate(mido.get_input_names()):
-            if platform.system() != "Windows": # cleanup linux ports
+            if platform.system() == "Linux": # cleanup linux ports
                 port_name = port_name[:port_name.rfind(' ')]
             Inputs.append(port_name)
 
