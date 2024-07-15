@@ -237,6 +237,9 @@ def start():
         app = QApplication.instance()
     widget = MainWindow()
     widget.setWindowTitle("I Like Chopin")
+    # execute:
+    # qdbus org.kde.KWin /KWin queryWindowInfo (resourceClass attribute)
+    app.setDesktopFileName("i-like-chopin");
     # m_icon = pParent->windowIcon().pixmap(32, 32);
     widget.show()
     sys.exit(app.exec())
