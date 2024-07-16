@@ -12,6 +12,7 @@ from PySide6.QtCore import QTimer
 from PySide6.QtGui import QIcon
 from midi_main import ClassMidiMain
 from settings import ClassSettings
+from informations import ShowInformation
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -60,6 +61,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Panic.clicked.connect(self.Panic)
         self.ui.pushButton_Quit.clicked.connect(self.Quit)
         self.ui.pushButton_Mode.setEnabled(False)
+        self.ui.pushButton_Info.clicked.connect(self.Informations)
 
         # ComboBoxes Inputs/Outputs
         self.ui.InputDeviceCombo.addItem(Input)
@@ -200,14 +202,32 @@ class MainWindow(QMainWindow):
     def Panic(self):
         self.midi.Panic()
 
+    def Informations(self):
+        ShowInformation(self)
+
     def Quit(self):
         self.midi.quit()
         app.quit()
 
 def start():
     global app
-    app = QApplication(sys.argv)
+
+    if not QApplication.instance():
+        app = QApplication(sys.argv)
+    else:
+        app = QApplication.instance()
     widget = MainWindow()
-    widget.setWindowTitle("Chopin Lab")
+    widget.setWindowTitle("I Like Chopin")
+
+    # Wayland : execute ?
+    # qdbus org.kde.KWin /KWin queryWindowInfo (resourceClass attribute)
+
+    # Wayland : icon is set in taskbar
+    # regarding xxx.desktop file
+
+    app.setDesktopFileName("i-like-chopin");
+
+    # m_icon = pParent->windowIcon().pixmap(32, 32);
     widget.show()
     sys.exit(app.exec())
+

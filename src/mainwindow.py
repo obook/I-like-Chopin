@@ -244,8 +244,8 @@ class MainWindow(QMainWindow):
         self.midi.MidiPanic()
 
     def Informations(self):
-        print("Informations")
-        ShowInformation(app)
+        ShowInformation(self)
+
 
 def start():
     global app

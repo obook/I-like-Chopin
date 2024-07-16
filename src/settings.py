@@ -76,6 +76,9 @@ def GetMidiPath():
         SaveConfig()
     return config['MidiPath']
 
+def GetConfigPath():
+    return settingsfile
+
 def WarningNoMidifile():
     print(f"WARNING : Copy midifiles to {config['MidiPath']}")
 

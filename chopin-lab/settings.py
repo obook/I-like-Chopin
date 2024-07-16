@@ -71,6 +71,9 @@ class ClassSettings:
             self.SaveConfig()
         return self.config['MidiPath']
 
+    def GetConfigPath(self):
+        return self.settingsfile
+
     def WarningNoMidifile(self):
         print(f"WARNING : Copy midifiles to {self.config['MidiPath']}")
 

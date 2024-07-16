@@ -1,42 +1,31 @@
-# This Python file uses the following encoding: utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun  5 18:19:14 2024
+@author: obooklage
+"""
 
-import sys
-from PySide6.QtWidgets import QApplication, QDialogButtonBox
+from PySide6.QtWidgets import QDialog
 from ui_informations import Ui_DialogInformation
+import platform
+from settings import GetMidiPath, GetConfigPath
 
-'''
-
-WORK IN PROGRES...
-
-'''
-
-class Informations(QDialogButtonBox):
+class InformationsDlg(Ui_DialogInformation, QDialog):
     def __init__(self, parent=None):
-        '''
-        super(Ui_DialogInformation, self).__init__()
-        self.initUI()
-        '''
-
         super().__init__(parent)
-        self.ui = Ui_DialogInformation()
-        self.ui.setupUi(self)
+        self.setupUi(self)
+        self.setWindowTitle("Informations")
+        self.pushButton_Close.clicked.connect(self.quit)
 
+        text = ""
+        text += f"SYSTEM\n{platform.system()}\n\n"
+        text += f"CONFIG FILE\n{GetConfigPath()}\n\n"
+        text += f"MIDIFILES PATH\n{GetMidiPath()}\n\n"
+        self.textEdit.setText(text)
 
-    def accept(self):
-        print("accept")
+    def quit(self):
+        self.close()
 
-    def reject(self):
-        print("reject")
-
-def ShowInformation(app):
-    print("Informations:ShowInformation")
-    '''
-    # app = QApplication(sys.argv)
-    widget = Informations()
-    widget.show()
-    app.exec()
-    '''
-    form = Informations()
-    form.show()
-    # form.exec_()
-
+def ShowInformation(pParent):
+    dlg = InformationsDlg(pParent)
+    dlg.show()
