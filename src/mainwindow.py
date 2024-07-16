@@ -243,9 +243,9 @@ class MainWindow(QMainWindow):
 
 def start():
     global app
-
     if not QApplication.instance():
         app = QApplication(sys.argv)
+        app.setStyle('Fusion') # Windows dark theme
     else:
         app = QApplication.instance()
     widget = MainWindow()
