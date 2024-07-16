@@ -10,9 +10,9 @@ import os
 
 class ClassSettings:
 
-    config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"(None)", "MidiPath":None}
-    settingsfile = os.path.expanduser("~") + "/.config/chopin-lab.json"
-    defaultmidipath = os.path.expanduser("~") + "/.local/share/chopin-lab/midi"
+    config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"(None)", "MidiPath":'(None)'}
+    settingsfile = os.path.expanduser("~") + "/.config/i-like-chopin.json"
+    defaultmidipath = os.path.expanduser("~") + "/.local/share/i-like-chopin/midi"
 
     def __init__(self):
         print(f"Settings file = [{self.settingsfile}]")
@@ -23,6 +23,14 @@ class ClassSettings:
                 self.config = json.load(f)
         except:
             self.SaveConfig()
+
+        #if old version
+        if not 'InputDevice' in self.config:
+            print('ClassSettings->conversion')
+            self.config['InputDevice'] = '(None)'
+            self.config['OutputDevice'] = '(None)'
+            self.config['Midifile'] = '(None)'
+            self.config['MidiPath'] = self.defaultmidipath
         return True
 
     def SaveConfig(self):

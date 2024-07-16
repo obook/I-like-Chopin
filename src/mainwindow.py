@@ -114,6 +114,14 @@ class MainWindow(QMainWindow):
 
         # Midifiles
         midifile = self.settings.GetMidifile()
+
+
+
+
+        print("!!! self.settings.GetMidiPath()=", self.settings.GetMidiPath(), " midifile=", midifile)
+
+
+
         self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+midifile)
         self.ui.FileCombo.addItems(self.MidiFiles)
         self.ui.FileCombo.setCurrentText(Midifile)

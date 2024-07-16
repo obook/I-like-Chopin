@@ -9,7 +9,7 @@
         "midi_file.py",
         "midi_numbers.py",
         "informations.ui",
-        "chopin-lab.py",
-        "informations.py"
+        "informations.py",
+        "i-like-chopin.py"
     ]
 }

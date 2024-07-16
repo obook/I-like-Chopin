@@ -21,13 +21,13 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         settings = ClassSettings()
 
         text = ""
-        text += f"SYSTEM\n{platform.system()}\n"
-        text += f"CONFIG FILE\n{settings.GetConfigPath()}\n"
-        text += f"MIDIFILES PATH\n{settings.GetMidiPath()}\n"
-        text += "HUMANIZE\ncontrol_change:control 71 (set your midi-keyboard)\n"
-        text += "SPEED CONTROL\ncontrol_change:control 76 (set your midi-keyboard)\n"
-        text += "MIDIFILE SELECT\ncontrol_change:control 77 (set your midi-keyboard)\n"
-        text += "MODE TOGGLE\ncontrol_change:control 51 (set your midi-keyboard)\n"
+        text += f"SYSTEM\n{platform.system()}\n\n"
+        text += f"CONFIG FILE\n{settings.GetConfigPath()}\n\n"
+        text += f"MIDIFILES PATH\n{settings.GetMidiPath()}\n\n"
+        text += "HUMANIZE\ncontrol_change:control 71 (set your midi-keyboard)\n\n"
+        text += "SPEED CONTROL\ncontrol_change:control 76 (set your midi-keyboard)\n\n"
+        text += "MIDIFILE SELECT\ncontrol_change:control 77 (set your midi-keyboard)\n\n"
+        text += "MODE TOGGLE PLAYBACK/PASSTHROUGH\ncontrol_change:control 51 (set your midi-keyboard)\n\n"
         text += "\n"
         text += "PROJECT\nhttps://github.com/obook/I-like-Chopin\n"
         self.textEdit.setText(text)
