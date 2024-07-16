@@ -26,6 +26,7 @@ class Ui_DialogInformation(object):
         self.textEdit = QTextEdit(DialogInformation)
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setGeometry(QRect(20, 20, 361, 321))
+        self.textEdit.setReadOnly(True)
         self.pushButton_Close = QPushButton(DialogInformation)
         self.pushButton_Close.setObjectName(u"pushButton_Close")
         self.pushButton_Close.setGeometry(QRect(300, 350, 80, 25))
@@ -44,7 +45,7 @@ class Ui_DialogInformation(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I am new to PyQt, so when I am creating UI files, I just copied one Mainwindow (mainfile.ui) and changed it to produce another UI file (Intro.ui). I know this is not a good way to create UI files, as it always gives the error:\u00a0<span style=\" font-family:'monospace';\">object has no attribute 'exec_'</span>.</p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">&lt;NONE&gt;</p></body></html>", None))
         self.pushButton_Close.setText(QCoreApplication.translate("DialogInformation", u"Close", None))
     # retranslateUi
 

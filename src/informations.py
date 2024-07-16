@@ -18,9 +18,9 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.pushButton_Close.clicked.connect(self.quit)
 
         text = ""
-        text += f"SYSTEM\n{platform.system()}\n\n"
-        text += f"CONFIG FILE\n{GetConfigPath()}\n\n"
-        text += f"MIDIFILES PATH\n{GetMidiPath()}\n\n"
+        text += f"SYSTEM\n{platform.system()}\n"
+        text += f"CONFIG FILE\n{GetConfigPath()}\n"
+        text += f"MIDIFILES PATH\n{GetMidiPath()}\n"
         self.textEdit.setText(text)
 
     def quit(self):
