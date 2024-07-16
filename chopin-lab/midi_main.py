@@ -15,7 +15,7 @@ from settings import ClassSettings
 
 class ClassMidiMain:
 
-    keys={"key_on":0,"tempo":0,"humanize":0}
+    keys={"key_on":0,"playback":True,"tempo":0,"humanize":0}
 
     # Threads
     ThreadInput = None
@@ -23,7 +23,6 @@ class ClassMidiMain:
     ThreadMidiFile = None
 
     midifile = None
-    port_out = None
     tracks = None
 
     settings = ClassSettings()
@@ -110,6 +109,11 @@ class ClassMidiMain:
     def Playback(self):
         self.ThreadMidiFile.start()
         pass
+
+    def Mode(self, playback=True):
+        out_port = self.ThreadOutput.getport()
+        self.ThreadInput.SetOutPort(out_port)
+        self.keys['playback']= playback
 
     def Stop(self):
         if self.ThreadMidiFile :

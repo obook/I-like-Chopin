@@ -10,7 +10,8 @@ from  midi_numbers import number_to_note
 
 class ClassThreadInput(Thread):
     in_device = None
-    inport = None
+    in_port = None
+    out_port = None
     running = False
 
     def __init__(self, in_device, keys, pParent):
@@ -24,10 +25,13 @@ class ClassThreadInput(Thread):
     def __del__(self):
             print("ClassThreadInput destroyed")
 
+    def SetOutPort(self,out_port):
+        self.out_port = out_port
+
     def run(self):
         self.stop()
         try:
-            self.inport = open_input(self.in_device, callback=self.callback)
+            self.in_port = open_input(self.in_device, callback=self.callback)
             self.running = True
         except:
             print(f"midi_input:Error connect from {self.in_device}")
@@ -41,8 +45,7 @@ class ClassThreadInput(Thread):
         if message.type not in filter:
             print(f"ClassThreadInput:{message}")
 
-        # Midi commands
-        # control_change channel=1 control=77 -> Speed controlled by knob
+        # Control change - Midi commands
         if message.type =='control_change':
             if message.control == 71:
                 self.keys['humanize'] = message.value #0 to 127
@@ -52,8 +55,21 @@ class ClassThreadInput(Thread):
                 self.pParent.PrintSlow(message.value)
             elif message.control == 77:
                 self.pParent.ChangeMidiFile(message.value)
+            elif message.control == 51 and message.value == 127:
+                self.pParent.Mode()
 
-        # Counter
+        # Playback/Passthrough mode
+        if not self.keys['playback']:
+            self.keys['key_on'] = 0
+            # Play
+            try: # meta messages can't be send to ports
+                if self.out_port:
+                    self.out_port.send(message)
+            except:
+                pass
+            return
+
+        # Keys pressed counter
         if message.type == 'note_on':
             self.keys['key_on'] +=1
         elif message.type == 'note_off':
@@ -66,14 +82,14 @@ class ClassThreadInput(Thread):
         self.pParent.PrintKeys(text)
 
     def active(self):
-        if self.inport :
+        if self.in_port :
             return True
         return False
 
     def stop(self):
         print("midi_input:stop")
         self.running = False
-        if self.inport :
-            self.inport.close()
-            self.inport = None
+        if self.in_port :
+            self.in_port.close()
+            self.in_port = None
 

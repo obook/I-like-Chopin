@@ -27,6 +27,7 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         text += "HUMANIZE\ncontrol_change:control 71 (set your midi-keyboard)\n"
         text += "SPEED CONTROL\ncontrol_change:control 76 (set your midi-keyboard)\n"
         text += "MIDIFILE SELECT\ncontrol_change:control 77 (set your midi-keyboard)\n"
+        text += "MODE TOGGLE\ncontrol_change:control 51 (set your midi-keyboard)\n"
         text += "\n"
         text += "PROJECT\nhttps://github.com/obook/I-like-Chopin\n"
         self.textEdit.setText(text)

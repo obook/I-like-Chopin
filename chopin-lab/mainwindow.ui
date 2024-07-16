@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>504</width>
-    <height>464</height>
+    <height>434</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>410</y>
+      <y>380</y>
       <width>80</width>
       <height>31</height>
      </rect>
@@ -33,25 +33,12 @@
       <x>10</x>
       <y>0</y>
       <width>481</width>
-      <height>191</height>
+      <height>151</height>
      </rect>
     </property>
     <property name="title">
      <string>Devices</string>
     </property>
-    <widget class="QPushButton" name="pushButton_Mode">
-     <property name="geometry">
-      <rect>
-       <x>70</x>
-       <y>151</y>
-       <width>371</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Playback</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_File">
      <property name="geometry">
       <rect>
@@ -83,19 +70,6 @@
        <width>371</width>
        <height>30</height>
       </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_Mode">
-     <property name="geometry">
-      <rect>
-       <x>18</x>
-       <y>155</y>
-       <width>71</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Mode</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_Ouput">
@@ -178,7 +152,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>190</y>
+      <y>150</y>
       <width>481</width>
       <height>141</height>
      </rect>
@@ -241,7 +215,7 @@
     <property name="geometry">
      <rect>
       <x>11</x>
-      <y>410</y>
+      <y>380</y>
       <width>97</width>
       <height>30</height>
      </rect>
@@ -254,7 +228,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>330</y>
+      <y>300</y>
       <width>481</width>
       <height>71</height>
      </rect>
@@ -274,9 +248,9 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>300</x>
+       <x>245</x>
        <y>30</y>
-       <width>97</width>
+       <width>101</width>
        <height>30</height>
       </rect>
      </property>
@@ -290,7 +264,7 @@
     <widget class="QPushButton" name="pushButton_Slow">
      <property name="geometry">
       <rect>
-       <x>190</x>
+       <x>135</x>
        <y>30</y>
        <width>101</width>
        <height>30</height>
@@ -306,7 +280,7 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>81</x>
+       <x>26</x>
        <y>30</y>
        <width>100</width>
        <height>30</height>
@@ -316,12 +290,25 @@
       <string>Humanize</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushButton_Mode">
+     <property name="geometry">
+      <rect>
+       <x>355</x>
+       <y>30</y>
+       <width>101</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Playback</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QPushButton" name="pushButton_Info">
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>410</y>
+      <y>380</y>
       <width>101</width>
       <height>30</height>
      </rect>

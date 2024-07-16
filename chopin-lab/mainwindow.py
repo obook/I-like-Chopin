@@ -39,11 +39,12 @@ class MainWindow(QMainWindow):
     ConnectInputState = False
     ConnectOutputState = False
     MidifileState = False
+    mode_playback = True
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
-        self.setFixedSize(504,464)
+        self.setFixedSize(504,434)
         self.ui.setupUi(self)
 
         # Application icon X.org->correct - Wayland->not implemented
@@ -64,8 +65,8 @@ class MainWindow(QMainWindow):
         # Push Buttons
         self.ui.pushButton_Panic.clicked.connect(self.Panic)
         self.ui.pushButton_Quit.clicked.connect(self.Quit)
-        self.ui.pushButton_Mode.setEnabled(False)
         self.ui.pushButton_Info.clicked.connect(self.Informations)
+        self.ui.pushButton_Mode.clicked.connect(self.Mode)
 
         # ComboBoxes Inputs/Outputs
         self.ui.InputDeviceCombo.addItem(Input)
@@ -96,13 +97,13 @@ class MainWindow(QMainWindow):
             self.TracksButtonsList.append(QPushButton(str(n+1)))
             self.TracksButtonsList[n].setCheckable(True);
             self.TracksButtonsList[n].clicked.connect(self.ReadTracks)
-            self.TracksButtonsList[n].setStyleSheet("QPushButton:checked { background-color: rgb(200,0,200); }\n")
+            self.TracksButtonsList[n].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }\n")
             grid.addWidget(self.TracksButtonsList[n],1,n)
         for n in range(8):
             self.TracksButtonsList.append(QPushButton(str(n+8+1)))
             self.TracksButtonsList[n+8].setCheckable(True);
             self.TracksButtonsList[n+8].clicked.connect(self.ReadTracks)
-            self.TracksButtonsList[n+8].setStyleSheet("QPushButton:checked { background-color: rgb(200,0,200); }\n")
+            self.TracksButtonsList[n+8].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }\n")
             grid.addWidget(self.TracksButtonsList[n+8],2,n)
 
         self.TracksFirst()
@@ -210,6 +211,15 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_FileIndex.setText(f"MidiFile {self.MidifilesIndex+1}/{len(self.MidiFiles)}")
         self.midi.Panic()
         self.ui.FileCombo.setCurrentText(self.MidiFiles[self.MidifilesIndex])
+
+    def Mode(self):
+        if self.mode_playback :
+            self.mode_playback = False
+            self.ui.pushButton_Mode.setText("Passthrough")
+        else:
+            self.mode_playback = True
+            self.ui.pushButton_Mode.setText("Playback")
+        self.midi.Mode(self.mode_playback)
 
     def Panic(self):
         self.midi.Panic()
