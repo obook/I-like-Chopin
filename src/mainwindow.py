@@ -5,6 +5,7 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 import sys
+import os
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from PySide6 import QtGui
@@ -19,11 +20,12 @@ from informations import ShowInformation
 #     pyside6-uic form.ui -o ui_form.py
 from ui_mainwindow import Ui_MainWindow
 
-ICON_APPLICATION = './icons/svg/i-like-chopin.svg'
+application_path = os.path.dirname(os.path.realpath(__file__))
+ICON_APPLICATION = application_path+'/icons/svg/i-like-chopin.svg'
 # Define status icons
-ICON_RED_LED = './icons/led/led-red-on.png'
-ICON_GREEN_LED = './icons/led/green-led-on.png'
-ICON_LED_OFF = './icons/led/led-off.png'
+ICON_RED_LED = application_path+'/icons/led/led-red-on.png'
+ICON_GREEN_LED = application_path+'/icons/led/green-led-on.png'
+ICON_LED_OFF = application_path+'/icons/led/led-off.png'
 
 app = None
 
