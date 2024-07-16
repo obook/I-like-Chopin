@@ -48,11 +48,10 @@ class ClassMidiMain:
                 port_name = port_name[:port_name.rfind(' ')]
             Inputs.append(port_name)
 
-        for i, port_name in enumerate(mido.get_ioport_names()):
-            clean_port_name = port_name[:port_name.rfind(' ')]
-            IOPorts.append(clean_port_name)
-
-        print("IOPorts=",IOPorts)
+        for i, port_name in enumerate(mido.get_ioport_names()): # not used
+            if platform.system() == "Linux": # cleanup linux ports
+                port_name = port_name[:port_name.rfind(' ')]
+            IOPorts.append(port_name)
 
         return Inputs, Outputs, IOPorts
 
