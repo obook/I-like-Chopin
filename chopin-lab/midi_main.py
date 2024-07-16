@@ -15,7 +15,7 @@ from settings import ClassSettings
 
 class ClassMidiMain:
 
-    keys={"key_on":0,"tempo":0}
+    keys={"key_on":0,"tempo":0,"humanize":0}
 
     # Threads
     ThreadInput = None

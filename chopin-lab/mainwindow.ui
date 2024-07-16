@@ -7,28 +7,18 @@
     <x>0</x>
     <y>0</y>
     <width>504</width>
-    <height>598</height>
+    <height>464</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTextBrowser" name="textBrowser">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>480</y>
-      <width>481</width>
-      <height>51</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_Quit">
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>540</y>
+      <y>410</y>
       <width>80</width>
       <height>31</height>
      </rect>
@@ -43,7 +33,7 @@
       <x>10</x>
       <y>0</y>
       <width>481</width>
-      <height>241</height>
+      <height>191</height>
      </rect>
     </property>
     <property name="title">
@@ -53,9 +43,9 @@
      <property name="geometry">
       <rect>
        <x>70</x>
-       <y>187</y>
+       <y>151</y>
        <width>371</width>
-       <height>30</height>
+       <height>28</height>
       </rect>
      </property>
      <property name="text">
@@ -99,9 +89,9 @@
      <property name="geometry">
       <rect>
        <x>18</x>
-       <y>191</y>
+       <y>155</y>
        <width>71</width>
-       <height>22</height>
+       <height>20</height>
       </rect>
      </property>
      <property name="text">
@@ -183,28 +173,12 @@
       <string>LED</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_MidiPath">
-     <property name="geometry">
-      <rect>
-       <x>70</x>
-       <y>150</y>
-       <width>371</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>MIDIFILES PATH</string>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>240</y>
+      <y>190</y>
       <width>481</width>
       <height>141</height>
      </rect>
@@ -266,8 +240,8 @@
    <widget class="QPushButton" name="pushButton_Panic">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>540</y>
+      <x>11</x>
+      <y>410</y>
       <width>97</width>
       <height>30</height>
      </rect>
@@ -280,28 +254,28 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>380</y>
+      <y>330</y>
       <width>481</width>
-      <height>91</height>
+      <height>71</height>
      </rect>
     </property>
     <property name="title">
-     <string>Commands</string>
+     <string>Midi Controller</string>
     </property>
-    <widget class="QPushButton" name="pushButton_TracksAll_2">
+    <widget class="QPushButton" name="pushButton_FileIndex">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="geometry">
       <rect>
-       <x>190</x>
+       <x>300</x>
        <y>30</y>
        <width>97</width>
        <height>30</height>
       </rect>
      </property>
      <property name="text">
-      <string>Humanize</string>
+      <string>Midifile</string>
      </property>
      <property name="checkable">
       <bool>false</bool>
@@ -310,46 +284,30 @@
     <widget class="QPushButton" name="pushButton_Slow">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>190</x>
        <y>30</y>
-       <width>91</width>
+       <width>101</width>
        <height>30</height>
       </rect>
      </property>
      <property name="text">
-      <string>Slow 0</string>
+      <string>Slow</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_TracksNone_2">
+    <widget class="QPushButton" name="pushButton_Humanize">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="geometry">
       <rect>
-       <x>375</x>
+       <x>81</x>
        <y>30</y>
-       <width>97</width>
+       <width>100</width>
        <height>30</height>
       </rect>
      </property>
      <property name="text">
-      <string>Random</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>60</y>
-       <width>70</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>(MIDI:77)</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <string>Humanize</string>
      </property>
     </widget>
    </widget>
@@ -357,8 +315,8 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>540</y>
-      <width>97</width>
+      <y>410</y>
+      <width>101</width>
       <height>30</height>
      </rect>
     </property>

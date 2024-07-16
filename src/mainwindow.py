@@ -206,7 +206,7 @@ class MainWindow(QMainWindow):
             self.bPassthrough = False
 
     def PrintKeys(self,n):
-        self.ui.statusbar.showMessage("Keys:"+str(n))
+        self.ui.statusbar.showMessage("Keys\t"+str(n))
 
     def PrintBrowser(self, text):
         # crash en sortie

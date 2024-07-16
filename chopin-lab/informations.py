@@ -23,6 +23,11 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         text += f"SYSTEM\n{platform.system()}\n"
         text += f"CONFIG FILE\n{settings.GetConfigPath()}\n"
         text += f"MIDIFILES PATH\n{settings.GetMidiPath()}\n"
+        text += "HUMANIZE\ncontrol_change:control 71 (set your midi-keyboard)\n"
+        text += "SPEED CONTROL\ncontrol_change:control 76 (set your midi-keyboard)\n"
+        text += "MIDIFILE SELECT\ncontrol_change:control 77 (set your midi-keyboard)\n"
+        text += "\n"
+        text += "PROJECT\nhttps://github.com/obook/I-like-Chopin\n"
         self.textEdit.setText(text)
 
     def quit(self):

@@ -51,12 +51,11 @@ class MidiKeyboard( Thread ):
         if self.keys['key_on'] <0 : # rare case of missing key on
             self.keys['key_on'] = 0
 
+        text = str(self.keys['key_on'])
         if message.type == 'note_on' : # or message.type == 'note_off':
             note, octave = number_to_note(message.note)
-            text=f"\t\t{note}{octave}\t\t[{message.note}]"
-            self.pParent.PrintKeys(str(self.keys['key_on'])+text)
-        elif message.type != 'note_off' :
-            self.pParent.PrintKeys(message)
+            text = text + f"\t\t {note}{octave} \t\t [{message.note}]"
+        self.pParent.PrintKeys(text)
 
     def Stop(self):
         if self.inport :

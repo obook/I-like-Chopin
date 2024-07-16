@@ -8,6 +8,7 @@ from mido import MidiFile
 from threading import Thread
 import time
 import os
+import random
 
 class ClassThreadMidiFile(Thread):
     midifile = None
@@ -58,7 +59,11 @@ class ClassThreadMidiFile(Thread):
 
             # Speed controlled by knob, see midi_input
             if msg.type == 'note_on':
-                msg.time = msg.time + self.keys['tempo']/5000
+                if self.keys['humanize']:
+                    human = random.randrange(0,self.keys['humanize'],1)/2000
+                else:
+                    human = 0
+                msg.time = msg.time + self.keys['tempo']/8000 + human
 
             time.sleep(msg.time)
 

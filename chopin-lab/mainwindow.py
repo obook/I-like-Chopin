@@ -33,6 +33,9 @@ class MainWindow(QMainWindow):
     TracksButtonsList = []
     TracksList = [False]*16
 
+    MidiFiles=[]
+    MidifilesIndex = 0
+
     ConnectInputState = False
     ConnectOutputState = False
     MidifileState = False
@@ -54,7 +57,7 @@ class MainWindow(QMainWindow):
         Inputs, Outputs, IOPorts = self.midi.GetDevices()
         Input = self.settings.GetInputDevice()
         Output = self.settings.GetOutputDevice()
-        MidiFiles = self.midi.GetMidiFiles()
+        self.MidiFiles = self.midi.GetMidiFiles()
         Midifile = self.settings.GetMidifile()
 
         # Push Buttons
@@ -110,17 +113,14 @@ class MainWindow(QMainWindow):
         # Midifiles
         midifile = self.settings.GetMidifile()
         self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+midifile)
-        self.ui.lineEdit_MidiPath.setText(self.settings.GetMidiPath())
-        self.ui.FileCombo.addItem(Midifile)
-        self.ui.FileCombo.addItems(MidiFiles)
+        self.ui.FileCombo.addItems(self.MidiFiles)
+        self.ui.FileCombo.setCurrentText(Midifile)
         self.ui.FileCombo.currentIndexChanged.connect(self.MidifileChanged)
 
         # Timer
         timer = QTimer(self)
         timer.timeout.connect(self.timer)
         timer.start(2000)
-
-        self.ui.textBrowser.insertPlainText("Ready")
 
     def timer(self):
 
@@ -198,6 +198,17 @@ class MainWindow(QMainWindow):
 
     def PrintSlow(self,speed): #0 to 126
         self.ui.pushButton_Slow.setText("Slow "+str(speed))
+
+    def PrintHumanize(self,value):
+        self.ui.pushButton_Humanize.setText("Humanize "+str(value))
+
+    def ChangeMidiFile(self,value):
+        # value 0-127
+        step = int(128/len(self.MidiFiles))
+        self.MidifilesIndex = min(int(value/step),len(self.MidiFiles)-1)
+        self.ui.pushButton_FileIndex.setText(f"MidiFile {self.MidifilesIndex+1}/{len(self.MidiFiles)}")
+        self.midi.Panic()
+        self.ui.FileCombo.setCurrentText(self.MidiFiles[self.MidifilesIndex])
 
     def Panic(self):
         self.midi.Panic()

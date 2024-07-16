@@ -44,9 +44,14 @@ class ClassThreadInput(Thread):
         # Midi commands
         # control_change channel=1 control=77 -> Speed controlled by knob
         if message.type =='control_change':
-            if message.control == 77:
+            if message.control == 71:
+                self.keys['humanize'] = message.value #0 to 127
+                self.pParent.PrintHumanize(message.value)
+            elif message.control == 76:
                 self.keys['tempo'] = message.value #0 to 127
                 self.pParent.PrintSlow(message.value)
+            elif message.control == 77:
+                self.pParent.ChangeMidiFile(message.value)
 
         # Counter
         if message.type == 'note_on':
