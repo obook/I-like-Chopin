@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'form.ui'
+## Form generated from reading UI file 'mainwindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -112,6 +112,9 @@ class Ui_MainWindow(object):
         self.label.setObjectName(u"label")
         self.label.setGeometry(QRect(20, 60, 70, 21))
         self.label.setAlignment(Qt.AlignCenter)
+        self.pushButton_Info = QPushButton(self.centralwidget)
+        self.pushButton_Info.setObjectName(u"pushButton_Info")
+        self.pushButton_Info.setGeometry(QRect(200, 540, 97, 30))
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -145,5 +148,6 @@ class Ui_MainWindow(object):
         self.pushButton_Slow.setText(QCoreApplication.translate("MainWindow", u"Slow 0", None))
         self.pushButton_TracksNone_2.setText(QCoreApplication.translate("MainWindow", u"Random", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"(MIDI:77)", None))
+        self.pushButton_Info.setText(QCoreApplication.translate("MainWindow", u"Info", None))
     # retranslateUi
 

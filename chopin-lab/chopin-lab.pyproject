@@ -1,12 +1,15 @@
 {
     "files": [
         "mainwindow.py",
-        "form.ui",
+        "mainwindow.ui",
         "midi_main.py",
         "midi_input.py",
         "midi_output.py",
         "settings.py",
         "midi_file.py",
-        "midi_numbers.py"
+        "midi_numbers.py",
+        "informations.ui",
+        "chopin-lab.py",
+        "informations.py"
     ]
 }

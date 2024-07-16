@@ -2,54 +2,35 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
-  <property name="enabled">
-   <bool>true</bool>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>509</width>
-    <height>534</height>
+    <width>504</width>
+    <height>598</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton_Start">
+   <widget class="QTextBrowser" name="textBrowser">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>480</y>
-      <width>97</width>
-      <height>30</height>
+      <width>481</width>
+      <height>51</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>Start</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_Stop">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>480</y>
-      <width>97</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Stop</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_Quit">
     <property name="geometry">
      <rect>
-      <x>384</x>
-      <y>480</y>
-      <width>97</width>
-      <height>30</height>
+      <x>410</x>
+      <y>540</y>
+      <width>80</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
@@ -62,7 +43,7 @@
       <x>10</x>
       <y>0</y>
       <width>481</width>
-      <height>231</height>
+      <height>241</height>
      </rect>
     </property>
     <property name="title">
@@ -72,13 +53,13 @@
      <property name="geometry">
       <rect>
        <x>70</x>
-       <y>180</y>
-       <width>401</width>
+       <y>187</y>
+       <width>371</width>
        <height>30</height>
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>Playback</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_File">
@@ -99,7 +80,7 @@
       <rect>
        <x>70</x>
        <y>30</y>
-       <width>401</width>
+       <width>371</width>
        <height>30</height>
       </rect>
      </property>
@@ -109,7 +90,7 @@
       <rect>
        <x>70</x>
        <y>70</y>
-       <width>401</width>
+       <width>371</width>
        <height>30</height>
       </rect>
      </property>
@@ -118,7 +99,7 @@
      <property name="geometry">
       <rect>
        <x>18</x>
-       <y>184</y>
+       <y>191</y>
        <width>71</width>
        <height>22</height>
       </rect>
@@ -158,22 +139,64 @@
       <rect>
        <x>70</x>
        <y>110</y>
-       <width>401</width>
+       <width>371</width>
        <height>30</height>
       </rect>
      </property>
     </widget>
-    <widget class="QLabel" name="label_midipath">
+    <widget class="QLabel" name="labelStatusInput">
+     <property name="geometry">
+      <rect>
+       <x>449</x>
+       <y>35</y>
+       <width>20</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>LED</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelStatusOuput">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>74</y>
+       <width>20</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>LED</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelStatusMidifile">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>113</y>
+       <width>20</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>LED</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_MidiPath">
      <property name="geometry">
       <rect>
        <x>70</x>
        <y>150</y>
-       <width>401</width>
-       <height>17</height>
+       <width>371</width>
+       <height>25</height>
       </rect>
      </property>
      <property name="text">
-      <string>PATH:</string>
+      <string>MIDIFILES PATH</string>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>
@@ -181,7 +204,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>235</y>
+      <y>240</y>
       <width>481</width>
       <height>141</height>
      </rect>
@@ -243,8 +266,8 @@
    <widget class="QPushButton" name="pushButton_Panic">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>480</y>
+      <x>10</x>
+      <y>540</y>
       <width>97</width>
       <height>30</height>
      </rect>
@@ -253,17 +276,94 @@
      <string>Panic</string>
     </property>
    </widget>
-   <widget class="QTextBrowser" name="textBrowser">
+   <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>380</y>
-      <width>461</width>
+      <width>481</width>
       <height>91</height>
      </rect>
     </property>
-    <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
+    <property name="title">
+     <string>Commands</string>
+    </property>
+    <widget class="QPushButton" name="pushButton_TracksAll_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>30</y>
+       <width>97</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Humanize</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_Slow">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>91</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Slow 0</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_TracksNone_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>375</x>
+       <y>30</y>
+       <width>97</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Random</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>60</y>
+       <width>70</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>(MIDI:77)</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Info">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>540</y>
+      <width>97</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Info</string>
     </property>
    </widget>
   </widget>

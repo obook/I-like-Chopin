@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'form.ui'
+## Form generated from reading UI file 'mainwindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -29,13 +29,13 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.pushButton_Start = QPushButton(self.centralwidget)
         self.pushButton_Start.setObjectName(u"pushButton_Start")
-        self.pushButton_Start.setGeometry(QRect(20, 480, 97, 30))
+        self.pushButton_Start.setGeometry(QRect(20, 480, 71, 30))
         self.pushButton_Stop = QPushButton(self.centralwidget)
         self.pushButton_Stop.setObjectName(u"pushButton_Stop")
-        self.pushButton_Stop.setGeometry(QRect(120, 480, 97, 30))
+        self.pushButton_Stop.setGeometry(QRect(120, 480, 71, 30))
         self.pushButton_Quit = QPushButton(self.centralwidget)
         self.pushButton_Quit.setObjectName(u"pushButton_Quit")
-        self.pushButton_Quit.setGeometry(QRect(384, 480, 97, 30))
+        self.pushButton_Quit.setGeometry(QRect(420, 480, 61, 30))
         self.groupBox = QGroupBox(self.centralwidget)
         self.groupBox.setObjectName(u"groupBox")
         self.groupBox.setGeometry(QRect(10, 0, 481, 231))
@@ -86,11 +86,14 @@ class Ui_MainWindow(object):
         self.pushButton_TracksNone.setGeometry(QRect(375, 30, 97, 30))
         self.pushButton_Panic = QPushButton(self.centralwidget)
         self.pushButton_Panic.setObjectName(u"pushButton_Panic")
-        self.pushButton_Panic.setGeometry(QRect(220, 480, 97, 30))
+        self.pushButton_Panic.setGeometry(QRect(220, 480, 71, 30))
         self.textBrowser = QTextBrowser(self.centralwidget)
         self.textBrowser.setObjectName(u"textBrowser")
         self.textBrowser.setGeometry(QRect(20, 380, 461, 91))
         self.textBrowser.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.pushButton_Info = QPushButton(self.centralwidget)
+        self.pushButton_Info.setObjectName(u"pushButton_Info")
+        self.pushButton_Info.setGeometry(QRect(320, 480, 71, 30))
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -118,5 +121,6 @@ class Ui_MainWindow(object):
         self.pushButton_TracksFirst.setText(QCoreApplication.translate("MainWindow", u"First", None))
         self.pushButton_TracksNone.setText(QCoreApplication.translate("MainWindow", u"None", None))
         self.pushButton_Panic.setText(QCoreApplication.translate("MainWindow", u"Panic", None))
+        self.pushButton_Info.setText(QCoreApplication.translate("MainWindow", u"Info", None))
     # retranslateUi
 

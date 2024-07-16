@@ -3,11 +3,21 @@
 """
 Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
-"""
-'''
-PySide6
 
-CapLinux:
+QTCreator and PySide6
+---------------------
+In QTCreator:
+-> "Add New -> Qt -> Qt Designer Form" -> Design your form : A file ui_xxxxxx.py was created
+Be warned to NAME your dialog in objectName
+-> Rebuild
+-> "Add New -> Python -> Python Class -> PySide6 -> QWidget or QMainWindow"
+-> Rebuild
+
+Edit xxxxxx.py and add :
+from ui_xxxxxx import Ui_MainWindow (or your class name)
+
+Not used
+--------
 ! Passer par QTCreator ou (moins bien)
 pip3 install pyside6
 
@@ -24,21 +34,22 @@ pip uninstall python-rtmidi
 pip install mido
 pip install python-rtmidi
 
-Important but not user under QTCreator :
+/!\ DO NOT USE under QTCreator :
 You need to run the following command to generate the ui_form.py file
 pyside6-uic form.ui -o ui_form.py, or
 pyside2-uic form.ui -o ui_form.py
-'''
+"""
 
 import sys
 import os
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from PySide6.QtGui import QIcon
 
-from ui_form import Ui_MainWindow
+from ui_mainwindow import Ui_MainWindow
 from midi_main import MidiMain
 from settings import GetInputDeviceId, SaveInputDeviceId, GetOutputDeviceId,SaveOutputDeviceId,GetMidifileId,SaveMidifileId, GetMidiPath
 #from logger import QPlainTextEditLogger
+from informations import ShowInformation
 
 app = None
 
@@ -68,12 +79,12 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Stop.clicked.connect(self.Stop)
         self.ui.pushButton_Quit.clicked.connect(self.Quit)
         self.ui.pushButton_Mode.clicked.connect(self.Mode)
+        self.ui.pushButton_Info.clicked.connect(self.Informations)
+        self.ui.pushButton_Panic.clicked.connect(self.Panic)
 
         self.ui.pushButton_TracksNone.clicked.connect(self.TracksNone)
         self.ui.pushButton_TracksAll.clicked.connect(self.TracksAll)
         self.ui.pushButton_TracksFirst.clicked.connect(self.TracksFirst)
-
-        self.ui.pushButton_Panic.clicked.connect(self.Panic)
 
         self.ui.pushButton_Stop.setEnabled(False)
 
@@ -232,6 +243,10 @@ class MainWindow(QMainWindow):
     def Panic(self):
         self.midi.MidiPanic()
 
+    def Informations(self):
+        print("Informations")
+        ShowInformation(app)
+
 def start():
     global app
 
@@ -241,9 +256,15 @@ def start():
         app = QApplication.instance()
     widget = MainWindow()
     widget.setWindowTitle("I Like Chopin")
-    # execute:
+
+    # Wayland : execute ?
     # qdbus org.kde.KWin /KWin queryWindowInfo (resourceClass attribute)
+
+    # Wayland : icon is set in taskbar
+    # regarding xxx.desktop file
+
     app.setDesktopFileName("i-like-chopin");
+
     # m_icon = pParent->windowIcon().pixmap(32, 32);
     widget.show()
     sys.exit(app.exec())

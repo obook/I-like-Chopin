@@ -16,13 +16,15 @@ from settings import ClassSettings
 # Important:
 # You need to run the following command to generate the ui_form.py file
 #     pyside6-uic form.ui -o ui_form.py
-from ui_form import Ui_MainWindow
+from ui_mainwindow import Ui_MainWindow
 
 ICON_APPLICATION = './icons/svg/i-like-chopin.svg'
 # Define status icons
 ICON_RED_LED = './icons/led/led-red-on.png'
 ICON_GREEN_LED = './icons/led/green-led-on.png'
 ICON_LED_OFF = './icons/led/led-off.png'
+
+app = None
 
 class MainWindow(QMainWindow):
 
@@ -202,7 +204,8 @@ class MainWindow(QMainWindow):
         self.midi.quit()
         app.quit()
 
-if __name__ == "__main__":
+def start():
+    global app
     app = QApplication(sys.argv)
     widget = MainWindow()
     widget.setWindowTitle("Chopin Lab")

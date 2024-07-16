@@ -1,7 +1,7 @@
 {
     "files": [
         "mainwindow.py",
-        "form.ui",
+        "mainwindow.ui",
         "midi_main.py",
         "settings.py",
         "midi_numbers.py",
@@ -9,6 +9,8 @@
         "midi_player.py",
         "logger.py",
         "midi_passthrough.py",
-        "i-like-chopin.py"
+        "i-like-chopin.py",
+        "informations.ui",
+        "informations.py"
     ]
 }
