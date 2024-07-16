@@ -10,9 +10,9 @@ import os
 
 class ClassSettings:
 
-    config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"(None)", "MidiPath":'(None)'}
-    settingsfile = os.path.expanduser("~") + "/.config/i-like-chopin.json"
-    defaultmidipath = os.path.expanduser("~") + "/.local/share/i-like-chopin/midi"
+    settingsfile = os.path.join(os.path.expanduser("~"), ".config","i-like-chopin.json")
+    defaultmidipath = os.path.join(os.path.expanduser("~"), ".local","share","i-like-chopin","midi")
+    config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"(None)", "MidiPath":defaultmidipath}
 
     def __init__(self):
         print(f"Settings file = [{self.settingsfile}]")
