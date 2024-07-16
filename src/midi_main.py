@@ -7,6 +7,8 @@ Created on Wed Jun  5 18:19:14 2024
 
 import mido
 import glob
+import platform
+
 from os import path
 from midi_input import ClassThreadInput
 from midi_output import ClassThreadOutput
@@ -37,12 +39,14 @@ class ClassMidiMain:
         IOPorts = []
 
         for i, port_name in enumerate(mido.get_output_names()):
-            clean_port_name = port_name[:port_name.rfind(' ')]
-            Outputs.append(clean_port_name)
+            if platform.system() == "Linux": # cleanup linux ports
+                port_name = port_name[:port_name.rfind(' ')]
+            Outputs.append(port_name)
 
         for i, port_name in enumerate(mido.get_input_names()):
-            clean_port_name = port_name[:port_name.rfind(' ')]
-            Inputs.append(clean_port_name)
+            if platform.system() == "Linux": # cleanup linux ports
+                port_name = port_name[:port_name.rfind(' ')]
+            Inputs.append(port_name)
 
         for i, port_name in enumerate(mido.get_ioport_names()):
             clean_port_name = port_name[:port_name.rfind(' ')]
