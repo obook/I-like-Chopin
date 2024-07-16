@@ -14,6 +14,7 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
+        self.setFixedSize(400,300)
         self.setWindowTitle("Informations")
         self.pushButton_Close.clicked.connect(self.quit)
 
