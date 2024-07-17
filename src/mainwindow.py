@@ -89,7 +89,10 @@ class MainWindow(QMainWindow):
         self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_LED_OFF))
         self.ui.labelStatusMidifile.setScaledContents(True)
 
-        # Tracks
+        # Tracks : can be more than 16 (is not Midi channel)
+        # Rosegarden start at 0
+        # Muse start at 1
+        # Mido start at 0 but track 0 is empty
         self.ui.pushButton_TracksNone.clicked.connect(self.TracksNone)
         self.ui.pushButton_TracksAll.clicked.connect(self.TracksAll)
         self.ui.pushButton_TracksFirst.clicked.connect(self.TracksFirst)

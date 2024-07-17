@@ -37,7 +37,7 @@
      </rect>
     </property>
     <property name="title">
-     <string>Devices</string>
+     <string>MIDI Devices</string>
     </property>
     <widget class="QLabel" name="label_File">
      <property name="geometry">
@@ -158,7 +158,7 @@
      </rect>
     </property>
     <property name="title">
-     <string>Tracks</string>
+     <string>MIDI Channels</string>
     </property>
     <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">
@@ -240,7 +240,7 @@
      </sizepolicy>
     </property>
     <property name="title">
-     <string>Midi Controller</string>
+     <string>MIDI Controller</string>
     </property>
     <widget class="QPushButton" name="pushButton_FileIndex">
      <property name="enabled">
@@ -314,7 +314,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Info</string>
+     <string>More</string>
     </property>
    </widget>
   </widget>

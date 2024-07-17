@@ -12,7 +12,7 @@ class ClassSettings:
 
     settingsfile = os.path.join(os.path.expanduser("~"), ".config","i-like-chopin.json")
     defaultmidipath = os.path.join(os.path.expanduser("~"), ".local","share","i-like-chopin","midi")
-    config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"(None)", "MidiPath":defaultmidipath}
+    config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"(None)", "MidiPath":defaultmidipath,"PrintTerm":False}
 
     def __init__(self):
         print(f"Settings file = [{self.settingsfile}]")
@@ -40,6 +40,8 @@ class ClassSettings:
 
     def GetInputDevice(self):
         self.LoadConfig()
+        if not self.config.get('InputDevice'):
+            self.config['InputDevice'] = '(None)'
         return self.config['InputDevice']
 
     def SaveInputDevice(self,name):
@@ -48,6 +50,8 @@ class ClassSettings:
 
     def GetOutputDevice(self):
         self.LoadConfig()
+        if not self.config.get('OutputDevice'):
+            self.config['OutputDevice'] = '(None)'
         return self.config['OutputDevice']
 
     def SaveOutputDevice(self,name):
@@ -64,6 +68,8 @@ class ClassSettings:
     '''
     def GetMidifile(self):
         self.LoadConfig()
+        if not self.config.get('Midifile'):
+            self.config['Midifile'] = '(None)'
         return self.config['Midifile']
 
     def SaveMidifile(self,name):
@@ -81,6 +87,26 @@ class ClassSettings:
 
     def GetConfigPath(self):
         return self.settingsfile
+
+    def GetPrintTerm(self):
+        self.LoadConfig()
+        if not self.config.get('PrintTerm'):
+            self.config['PrintTerm'] = False
+        return self.config['PrintTerm']
+
+    def SetPrintTerm(self,status):
+        self.config['PrintTerm'] = status
+        return self.SaveConfig()
+
+    def GetForceIntrument(self):
+        self.LoadConfig()
+        if not self.config.get('ForceInstrument'):
+            self.config['ForceInstrument'] = False
+        return self.config['ForceInstrument']
+
+    def SetForceIntrument(self,status):
+        self.config['ForceInstrument'] = status
+        return self.SaveConfig()
 
     def WarningNoMidifile(self):
         print(f"WARNING : Copy midifiles to {self.config['MidiPath']}")

@@ -6,7 +6,8 @@ Created on Wed Jun  5 18:19:14 2024
 """
 from mido import open_input
 from threading import Thread
-from  midi_numbers import number_to_note
+from settings import ClassSettings
+from midi_numbers import number_to_note
 
 class ClassThreadInput(Thread):
     in_device = None
@@ -16,6 +17,7 @@ class ClassThreadInput(Thread):
 
     def __init__(self, in_device, keys, pParent):
         Thread.__init__( self )
+        self.settings = ClassSettings()
         self.in_device = in_device
         self.keys = keys
         self.pParent = pParent
@@ -41,9 +43,10 @@ class ClassThreadInput(Thread):
 
     def callback(self, message):
 
-        filter =['clock','stop','note_off']
-        if message.type not in filter:
-            print(f"ClassThreadInput:{message}")
+        if self.settings.GetPrintTerm():
+            filter =['clock','stop','note_off']
+            if message.type not in filter:
+                print(f"ClassThreadInput:{message}")
 
         # Control change - Midi commands
         if message.type =='control_change':

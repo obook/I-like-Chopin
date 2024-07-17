@@ -6,6 +6,8 @@ Created on Wed Jun  5 18:19:14 2024
 """
 from mido import MidiFile
 from threading import Thread
+from settings import ClassSettings
+from midi_numbers import program_to_instrument
 import time
 import os
 import random
@@ -18,6 +20,7 @@ class ClassThreadMidiFile(Thread):
 
     def __init__(self,keys,tracks):
         Thread.__init__( self )
+        self.settings = ClassSettings()
         self.keys = keys
         self.running = False
         self.tracks = tracks
@@ -74,6 +77,12 @@ class ClassThreadMidiFile(Thread):
                         self.stop()
                         return
                     time.sleep(msg.time)
+
+            # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
+            if msg.type == 'program_change' and self.settings.GetForceIntrument():
+                # print(f"programme change channel {msg.channel}={program_to_instrument(msg.program+1)}")
+                if msg.channel != 15: # not for drums
+                    msg.program = 0
 
             # Play
             try: # meta messages can't be send to ports
