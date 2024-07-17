@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>504</width>
-    <height>434</height>
+    <height>442</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -261,7 +261,7 @@
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_Slow">
+    <widget class="QPushButton" name="pushButton_Speed">
      <property name="geometry">
       <rect>
        <x>135</x>
@@ -271,7 +271,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Slow</string>
+      <string>Speed</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_Humanize">

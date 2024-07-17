@@ -66,7 +66,7 @@ class ClassThreadMidiFile(Thread):
                     human = random.randrange(0,self.keys['humanize'],1)/2000
                 else:
                     human = 0
-                msg.time = msg.time + self.keys['tempo']/8000 + human
+                msg.time = msg.time + self.keys['speed']/2000 + human
 
             time.sleep(msg.time)
 

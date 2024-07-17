@@ -54,6 +54,9 @@ class MainWindow(QMainWindow):
         my_icon.addFile(ICON_APPLICATION)
         self.setWindowIcon(my_icon)
 
+        #StatusBar
+        self.ui.statusbar.setSizeGripEnabled(False)
+
         # Midi class
         self.midi = ClassMidiMain(self,self.TracksList)
 
@@ -211,11 +214,17 @@ class MainWindow(QMainWindow):
     def PrintKeys(self,n):
         self.ui.statusbar.showMessage("Keys\t"+str(n))
 
-    def PrintSlow(self,speed): #0 to 126
-        self.ui.pushButton_Slow.setText("Slow "+str(speed))
+    def PrintSpeed(self,speed): #0 to 126
+        if speed :
+            self.ui.pushButton_Speed.setText(f"Speed -{speed}")
+        else:
+            self.ui.pushButton_Speed.setText("Speed")
 
     def PrintHumanize(self,value):
-        self.ui.pushButton_Humanize.setText("Humanize "+str(value))
+        if value :
+            self.ui.pushButton_Humanize.setText("Humanize "+str(value))
+        else:
+            self.ui.pushButton_Humanize.setText("Humanize")
 
     def ChangeMidiFile(self,value):
         # value 0-127

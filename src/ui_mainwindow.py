@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'mainwindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.1
+## Created by: Qt User Interface Compiler version 6.7.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -23,7 +23,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(504, 434)
+        MainWindow.resize(504, 442)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.pushButton_Quit = QPushButton(self.centralwidget)
@@ -93,9 +93,9 @@ class Ui_MainWindow(object):
         self.pushButton_FileIndex.setEnabled(True)
         self.pushButton_FileIndex.setGeometry(QRect(245, 30, 101, 30))
         self.pushButton_FileIndex.setCheckable(False)
-        self.pushButton_Slow = QPushButton(self.groupBox_3)
-        self.pushButton_Slow.setObjectName(u"pushButton_Slow")
-        self.pushButton_Slow.setGeometry(QRect(135, 30, 101, 30))
+        self.pushButton_Speed = QPushButton(self.groupBox_3)
+        self.pushButton_Speed.setObjectName(u"pushButton_Speed")
+        self.pushButton_Speed.setGeometry(QRect(135, 30, 101, 30))
         self.pushButton_Humanize = QPushButton(self.groupBox_3)
         self.pushButton_Humanize.setObjectName(u"pushButton_Humanize")
         self.pushButton_Humanize.setEnabled(True)
@@ -133,7 +133,7 @@ class Ui_MainWindow(object):
         self.pushButton_Panic.setText(QCoreApplication.translate("MainWindow", u"Panic", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("MainWindow", u"MIDI Controller", None))
         self.pushButton_FileIndex.setText(QCoreApplication.translate("MainWindow", u"Midifile", None))
-        self.pushButton_Slow.setText(QCoreApplication.translate("MainWindow", u"Slow", None))
+        self.pushButton_Speed.setText(QCoreApplication.translate("MainWindow", u"Speed", None))
         self.pushButton_Humanize.setText(QCoreApplication.translate("MainWindow", u"Humanize", None))
         self.pushButton_Mode.setText(QCoreApplication.translate("MainWindow", u"Playback", None))
         self.pushButton_Info.setText(QCoreApplication.translate("MainWindow", u"More", None))

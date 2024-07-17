@@ -54,8 +54,8 @@ class ClassThreadInput(Thread):
                 self.keys['humanize'] = message.value #0 to 127
                 self.pParent.PrintHumanize(message.value)
             elif message.control == 76:
-                self.keys['tempo'] = message.value #0 to 127
-                self.pParent.PrintSlow(message.value)
+                self.keys['speed'] = message.value #0 to 127
+                self.pParent.PrintSpeed(message.value)
             elif message.control == 77:
                 self.pParent.ChangeMidiFile(message.value)
             elif message.control == 51 and message.value == 127:
