@@ -5,7 +5,7 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 
-from PySide6.QtWidgets import QDialog
+from PySide6.QtWidgets import QDialog, QTextBrowser
 from ui_informations import Ui_DialogInformation
 import platform
 from settings import ClassSettings
@@ -19,16 +19,17 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.setWindowTitle("Informations")
         self.pushButton_Close.clicked.connect(self.quit)
         text = ""
-        text += f"SYSTEM\n{platform.system()}\n\n"
-        text += f"CONFIG FILE\n{self.settings.GetConfigPath()}\n\n"
-        text += f"MIDIFILES PATH\n{self.settings.GetMidiPath()}\n\n"
-        text += "HUMANIZE\ncontrol_change:control 71 (set your midi-keyboard)\n\n"
-        text += "SPEED CONTROL\ncontrol_change:control 76 (set your midi-keyboard)\n\n"
-        text += "MIDIFILE SELECT\ncontrol_change:control 77 (set your midi-keyboard)\n\n"
-        text += "MODE TOGGLE PLAYBACK/PASSTHROUGH\ncontrol_change:control 51 (set your midi-keyboard)\n\n"
-        text += "\n"
-        text += "PROJECT\nhttps://github.com/obook/I-like-Chopin\n"
-        self.textEdit.setText(text)
+        text += f"SYSTEM<br>\n{platform.system()}<br>\n<br>\n"
+        text += f"CONFIG FILE<br>\n{self.settings.GetConfigPath()}<br>\n<br>\n"
+        text += f"MIDIFILES PATH<br>\n{self.settings.GetMidiPath()}<br>\n<br>\n"
+        text += "HUMANIZE<br>\ncontrol_change:control 71 (set your midi-device)<br>\n<br>\n"
+        text += "SPEED CONTROL<br>\ncontrol_change:control 76 (set your midi-device)<br>\n<br>\n"
+        text += "MIDIFILE SELECT<br>\ncontrol_change:control 77 (set your midi-device)<br>\n<br>\n"
+        text += "MODE TOGGLE PLAYBACK/PASSTHROUGH<br>\ncontrol_change:control 51 (set your midi-device)<br>\n<br>\n"
+        text += "PROJECT : <a href='https://github.com/obook/I-like-Chopin'>https://github.com/obook/I-like-Chopin</a>"
+        self.textBrowser.setAcceptRichText(True)
+        self.textBrowser.setOpenLinks(False)
+        self.textBrowser.insertHtml(text)
 
         self.checkBox_PrintTerminalMsg.setChecked(self.settings.GetPrintTerm())
         self.checkBox_ForceIntrument0.setChecked(self.settings.GetForceIntrument())
