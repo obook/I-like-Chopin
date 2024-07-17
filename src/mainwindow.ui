@@ -302,6 +302,9 @@
      <property name="text">
       <string>Playback</string>
      </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
     </widget>
    </widget>
    <widget class="QPushButton" name="pushButton_Info">

@@ -15,7 +15,7 @@ class ClassSettings:
     config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"(None)", "MidiPath":defaultmidipath,"PrintTerm":False}
 
     def __init__(self):
-        print(f"Settings file = [{self.settingsfile}]")
+        pass
 
     def LoadConfig(self):
         try:

@@ -103,6 +103,7 @@ class Ui_MainWindow(object):
         self.pushButton_Mode = QPushButton(self.groupBox_3)
         self.pushButton_Mode.setObjectName(u"pushButton_Mode")
         self.pushButton_Mode.setGeometry(QRect(355, 30, 101, 30))
+        self.pushButton_Mode.setCheckable(True)
         self.pushButton_Info = QPushButton(self.centralwidget)
         self.pushButton_Info.setObjectName(u"pushButton_Info")
         self.pushButton_Info.setGeometry(QRect(200, 380, 101, 30))

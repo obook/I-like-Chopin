@@ -72,6 +72,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Quit.clicked.connect(self.Quit)
         self.ui.pushButton_Info.clicked.connect(self.Informations)
         self.ui.pushButton_Mode.clicked.connect(self.Mode)
+        self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,30); }\n")
 
         # ComboBoxes Inputs/Outputs
         self.ui.InputDeviceCombo.addItem(Input)
@@ -122,13 +123,6 @@ class MainWindow(QMainWindow):
 
         # Midifiles
         midifile = self.settings.GetMidifile()
-
-
-
-
-        print("!!! self.settings.GetMidiPath()=", self.settings.GetMidiPath(), " midifile=", midifile)
-
-
 
         self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+midifile)
         self.ui.FileCombo.addItems(self.MidiFiles)
@@ -235,12 +229,17 @@ class MainWindow(QMainWindow):
         self.ui.FileCombo.setCurrentText(self.MidiFiles[self.MidifilesIndex])
 
     def Mode(self):
+
         if self.mode_playback :
             self.mode_playback = False
             self.ui.pushButton_Mode.setText("Passthrough")
+            self.ui.pushButton_Mode.setChecked(True)
+            self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(100,0,0); }\n")
         else:
             self.mode_playback = True
             self.ui.pushButton_Mode.setText("Playback")
+            self.ui.pushButton_Mode.setChecked(False)
+            self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,30); }\n")
         self.midi.Mode(self.mode_playback)
 
     def Panic(self):
