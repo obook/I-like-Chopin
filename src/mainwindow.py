@@ -36,7 +36,9 @@ class MainWindow(QMainWindow):
     ChannelsList = [False]*16
 
     MidiFiles=[]
-    MidifilesIndex = 0
+    MidifilesIndex = 0 # ?
+    Tracks = None
+    Midifile = None # current midifile
 
     ConnectInputState = False
     ConnectOutputState = False
@@ -119,9 +121,9 @@ class MainWindow(QMainWindow):
         self.midi.ConnectOutput(Output)
 
         # Midifiles
-        midifile = self.settings.GetMidifile()
+        self.Midifile = self.settings.GetMidifile()
 
-        self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+midifile)
+        self.Tracks = self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+self.Midifile)
         self.ui.FileCombo.addItems(self.MidiFiles)
         self.ui.FileCombo.setCurrentText(Midifile)
         self.ui.FileCombo.currentIndexChanged.connect(self.MidifileChanged)
@@ -172,10 +174,10 @@ class MainWindow(QMainWindow):
     def MidifileChanged(self):
         self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
         self.MidifileState = False
-        file = self.ui.FileCombo.currentText()
-        print(f"MidifileChanged:[{file}]")
-        self.settings.SaveMidifile(file)
-        self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+file)
+        self.Midifile = self.ui.FileCombo.currentText()
+        print(f"MidifileChanged:[{self.Midifile}]")
+        self.settings.SaveMidifile(self.Midifile)
+        self.Tracks = self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+self.Midifile)
 
     def ChannelsNone(self):
         for n in range(len(self.ChannelsButtonsList)):
@@ -240,7 +242,7 @@ class MainWindow(QMainWindow):
         self.midi.Panic()
 
     def Informations(self):
-        ShowInformation(self)
+        ShowInformation(self, self.Midifile, self.Tracks)
 
     def Quit(self):
         self.midi.quit()

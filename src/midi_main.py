@@ -97,12 +97,14 @@ class ClassMidiMain:
             self.ThreadMidiFile = None
 
         self.ThreadMidiFile = ClassThreadMidiFile(self.keys, self.channels)
-        self.ThreadMidiFile.SetMidiFile(filename)
+        tracks = self.ThreadMidiFile.SetMidiFile(filename)
 
         if self.ThreadOutput:
             port = self.ThreadOutput.getport()
             self.ThreadMidiFile.SetMidiPort(port)
             self.ThreadMidiFile.start()
+
+        return tracks # array of tracks names
 
     def MidifileState(self):
         if self.ThreadMidiFile:

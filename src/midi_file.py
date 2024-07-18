@@ -27,16 +27,22 @@ class ClassThreadMidiFile(Thread):
     def __del__(self):
             print("ClassThreadMidiFile destroyed")
 
-    def SetMidiFile(self, filename):
+    def SetMidiFile(self, filename): # returns array of tracks names
+
         self.midifile = filename
+        tracks = []
         try:
             midi = MidiFile(self.midifile)
             print(f"ClassThreadMidiFile:{self.midifile}={round(midi.length/60,2)} minutes")
             for i, track in enumerate(midi.tracks):
-                print('ClassThreadMidiFile:Track {} [{}]'.format(i, track.name))
-                self.ready = True
+                tracks.append(track.name)
+                # print('ClassThreadMidiFile:Track {} [{}]'.format(i, track.name))
+            self.ready = True
         except:
             print(f"ClassThreadMidiFile:Cannot read {self.midifile}")
+            return None
+
+        return tracks
 
     def SetMidiPort(self,port_out):
         print(f"ClassThreadMidiFile:SetMidiPort [{port_out}]")
@@ -98,7 +104,6 @@ class ClassThreadMidiFile(Thread):
         return self.ready
 
     def stop(self):
-        print("midi_file:stop")
         self.ready = False
 
 
