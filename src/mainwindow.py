@@ -199,8 +199,8 @@ class MainWindow(QMainWindow):
             else:
                 self.ChannelsList[n] = False
 
-    def PrintKeys(self,n):
-        self.ui.statusbar.showMessage("Keys\t"+str(n))
+    def PrintStatusBar(self,message):
+        self.ui.statusbar.showMessage(message)
 
     def PrintSpeed(self,speed): #0 to 126
         if speed :

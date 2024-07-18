@@ -40,6 +40,7 @@ class ClassThreadInput(Thread):
             return
 
         print(f"midi_input:run open_output [{self.in_device}] READY")
+        self.pParent.PrintStatusBar(f"Waiting {self.in_device} ...")
 
     def callback(self, message):
 
@@ -78,11 +79,11 @@ class ClassThreadInput(Thread):
         elif message.type == 'note_off':
             self.keys['key_on'] -=1
 
-        text = str(self.keys['key_on'])
+        text = f"Keys\t{self.keys['key_on']}"
         if message.type == 'note_on': # or message.type == 'note_off':
             note, octave = number_to_note(message.note)
             text = text + f"\t\t {note}{octave} \t\t [{message.note}]"
-        self.pParent.PrintKeys(text)
+        self.pParent.PrintStatusBar(text)
 
     def active(self):
         if self.in_port :
