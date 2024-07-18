@@ -33,15 +33,17 @@ class ClassThreadOutput(Thread):
 
         print(f"midi_output:run open_output [{self.out_device}] READY")
 
-        # init channels to Piano
-
+        # Set all channels to Piano ('Acoustic Grand Piano')
         if self.settings.GetForceIntrument():
             init_message = Message('program_change')
             init_message.program = 0 # Bank 0 Intrument 0
             for i in range(16):
                 init_message.channel = i
                 if i != 15 : # not for drums
-                    self.outport.send(init_message)
+                    try:
+                        self.outport.send(init_message)
+                    except:
+                        pass
 
         return self.outport
 
