@@ -10,6 +10,14 @@ Funny program for play like Chopin.
 
 Impress your friends with this musical magic trick!
 
+Require:
+
+* Python 3.10
+* mido==1.2.10
+* PySide6==6.7.1
+* PySide6_Addons==6.7.1
+* PySide6_Essentials==6.7.1
+
 <p align="center">
     <img src="media/ILC.png"  width="280">
 </p>
