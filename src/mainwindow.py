@@ -244,6 +244,9 @@ class MainWindow(QMainWindow):
     def Informations(self):
         ShowInformation(self, self.Midifile, self.Tracks)
 
+    def closeEvent(self, event): # overwritten
+        self.midi.quit()
+
     def Quit(self):
         self.midi.quit()
         app.quit()
