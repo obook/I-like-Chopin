@@ -5,7 +5,7 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 from mido import open_input
-from threading import Thread
+from threading import Thread, get_native_id
 from settings import ClassSettings
 from midi_numbers import number_to_note
 
@@ -22,10 +22,10 @@ class ClassThreadInput(Thread):
         self.keys = keys
         self.pParent = pParent
         self.running = True
-        print("ClassThreadInput created")
+        print(f"ClassThreadInput {get_native_id()} created")
 
     def __del__(self):
-            print("ClassThreadInput destroyed")
+            print(f"ClassThreadInput {get_native_id()} destroyed")
 
     def SetOutPort(self,out_port):
         self.out_port = out_port

@@ -5,7 +5,7 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 from mido import MidiFile
-from threading import Thread
+from threading import Thread, get_native_id
 from settings import ClassSettings
 import time
 import os
@@ -22,10 +22,10 @@ class ClassThreadMidiFile(Thread):
         self.settings = ClassSettings()
         self.keys = keys
         self.channels = channels
-        print("ClassThreadMidiFile created")
+        print(f"ClassThreadMidiFile {get_native_id()} created")
 
     def __del__(self):
-            print("ClassThreadMidiFile destroyed")
+            print(f"ClassThreadMidiFile {get_native_id()} destroyed")
 
     def SetMidiFile(self, filename): # returns array of tracks names
 

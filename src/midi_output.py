@@ -4,7 +4,7 @@
 Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
-from threading import Thread
+from threading import Thread, get_native_id
 from mido import open_output, Message
 from settings import ClassSettings
 
@@ -17,10 +17,10 @@ class ClassThreadOutput(Thread):
         self.out_device = out_device
         self.keys = keys
         self.pParent = pParent
-        print("ClassThreadOutput created")
+        print(f"ClassThreadOutput {get_native_id()} created")
 
     def __del__(self):
-        print("ClassThreadOutput destroyed")
+        print(f"ClassThreadOutput {get_native_id()} destroyed")
 
     def run(self):
         self.stop()
@@ -33,8 +33,13 @@ class ClassThreadOutput(Thread):
 
         print(f"midi_output:run open_output [{self.out_device}] READY")
 
-        # Set all channels to Piano ('Acoustic Grand Piano')
-        if self.settings.GetForceIntrument():
+        # Set all channels to Piano ('Acoustic Grand Piano') if set
+        self.forcePiano()
+
+        return self.outport
+
+    def forcePiano(self):
+        if self.outport and self.settings.GetForceIntrument():
             init_message = Message('program_change')
             init_message.program = 0 # Bank 0 Intrument 0
             for i in range(16):
@@ -44,8 +49,6 @@ class ClassThreadOutput(Thread):
                         self.outport.send(init_message)
                     except:
                         pass
-
-        return self.outport
 
     def send(self, message):
         if self.outport :
@@ -57,6 +60,7 @@ class ClassThreadOutput(Thread):
     def panic(self):
         if self.outport :
             self.outport.panic()
+            self.forcePiano()
 
     def active(self):
         if self.outport :
