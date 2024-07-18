@@ -102,13 +102,13 @@ class MainWindow(QMainWindow):
         for n in range(8):
             self.ChannelsButtonsList.append(QPushButton(str(n+1)))
             self.ChannelsButtonsList[n].setCheckable(True);
-            self.ChannelsButtonsList[n].clicked.connect(self.ReadTracks)
+            self.ChannelsButtonsList[n].clicked.connect(self.ReadChannels)
             self.ChannelsButtonsList[n].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }\n")
             grid.addWidget(self.ChannelsButtonsList[n],1,n)
         for n in range(8):
             self.ChannelsButtonsList.append(QPushButton(str(n+8+1)))
             self.ChannelsButtonsList[n+8].setCheckable(True);
-            self.ChannelsButtonsList[n+8].clicked.connect(self.ReadTracks)
+            self.ChannelsButtonsList[n+8].clicked.connect(self.ReadChannels)
             self.ChannelsButtonsList[n+8].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }\n")
             grid.addWidget(self.ChannelsButtonsList[n+8],2,n)
 
@@ -180,19 +180,19 @@ class MainWindow(QMainWindow):
     def ChannelsNone(self):
         for n in range(len(self.ChannelsButtonsList)):
             self.ChannelsButtonsList[n].setChecked(False)
-        self.ReadTracks()
+        self.ReadChannels()
 
     def ChannelsAll(self):
         for n in range(len(self.ChannelsButtonsList)):
             self.ChannelsButtonsList[n].setChecked(True)
-        self.ReadTracks()
+        self.ReadChannels()
 
     def ChannelsFirst(self):
         self.ChannelsNone()
         self.ChannelsButtonsList[0].setChecked(True)
-        self.ReadTracks()
+        self.ReadChannels()
 
-    def ReadTracks(self):
+    def ReadChannels(self):
         for n in range(len(self.ChannelsButtonsList)):
             if self.ChannelsButtonsList[n].isChecked():
                 self.ChannelsList[n] = True
@@ -210,7 +210,7 @@ class MainWindow(QMainWindow):
 
     def PrintHumanize(self,value):
         if value :
-            self.ui.pushButton_Humanize.setText("Humanize "+str(value))
+            self.ui.pushButton_Humanize.setText(f"Humanize {value}")
         else:
             self.ui.pushButton_Humanize.setText("Humanize")
 
