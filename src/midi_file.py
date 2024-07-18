@@ -16,13 +16,12 @@ class ClassThreadMidiFile(Thread):
     midifile = None
     keys = None
     port_out = None
-    running = False
+    ready = False
 
     def __init__(self,keys,tracks):
         Thread.__init__( self )
         self.settings = ClassSettings()
         self.keys = keys
-        self.running = False
         self.tracks = tracks
         print("ClassThreadMidiFile created")
 
@@ -33,31 +32,33 @@ class ClassThreadMidiFile(Thread):
         self.midifile = filename
         try:
             midi = MidiFile(self.midifile)
-            print(f"{self.midifile} = {round(midi.length/60,2)} minutes")
+            print(f"ClassThreadMidiFile:{self.midifile}={round(midi.length/60,2)} minutes")
             for i, track in enumerate(midi.tracks):
-                print('Track {}: {}'.format(i, track.name))
+                print('ClassThreadMidiFile:Track {} [{}]'.format(i, track.name))
+                self.ready = True
         except:
             print(f"ClassThreadMidiFile:Cannot read {self.midifile}")
 
     def SetMidiPort(self,port_out):
-        print("ClassThreadMidiFile:SetMidiPort")
+        print(f"ClassThreadMidiFile:SetMidiPort [{port_out}]")
         self.port_out = port_out
 
     def run(self):
 
-        print(f"ClassThreadMidiFile:run : [{self.midifile}]")
+        if not self.ready:
+            return
+
+        print(f"ClassThreadMidiFile:run [{self.midifile}]")
         if self.midifile:
             if not os.path.isfile(self.midifile):
-                print("ClassThreadMidiFile:midifile not found")
+                print("ClassThreadMidiFile:midifile [{self.midifile}] not found")
                 return
-
-        self.running = True
 
         for msg in MidiFile(self.midifile):
             # ("ClassThreadMidiFile:msg =",msg, "keys=",self.keys['key_on'] )
 
             # Stop while running ?
-            if not self.running:
+            if not self.ready:
                 break
 
             # Speed controlled by knob, see midi_input
@@ -73,7 +74,7 @@ class ClassThreadMidiFile(Thread):
             # Pause ?
             if msg.type == 'note_on':
                 while not self.keys['key_on']: # Loop waiting keyboard
-                    if not self.running:
+                    if not self.ready:
                         self.stop()
                         return
                     time.sleep(msg.time)
@@ -96,10 +97,10 @@ class ClassThreadMidiFile(Thread):
         self.stop()
 
     def active(self):
-        return self.running
+        return self.ready
 
     def stop(self):
         print("midi_file:stop")
-        self.running = False
+        self.ready = False
 
 
