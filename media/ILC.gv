@@ -10,11 +10,11 @@ digraph {
                 color=blue;
                 MIDIFILE [label="Midi File"];
                 ILC [label="I-Like-Chopin"];
-                QSYNTH [label="QSynth"];
+                SYNTH [label="Virtual Synthesizer\n(OmniMIDI,QSynth,...)"];
         }
 
         MIDIFILE -> ILC
-        ILC -> QSYNTH [label="Correct Key"];
+        ILC -> SYNTH [label="Correct Key"];
 
         subgraph cluster_1 {
                 label = "Physical";
@@ -23,6 +23,6 @@ digraph {
         }
 
         KEYBOARD -> ILC [label="Any Key"];
-        SOUNDEVICE[label="Sound Device", shape=square];
-        QSYNTH -> SOUNDEVICE [label="Audio"];
+        SOUNDEVICE[label="Sound Device"];
+        SYNTH -> SOUNDEVICE [label="Audio"];
 }
