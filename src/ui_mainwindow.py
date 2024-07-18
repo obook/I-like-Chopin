@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'mainwindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -68,15 +68,15 @@ class Ui_MainWindow(object):
         self.gridLayout = QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.pushButton_TracksAll = QPushButton(self.groupBox_2)
-        self.pushButton_TracksAll.setObjectName(u"pushButton_TracksAll")
-        self.pushButton_TracksAll.setGeometry(QRect(190, 30, 97, 30))
-        self.pushButton_TracksFirst = QPushButton(self.groupBox_2)
-        self.pushButton_TracksFirst.setObjectName(u"pushButton_TracksFirst")
-        self.pushButton_TracksFirst.setGeometry(QRect(10, 30, 91, 30))
-        self.pushButton_TracksNone = QPushButton(self.groupBox_2)
-        self.pushButton_TracksNone.setObjectName(u"pushButton_TracksNone")
-        self.pushButton_TracksNone.setGeometry(QRect(375, 30, 97, 30))
+        self.pushButton_ChannelsAll = QPushButton(self.groupBox_2)
+        self.pushButton_ChannelsAll.setObjectName(u"pushButton_ChannelsAll")
+        self.pushButton_ChannelsAll.setGeometry(QRect(190, 30, 97, 30))
+        self.pushButton_ChannelsFirst = QPushButton(self.groupBox_2)
+        self.pushButton_ChannelsFirst.setObjectName(u"pushButton_ChannelsFirst")
+        self.pushButton_ChannelsFirst.setGeometry(QRect(10, 30, 91, 30))
+        self.pushButton_ChannelsNone = QPushButton(self.groupBox_2)
+        self.pushButton_ChannelsNone.setObjectName(u"pushButton_ChannelsNone")
+        self.pushButton_ChannelsNone.setGeometry(QRect(375, 30, 97, 30))
         self.pushButton_Panic = QPushButton(self.centralwidget)
         self.pushButton_Panic.setObjectName(u"pushButton_Panic")
         self.pushButton_Panic.setGeometry(QRect(11, 380, 97, 30))
@@ -128,9 +128,9 @@ class Ui_MainWindow(object):
         self.labelStatusOuput.setText(QCoreApplication.translate("MainWindow", u"LED", None))
         self.labelStatusMidifile.setText(QCoreApplication.translate("MainWindow", u"LED", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"MIDI Channels", None))
-        self.pushButton_TracksAll.setText(QCoreApplication.translate("MainWindow", u"All", None))
-        self.pushButton_TracksFirst.setText(QCoreApplication.translate("MainWindow", u"First", None))
-        self.pushButton_TracksNone.setText(QCoreApplication.translate("MainWindow", u"None", None))
+        self.pushButton_ChannelsAll.setText(QCoreApplication.translate("MainWindow", u"All", None))
+        self.pushButton_ChannelsFirst.setText(QCoreApplication.translate("MainWindow", u"First", None))
+        self.pushButton_ChannelsNone.setText(QCoreApplication.translate("MainWindow", u"None", None))
         self.pushButton_Panic.setText(QCoreApplication.translate("MainWindow", u"Panic", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("MainWindow", u"MIDI Controller", None))
         self.pushButton_FileIndex.setText(QCoreApplication.translate("MainWindow", u"Midifile", None))

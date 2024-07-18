@@ -17,11 +17,11 @@ class ClassThreadMidiFile(Thread):
     port_out = None
     ready = False
 
-    def __init__(self,keys,tracks):
+    def __init__(self,keys,channels):
         Thread.__init__( self )
         self.settings = ClassSettings()
         self.keys = keys
-        self.tracks = tracks
+        self.channels = channels
         print("ClassThreadMidiFile created")
 
     def __del__(self):
@@ -85,7 +85,7 @@ class ClassThreadMidiFile(Thread):
 
             # Play
             try: # meta messages can't be send to ports
-                if self.port_out and self.tracks[msg.channel]:
+                if self.port_out and self.channels[msg.channel]:
                     self.port_out.send(msg)
             except:
                 # print("ERROR->ClassThreadMidiFile:port_out.send type=", type(self.port_out), "msg=", msg)

@@ -25,13 +25,13 @@ class ClassMidiMain:
     ThreadMidiFile = None
 
     midifile = None
-    tracks = None
+    channels = None
 
     settings = ClassSettings()
 
-    def __init__(self, pParent, tracks):
+    def __init__(self, pParent, channels):
         self.pParent = pParent
-        self.tracks = tracks
+        self.channels = channels
 
     def GetDevices(self):
         Inputs = []
@@ -96,7 +96,7 @@ class ClassMidiMain:
             self.ThreadMidiFile.stop()
             self.ThreadMidiFile = None
 
-        self.ThreadMidiFile = ClassThreadMidiFile(self.keys, self.tracks)
+        self.ThreadMidiFile = ClassThreadMidiFile(self.keys, self.channels)
         self.ThreadMidiFile.SetMidiFile(filename)
 
         if self.ThreadOutput:

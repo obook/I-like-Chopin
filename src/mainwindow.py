@@ -32,8 +32,8 @@ app = None
 class MainWindow(QMainWindow):
 
     settings = ClassSettings()
-    TracksButtonsList = []
-    TracksList = [False]*16
+    ChannelsButtonsList = []
+    ChannelsList = [False]*16
 
     MidiFiles=[]
     MidifilesIndex = 0
@@ -58,7 +58,7 @@ class MainWindow(QMainWindow):
         self.ui.statusbar.setSizeGripEnabled(False)
 
         # Midi class
-        self.midi = ClassMidiMain(self,self.TracksList)
+        self.midi = ClassMidiMain(self,self.ChannelsList)
 
         # Datas
         Inputs, Outputs, IOPorts = self.midi.GetDevices()
@@ -94,25 +94,25 @@ class MainWindow(QMainWindow):
         self.ui.labelStatusMidifile.setScaledContents(True)
 
         # Midi Channels
-        self.ui.pushButton_TracksNone.clicked.connect(self.TracksNone)
-        self.ui.pushButton_TracksAll.clicked.connect(self.TracksAll)
-        self.ui.pushButton_TracksFirst.clicked.connect(self.TracksFirst)
+        self.ui.pushButton_ChannelsNone.clicked.connect(self.ChannelsNone)
+        self.ui.pushButton_ChannelsAll.clicked.connect(self.ChannelsAll)
+        self.ui.pushButton_ChannelsFirst.clicked.connect(self.ChannelsFirst)
 
         grid = self.ui.gridLayout
         for n in range(8):
-            self.TracksButtonsList.append(QPushButton(str(n+1)))
-            self.TracksButtonsList[n].setCheckable(True);
-            self.TracksButtonsList[n].clicked.connect(self.ReadTracks)
-            self.TracksButtonsList[n].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }\n")
-            grid.addWidget(self.TracksButtonsList[n],1,n)
+            self.ChannelsButtonsList.append(QPushButton(str(n+1)))
+            self.ChannelsButtonsList[n].setCheckable(True);
+            self.ChannelsButtonsList[n].clicked.connect(self.ReadTracks)
+            self.ChannelsButtonsList[n].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }\n")
+            grid.addWidget(self.ChannelsButtonsList[n],1,n)
         for n in range(8):
-            self.TracksButtonsList.append(QPushButton(str(n+8+1)))
-            self.TracksButtonsList[n+8].setCheckable(True);
-            self.TracksButtonsList[n+8].clicked.connect(self.ReadTracks)
-            self.TracksButtonsList[n+8].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }\n")
-            grid.addWidget(self.TracksButtonsList[n+8],2,n)
+            self.ChannelsButtonsList.append(QPushButton(str(n+8+1)))
+            self.ChannelsButtonsList[n+8].setCheckable(True);
+            self.ChannelsButtonsList[n+8].clicked.connect(self.ReadTracks)
+            self.ChannelsButtonsList[n+8].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }\n")
+            grid.addWidget(self.ChannelsButtonsList[n+8],2,n)
 
-        self.TracksFirst()
+        self.ChannelsFirst()
 
         # Connections
         self.midi.ConnectInput(Input)
@@ -177,30 +177,27 @@ class MainWindow(QMainWindow):
         self.settings.SaveMidifile(file)
         self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+file)
 
-    def TracksNone(self):
-        for n in range(len(self.TracksButtonsList)):
-            self.TracksButtonsList[n].setChecked(False)
+    def ChannelsNone(self):
+        for n in range(len(self.ChannelsButtonsList)):
+            self.ChannelsButtonsList[n].setChecked(False)
         self.ReadTracks()
 
-    def TracksAll(self):
-        for n in range(len(self.TracksButtonsList)):
-            self.TracksButtonsList[n].setChecked(True)
+    def ChannelsAll(self):
+        for n in range(len(self.ChannelsButtonsList)):
+            self.ChannelsButtonsList[n].setChecked(True)
         self.ReadTracks()
 
-    def TracksFirst(self):
-        self.TracksNone()
-        self.TracksButtonsList[0].setChecked(True)
+    def ChannelsFirst(self):
+        self.ChannelsNone()
+        self.ChannelsButtonsList[0].setChecked(True)
         self.ReadTracks()
 
     def ReadTracks(self):
-        for n in range(len(self.TracksButtonsList)):
-            if self.TracksButtonsList[n].isChecked():
-                self.TracksList[n] = True
+        for n in range(len(self.ChannelsButtonsList)):
+            if self.ChannelsButtonsList[n].isChecked():
+                self.ChannelsList[n] = True
             else:
-                self.TracksList[n] = False
-
-    def TracksIsActive(self,n):
-        return(self.TracksList[n])
+                self.ChannelsList[n] = False
 
     def PrintKeys(self,n):
         self.ui.statusbar.showMessage("Keys\t"+str(n))
@@ -258,16 +255,7 @@ def start():
         app = QApplication.instance()
     widget = MainWindow()
     widget.setWindowTitle("I Like Chopin")
-
-    # Wayland : execute ?
-    # qdbus org.kde.KWin /KWin queryWindowInfo (resourceClass attribute)
-
-    # Wayland : icon is set in taskbar
-    # regarding xxx.desktop file
-
-    app.setDesktopFileName("i-like-chopin");
-
-    # m_icon = pParent->windowIcon().pixmap(32, 32);
+    app.setDesktopFileName("org.obook.i-like-chopin"); # For Wayland, must be .desktop filename
     widget.show()
     sys.exit(app.exec())
 
