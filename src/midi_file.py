@@ -7,7 +7,6 @@ Created on Wed Jun  5 18:19:14 2024
 from mido import MidiFile
 from threading import Thread
 from settings import ClassSettings
-from midi_numbers import program_to_instrument
 import time
 import os
 import random
@@ -45,7 +44,7 @@ class ClassThreadMidiFile(Thread):
 
     def run(self):
 
-        if not self.ready:
+        if not self.ready: # SetMidiFile failed to get tracks, malformed midifile ?
             return
 
         print(f"ClassThreadMidiFile:run [{self.midifile}]")
@@ -55,7 +54,6 @@ class ClassThreadMidiFile(Thread):
                 return
 
         for msg in MidiFile(self.midifile):
-            # ("ClassThreadMidiFile:msg =",msg, "keys=",self.keys['key_on'] )
 
             # Stop while running ?
             if not self.ready:
