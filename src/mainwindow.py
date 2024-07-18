@@ -114,6 +114,9 @@ class MainWindow(QMainWindow):
             self.ChannelsButtonsList[n+8].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }\n")
             grid.addWidget(self.ChannelsButtonsList[n+8],2,n)
 
+        # Special color for drums channel
+        self.ChannelsButtonsList[9].setStyleSheet("QPushButton:checked { background-color: rgb(100,50,50); }\n")
+
         self.ChannelsFirst()
 
         # Connections
