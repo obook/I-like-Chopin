@@ -13,4 +13,4 @@ pip install pyside6
 pip install mido
 pip install python-rtmidi
 
-You can now launch "python i-like-chopin.py"
+If no any error, you can now launch "python i-like-chopin.py"
