@@ -10,6 +10,8 @@
         "midi_numbers.py",
         "informations.ui",
         "informations.py",
-        "i-like-chopin.py"
+        "i-like-chopin.py",
+        "big_screen.ui",
+        "big_screen.py"
     ]
 }

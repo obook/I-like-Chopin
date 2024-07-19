@@ -22,6 +22,7 @@ from PySide6.QtGui import QIcon
 from midi_main import ClassMidiMain
 from settings import ClassSettings
 from informations import ShowInformation
+from big_screen import ShowBigScreen
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -102,6 +103,7 @@ class MainWindow(QMainWindow):
 
         self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_LED_OFF))
         self.ui.labelStatusMidifile.setScaledContents(True)
+        # un label n'est pas cliquable ... self.ui.labelStatusMidifile.clicked.connect(self.BigScreen())
 
         # Midi Channels
         self.ui.pushButton_ChannelsNone.clicked.connect(self.ChannelsNone)
@@ -253,6 +255,10 @@ class MainWindow(QMainWindow):
 
     def Informations(self):
         ShowInformation(self, self.Midifile, self.Tracks)
+
+    def BigScreen(self):
+        # not terminated -> ShowBigScreen(self, self.Midifile)
+        pass
 
     def closeEvent(self, event): # overwritten
         self.midi.quit()
