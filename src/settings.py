@@ -20,6 +20,7 @@ class ClassSettings:
     "Midifile":"(None)",
     "MidiPath":defaultmidipath,
     "PrintTerm":False,
+    "ForceInstrument":False,
     "PianoProgram":0}
 
     def __init__(self):
@@ -39,33 +40,31 @@ class ClassSettings:
         try:
             with open(self.settingsfile, 'r') as f:
                 self.config = json.load(f)
+                f.close
         except:
-            self.SaveConfig()
+            pass
 
-        #if old version
-        if not 'InputDevice' in self.config:
-            print('ClassSettings->conversion')
-            self.config['InputDevice'] = '(None)'
-            self.config['OutputDevice'] = '(None)'
-            self.config['Midifile'] = '(None)'
-            self.config['MidiPath'] = self.defaultmidipath
         return True
+
+    def SaveConfig(self):
+        try:
+            with open(self.settingsfile, 'w') as f:
+                json.dump(self.config, f)
+                f.close
+        except:
+            return False
+        return True
+
+    def GetConfigPath(self):
+        return self.settingsfile
 
     '''
     Globals functions
     '''
 
-    def GetConfigPath(self):
-        return self.settingsfile
-
-    def SaveConfig(self):
-        with open(self.settingsfile, 'w') as f:
-            json.dump(self.config, f)
-        return True
-
     def GetSetting(self,key,default=None):
         self.LoadConfig()
-        if not self.config.get(key):
+        if not key in self.config:
             self.config[key] = default
             self.SaveConfig()
         return self.config[key]
@@ -102,17 +101,17 @@ class ClassSettings:
     def GetPrintTerm(self):
         return self.GetSetting('PrintTerm',False)
 
-    def SetPrintTerm(self,value):
+    def SavePrintTerm(self,value):
         return self.SetSetting('PrintTerm', value)
 
     def GetForceIntrument(self):
         return self.GetSetting('ForceInstrument',False)
 
-    def SetForceIntrument(self,value):
+    def SaveForceIntrument(self,value):
         return self.SetSetting('ForceInstrument', value)
 
     def GetPianoProgram(self):
         return self.GetSetting('PianoProgram',0)
 
-    def SetPianoProgram(self,value):
+    def SavePianoProgram(self,value): # not used
         return self.SetSetting('PianoProgram', value)

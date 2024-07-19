@@ -54,8 +54,8 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.checkBox_ForceIntrument0.setChecked(self.settings.GetForceIntrument())
 
     def quit(self):
-        self.settings.SetPrintTerm(self.checkBox_PrintTerminalMsg.isChecked())
-        self.settings.SetForceIntrument(self.checkBox_ForceIntrument0.isChecked())
+        self.settings.SavePrintTerm(self.checkBox_PrintTerminalMsg.isChecked())
+        self.settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
         self.close()
 
 def ShowInformation(pParent,midifile,tracks):
