@@ -133,8 +133,7 @@ class MainWindow(QMainWindow):
 
         # Midifiles
         self.Midifile = self.settings.GetMidifile()
-
-        self.Tracks = self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+self.Midifile)
+        self.Tracks = self.midi.SetMidifile(os.path.join(self.settings.GetMidiPath(),"/",self.Midifile))
         self.ui.FileCombo.addItems(self.MidiFiles)
         self.ui.FileCombo.setCurrentText(Midifile)
         self.ui.FileCombo.currentIndexChanged.connect(self.MidifileChanged)
@@ -188,7 +187,7 @@ class MainWindow(QMainWindow):
         self.Midifile = self.ui.FileCombo.currentText()
         print(f"MidifileChanged:[{self.Midifile}]")
         self.settings.SaveMidifile(self.Midifile)
-        self.Tracks = self.midi.SetMidifile(self.settings.GetMidiPath()+"/"+self.Midifile)
+        self.Tracks = self.midi.SetMidifile(os.path.join(self.settings.GetMidiPath(),self.Midifile))
 
     def ChannelsNone(self):
         for n in range(len(self.ChannelsButtonsList)):
