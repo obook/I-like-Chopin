@@ -62,7 +62,7 @@ class Ui_MainWindow(object):
         self.labelStatusMidifile.setGeometry(QRect(450, 113, 20, 20))
         self.groupBox_2 = QGroupBox(self.centralwidget)
         self.groupBox_2.setObjectName(u"groupBox_2")
-        self.groupBox_2.setGeometry(QRect(10, 150, 481, 141))
+        self.groupBox_2.setGeometry(QRect(10, 155, 481, 141))
         self.gridLayoutWidget = QWidget(self.groupBox_2)
         self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
         self.gridLayoutWidget.setGeometry(QRect(10, 70, 461, 71))
