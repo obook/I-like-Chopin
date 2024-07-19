@@ -1,0 +1,15 @@
+Main installation guideline for Microsft Windows
+------------------------------------------------
+
+! Set in python installer "Use admin privileges when installing py.exe" and "Add python.exe to PATH"
+! At the end, press "Disable path lenght limit"
+
+-> Install Python from https://www.python.org/downloads/, tested with python-3.12.4-amd64.exe
+
+
+Open CMD and run
+
+pip install pyside6
+pip install mido
+pip install python-rtmidi
+
