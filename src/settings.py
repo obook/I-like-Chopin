@@ -7,15 +7,27 @@ Created on Wed Jun  5 18:19:14 2024
 
 import json
 import os
+import shutil
 
 class ClassSettings:
 
-    settingsfile = os.path.join(os.path.expanduser("~"), ".config","i-like-chopin.json")
+    settingspath = os.path.join(os.path.expanduser("~"), ".config")
+    settingsfile =  os.path.join(settingspath, "i-like-chopin.json")
     defaultmidipath = os.path.join(os.path.expanduser("~"), ".local","share","i-like-chopin","midi")
     config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"(None)", "MidiPath":defaultmidipath,"PrintTerm":False}
 
     def __init__(self):
-        pass
+
+        self.application_path = os.path.dirname(os.path.realpath(__file__))
+
+        if not os.path.isdir(self.settingspath):
+            os.makedirs(self.settingspath, exist_ok=True)
+        if not os.path.isdir(self.defaultmidipath):
+            midifiles_path_src = os.path.join(self.application_path, "midi")
+            try:
+                shutil.copytree( midifiles_path_src, self.defaultmidipath )
+            except:
+                pass
 
     def LoadConfig(self):
         try:
