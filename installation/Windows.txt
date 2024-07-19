@@ -1,5 +1,5 @@
-Main installation guideline for Microsft Windows
-------------------------------------------------
+Main installation guideline for Microsoft Windows
+-------------------------------------------------
 
 ! Set in python installer "Use admin privileges when installing py.exe" and "Add python.exe to PATH"
 ! At the end, press "Disable path lenght limit"
