@@ -14,7 +14,13 @@ class ClassSettings:
     settingspath = os.path.join(os.path.expanduser("~"), ".config")
     settingsfile =  os.path.join(settingspath, "i-like-chopin.json")
     defaultmidipath = os.path.join(os.path.expanduser("~"), ".local","share","i-like-chopin","midi")
-    config = {"InputDevice": '(None)', "OutputDevice": '(None)', "Midifile":"(None)", "MidiPath":defaultmidipath,"PrintTerm":False}
+    config = {
+    "InputDevice": '(None)',
+    "OutputDevice": '(None)',
+    "Midifile":"(None)",
+    "MidiPath":defaultmidipath,
+    "PrintTerm":False,
+    "PianoProgram":0}
 
     def __init__(self):
 
@@ -45,82 +51,68 @@ class ClassSettings:
             self.config['MidiPath'] = self.defaultmidipath
         return True
 
+    '''
+    Globals functions
+    '''
+
+    def GetConfigPath(self):
+        return self.settingsfile
+
     def SaveConfig(self):
         with open(self.settingsfile, 'w') as f:
             json.dump(self.config, f)
         return True
 
-    def GetInputDevice(self):
+    def GetSetting(self,key,default=None):
         self.LoadConfig()
-        if not self.config.get('InputDevice'):
-            self.config['InputDevice'] = '(None)'
-        return self.config['InputDevice']
+        if not self.config.get(key):
+            self.config[key] = default
+            self.SaveConfig()
+        return self.config[key]
 
-    def SaveInputDevice(self,name):
-        self.config['InputDevice'] = name
+    def SetSetting(self,key,value):
+        self.config[key] = value
         return self.SaveConfig()
+
+    '''
+    Individuals functions
+    '''
+
+    def GetInputDevice(self):
+        return self.GetSetting('InputDevice','(None)')
+
+    def SaveInputDevice(self,value):
+        return self.SetSetting('InputDevice', value)
 
     def GetOutputDevice(self):
-        self.LoadConfig()
-        if not self.config.get('OutputDevice'):
-            self.config['OutputDevice'] = '(None)'
-        return self.config['OutputDevice']
+        return self.GetSetting('OutputDevice','(None)')
 
-    def SaveOutputDevice(self,name):
-        self.config['OutputDevice'] = name
-        return self.SaveConfig()
-    '''
-    def GetMidifileId(self):
-        self.LoadConfig()
-        return self.config['MidifileId']
+    def SaveOutputDevice(self,value):
+        return self.SetSetting('OutputDevice', value)
 
-    def SaveMidifileId(self,id):
-        self.config['MidifileId'] = id
-        return self.SaveConfig()
-    '''
     def GetMidifile(self):
-        self.LoadConfig()
-        if not self.config.get('Midifile'):
-            self.config['Midifile'] = '(None)'
-        return self.config['Midifile']
+        return self.GetSetting('Midifile','(None)')
 
-    def SaveMidifile(self,name):
-        self.config['Midifile'] = name
-        return self.SaveConfig()
+    def SaveMidifile(self,value):
+        return self.SetSetting('Midifile', value)
 
     def GetMidiPath(self):
-        self.LoadConfig()
-        if not self.config.get('MidiPath'):
-            os.makedirs(self.defaultmidipath, exist_ok=True)
-            self.WarningNoMidifile()
-            self.config['MidiPath'] = self.defaultmidipath
-            self.SaveConfig()
-        return self.config['MidiPath']
-
-    def GetConfigPath(self):
-        return self.settingsfile
+         return self.GetSetting('MidiPath',self.defaultmidipath)
 
     def GetPrintTerm(self):
-        self.LoadConfig()
-        if not self.config.get('PrintTerm'):
-            self.config['PrintTerm'] = False
-        return self.config['PrintTerm']
+        return self.GetSetting('PrintTerm',False)
 
-    def SetPrintTerm(self,status):
-        self.config['PrintTerm'] = status
-        return self.SaveConfig()
+    def SetPrintTerm(self,value):
+        return self.SetSetting('PrintTerm', value)
 
     def GetForceIntrument(self):
-        self.LoadConfig()
-        if not self.config.get('ForceInstrument'):
-            self.config['ForceInstrument'] = False
-        return self.config['ForceInstrument']
+        return self.GetSetting('ForceInstrument',False)
 
-    def SetForceIntrument(self,status):
-        self.config['ForceInstrument'] = status
-        return self.SaveConfig()
+    def SetForceIntrument(self,value):
+        return self.SetSetting('ForceInstrument', value)
 
-    def WarningNoMidifile(self):
-        print(f"WARNING : Copy midifiles to {self.config['MidiPath']}")
+    def GetPianoProgram(self):
+        return self.GetSetting('PianoProgram',0)
 
-
+    def SetPianoProgram(self,value):
+        return self.SetSetting('PianoProgram', value)
