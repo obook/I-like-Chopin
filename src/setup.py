@@ -1,10 +1,13 @@
+'''
+!!! NOT USED FOR INSTANCE
+'''
 import sys
 from cx_Freeze import setup, Executable
 
 # Les dépendances sont automatiquement détectées, mais il peut être nécessaire de les ajuster.
 build_exe_options = {
     "excludes": ["tkinter", "unittest"],
-    "zip_include_packages": ["encodings", "PySide6"],
+    "zip_include_packages": ["encodings", "PySide6", "python-rtmidi"],
 }
 
 # base="Win32GUI" devrait être utilisé uniquement avec l’app Windows GUI 
