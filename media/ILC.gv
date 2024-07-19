@@ -19,7 +19,7 @@ digraph {
         subgraph cluster_1 {
                 label = "Physical";
                 color=red;
-                KEYBOARD[label="Midi Keyboard"];
+                KEYBOARD[label="Master Keyboard"];
         }
 
         KEYBOARD -> ILC [label="Any Key"];
