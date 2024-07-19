@@ -133,7 +133,7 @@ class MainWindow(QMainWindow):
 
         # Midifiles
         self.Midifile = self.settings.GetMidifile()
-        self.Tracks = self.midi.SetMidifile(os.path.join(self.settings.GetMidiPath(),"/",self.Midifile))
+        self.Tracks = self.midi.SetMidifile(os.path.join(self.settings.GetMidiPath(),self.Midifile))
         self.ui.FileCombo.addItems(self.MidiFiles)
         self.ui.FileCombo.setCurrentText(Midifile)
         self.ui.FileCombo.currentIndexChanged.connect(self.MidifileChanged)
