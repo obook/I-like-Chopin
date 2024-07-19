@@ -27,7 +27,7 @@
      <string>Quit</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QGroupBox" name="groupBoxDevices">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -106,6 +106,9 @@
        <width>371</width>
        <height>30</height>
       </rect>
+     </property>
+     <property name="acceptDrops">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QLabel" name="labelStatusInput">

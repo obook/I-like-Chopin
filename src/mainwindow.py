@@ -17,7 +17,7 @@ import os
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from PySide6 import QtGui
-from PySide6.QtCore import QTimer
+from PySide6.QtCore import QTimer, QEvent
 from PySide6.QtGui import QIcon
 from midi_main import ClassMidiMain
 from settings import ClassSettings
@@ -135,10 +135,13 @@ class MainWindow(QMainWindow):
 
         # Midifiles
         self.Midifile = self.settings.GetMidifile()
-        self.Tracks = self.midi.SetMidifile(os.path.join(self.settings.GetMidiPath(),self.Midifile))
         self.ui.FileCombo.addItems(self.MidiFiles)
         self.ui.FileCombo.setCurrentText(Midifile)
         self.ui.FileCombo.currentIndexChanged.connect(self.MidifileChanged)
+        self.Tracks = self.midi.SetMidifile(os.path.join(self.settings.GetMidiPath(),self.Midifile))
+
+        # Drop file
+        self.ui.FileCombo.installEventFilter(self)
 
         # Timer
         timer = QTimer(self)
@@ -259,6 +262,21 @@ class MainWindow(QMainWindow):
     def BigScreen(self):
         # not terminated -> ShowBigScreen(self, self.Midifile)
         pass
+
+    def eventFilter(self, o, e):
+        if e.type() == QEvent.DragEnter: #remember to accept the enter event
+            e.acceptProposedAction()
+            return True
+        if e.type() == QEvent.Drop:
+            data = e.mimeData()
+            urls = data.urls()
+            if ( urls and urls[0].scheme() == 'file' ):
+                self.Tracks = self.midi.SetMidifile(urls[0].path())
+                # not possible yet -> self.ui.FileCombo.setCurrentText(urls[0].fileName()) #
+                return True
+        return False #remember to return false for other event types
+
+    # End
 
     def closeEvent(self, event): # overwritten
         self.midi.quit()

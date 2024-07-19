@@ -87,7 +87,7 @@ class ClassThreadMidiFile(Thread):
             if msg.type == 'program_change' and self.settings.GetForceIntrument():
                 # print(f"programme change channel {msg.channel}={program_to_instrument(msg.program+1)}")
                 if msg.channel != 15: # not for drums
-                    msg.program = 0
+                    msg.program = self.settings.GetPianoProgram()
 
             # Play
             try: # meta messages can't be send to ports
