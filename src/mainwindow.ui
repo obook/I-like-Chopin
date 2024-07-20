@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>I-LIKE-CHOPIN</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="pushButton_Quit">
@@ -42,14 +42,17 @@
     <widget class="QLabel" name="label_File">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>-10</x>
        <y>114</y>
        <width>71</width>
        <height>22</height>
       </rect>
      </property>
      <property name="text">
-      <string>File</string>
+      <string>Library</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QComboBox" name="InputDeviceCombo">
@@ -75,7 +78,7 @@
     <widget class="QLabel" name="label_Ouput">
      <property name="geometry">
       <rect>
-       <x>15</x>
+       <x>-10</x>
        <y>74</y>
        <width>71</width>
        <height>22</height>
@@ -84,11 +87,14 @@
      <property name="text">
       <string>Ouput</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="label_Input">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>-10</x>
        <y>34</y>
        <width>71</width>
        <height>22</height>
@@ -96,6 +102,9 @@
      </property>
      <property name="text">
       <string>Input</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QComboBox" name="FileCombo">

@@ -17,7 +17,7 @@ class ClassSettings:
     config = {
     "InputDevice": '(None)',
     "OutputDevice": '(None)',
-    "Midifile":"(None)",
+    "MidiFilepath":"(None)",
     "MidiPath":defaultmidipath,
     "PrintTerm":False,
     "ForceInstrument":False,
@@ -90,10 +90,10 @@ class ClassSettings:
         return self.SetSetting('OutputDevice', value)
 
     def GetMidifile(self):
-        return self.GetSetting('Midifile','(None)')
+        return self.GetSetting('MidiSong','(None)')
 
     def SaveMidifile(self,value):
-        return self.SetSetting('Midifile', value)
+        return self.SetSetting('MidiSong', value)
 
     def GetMidiPath(self):
          return self.GetSetting('MidiPath',self.defaultmidipath)

@@ -20,6 +20,7 @@ from PySide6 import QtGui
 from PySide6.QtCore import QTimer, QEvent
 from PySide6.QtGui import QIcon
 from midi_main import ClassMidiMain
+from midi_song import ClassMidiSong
 from settings import ClassSettings
 from informations import ShowInformation
 from big_screen import ShowBigScreen
@@ -46,8 +47,7 @@ class MainWindow(QMainWindow):
 
     MidiFiles=[]
     MidifilesIndex = 0 # ?
-    Tracks = None
-    Midifile = None # current midifile
+    midisong = ClassMidiSong() # current midifile
 
     ConnectInputState = False
     ConnectOutputState = False
@@ -76,7 +76,7 @@ class MainWindow(QMainWindow):
         Input = self.settings.GetInputDevice()
         Output = self.settings.GetOutputDevice()
         self.MidiFiles = self.midi.GetMidiFiles()
-        Midifile = self.settings.GetMidifile()
+        self.midisong.Setfilepath(self.settings.GetMidifile())
 
         # Push Buttons
         self.ui.pushButton_Panic.clicked.connect(self.Panic)
@@ -130,15 +130,14 @@ class MainWindow(QMainWindow):
         self.ChannelsFirst()
 
         # Connections
+        self.midi.SetMidiSong(self.midisong)
         self.midi.ConnectInput(Input)
         self.midi.ConnectOutput(Output)
 
         # Midifiles
-        self.Midifile = self.settings.GetMidifile()
         self.ui.FileCombo.addItems(self.MidiFiles)
-        self.ui.FileCombo.setCurrentText(Midifile)
+        self.ui.FileCombo.setCurrentText(self.midisong.GetFilename())
         self.ui.FileCombo.currentIndexChanged.connect(self.MidifileChanged)
-        self.Tracks = self.midi.SetMidifile(os.path.join(self.settings.GetMidiPath(),self.Midifile))
 
         # Drop file
         self.ui.FileCombo.installEventFilter(self)
@@ -189,10 +188,10 @@ class MainWindow(QMainWindow):
     def MidifileChanged(self):
         self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
         self.MidifileState = False
-        self.Midifile = self.ui.FileCombo.currentText()
-        print(f"MidifileChanged:[{self.Midifile}]")
-        self.settings.SaveMidifile(self.Midifile)
-        self.Tracks = self.midi.SetMidifile(os.path.join(self.settings.GetMidiPath(),self.Midifile))
+        self.midisong.Setfilepath(os.path.join(self.settings.GetMidiPath(),self.ui.FileCombo.currentText()))
+        self.settings.SaveMidifile(self.midisong.Getfilepath())
+        self.Tracks = self.midi.SetMidiSong(self.midisong)
+        self.SetWindowName()
 
     def ChannelsNone(self):
         for n in range(len(self.ChannelsButtonsList)):
@@ -256,8 +255,11 @@ class MainWindow(QMainWindow):
     def Panic(self):
         self.midi.Panic()
 
+    def SetWindowName(self):
+        self.setWindowTitle(f"I Like Chopin : {self.midisong.GetName()}")
+
     def Informations(self):
-        ShowInformation(self, self.Midifile, self.Tracks)
+        ShowInformation(self, self.midisong)
 
     def BigScreen(self):
         # not terminated -> ShowBigScreen(self, self.Midifile)
@@ -271,9 +273,10 @@ class MainWindow(QMainWindow):
             data = e.mimeData()
             urls = data.urls()
             if ( urls and urls[0].scheme() == 'file' ):
-                self.Tracks = self.midi.SetMidifile(urls[0].path())
+                self.midisong.Setfilepath(urls[0].path())
+                self.midi.SetMidiSong(self.midisong)
                 # not possible yet ->  self.ui.FileCombo.setLineEdit(urls[0].fileName()) #
-                self.setWindowTitle(f"I Like Chopin : {urls[0].fileName()}")
+                self.setWindowTitle(f"I Like Chopin : {self.midisong.GetName()}")
                 return True
         return False #remember to return false for other event types
 
@@ -294,7 +297,6 @@ def start():
     else:
         app = QApplication.instance()
     widget = MainWindow()
-    widget.setWindowTitle("I Like Chopin")
     app.setDesktopFileName("org.obook.i-like-chopin"); # For Wayland, must be .desktop filename
     widget.show()
     sys.exit(app.exec())

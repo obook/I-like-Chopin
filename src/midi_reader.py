@@ -11,41 +11,41 @@ import time
 import os
 import random
 
-class ClassThreadMidiFile(Thread):
-    midifile = None
+class ClassThreadMidiReader(Thread):
+    midisong = None
     keys = None
     port_out = None
     ready = False
 
-    def __init__(self,keys,channels):
+    def __init__(self,midisong,keys,channels):
         Thread.__init__( self )
         self.settings = ClassSettings()
+        self.midisong = midisong
         self.keys = keys
         self.channels = channels
-        print(f"ClassThreadMidiFile {get_native_id()} created")
+        print(f"ClassThreadMidiReader {get_native_id()} created")
 
     def __del__(self):
-            print(f"ClassThreadMidiFile {get_native_id()} destroyed")
+            print(f"ClassThreadMidiReader {get_native_id()} destroyed")
 
-    def SetMidiFile(self, filename): # returns array of tracks names
+    def SetMidiSong(self, midisong): # returns array of tracks names
 
-        self.midifile = filename
-        tracks = []
+        self.midisong = midisong
+        self.midisong.tracks = []
         try:
-            midi = MidiFile(self.midifile)
-            print(f"ClassThreadMidiFile:{self.midifile}={round(midi.length/60,2)} minutes")
+            midi = MidiFile(self.midisong.Getfilepath())
+            self.midisong.SetDuration(round(midi.length/60,2))
+            print(f"ClassThreadMidiReader:{self.midisong.Getfilepath()}={self.midisong.GetDuration()} minutes")
             for i, track in enumerate(midi.tracks):
-                tracks.append(track.name)
-                # print('ClassThreadMidiFile:Track {} [{}]'.format(i, track.name))
+                self.midisong.tracks.append(track.name)
+                # print('ClassThreadMidiReader:Track {} [{}]'.format(i, track.name))
             self.ready = True
         except:
-            print(f"ClassThreadMidiFile:Cannot read {self.midifile}")
+            print(f"ClassThreadMidiReader:ERROR READING {self.midisong.Getfilepath()}")
             return None
 
-        return tracks
-
     def SetMidiPort(self,port_out):
-        print(f"ClassThreadMidiFile:SetMidiPort [{port_out}]")
+        print(f"ClassThreadMidiReader:SetMidiPort [{port_out}]")
         self.port_out = port_out
 
     def run(self):
@@ -53,13 +53,13 @@ class ClassThreadMidiFile(Thread):
         if not self.ready: # SetMidiFile failed to get tracks, malformed midifile ?
             return
 
-        print(f"ClassThreadMidiFile:run [{self.midifile}]")
-        if self.midifile:
-            if not os.path.isfile(self.midifile):
-                print("ClassThreadMidiFile:midifile [{self.midifile}] not found")
+        print(f"ClassThreadMidiReader:run [{self.midisong.Getfilepath()}]")
+        if self.midisong:
+            if not os.path.isfile(self.midisong.Getfilepath()):
+                print("ClassThreadMidiReader:midisong [{self.midisong.Getfilepath()}] not found")
                 return
 
-        for msg in MidiFile(self.midifile):
+        for msg in MidiFile(self.midisong.Getfilepath()):
 
             # Stop while running ?
             if not self.ready:

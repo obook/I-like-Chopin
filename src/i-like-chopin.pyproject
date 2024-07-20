@@ -6,12 +6,13 @@
         "midi_input.py",
         "midi_output.py",
         "settings.py",
-        "midi_file.py",
+        "midi_reader.py",
         "midi_numbers.py",
         "informations.ui",
         "informations.py",
         "i-like-chopin.py",
         "big_screen.ui",
-        "big_screen.py"
+        "big_screen.py",
+        "midi_song.py"
     ]
 }

@@ -12,7 +12,8 @@ import platform
 from os import path
 from midi_input import ClassThreadInput
 from midi_output import ClassThreadOutput
-from midi_file import ClassThreadMidiFile
+from midi_reader import ClassThreadMidiReader
+from midi_song import ClassMidiSong
 from settings import ClassSettings
 
 class ClassMidiMain:
@@ -24,7 +25,7 @@ class ClassMidiMain:
     ThreadOutput = None
     ThreadMidiFile = None
 
-    midifile = None
+    midisong = ClassMidiSong()
     channels = None
 
     settings = ClassSettings()
@@ -75,7 +76,7 @@ class ClassMidiMain:
         self.ThreadOutput = ClassThreadOutput(out_device, self.keys, self.pParent)
         self.port_out = self.ThreadOutput.start()
 
-        self.SetMidifile(self.midifile)
+        self.SetMidiSong(self.midisong)
 
     def ConnectOutputState(self):
         if self.ThreadOutput:
@@ -89,15 +90,16 @@ class ClassMidiMain:
             midifiles.append(path.basename(file))
         return midifiles
 
-    def SetMidifile(self, filename):
-        self.midifile = filename
+    def SetMidiSong(self, midisong):
+        self.midisong = midisong
+        self.pParent.SetWindowName()
 
         if self.ThreadMidiFile:
             self.ThreadMidiFile.stop()
             self.ThreadMidiFile = None
 
-        self.ThreadMidiFile = ClassThreadMidiFile(self.keys, self.channels)
-        tracks = self.ThreadMidiFile.SetMidiFile(filename)
+        self.ThreadMidiFile = ClassThreadMidiReader(self.midisong, self.keys, self.channels)
+        tracks = self.ThreadMidiFile.SetMidiSong(self.midisong)
 
         if self.ThreadOutput:
             port = self.ThreadOutput.getport()

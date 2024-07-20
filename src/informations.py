@@ -10,15 +10,11 @@ from ui_informations import Ui_DialogInformation
 import platform
 from settings import ClassSettings
 
-info_midifile = []
-info_tracks = []
-
 class InformationsDlg(Ui_DialogInformation, QDialog):
 
-    global info_midifile,info_tracks
-
-    def __init__(self, parent=None):
+    def __init__(self, midisong, parent=None):
         super().__init__(parent)
+        self.midisong = midisong
         self.settings = ClassSettings()
         self.setupUi(self)
         self.setFixedSize(400,361)
@@ -26,11 +22,11 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.pushButton_Close.clicked.connect(self.quit)
         style = " style='color:#FFFFFF;background-color:#333333;'"
         text = ""
-        text += f"<p{style}>SONG</p>"
-        text += f"{info_midifile}"
-        if info_tracks:
-            for i in range(len(info_tracks)):
-                text += f"<br>track {i} : {info_tracks[i]}"
+        text += f"<p{style}>SONG : {self.midisong.GetFilename()}</p>"
+        text += f"Duration : {self.midisong.GetDuration()} minutes"
+        if self.midisong.tracks:
+            for i in range(len(self.midisong.tracks)):
+                text += f"<br>track {i} : {self.midisong.tracks[i]}"
         text += f"<p{style}>SYSTEM</p>"
         text += f"{platform.system()}"
         text += f"<p{style}>CONFIG FILE</p>"
@@ -60,9 +56,6 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
         self.close()
 
-def ShowInformation(pParent,midifile,tracks):
-    global info_midifile,info_tracks
-    info_midifile = midifile
-    info_tracks = tracks
-    dlg = InformationsDlg(pParent)
+def ShowInformation(pParent,midisong):
+    dlg = InformationsDlg(midisong, pParent)
     dlg.show()
