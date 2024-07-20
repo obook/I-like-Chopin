@@ -4,6 +4,7 @@
 Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
+from PySide6 import QtCore
 from PySide6.QtWidgets import QDialog
 from ui_big_screen import Ui_BigScreenDlg
 
@@ -30,6 +31,10 @@ class BigScreenDlg(Ui_BigScreenDlg, QDialog):
 
     def quit(self):
         self.close()
+
+    @QtCore.Slot() # project
+    def alert(self):
+        print("alert")
 
 def ShowBigScreen(pParent,midisong):
     dlg = BigScreenDlg(midisong,pParent)
