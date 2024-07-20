@@ -272,7 +272,8 @@ class MainWindow(QMainWindow):
             urls = data.urls()
             if ( urls and urls[0].scheme() == 'file' ):
                 self.Tracks = self.midi.SetMidifile(urls[0].path())
-                # not possible yet -> self.ui.FileCombo.setCurrentText(urls[0].fileName()) #
+                # not possible yet ->  self.ui.FileCombo.setLineEdit(urls[0].fileName()) #
+                self.setWindowTitle(f"I Like Chopin : {urls[0].fileName()}")
                 return True
         return False #remember to return false for other event types
 

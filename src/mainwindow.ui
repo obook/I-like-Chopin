@@ -110,6 +110,9 @@
      <property name="acceptDrops">
       <bool>true</bool>
      </property>
+     <property name="editable">
+      <bool>false</bool>
+     </property>
     </widget>
     <widget class="QLabel" name="labelStatusInput">
      <property name="geometry">

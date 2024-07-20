@@ -51,6 +51,7 @@ class Ui_MainWindow(object):
         self.FileCombo.setObjectName(u"FileCombo")
         self.FileCombo.setGeometry(QRect(70, 110, 371, 30))
         self.FileCombo.setAcceptDrops(True)
+        self.FileCombo.setEditable(False)
         self.labelStatusInput = QLabel(self.groupBoxDevices)
         self.labelStatusInput.setObjectName(u"labelStatusInput")
         self.labelStatusInput.setGeometry(QRect(449, 35, 20, 20))
