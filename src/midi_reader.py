@@ -31,14 +31,15 @@ class ClassThreadMidiReader(Thread):
     def SetMidiSong(self, midisong): # returns array of tracks names
 
         self.midisong = midisong
-        self.midisong.tracks = []
+        tracks = []
         try:
             midi = MidiFile(self.midisong.Getfilepath())
             self.midisong.SetDuration(round(midi.length/60,2))
             print(f"ClassThreadMidiReader:{self.midisong.Getfilepath()}={self.midisong.GetDuration()} minutes")
             for i, track in enumerate(midi.tracks):
-                self.midisong.tracks.append(track.name)
+                tracks.append(track.name)
                 # print('ClassThreadMidiReader:Track {} [{}]'.format(i, track.name))
+            self.midisong.SetTracks(tracks)
             self.ready = True
         except:
             print(f"ClassThreadMidiReader:ERROR READING {self.midisong.Getfilepath()}")

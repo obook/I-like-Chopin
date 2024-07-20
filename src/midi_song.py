@@ -30,3 +30,10 @@ class ClassMidiSong:
 
     def GetDuration(self):
         return self.duration
+
+    def SetTracks(self,tracks):
+        self.tracks = tracks.copy()
+
+    def GetTacks(self):
+        return self.tracks
+

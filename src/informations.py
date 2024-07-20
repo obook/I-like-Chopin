@@ -24,8 +24,8 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         text = ""
         text += f"<p{style}>SONG : {self.midisong.GetFilename()}</p>"
         text += f"Duration : {self.midisong.GetDuration()} minutes"
-        if self.midisong.tracks:
-            for i in range(len(self.midisong.tracks)):
+        if self.midisong.GetTacks():
+            for i in range(len(self.midisong.GetTacks())):
                 text += f"<br>track {i} : {self.midisong.tracks[i]}"
         text += f"<p{style}>SYSTEM</p>"
         text += f"{platform.system()}"
