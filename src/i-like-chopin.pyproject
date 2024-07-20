@@ -11,8 +11,8 @@
         "informations.ui",
         "informations.py",
         "i-like-chopin.py",
-        "big_screen.ui",
-        "big_screen.py",
+        "song_screen.ui",
+        "song_screen.py",
         "midi_song.py"
     ]
 }

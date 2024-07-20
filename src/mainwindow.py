@@ -23,7 +23,7 @@ from midi_main import ClassMidiMain
 from midi_song import ClassMidiSong
 from settings import ClassSettings
 from informations import ShowInformation
-from big_screen import ShowBigScreen
+from song_screen import ShowSongScreen
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -84,7 +84,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Info.clicked.connect(self.Informations)
         self.ui.pushButton_Mode.clicked.connect(self.Mode)
         self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,30); }\n")
-        self.ui.pushButton_Screen.clicked.connect(self.BigScreen)
+        self.ui.pushButton_Screen.clicked.connect(self.SongScreen)
 
         # ComboBoxes Inputs/Outputs
         self.ui.InputDeviceCombo.addItem(Input)
@@ -104,7 +104,6 @@ class MainWindow(QMainWindow):
 
         self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_LED_OFF))
         self.ui.labelStatusMidifile.setScaledContents(True)
-        # un label n'est pas cliquable ... self.ui.labelStatusMidifile.clicked.connect(self.BigScreen())
 
         # Midi Channels
         self.ui.pushButton_ChannelsNone.clicked.connect(self.ChannelsNone)
@@ -193,6 +192,7 @@ class MainWindow(QMainWindow):
         self.settings.SaveMidifile(self.midisong.Getfilepath())
         self.Tracks = self.midi.SetMidiSong(self.midisong)
         self.SetWindowName()
+        ShowSongScreen(self,self.midisong)
 
     def ChannelsNone(self):
         for n in range(len(self.ChannelsButtonsList)):
@@ -260,12 +260,10 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(f"I Like Chopin : {self.midisong.GetName()}")
 
     def Informations(self):
-        ShowInformation(self, self.midisong)
+        ShowInformation(self)
 
-    def BigScreen(self):
-        # not terminated ->
-        ShowBigScreen(self, self.midisong)
-        # pass
+    def SongScreen(self):
+        ShowSongScreen(self, self.midisong)
 
     def eventFilter(self, o, e):
         if e.type() == QEvent.DragEnter: #remember to accept the enter event
@@ -279,6 +277,7 @@ class MainWindow(QMainWindow):
                 self.midi.SetMidiSong(self.midisong)
                 # not possible yet ->  self.ui.FileCombo.setLineEdit(urls[0].fileName()) #
                 self.setWindowTitle(f"I Like Chopin : {self.midisong.GetName()}")
+                UpdateSongScreen(self.midisong)
                 return True
         return False #remember to return false for other event types
 
@@ -299,7 +298,8 @@ def start():
     else:
         app = QApplication.instance()
     widget = MainWindow()
-    app.setDesktopFileName("org.obook.i-like-chopin"); # For Wayland, must be .desktop filename
+    # For Linux Wayland, must be .desktop filename = Set QMainWindow icon
+    app.setDesktopFileName("org.obook.i-like-chopin");
     widget.show()
     sys.exit(app.exec())
 

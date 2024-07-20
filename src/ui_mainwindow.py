@@ -146,6 +146,6 @@ class Ui_MainWindow(object):
         self.pushButton_Humanize.setText(QCoreApplication.translate("MainWindow", u"Humanize", None))
         self.pushButton_Mode.setText(QCoreApplication.translate("MainWindow", u"Playback", None))
         self.pushButton_Info.setText(QCoreApplication.translate("MainWindow", u"More", None))
-        self.pushButton_Screen.setText(QCoreApplication.translate("MainWindow", u"Screen", None))
+        self.pushButton_Screen.setText(QCoreApplication.translate("MainWindow", u"Song", None))
     # retranslateUi
 
