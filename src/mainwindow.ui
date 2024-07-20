@@ -17,7 +17,7 @@
    <widget class="QPushButton" name="pushButton_Quit">
     <property name="geometry">
      <rect>
-      <x>366</x>
+      <x>390</x>
       <y>380</y>
       <width>100</width>
       <height>30</height>
@@ -42,7 +42,7 @@
     <widget class="QLabel" name="label_File">
      <property name="geometry">
       <rect>
-       <x>-10</x>
+       <x>-2</x>
        <y>114</y>
        <width>71</width>
        <height>22</height>
@@ -58,7 +58,7 @@
     <widget class="QComboBox" name="InputDeviceCombo">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>73</x>
        <y>30</y>
        <width>371</width>
        <height>30</height>
@@ -68,7 +68,7 @@
     <widget class="QComboBox" name="OutputDeviceCombo">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>73</x>
        <y>70</y>
        <width>371</width>
        <height>30</height>
@@ -78,14 +78,14 @@
     <widget class="QLabel" name="label_Ouput">
      <property name="geometry">
       <rect>
-       <x>-10</x>
+       <x>-2</x>
        <y>74</y>
        <width>71</width>
        <height>22</height>
       </rect>
      </property>
      <property name="text">
-      <string>Ouput</string>
+      <string>Synthesizer</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -94,14 +94,14 @@
     <widget class="QLabel" name="label_Input">
      <property name="geometry">
       <rect>
-       <x>-10</x>
+       <x>-2</x>
        <y>34</y>
        <width>71</width>
        <height>22</height>
       </rect>
      </property>
      <property name="text">
-      <string>Input</string>
+      <string>Keyboard</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -110,7 +110,7 @@
     <widget class="QComboBox" name="FileCombo">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>73</x>
        <y>110</y>
        <width>371</width>
        <height>30</height>
@@ -229,7 +229,7 @@
    <widget class="QPushButton" name="pushButton_Panic">
     <property name="geometry">
      <rect>
-      <x>36</x>
+      <x>10</x>
       <y>380</y>
       <width>100</width>
       <height>30</height>
@@ -325,7 +325,7 @@
    <widget class="QPushButton" name="pushButton_Info">
     <property name="geometry">
      <rect>
-      <x>256</x>
+      <x>200</x>
       <y>380</y>
       <width>100</width>
       <height>30</height>
@@ -333,19 +333,6 @@
     </property>
     <property name="text">
      <string>More</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_Screen">
-    <property name="geometry">
-     <rect>
-      <x>146</x>
-      <y>380</y>
-      <width>100</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Song</string>
     </property>
    </widget>
   </widget>

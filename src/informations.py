@@ -11,12 +11,13 @@ import platform
 from settings import ClassSettings
 
 class InformationsDlg(Ui_DialogInformation, QDialog):
-
+    pParent = None
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.pParent = parent
         self.settings = ClassSettings()
         self.setupUi(self)
-        self.setFixedSize(400,361)
+        self.setFixedSize(481,361)
         self.setWindowTitle("Informations")
         self.pushButton_Close.clicked.connect(self.quit)
         style = " style='color:#FFFFFF;background-color:#333333;'"
@@ -41,13 +42,17 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.textBrowser.insertHtml(text)
 
         self.checkBox_PrintTerminalMsg.setChecked(self.settings.GetPrintTerm())
+        self.checkBox_ShowSongInfo.setChecked(self.settings.GetShowSongInfo())
         self.checkBox_ForceIntrument0.setChecked(self.settings.GetForceIntrument())
 
         self.checkBox_ForceIntrument0.setText(f"Force piano (prog {self.settings.GetPianoProgram()})")
 
     def quit(self):
         self.settings.SavePrintTerm(self.checkBox_PrintTerminalMsg.isChecked())
+        self.settings.SaveShowSongInfo(self.checkBox_ShowSongInfo.isChecked())
         self.settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
+        if self.checkBox_ShowSongInfo.isChecked():
+            self.pParent.SongScreen()
         self.close()
 
 def ShowInformation(pParent):

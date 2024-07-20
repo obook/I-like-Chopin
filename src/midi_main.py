@@ -107,12 +107,10 @@ class ClassMidiMain:
             self.ThreadMidiFile.start()
 
         return tracks # array of tracks names
-
+    '''
     def MidifileState(self):
-        if self.ThreadMidiFile:
-            return(self.ThreadMidiFile.active())
-        return False
-
+        return self.midisong.Active()
+    '''
     def Playback(self):
         self.ThreadMidiFile.start()
         pass

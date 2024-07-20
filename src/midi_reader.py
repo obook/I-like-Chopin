@@ -40,7 +40,7 @@ class ClassThreadMidiReader(Thread):
                 tracks.append(track.name)
                 # print('ClassThreadMidiReader:Track {} [{}]'.format(i, track.name))
             self.midisong.SetTracks(tracks)
-            self.ready = True
+            self.midisong.SetActive(True)
         except:
             print(f"ClassThreadMidiReader:ERROR READING {self.midisong.Getfilepath()}")
             return None
@@ -51,7 +51,7 @@ class ClassThreadMidiReader(Thread):
 
     def run(self):
 
-        if not self.ready: # SetMidiFile failed to get tracks, malformed midifile ?
+        if not self.midisong.Active(): # SetMidiFile failed to get tracks, malformed midifile ?
             return
 
         print(f"ClassThreadMidiReader:run [{self.midisong.Getfilepath()}]")
@@ -60,10 +60,12 @@ class ClassThreadMidiReader(Thread):
                 print("ClassThreadMidiReader:midisong [{self.midisong.Getfilepath()}] not found")
                 return
 
+        self.midisong.SetActive(True)
+
         for msg in MidiFile(self.midisong.Getfilepath()):
 
             # Stop while running ?
-            if not self.ready:
+            if not self.midisong.Active():
                 break
 
             # Speed controlled by knob, see midi_input
@@ -79,7 +81,7 @@ class ClassThreadMidiReader(Thread):
             # Pause ?
             if msg.type == 'note_on':
                 while not self.keys['key_on']: # Loop waiting keyboard
-                    if not self.ready:
+                    if not self.midisong.Active():
                         self.stop()
                         return
                     time.sleep(msg.time)
@@ -100,11 +102,10 @@ class ClassThreadMidiReader(Thread):
 
         # End of song
         self.stop()
-
+    '''
     def active(self):
         return self.ready
-
+    '''
     def stop(self):
-        self.ready = False
-
+        self.midisong.SetActive(False)
 

@@ -40,7 +40,7 @@ class ClassThreadInput(Thread):
             return
 
         print(f"midi_input:run open_output [{self.in_device}] READY")
-        self.pParent.PrintStatusBar(f"Waiting {self.in_device} ...")
+        self.pParent.PrintStatusBar(f"Waiting:{self.in_device} ...")
 
     def callback(self, message):
 

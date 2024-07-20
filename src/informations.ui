@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>361</height>
+    <width>481</width>
+    <height>373</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,7 @@
   <widget class="QPushButton" name="pushButton_Close">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>200</x>
      <y>330</y>
      <width>81</width>
      <height>25</height>
@@ -31,7 +31,7 @@
     <rect>
      <x>10</x>
      <y>260</y>
-     <width>381</width>
+     <width>461</width>
      <height>61</height>
     </rect>
    </property>
@@ -41,7 +41,7 @@
    <widget class="QCheckBox" name="checkBox_PrintTerminalMsg">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>290</x>
       <y>30</y>
       <width>141</width>
       <height>23</height>
@@ -54,14 +54,27 @@
    <widget class="QCheckBox" name="checkBox_ForceIntrument0">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>30</y>
-      <width>171</width>
+      <width>141</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>Force Piano (Prog 0)</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_ShowSongInfo">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>30</y>
+      <width>141</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Open Song info</string>
     </property>
    </widget>
   </widget>
@@ -70,7 +83,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>381</width>
+     <width>461</width>
      <height>241</height>
     </rect>
    </property>

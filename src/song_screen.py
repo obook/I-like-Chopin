@@ -7,6 +7,7 @@ Created on Wed Jun  5 18:19:14 2024
 #from PySide6 import QtCore
 from PySide6.QtWidgets import QDialog
 from ui_song_screen import Ui_SongScreenDlg
+from settings import ClassSettings
 
 class SongScreenDlg(Ui_SongScreenDlg, QDialog):
     midisong = None
@@ -22,12 +23,22 @@ class SongScreenDlg(Ui_SongScreenDlg, QDialog):
         self.textBrowser.clear()
         header_style = " style='color:#FFFFFF;background-color:#333333;font-size: 32px;text-transform: uppercase;' "
         text_style = " style='color:#FFFFFF;font-size: 18px;' "
+        name = self.midisong.GetName()
+        name = name.replace('_',' ')
+        name = name.replace('-',' ')
+        duration = self.midisong.GetDuration()
+        minutes = int(duration)
+        seconds = int((duration-minutes)*60)
         text = ""
-        text += f"<p{header_style}>{self.midisong.GetName()}</p>"
-        text += f"<span{text_style}>Duration : {self.midisong.GetDuration()} minutes</span>"
+        text += f"<p{header_style}>{name}</p>"
+        text += f"<span{text_style}>Duration : {minutes} minutes {seconds} seconds</span>"
         if self.midisong.GetTracks():
             for i in range(len(self.midisong.GetTracks())):
                 text += f"<br><span{text_style}>track {i} : {self.midisong.tracks[i]}</span>"
+        if not self.midisong.Active():
+            text += "<br>(STOPPED)"
+        else:
+            text += "<br>(ACTIVE)"
         self.textBrowser.insertHtml(text)
 
     def closeEvent(self, event): # overwritten
@@ -37,12 +48,15 @@ class SongScreenDlg(Ui_SongScreenDlg, QDialog):
         self.close()
 
 SongScreen = None
+settings = ClassSettings()
 
-def ShowSongScreen(pParent,midisong):
+def UpdateSongScreen(pParent,midisong):
     global SongScreen
     if not SongScreen:
         SongScreen = SongScreenDlg(midisong,pParent)
-        SongScreen.show()
+        if settings.GetShowSongInfo():
+            SongScreen.show()
     else:
         SongScreen.Update(midisong)
-
+        if not SongScreen.isVisible() and settings.GetShowSongInfo():
+            SongScreen.show()

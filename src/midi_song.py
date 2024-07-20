@@ -9,6 +9,7 @@ class ClassMidiSong:
     filepath = None
     duration = 0
     tracks = []
+    active = False
 
     def __init__(self):
         pass
@@ -37,3 +38,8 @@ class ClassMidiSong:
     def GetTracks(self):
         return self.tracks
 
+    def SetActive(self,value):
+        self.active = value
+
+    def Active(self):
+        return self.active

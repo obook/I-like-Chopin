@@ -21,7 +21,8 @@ class ClassSettings:
     "MidiPath":defaultmidipath,
     "PrintTerm":False,
     "ForceInstrument":False,
-    "PianoProgram":0}
+    "PianoProgram":0,
+    "ShowSongInfo":False}
 
     def __init__(self):
 
@@ -115,3 +116,9 @@ class ClassSettings:
 
     def SavePianoProgram(self,value): # not used
         return self.SetSetting('PianoProgram', value)
+
+    def GetShowSongInfo(self):
+        return self.GetSetting('ShowSongInfo',False)
+
+    def SaveShowSongInfo(self,value): # not used
+        return self.SetSetting('ShowSongInfo', value)
