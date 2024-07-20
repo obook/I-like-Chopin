@@ -17,10 +17,10 @@
    <widget class="QPushButton" name="pushButton_Quit">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>366</x>
       <y>380</y>
-      <width>80</width>
-      <height>31</height>
+      <width>100</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -229,9 +229,9 @@
    <widget class="QPushButton" name="pushButton_Panic">
     <property name="geometry">
      <rect>
-      <x>11</x>
+      <x>36</x>
       <y>380</y>
-      <width>97</width>
+      <width>100</width>
       <height>30</height>
      </rect>
     </property>
@@ -265,7 +265,7 @@
       <rect>
        <x>245</x>
        <y>30</y>
-       <width>101</width>
+       <width>100</width>
        <height>30</height>
       </rect>
      </property>
@@ -281,7 +281,7 @@
       <rect>
        <x>135</x>
        <y>30</y>
-       <width>101</width>
+       <width>100</width>
        <height>30</height>
       </rect>
      </property>
@@ -310,7 +310,7 @@
       <rect>
        <x>355</x>
        <y>30</y>
-       <width>101</width>
+       <width>100</width>
        <height>30</height>
       </rect>
      </property>
@@ -325,14 +325,27 @@
    <widget class="QPushButton" name="pushButton_Info">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>256</x>
       <y>380</y>
-      <width>101</width>
+      <width>100</width>
       <height>30</height>
      </rect>
     </property>
     <property name="text">
      <string>More</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Screen">
+    <property name="geometry">
+     <rect>
+      <x>146</x>
+      <y>380</y>
+      <width>100</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Screen</string>
     </property>
    </widget>
   </widget>

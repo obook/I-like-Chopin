@@ -15,17 +15,31 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QDialog, QPushButton, QSizePolicy,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QDialog, QFormLayout, QGridLayout,
+    QPushButton, QSizePolicy, QTextBrowser, QWidget)
 
 class Ui_BigScreenDlg(object):
     def setupUi(self, BigScreenDlg):
         if not BigScreenDlg.objectName():
             BigScreenDlg.setObjectName(u"BigScreenDlg")
-        BigScreenDlg.resize(400, 300)
+        BigScreenDlg.resize(394, 304)
+        self.gridLayout = QGridLayout(BigScreenDlg)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.formLayout = QFormLayout()
+        self.formLayout.setObjectName(u"formLayout")
+        self.textBrowser = QTextBrowser(BigScreenDlg)
+        self.textBrowser.setObjectName(u"textBrowser")
+
+        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.textBrowser)
+
         self.pushButtonClose = QPushButton(BigScreenDlg)
         self.pushButtonClose.setObjectName(u"pushButtonClose")
-        self.pushButtonClose.setGeometry(QRect(310, 260, 80, 25))
+
+        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.pushButtonClose)
+
+
+        self.gridLayout.addLayout(self.formLayout, 0, 0, 1, 1)
+
 
         self.retranslateUi(BigScreenDlg)
 

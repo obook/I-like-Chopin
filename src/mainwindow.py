@@ -84,6 +84,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Info.clicked.connect(self.Informations)
         self.ui.pushButton_Mode.clicked.connect(self.Mode)
         self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,30); }\n")
+        self.ui.pushButton_Screen.clicked.connect(self.BigScreen)
 
         # ComboBoxes Inputs/Outputs
         self.ui.InputDeviceCombo.addItem(Input)
@@ -262,8 +263,9 @@ class MainWindow(QMainWindow):
         ShowInformation(self, self.midisong)
 
     def BigScreen(self):
-        # not terminated -> ShowBigScreen(self, self.Midifile)
-        pass
+        # not terminated ->
+        ShowBigScreen(self, self.midisong)
+        # pass
 
     def eventFilter(self, o, e):
         if e.type() == QEvent.DragEnter: #remember to accept the enter event
