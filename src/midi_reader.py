@@ -26,7 +26,7 @@ class ClassThreadMidiReader(Thread):
         print(f"ClassThreadMidiReader {get_native_id()} created")
 
     def __del__(self):
-            print(f"ClassThreadMidiReader {get_native_id()} destroyed")
+        print(f"ClassThreadMidiReader {get_native_id()} destroyed")
 
     def SetMidiSong(self, midisong): # returns array of tracks names
 
