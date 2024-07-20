@@ -31,7 +31,7 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         text += f"{platform.system()}"
         text += f"<p{style}>CONFIG FILE</p>"
         text += f"{self.settings.GetConfigPath()}"
-        text += f"<p{style}>MIDIFILES PATH</p>"
+        text += f"<p{style}>MIDIFILES LIBRARY PATH</p>"
         text += f"{self.settings.GetMidiPath()}"
         text += f"<p{style}>HUMANIZE</p>"
         text += "control_change:control 71 (set your midi-device)"
