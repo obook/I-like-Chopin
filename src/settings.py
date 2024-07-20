@@ -3,11 +3,15 @@
 """
 Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
+
+TODO : mutiples calls for nothing..
+
 """
 
 import json
 import os
 import shutil
+import uuid
 
 class ClassSettings:
 
@@ -24,9 +28,16 @@ class ClassSettings:
     "PianoProgram":0,
     "ShowSongInfo":False}
 
-    def __init__(self):
+    uuid = None
 
+    def __init__(self):
+        self.uuid = uuid.uuid4()
         self.application_path = os.path.dirname(os.path.realpath(__file__))
+        # print(f"ClassSettings {self.uuid} created")
+
+    def __del__(self):
+        # print(f"ClassSettings {self.uuid} destroyed")
+        pass
 
         if not os.path.isdir(self.settingspath):
             os.makedirs(self.settingspath, exist_ok=True)

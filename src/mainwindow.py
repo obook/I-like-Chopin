@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
 
     MidiFiles=[]
     MidifilesIndex = 0 # ?
-    midisong = ClassMidiSong() # current midifile
+    midisong = None # current midifile
     MidifileState = False
 
     ConnectInputState = False
@@ -76,7 +76,7 @@ class MainWindow(QMainWindow):
         Input = self.settings.GetInputDevice()
         Output = self.settings.GetOutputDevice()
         self.MidiFiles = self.midi.GetMidiFiles()
-        self.midisong.Setfilepath(self.settings.GetMidifile())
+        self.midisong = ClassMidiSong(self.settings.GetMidifile())
 
         # Push Buttons
         self.ui.pushButton_Panic.clicked.connect(self.Panic)
@@ -190,7 +190,7 @@ class MainWindow(QMainWindow):
     def MidifileChanged(self):
         self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
         self.MidifileState = False
-        self.midisong.Setfilepath(os.path.join(self.settings.GetMidiPath(),self.ui.FileCombo.currentText()))
+        self.midisong = ClassMidiSong(os.path.join(self.settings.GetMidiPath(),self.ui.FileCombo.currentText()))
         self.settings.SaveMidifile(self.midisong.Getfilepath())
         self.Tracks = self.midi.SetMidiSong(self.midisong)
         self.SetWindowName()
@@ -275,7 +275,7 @@ class MainWindow(QMainWindow):
             data = e.mimeData()
             urls = data.urls()
             if ( urls and urls[0].scheme() == 'file' ):
-                self.midisong.Setfilepath(urls[0].path())
+                self.midisong = ClassMidiSong(urls[0].path())
                 self.midi.SetMidiSong(self.midisong)
                 # not possible yet ->  self.ui.FileCombo.setLineEdit(urls[0].fileName()) #
                 self.setWindowTitle(f"I Like Chopin : {self.midisong.GetName()}")

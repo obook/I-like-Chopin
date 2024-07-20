@@ -5,17 +5,19 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 from mido import MidiFile
-from threading import Thread, get_native_id
+from threading import Thread
 from settings import ClassSettings
 import time
 import os
 import random
+import uuid
 
 class ClassThreadMidiReader(Thread):
     midisong = None
     keys = None
     port_out = None
     ready = False
+    uuid = None
 
     def __init__(self,midisong,keys,channels):
         Thread.__init__( self )
@@ -23,10 +25,12 @@ class ClassThreadMidiReader(Thread):
         self.midisong = midisong
         self.keys = keys
         self.channels = channels
-        print(f"ClassThreadMidiReader {get_native_id()} created")
+        self.uuid = uuid.uuid4()
+        print(f"MidiReader {self.uuid} created [{self.midisong.GetFilename()}]")
 
     def __del__(self):
-        print(f"ClassThreadMidiReader {get_native_id()} destroyed")
+        print(f"MidiReader {self.uuid} destroyed [{self.midisong.GetFilename()}]")
+        self.midisong = None
 
     def SetMidiSong(self, midisong): # returns array of tracks names
 
@@ -35,18 +39,16 @@ class ClassThreadMidiReader(Thread):
         try:
             midi = MidiFile(self.midisong.Getfilepath())
             self.midisong.SetDuration(round(midi.length/60,2))
-            print(f"ClassThreadMidiReader:{self.midisong.Getfilepath()}={self.midisong.GetDuration()} minutes")
             for i, track in enumerate(midi.tracks):
                 tracks.append(track.name)
-                # print('ClassThreadMidiReader:Track {} [{}]'.format(i, track.name))
             self.midisong.SetTracks(tracks)
             self.midisong.SetActive(True)
         except:
-            print(f"ClassThreadMidiReader:ERROR READING {self.midisong.Getfilepath()}")
+            print(f"MidiReader {self.uuid} ERROR READING {self.midisong.Getfilepath()}")
             return None
 
     def SetMidiPort(self,port_out):
-        print(f"ClassThreadMidiReader:SetMidiPort [{port_out}]")
+        print(f"MidiReader {self.uuid} SetMidiPort [{port_out}]")
         self.port_out = port_out
 
     def run(self):
@@ -54,10 +56,9 @@ class ClassThreadMidiReader(Thread):
         if not self.midisong.Active(): # SetMidiFile failed to get tracks, malformed midifile ?
             return
 
-        print(f"ClassThreadMidiReader:run [{self.midisong.Getfilepath()}]")
         if self.midisong:
             if not os.path.isfile(self.midisong.Getfilepath()):
-                print("ClassThreadMidiReader:midisong [{self.midisong.Getfilepath()}] not found")
+                print("MidiReader {self.uuid} midisong [{self.midisong.Getfilepath()}] not found")
                 return
 
         self.midisong.SetActive(True)
@@ -81,14 +82,16 @@ class ClassThreadMidiReader(Thread):
             # Pause ?
             if msg.type == 'note_on':
                 while not self.keys['key_on']: # Loop waiting keyboard
-                    if not self.midisong.Active():
+                    if not self.midisong:
+                        self.stop()
+                        return
+                    elif not self.midisong.Active():
                         self.stop()
                         return
                     time.sleep(msg.time)
 
             # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
             if msg.type == 'program_change' and self.settings.GetForceIntrument():
-                # print(f"programme change channel {msg.channel}={program_to_instrument(msg.program+1)}")
                 if msg.channel != 15: # not for drums
                     msg.program = self.settings.GetPianoProgram()
 
@@ -102,10 +105,9 @@ class ClassThreadMidiReader(Thread):
 
         # End of song
         self.stop()
-    '''
-    def active(self):
-        return self.ready
-    '''
+
     def stop(self):
-        self.midisong.SetActive(False)
+        if self.midisong:
+            self.midisong.SetActive(False)
+        self.port_out = None
 

@@ -2,20 +2,22 @@
 
 import os
 from pathlib import Path
-
-# os.path.join(self.settings.GetMidiPath(),self.Midifile)
+import uuid
 
 class ClassMidiSong:
     filepath = None
     duration = 0
     tracks = []
     active = False
+    uuid = None
 
-    def __init__(self):
-        pass
-
-    def Setfilepath(self, filepath):
+    def __init__(self, filepath):
+        self.uuid = uuid.uuid4()
         self.filepath = filepath
+        print(f"MidiSong {self.uuid} created [{self.GetFilename()}]")
+
+    def __del__(self):
+        print(f"MidiSong {self.uuid} destroyed [{self.GetFilename()}]")
 
     def Getfilepath(self): # complete path and filename
         return self.filepath

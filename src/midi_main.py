@@ -13,8 +13,8 @@ from os import path
 from midi_input import ClassThreadInput
 from midi_output import ClassThreadOutput
 from midi_reader import ClassThreadMidiReader
-from midi_song import ClassMidiSong
 from settings import ClassSettings
+import uuid
 
 class ClassMidiMain:
 
@@ -25,14 +25,20 @@ class ClassMidiMain:
     ThreadOutput = None
     ThreadMidiFile = None
 
-    midisong = ClassMidiSong()
+    midisong = None
     channels = None
+    uuid = None
 
     settings = ClassSettings()
 
     def __init__(self, pParent, channels):
         self.pParent = pParent
         self.channels = channels
+        self.uuid = uuid.uuid4()
+        print(f"MidiMain {self.uuid} created")
+
+    def __del__(self):
+        print(f"MidiMain {self.uuid} destroyed")
 
     def GetDevices(self):
         Inputs = []
@@ -107,10 +113,7 @@ class ClassMidiMain:
             self.ThreadMidiFile.start()
 
         return tracks # array of tracks names
-    '''
-    def MidifileState(self):
-        return self.midisong.Active()
-    '''
+
     def Playback(self):
         self.ThreadMidiFile.start()
         pass
@@ -128,9 +131,10 @@ class ClassMidiMain:
     def Panic(self):
         if self.ThreadOutput:
             self.ThreadOutput.panic()
+        self.keys['key_on'] = 0
 
     def quit(self):
-        print("midi_main:quit")
+        print("MidiMain {self.uuid} quit")
 
         if self.ThreadMidiFile:
             self.ThreadMidiFile.SetMidiPort(None) # stop send

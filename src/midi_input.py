@@ -5,15 +5,17 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 from mido import open_input
-from threading import Thread, get_native_id
+from threading import Thread
 from settings import ClassSettings
 from midi_numbers import number_to_note
+import uuid
 
 class ClassThreadInput(Thread):
     in_device = None
     in_port = None
     out_port = None
     running = False
+    uuid = None
 
     def __init__(self, in_device, keys, pParent):
         Thread.__init__( self )
@@ -22,10 +24,11 @@ class ClassThreadInput(Thread):
         self.keys = keys
         self.pParent = pParent
         self.running = True
-        print(f"ClassThreadInput {get_native_id()} created")
+        self.uuid = uuid.uuid4()
+        print(f"Input {self.uuid} created [{self.in_device}]")
 
     def __del__(self):
-            print(f"ClassThreadInput {get_native_id()} destroyed")
+        print(f"Input {self.uuid} destroyed [{self.in_device}]")
 
     def SetOutPort(self,out_port):
         self.out_port = out_port
@@ -36,10 +39,8 @@ class ClassThreadInput(Thread):
             self.in_port = open_input(self.in_device, callback=self.callback)
             self.running = True
         except:
-            print(f"midi_input:Error connect from {self.in_device}")
+            print(f"Input {self.uuid} midi_input:Error connect from {self.in_device}")
             return
-
-        print(f"midi_input:run open_output [{self.in_device}] READY")
         self.pParent.PrintStatusBar(f"Waiting:{self.in_device} ...")
 
     def callback(self, message):
@@ -47,7 +48,7 @@ class ClassThreadInput(Thread):
         if self.settings.GetPrintTerm():
             filter =['clock','stop','note_off']
             if message.type not in filter:
-                print(f"ClassThreadInput:{message}")
+                print(f"Input {self.uuid}:{message}")
 
         # Control change - Midi commands
         if message.type =='control_change':
@@ -79,6 +80,10 @@ class ClassThreadInput(Thread):
         elif message.type == 'note_off':
             self.keys['key_on'] -=1
 
+        # Rares cases
+        if self.keys['key_on'] < 0:
+            self.keys['key_on'] = 0
+
         text = f"Keys\t{self.keys['key_on']}"
         if message.type == 'note_on': # or message.type == 'note_off':
             note, octave = number_to_note(message.note)
@@ -91,7 +96,7 @@ class ClassThreadInput(Thread):
         return False
 
     def stop(self):
-        print("midi_input:stop")
+        print(f"Input {self.uuid} stop")
         self.running = False
         if self.in_port :
             self.in_port.close()

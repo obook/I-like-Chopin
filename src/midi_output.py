@@ -4,23 +4,27 @@
 Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
-from threading import Thread, get_native_id
+from threading import Thread
 from mido import open_output, Message
 from settings import ClassSettings
+import uuid
 
 class ClassThreadOutput(Thread):
     out_device = None
     outport = None
+    uuid = None
+
     def __init__(self, out_device, keys, pParent):
         Thread.__init__( self )
         self.settings = ClassSettings()
         self.out_device = out_device
         self.keys = keys
         self.pParent = pParent
-        print(f"ClassThreadOutput {get_native_id()} created")
+        self.uuid = uuid.uuid4()
+        print(f"Output {self.uuid} created [{self.out_device}]")
 
     def __del__(self):
-        print(f"ClassThreadOutput {get_native_id()} destroyed")
+        print(f"Output {self.uuid} destroyed [{self.out_device}]")
 
     def run(self):
         self.stop()
@@ -28,10 +32,8 @@ class ClassThreadOutput(Thread):
             self.outport = open_output(self.out_device,autoreset=True)
         except:
             self.outport = None
-            print(f"midi_output open [{self.out_device}] ERROR")
+            print(f"Output {self.uuid} midi_output open [{self.out_device}] ERROR")
             return
-
-        print(f"midi_output:run open_output [{self.out_device}] READY")
 
         # Set all channels to Piano ('Acoustic Grand Piano') if set
         self.forcePiano()
@@ -70,7 +72,7 @@ class ClassThreadOutput(Thread):
         return False
 
     def stop(self):
-        print("midi_output:stop")
+        print(f"Output {self.uuid} stop")
         if self.outport :
             self.outport.close()
             self.outport = None
