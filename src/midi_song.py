@@ -34,6 +34,6 @@ class ClassMidiSong:
     def SetTracks(self,tracks):
         self.tracks = tracks.copy()
 
-    def GetTacks(self):
+    def GetTracks(self):
         return self.tracks
 
