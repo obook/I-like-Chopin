@@ -35,7 +35,7 @@ class SongScreenDlg(Ui_SongScreenDlg, QDialog):
         self.midisong = midisong
         self.textBrowser.clear()
         header_style = " style='color:#FFFFFF;background-color:#333333;font-size: 32px;text-transform: uppercase;' "
-        text_style = " style='color:#FFFFFF;background-color:#222222;font-size: 18px;' "
+        text_style = " style='font-size: 18px;' "
         name = self.midisong.GetName()
         name = name.replace('_',' ')
         name = name.replace('-',' ')
