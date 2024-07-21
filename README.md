@@ -16,9 +16,7 @@ Impress your friends with this musical magic trick!
 
 Requirements:
 
-* Python 3.10
+* Python 3.1x
 * mido==1.2.10
+* python-rtmidi==1.4.7
 * PySide6==6.7.1
-* PySide6_Addons==6.7.1
-* PySide6_Essentials==6.7.1
-
