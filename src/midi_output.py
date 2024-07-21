@@ -72,6 +72,7 @@ class ClassThreadOutput(Thread):
         return False
 
     def stop(self):
+        #print(f"MidiOutput {self.uuid} stop")
         if self.outport :
             self.outport.close()
             self.outport = None

@@ -17,7 +17,7 @@ import os
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from PySide6 import QtGui
-from PySide6.QtCore import QTimer, QEvent
+from PySide6.QtCore import QTimer
 from PySide6.QtGui import QIcon
 from midi_main import ClassMidiMain
 from midi_song import ClassMidiSong
@@ -47,6 +47,7 @@ class MainWindow(QMainWindow):
 
     MidiFiles=[]
     MidifilesIndex = 0 # ?
+    midi = None
     midisong = None # current midifile
     MidifileState = False
 
@@ -57,7 +58,7 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
-        self.setFixedSize(504,442)
+        self.setFixedSize(504,434)
         self.ui.setupUi(self)
 
         # Application icon X.org->correct - Wayland->not implemented
@@ -68,12 +69,6 @@ class MainWindow(QMainWindow):
         #StatusBar
         self.ui.statusbar.setSizeGripEnabled(False)
 
-        #Progress Bar
-        #self.ui.progressBar.setStyleSheet("QProgressBar::chunk {background: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #78d,stop: 0.4999 #46a,stop: 0.5 #45a,stop: 1 #238 );border: 1px solid black;}")
-        self.ui.progressBar.setRange(0,100)
-        self.ui.progressBar.setTextVisible(False)
-        self.ui.progressBar.setValue(0)
-
         # Midi class
         self.midi = ClassMidiMain(self,self.ChannelsList)
 
@@ -83,6 +78,11 @@ class MainWindow(QMainWindow):
         Output = self.settings.GetOutputDevice()
         self.MidiFiles = self.midi.GetMidiFiles()
         self.midisong = ClassMidiSong(self.settings.GetMidifile())
+
+        # Connections
+        self.midi.ConnectInput(Input)
+        self.midi.ConnectOutput(Output)
+        self.midi.SetMidiSong(self.midisong)
 
         # Push Buttons
         self.ui.pushButton_Panic.clicked.connect(self.Panic)
@@ -129,15 +129,9 @@ class MainWindow(QMainWindow):
             self.ChannelsButtonsList[n+8].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }\n")
             grid.addWidget(self.ChannelsButtonsList[n+8],2,n)
 
+        self.ChannelsFirst()
         # Special color for drums channel
         self.ChannelsButtonsList[9].setStyleSheet("QPushButton:checked { background-color: rgb(100,50,50); }\n")
-
-        self.ChannelsFirst()
-
-        # Connections
-        self.midi.SetMidiSong(self.midisong)
-        self.midi.ConnectInput(Input)
-        self.midi.ConnectOutput(Output)
 
         # Midifiles
         self.ui.FileCombo.addItems(self.MidiFiles)
@@ -178,11 +172,6 @@ class MainWindow(QMainWindow):
             self.MidifileState = False
             UpdateSongScreen(self,self.midisong)
 
-        if self.midisong:
-            self.ui.progressBar.setRange(0,100)
-            self.ui.progressBar.setTextVisible(False)
-            self.ui.progressBar.setValue(self.midisong.played)
-
     def InputDeviceChanged(self):
         self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
         self.ConnectInputState = False
@@ -194,18 +183,22 @@ class MainWindow(QMainWindow):
         self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
         self.ConnectOutputState = False
         out_device = self.ui.OutputDeviceCombo.currentText()
-        print(out_device)
         self.settings.SaveOutputDevice(out_device)
         self.midi.ConnectOutput(out_device)
+        self.midi.SetMidiSong(self.midisong)
 
     def MidifileChanged(self):
+        self.MidifileChange(os.path.join(self.settings.GetMidiPath(),self.ui.FileCombo.currentText()))
+
+    def MidifileChange(self, filepath):
         self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
         self.MidifileState = False
-        self.midisong = ClassMidiSong(os.path.join(self.settings.GetMidiPath(),self.ui.FileCombo.currentText()))
+        self.midisong = ClassMidiSong(filepath)
         self.settings.SaveMidifile(self.midisong.Getfilepath())
         self.Tracks = self.midi.SetMidiSong(self.midisong)
-        self.SetWindowName()
         UpdateSongScreen(self,self.midisong)
+        UpdateSongScreen(self,self.midisong)
+        self.SetWindowName()
 
     def ChannelsNone(self):
         for n in range(len(self.ChannelsButtonsList)):
@@ -244,7 +237,7 @@ class MainWindow(QMainWindow):
         else:
             self.ui.pushButton_Humanize.setText("Humanize")
 
-    def ChangeMidiFile(self,value):
+    def ChangeMidiFile(self,value): # External Midi command
         # value 0-127
         step = int(128/len(self.MidiFiles))
         self.MidifilesIndex = min(int(value/step),len(self.MidiFiles)-1)
@@ -277,22 +270,6 @@ class MainWindow(QMainWindow):
 
     def SongScreen(self):
         UpdateSongScreen(self, self.midisong)
-
-    def eventFilter(self, o, e):
-        if e.type() == QEvent.DragEnter: #remember to accept the enter event
-            e.acceptProposedAction()
-            return True
-        if e.type() == QEvent.Drop:
-            data = e.mimeData()
-            urls = data.urls()
-            if ( urls and urls[0].scheme() == 'file' ):
-                self.midisong = ClassMidiSong(urls[0].path())
-                self.midi.SetMidiSong(self.midisong)
-                # not possible yet ->  self.ui.FileCombo.setLineEdit(urls[0].fileName()) #
-                self.setWindowTitle(f"I Like Chopin : {self.midisong.GetName()}")
-                UpdateSongScreen(self,self.midisong)
-                return True
-        return False #remember to return false for other event types
 
     # End
 

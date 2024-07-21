@@ -16,7 +16,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QDialog, QFormLayout, QGridLayout,
-    QSizePolicy, QTextBrowser, QWidget)
+    QProgressBar, QSizePolicy, QTextBrowser, QWidget)
 
 class Ui_SongScreenDlg(object):
     def setupUi(self, SongScreenDlg):
@@ -31,6 +31,12 @@ class Ui_SongScreenDlg(object):
         self.textBrowser.setObjectName(u"textBrowser")
 
         self.formLayout.setWidget(0, QFormLayout.FieldRole, self.textBrowser)
+
+        self.progressBar = QProgressBar(SongScreenDlg)
+        self.progressBar.setObjectName(u"progressBar")
+        self.progressBar.setValue(24)
+
+        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.progressBar)
 
 
         self.gridLayout.addLayout(self.formLayout, 0, 0, 1, 1)

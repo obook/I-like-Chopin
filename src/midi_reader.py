@@ -40,7 +40,8 @@ class ClassThreadMidiReader(Thread):
         tracks = []
         try:
             midi = MidiFile(self.midisong.Getfilepath())
-            self.midisong.SetDuration(round(midi.length/60,2))
+            #self.midisong.SetDuration(round(midi.length/60,2))
+            self.midisong.SetDuration(midi.length/60)
             for i, track in enumerate(midi.tracks):
                 tracks.append(track.name)
 
@@ -48,6 +49,7 @@ class ClassThreadMidiReader(Thread):
             for msg in MidiFile(self.midisong.Getfilepath()):
                 if msg.type == 'note_on':
                     self.total_notes_on +=1
+
             self.midisong.SetTracks(tracks)
             self.midisong.SetActive(True)
         except:
@@ -55,7 +57,7 @@ class ClassThreadMidiReader(Thread):
             return None
 
     def SetMidiPort(self,port_out):
-        print(f"MidiReader {self.uuid} SetMidiPort [{port_out}]")
+        #print(f"MidiReader {self.uuid} SetMidiPort [{port_out}]")
         self.port_out = port_out
 
     def run(self):
@@ -75,10 +77,9 @@ class ClassThreadMidiReader(Thread):
             # Stop while running ?
             if not self.midisong.Active():
                 break
-
             if msg.type == 'note_on':
-                self.current_notes_on += 1
                 self.midisong.played = int(100*self.current_notes_on/self.total_notes_on)
+                self.current_notes_on += 1
                 # Humanize controlled by knob, see midi_input
                 if self.keys['humanize']:
                     human = random.randrange(0,self.keys['humanize'],1)/2000
@@ -114,9 +115,11 @@ class ClassThreadMidiReader(Thread):
                 pass
 
         # End of song
+        self.midisong.played = 100
         self.stop()
 
     def stop(self):
+        # print(f"MidiReader {self.uuid} stop")
         if self.midisong:
             self.midisong.SetActive(False)
         self.port_out = None

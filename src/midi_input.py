@@ -96,6 +96,7 @@ class ClassThreadInput(Thread):
         return False
 
     def stop(self):
+        # print(f"MidiInput {self.uuid} stop")
         self.running = False
         if self.in_port :
             self.in_port.close()

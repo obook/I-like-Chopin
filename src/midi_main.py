@@ -82,8 +82,6 @@ class ClassMidiMain:
         self.ThreadOutput = ClassThreadOutput(out_device, self.keys, self.pParent)
         self.port_out = self.ThreadOutput.start()
 
-        self.SetMidiSong(self.midisong)
-
     def ConnectOutputState(self):
         if self.ThreadOutput:
             return self.ThreadOutput.active()
