@@ -33,7 +33,7 @@ class ClassSettings:
     def __init__(self):
         self.uuid = uuid.uuid4()
         self.application_path = os.path.dirname(os.path.realpath(__file__))
-        print(f"Settings {self.uuid} created [{self.settingsfile}]")
+        print(f"Settings {self.uuid} reading [{self.settingsfile}]")
 
     def __del__(self):
         print(f"Settings {self.uuid} destroyed [{self.settingsfile}]")
