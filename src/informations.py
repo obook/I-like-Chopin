@@ -47,6 +47,8 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
 
         self.checkBox_ForceIntrument0.setText(f"Force piano (prog {self.settings.GetPianoProgram()})")
 
+        # WARNING HERE -> Send now force piano to device if set
+
     def quit(self):
         self.settings.SavePrintTerm(self.checkBox_PrintTerminalMsg.isChecked())
         self.settings.SaveShowSongInfo(self.checkBox_ShowSongInfo.isChecked())
