@@ -16,19 +16,19 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QGroupBox,
-    QLabel, QMainWindow, QPushButton, QSizePolicy,
-    QStatusBar, QWidget)
+    QLabel, QMainWindow, QProgressBar, QPushButton,
+    QSizePolicy, QStatusBar, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(504, 442)
+        MainWindow.resize(504, 454)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.pushButton_Quit = QPushButton(self.centralwidget)
         self.pushButton_Quit.setObjectName(u"pushButton_Quit")
-        self.pushButton_Quit.setGeometry(QRect(390, 380, 100, 30))
+        self.pushButton_Quit.setGeometry(QRect(390, 400, 100, 30))
         self.groupBoxDevices = QGroupBox(self.centralwidget)
         self.groupBoxDevices.setObjectName(u"groupBoxDevices")
         self.groupBoxDevices.setGeometry(QRect(10, 0, 481, 151))
@@ -84,7 +84,7 @@ class Ui_MainWindow(object):
         self.pushButton_ChannelsNone.setGeometry(QRect(375, 30, 97, 30))
         self.pushButton_Panic = QPushButton(self.centralwidget)
         self.pushButton_Panic.setObjectName(u"pushButton_Panic")
-        self.pushButton_Panic.setGeometry(QRect(10, 380, 100, 30))
+        self.pushButton_Panic.setGeometry(QRect(10, 400, 100, 30))
         self.groupBox_3 = QGroupBox(self.centralwidget)
         self.groupBox_3.setObjectName(u"groupBox_3")
         self.groupBox_3.setGeometry(QRect(10, 300, 481, 71))
@@ -111,7 +111,11 @@ class Ui_MainWindow(object):
         self.pushButton_Mode.setCheckable(True)
         self.pushButton_Info = QPushButton(self.centralwidget)
         self.pushButton_Info.setObjectName(u"pushButton_Info")
-        self.pushButton_Info.setGeometry(QRect(200, 380, 100, 30))
+        self.pushButton_Info.setGeometry(QRect(200, 400, 100, 30))
+        self.progressBar = QProgressBar(self.centralwidget)
+        self.progressBar.setObjectName(u"progressBar")
+        self.progressBar.setGeometry(QRect(10, 377, 481, 16))
+        self.progressBar.setValue(24)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")

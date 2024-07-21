@@ -7,6 +7,7 @@ import uuid
 class ClassMidiSong:
     filepath = None
     duration = 0
+    played = 0 #percent
     tracks = []
     active = False
     uuid = None

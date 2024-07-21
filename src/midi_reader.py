@@ -18,6 +18,9 @@ class ClassThreadMidiReader(Thread):
     port_out = None
     ready = False
     uuid = None
+    total_notes_on = 0
+    current_notes_on = 0
+    current_percent_played = 0
 
     def __init__(self,midisong,keys,channels):
         Thread.__init__( self )
@@ -41,6 +44,11 @@ class ClassThreadMidiReader(Thread):
             self.midisong.SetDuration(round(midi.length/60,2))
             for i, track in enumerate(midi.tracks):
                 tracks.append(track.name)
+
+            self.total_notes_on = 0
+            for msg in MidiFile(self.midisong.Getfilepath()):
+                if msg.type == 'note_on':
+                    self.total_notes_on +=1
             self.midisong.SetTracks(tracks)
             self.midisong.SetActive(True)
         except:
@@ -71,6 +79,8 @@ class ClassThreadMidiReader(Thread):
 
             # Speed controlled by knob, see midi_input
             if msg.type == 'note_on':
+                self.current_notes_on += 1
+                self.midisong.played = int(100*self.current_notes_on/self.total_notes_on)
                 if self.keys['humanize']:
                     human = random.randrange(0,self.keys['humanize'],1)/2000
                 else:
