@@ -17,7 +17,7 @@ class SongScreenDlg(Ui_SongScreenDlg, QDialog):
         self.setupUi(self)
         self.pParent = parent
         self.settings = self.pParent.settings
-        self.setWindowTitle("Song")
+        self.setWindowTitle("Song - drop files here")
         self.Update(midisong)
         # Drop file
         self.textBrowser.installEventFilter(self)
