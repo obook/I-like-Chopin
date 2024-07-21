@@ -13,7 +13,6 @@ from os import path
 from midi_input import ClassThreadInput
 from midi_output import ClassThreadOutput
 from midi_reader import ClassThreadMidiReader
-from settings import ClassSettings
 import uuid
 
 class ClassMidiMain:
@@ -29,10 +28,11 @@ class ClassMidiMain:
     channels = None
     uuid = None
 
-    settings = ClassSettings()
+    settings = None
 
     def __init__(self, pParent, channels):
         self.pParent = pParent
+        self.settings = self.pParent.settings
         self.channels = channels
         self.uuid = uuid.uuid4()
         print(f"MidiMain {self.uuid} created")
@@ -102,7 +102,7 @@ class ClassMidiMain:
             self.ThreadMidiFile.stop()
             self.ThreadMidiFile = None
 
-        self.ThreadMidiFile = ClassThreadMidiReader(self.midisong, self.keys, self.channels)
+        self.ThreadMidiFile = ClassThreadMidiReader(self.midisong, self.keys, self.channels,self.pParent)
         tracks = self.ThreadMidiFile.SetMidiSong(self.midisong)
 
         if self.ThreadOutput:

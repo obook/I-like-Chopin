@@ -6,20 +6,20 @@ Created on Wed Jun  5 18:19:14 2024
 """
 from threading import Thread
 from mido import open_output, Message
-from settings import ClassSettings
 import uuid
 
 class ClassThreadOutput(Thread):
     out_device = None
     outport = None
     uuid = None
+    settings = None
 
     def __init__(self, out_device, keys, pParent):
         Thread.__init__( self )
-        self.settings = ClassSettings()
+        self.pParent = pParent
+        self.settings = self.pParent.settings
         self.out_device = out_device
         self.keys = keys
-        self.pParent = pParent
         self.uuid = uuid.uuid4()
         print(f"MidiOutput {self.uuid} created [{self.out_device}]")
 

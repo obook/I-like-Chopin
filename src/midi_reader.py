@@ -6,7 +6,6 @@ Created on Wed Jun  5 18:19:14 2024
 """
 from mido import MidiFile
 from threading import Thread
-from settings import ClassSettings
 import time
 import os
 import random
@@ -16,14 +15,16 @@ class ClassThreadMidiReader(Thread):
     midisong = None
     keys = None
     port_out = None
+    settings = None
     ready = False
     uuid = None
     total_notes_on = 0
     current_notes_on = 0
 
-    def __init__(self,midisong,keys,channels):
+    def __init__(self,midisong,keys,channels,pParent):
         Thread.__init__( self )
-        self.settings = ClassSettings()
+        self.parent = pParent
+        self.settings = self.parent.settings
         self.midisong = midisong
         self.keys = keys
         self.channels = channels

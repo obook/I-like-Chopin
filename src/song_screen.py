@@ -7,15 +7,16 @@ Created on Wed Jun  5 18:19:14 2024
 from PySide6.QtCore import QEvent, QTimer
 from PySide6.QtWidgets import QDialog
 from ui_song_screen import Ui_SongScreenDlg
-from settings import ClassSettings
 
 class SongScreenDlg(Ui_SongScreenDlg, QDialog):
     midisong = None
     pParent = None
+    settings = None
     def __init__(self, midisong, parent=None):
         super().__init__(parent)
         self.setupUi(self)
         self.pParent = parent
+        self.settings = self.pParent.settings
         self.setWindowTitle("Song")
         self.Update(midisong)
         # Drop file
@@ -78,15 +79,14 @@ class SongScreenDlg(Ui_SongScreenDlg, QDialog):
         self.close()
 
 SongScreen = None
-settings = ClassSettings()
 
 def UpdateSongScreen(pParent,midisong):
     global SongScreen
     if not SongScreen:
         SongScreen = SongScreenDlg(midisong,pParent)
-        if settings.GetShowSongInfo():
+        if pParent.settings.GetShowSongInfo():
             SongScreen.show()
     else:
         SongScreen.Update(midisong)
-        if not SongScreen.isVisible() and settings.GetShowSongInfo():
+        if not SongScreen.isVisible() and pParent.settings.GetShowSongInfo():
             SongScreen.show()

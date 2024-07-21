@@ -8,14 +8,14 @@ Created on Wed Jun  5 18:19:14 2024
 from PySide6.QtWidgets import QDialog
 from ui_informations import Ui_DialogInformation
 import platform
-from settings import ClassSettings
 
 class InformationsDlg(Ui_DialogInformation, QDialog):
     pParent = None
+    settings = None
     def __init__(self, parent=None):
         super().__init__(parent)
         self.pParent = parent
-        self.settings = ClassSettings()
+        self.settings = self.pParent.settings
         self.setupUi(self)
         self.setFixedSize(481,361)
         self.setWindowTitle("Informations")

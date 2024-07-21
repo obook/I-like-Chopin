@@ -6,7 +6,6 @@ Created on Wed Jun  5 18:19:14 2024
 """
 from mido import open_input
 from threading import Thread
-from settings import ClassSettings
 from midi_numbers import number_to_note
 import uuid
 
@@ -14,15 +13,17 @@ class ClassThreadInput(Thread):
     in_device = None
     in_port = None
     out_port = None
+    pParent = None
+    settings = None
     running = False
     uuid = None
 
     def __init__(self, in_device, keys, pParent):
         Thread.__init__( self )
-        self.settings = ClassSettings()
+        self.pParent = pParent
+        self.settings = self.pParent.settings
         self.in_device = in_device
         self.keys = keys
-        self.pParent = pParent
         self.running = True
         self.uuid = uuid.uuid4()
         print(f"MidiInput {self.uuid} created [{self.in_device}]")
