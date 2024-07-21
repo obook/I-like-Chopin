@@ -37,7 +37,6 @@ class ClassSettings:
 
     def __del__(self):
         print(f"Settings {self.uuid} destroyed [{self.settingsfile}]")
-        pass
 
         if not os.path.isdir(self.settingspath):
             os.makedirs(self.settingspath, exist_ok=True)
