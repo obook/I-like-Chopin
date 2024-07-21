@@ -129,6 +129,7 @@ class ClassMidiMain:
     def Panic(self):
         if self.ThreadOutput:
             self.ThreadOutput.panic()
+        self.pParent.PrintStatusBar("")
         self.keys['key_on'] = 0
 
     def quit(self):
