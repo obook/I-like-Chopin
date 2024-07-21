@@ -21,10 +21,10 @@ class ClassThreadOutput(Thread):
         self.keys = keys
         self.pParent = pParent
         self.uuid = uuid.uuid4()
-        print(f"Output {self.uuid} created [{self.out_device}]")
+        print(f"MidiOutput {self.uuid} created [{self.out_device}]")
 
     def __del__(self):
-        print(f"Output {self.uuid} destroyed [{self.out_device}]")
+        print(f"MidiOutput {self.uuid} destroyed [{self.out_device}]")
 
     def run(self):
         self.stop()
@@ -32,7 +32,7 @@ class ClassThreadOutput(Thread):
             self.outport = open_output(self.out_device,autoreset=True)
         except:
             self.outport = None
-            print(f"Output {self.uuid} midi_output open [{self.out_device}] ERROR")
+            print(f"MidiOutput {self.uuid} midi_output open [{self.out_device}] ERROR")
             return
 
         # Set all channels to Piano ('Acoustic Grand Piano') if set
@@ -72,7 +72,6 @@ class ClassThreadOutput(Thread):
         return False
 
     def stop(self):
-        print(f"Output {self.uuid} stop")
         if self.outport :
             self.outport.close()
             self.outport = None

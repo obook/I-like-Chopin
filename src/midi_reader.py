@@ -20,7 +20,6 @@ class ClassThreadMidiReader(Thread):
     uuid = None
     total_notes_on = 0
     current_notes_on = 0
-    current_percent_played = 0
 
     def __init__(self,midisong,keys,channels):
         Thread.__init__( self )
@@ -77,14 +76,15 @@ class ClassThreadMidiReader(Thread):
             if not self.midisong.Active():
                 break
 
-            # Speed controlled by knob, see midi_input
             if msg.type == 'note_on':
                 self.current_notes_on += 1
                 self.midisong.played = int(100*self.current_notes_on/self.total_notes_on)
+                # Humanize controlled by knob, see midi_input
                 if self.keys['humanize']:
                     human = random.randrange(0,self.keys['humanize'],1)/2000
                 else:
                     human = 0
+                # Speed controlled by knob, see midi_input
                 msg.time = msg.time + self.keys['speed']/2000 + human
 
             time.sleep(msg.time)

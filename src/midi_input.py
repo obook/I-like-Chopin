@@ -25,10 +25,10 @@ class ClassThreadInput(Thread):
         self.pParent = pParent
         self.running = True
         self.uuid = uuid.uuid4()
-        print(f"Input {self.uuid} created [{self.in_device}]")
+        print(f"MidiInput {self.uuid} created [{self.in_device}]")
 
     def __del__(self):
-        print(f"Input {self.uuid} destroyed [{self.in_device}]")
+        print(f"MidiInput {self.uuid} destroyed [{self.in_device}]")
 
     def SetOutPort(self,out_port):
         self.out_port = out_port
@@ -39,7 +39,7 @@ class ClassThreadInput(Thread):
             self.in_port = open_input(self.in_device, callback=self.callback)
             self.running = True
         except:
-            print(f"Input {self.uuid} midi_input:Error connect from {self.in_device}")
+            print(f"MidiInput {self.uuid} midi_input:Error connect from {self.in_device}")
             return
         self.pParent.PrintStatusBar(f"Waiting:{self.in_device} ...")
 
@@ -48,7 +48,7 @@ class ClassThreadInput(Thread):
         if self.settings.GetPrintTerm():
             filter =['clock','stop','note_off']
             if message.type not in filter:
-                print(f"Input {self.uuid}:{message}")
+                print(f"MidiInput {self.uuid}:{message}")
 
         # Control change - Midi commands
         if message.type =='control_change':
@@ -96,7 +96,6 @@ class ClassThreadInput(Thread):
         return False
 
     def stop(self):
-        print(f"Input {self.uuid} stop")
         self.running = False
         if self.in_port :
             self.in_port.close()

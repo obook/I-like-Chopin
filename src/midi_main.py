@@ -134,8 +134,6 @@ class ClassMidiMain:
         self.keys['key_on'] = 0
 
     def quit(self):
-        print("MidiMain {self.uuid} quit")
-
         if self.ThreadMidiFile:
             self.ThreadMidiFile.SetMidiPort(None) # stop send
             self.ThreadMidiFile.stop()
@@ -146,9 +144,11 @@ class ClassMidiMain:
             self.ThreadInput = None
 
         if self.ThreadOutput:
-            self.ThreadOutput.panic
+            self.ThreadOutput.panic()
             self.ThreadOutput.stop()
             self.ThreadOutput = None
 
-
+        if self.midisong:
+            self.midisong.SetActive(False)
+            self.midisong = None
 

@@ -57,7 +57,7 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
-        self.setFixedSize(504,454)
+        self.setFixedSize(504,442)
         self.ui.setupUi(self)
 
         # Application icon X.org->correct - Wayland->not implemented
@@ -69,7 +69,7 @@ class MainWindow(QMainWindow):
         self.ui.statusbar.setSizeGripEnabled(False)
 
         #Progress Bar
-        self.ui.progressBar.setStyleSheet("QProgressBar::chunk {background: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #78d,stop: 0.4999 #46a,stop: 0.5 #45a,stop: 1 #238 );border: 1px solid black;}")
+        #self.ui.progressBar.setStyleSheet("QProgressBar::chunk {background: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #78d,stop: 0.4999 #46a,stop: 0.5 #45a,stop: 1 #238 );border: 1px solid black;}")
         self.ui.progressBar.setRange(0,100)
         self.ui.progressBar.setTextVisible(False)
         self.ui.progressBar.setValue(0)
