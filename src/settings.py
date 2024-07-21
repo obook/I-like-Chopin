@@ -34,10 +34,6 @@ class ClassSettings:
         self.uuid = uuid.uuid4()
         self.application_path = os.path.dirname(os.path.realpath(__file__))
         print(f"Settings {self.uuid} reading [{self.settingsfile}]")
-
-    def __del__(self):
-        print(f"Settings {self.uuid} destroyed [{self.settingsfile}]")
-
         if not os.path.isdir(self.settingspath):
             os.makedirs(self.settingspath, exist_ok=True)
         if not os.path.isdir(self.defaultmidipath):
@@ -45,7 +41,10 @@ class ClassSettings:
             try:
                 shutil.copytree( midifiles_path_src, self.defaultmidipath )
             except:
-                pass
+                print(f"Settings {self.uuid} unable de copy midifiles [{self.defaultmidipath}]")
+
+    def __del__(self):
+        print(f"Settings {self.uuid} destroyed [{self.settingsfile}]")
 
     def LoadConfig(self):
         try:
