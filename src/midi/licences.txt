@@ -1,0 +1,25 @@
+Played by Bernd Krueger
+-----------------------
+'Fantaisie-Impromptu Opus 66.mid'
+'Grande Waltz Op.18.mid'
+'Mazurka Opus 7_1.mid'
+'Mazurka Opus 7_2.mid'
+'Nocturne Op.09 n2.mid'
+'Nocturne Op.55 n1.mid'
+'Prelude Op.28 No.4 in e.mid'
+
+The MIDI are licensed under the cc-by-sa Germany License. This means, that you can use and adapt the files, as long as you attribute to the copyright holder
+The distribution or public playback of the files is only allowed under identical license conditions.
+Source : http://www.piano-midi.de
+
+Played by Andy Delmenico
+------------------------
+'Nocturne Op. 9 No. 1 in Bmin.mid'
+Source : https://www.midiworld.com/chopin.htm
+Copyright © 1998
+
+Played by ?
+-----------
+'Prelude-in-C-Minor-Opus-28-Nr-20.mid'
+Source : https://bitmidi.com/prelude-in-c-minor-opus-28-nr-20-mid
+Licence unknown
