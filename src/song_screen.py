@@ -48,10 +48,12 @@ class SongScreenDlg(Ui_SongScreenDlg, QDialog):
         if self.midisong.GetTracks():
             for i in range(len(self.midisong.GetTracks())):
                 text += f"<br><span{text_style}>track {i} : {self.midisong.tracks[i]}</span>"
-        if not self.midisong.Active():
+        if not self.midisong.Active() and not self.midisong.ready:
             text += "<br><br><span{text_style}>(STOPPED)</span>"
+        if not self.midisong.ready:
+            text += "<br><br><span{text_style}>(WAITING CHANNELS...)</span>"
         else:
-            text += "<br><br><span{text_style}>(PLAYING)</span>"
+            text += "<br><br><span{text_style}>(RUNNING)</span>"
         self.textBrowser.insertHtml(text)
 
     def eventFilter(self, o, e):

@@ -80,6 +80,8 @@ class ClassThreadMidiReader(Thread):
                 self.stop()
                 return
             if msg.type == 'note_on':
+                #print(f"MidiReader {self.uuid} note_on channel {msg.channel} note {msg.note}" )
+
                 self.midisong.played = int(100*self.current_notes_on/self.total_notes_on)
                 self.current_notes_on += 1
                 # Humanize controlled by knob, see midi_input
@@ -90,21 +92,27 @@ class ClassThreadMidiReader(Thread):
                 # Speed controlled by knob, see midi_input
                 msg.time = msg.time + self.keys['speed']/2000 + human
 
+                if self.channels[msg.channel] and not self.midisong.ready:
+                    print(f"MidiReader {self.uuid} ready")
+                    self.midisong.ready = True
+
             time.sleep(msg.time)
 
             # Pause ?
-            if self.current_notes_on==1 and not self.midisong.ready:
-                print(f"MidiReader {self.uuid} wait keyboard...")
-                self.midisong.ready = True
-
             if msg.type == 'note_on':
                 while not self.keys['key_on']: # Loop waiting keyboard
+
+                    if not self.channels[msg.channel]:
+                        break
+
                     if not self.midisong:
-                        self.stop()
-                        return
+                            self.stop()
+                            return
+
                     if not self.midisong.Active():
                         self.stop()
                         return
+
                     time.sleep(0.001) # for loop
 
             # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
