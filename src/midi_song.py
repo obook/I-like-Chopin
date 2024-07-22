@@ -11,6 +11,7 @@ class ClassMidiSong:
     tracks = []
     active = False
     uuid = None
+    ready = False # wait first key on keyboard
 
     def __init__(self, filepath):
         self.uuid = uuid.uuid4()

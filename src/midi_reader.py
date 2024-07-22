@@ -72,12 +72,13 @@ class ClassThreadMidiReader(Thread):
                 return
 
         self.midisong.SetActive(True)
+        self.midisong.ready = False
 
         for msg in MidiFile(self.midisong.Getfilepath()):
-
             # Stop while running ?
             if not self.midisong.Active():
-                break
+                self.stop()
+                return
             if msg.type == 'note_on':
                 self.midisong.played = int(100*self.current_notes_on/self.total_notes_on)
                 self.current_notes_on += 1
@@ -92,15 +93,19 @@ class ClassThreadMidiReader(Thread):
             time.sleep(msg.time)
 
             # Pause ?
+            if self.current_notes_on==1 and not self.midisong.ready:
+                print(f"MidiReader {self.uuid} wait keyboard...")
+                self.midisong.ready = True
+
             if msg.type == 'note_on':
                 while not self.keys['key_on']: # Loop waiting keyboard
                     if not self.midisong:
                         self.stop()
                         return
-                    elif not self.midisong.Active():
+                    if not self.midisong.Active():
                         self.stop()
                         return
-                    time.sleep(msg.time)
+                    time.sleep(0.001) # for loop
 
             # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
             if msg.type == 'program_change' and self.settings.GetForceIntrument():

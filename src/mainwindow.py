@@ -35,6 +35,7 @@ ICON_APPLICATION = application_path+'/icons/svg/i-like-chopin.svg'
 # Define status icons
 ICON_RED_LED = application_path+'/icons/led/led-red-on.png'
 ICON_GREEN_LED = application_path+'/icons/led/green-led-on.png'
+ICON_YELLOW_LED = application_path+'/icons/led/yellow-led-on.png'
 ICON_LED_OFF = application_path+'/icons/led/led-off.png'
 
 app = None
@@ -49,6 +50,7 @@ class MainWindow(QMainWindow):
     MidifilesIndex = 0 # ?
     midi = None
     midisong = None # current midifile
+
     MidifileState = False
 
     ConnectInputState = False
@@ -163,10 +165,14 @@ class MainWindow(QMainWindow):
             self.ConnectOutputState = False
 
         # A revoir : UpdateSongScreen tout le temps
-        if self.midisong.Active() and not self.MidifileState:
+        if self.midisong.Active() and not self.midisong.ready:
+            self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_YELLOW_LED))
+
+        elif self.midisong.Active() and not self.MidifileState:
             self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
             self.MidifileState = True
             UpdateSongScreen(self,self.midisong)
+
         elif not self.midisong.Active():
             self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
             self.MidifileState = False
@@ -196,7 +202,6 @@ class MainWindow(QMainWindow):
         self.midisong = ClassMidiSong(filepath)
         self.settings.SaveMidifile(self.midisong.Getfilepath())
         self.Tracks = self.midi.SetMidiSong(self.midisong)
-        UpdateSongScreen(self,self.midisong)
         UpdateSongScreen(self,self.midisong)
         self.SetWindowName()
 
