@@ -6,6 +6,7 @@ Created on Wed Jun  5 18:19:14 2024
 """
 from mido import MidiFile
 from threading import Thread
+from midi_numbers import number_to_note
 import time
 import os
 import random
@@ -20,6 +21,7 @@ class ClassThreadMidiReader(Thread):
     uuid = None
     total_notes_on = 0
     current_notes_on = 0
+    channels = None
 
     def __init__(self,midisong,keys,channels,pParent):
         Thread.__init__( self )
@@ -75,31 +77,41 @@ class ClassThreadMidiReader(Thread):
         self.midisong.ready = False
 
         for msg in MidiFile(self.midisong.Getfilepath()):
-            # Stop while running ?
-            if not self.midisong.Active():
-                self.stop()
-                return
-            if msg.type == 'note_on':
-                #print(f"MidiReader {self.uuid} note_on channel {msg.channel} note {msg.note}" )
 
+            # Stop while running ?
+            if self.midisong:
+                if not self.midisong.Active():
+                    self.stop()
+                    return
+
+            # Note Time
+            if self.midisong.ready:
+                time.sleep(msg.time)
+
+            if msg.type == 'note_on':
+                # First note on channels selected
+                if self.channels[msg.channel] and not self.midisong.ready:
+                    print(f"MidiReader {self.uuid} ready")
+                    self.midisong.ready = True
+
+                # Stats
                 self.midisong.played = int(100*self.current_notes_on/self.total_notes_on)
                 self.current_notes_on += 1
+
                 # Humanize controlled by knob, see midi_input
                 if self.keys['humanize']:
                     human = random.randrange(0,self.keys['humanize'],1)/2000
                 else:
                     human = 0
+
                 # Speed controlled by knob, see midi_input
                 msg.time = msg.time + self.keys['speed']/2000 + human
 
-                if self.channels[msg.channel] and not self.midisong.ready:
-                    print(f"MidiReader {self.uuid} ready")
-                    self.midisong.ready = True
-
-            time.sleep(msg.time)
+            if not self.midisong.ready:
+                msg.time = 0
 
             # Pause ?
-            if msg.type == 'note_on':
+            if msg.type == 'note_on' and self.midisong.ready:
                 while not self.keys['key_on']: # Loop waiting keyboard
 
                     if not self.channels[msg.channel]:
