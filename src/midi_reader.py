@@ -65,6 +65,8 @@ class ClassThreadMidiReader(Thread):
 
     def run(self):
 
+        self.midisong.ready = False
+
         if not self.midisong.Active(): # SetMidiFile failed to get tracks, malformed midifile ?
             return
 
@@ -74,7 +76,6 @@ class ClassThreadMidiReader(Thread):
                 return
 
         self.midisong.SetActive(True)
-        self.midisong.ready = False
 
         for msg in MidiFile(self.midisong.Getfilepath()):
 
@@ -89,6 +90,7 @@ class ClassThreadMidiReader(Thread):
                 time.sleep(msg.time)
 
             if msg.type == 'note_on':
+                #print(f"MidiReader {self.uuid} note_on msg.channel {msg.channel} self.midisong.ready {self.midisong.ready}")
                 # First note on channels selected
                 if self.channels[msg.channel] and not self.midisong.ready:
                     print(f"MidiReader {self.uuid} ready")
@@ -148,5 +150,6 @@ class ClassThreadMidiReader(Thread):
         # print(f"MidiReader {self.uuid} stop")
         if self.midisong:
             self.midisong.SetActive(False)
+            self.midisong.ready = False
         self.port_out = None
 

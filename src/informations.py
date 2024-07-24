@@ -28,6 +28,12 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         text += f"{self.settings.GetConfigPath()}"
         text += f"<p{style}>MIDIFILES LIBRARY PATH</p>"
         text += f"{self.settings.GetMidiPath()}"
+        text += f"<p{style}>OUTPUTS</p>"
+        for input in self.pParent.Inputs:
+            text += f"{input}<br>"
+        text += f"<p{style}>INPUTS</p>"
+        for output in self.pParent.Outputs:
+            text += f"{output}<br>"
         text += f"<p{style}>HUMANIZE</p>"
         text += "control_change:control 71 (set your midi-device)"
         text += f"<p{style}>SPEED CONTROL</p>"
@@ -40,6 +46,9 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.textBrowser.setAcceptRichText(True)
         self.textBrowser.setOpenLinks(False)
         self.textBrowser.insertHtml(text)
+        cursor = self.textBrowser.textCursor()
+        cursor.setPosition(0);
+        self.textBrowser.setTextCursor(cursor);
 
         self.checkBox_PrintTerminalMsg.setChecked(self.settings.GetPrintTerm())
         self.checkBox_ShowSongInfo.setChecked(self.settings.GetShowSongInfo())

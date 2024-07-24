@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>481</width>
-    <height>373</height>
+    <width>479</width>
+    <height>365</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,7 +41,7 @@
    <widget class="QCheckBox" name="checkBox_PrintTerminalMsg">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>300</x>
       <y>30</y>
       <width>141</width>
       <height>23</height>
@@ -67,9 +67,9 @@
    <widget class="QCheckBox" name="checkBox_ShowSongInfo">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>166</x>
       <y>30</y>
-      <width>141</width>
+      <width>121</width>
       <height>23</height>
      </rect>
     </property>

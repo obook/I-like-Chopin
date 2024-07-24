@@ -46,6 +46,9 @@ class MainWindow(QMainWindow):
     ChannelsButtonsList = []
     ChannelsList = [False]*16
 
+    Inputs = []
+    Outputs = []
+
     MidiFiles=[]
     MidifilesIndex = 0 # ?
     midi = None
@@ -75,7 +78,7 @@ class MainWindow(QMainWindow):
         self.midi = ClassMidiMain(self,self.ChannelsList)
 
         # Datas
-        Inputs, Outputs, IOPorts = self.midi.GetDevices()
+        self.Inputs, self.Outputs, IOPorts = self.midi.GetDevices()
         Input = self.settings.GetInputDevice()
         Output = self.settings.GetOutputDevice()
         self.MidiFiles = self.midi.GetMidiFiles()
@@ -95,11 +98,11 @@ class MainWindow(QMainWindow):
 
         # ComboBoxes Inputs/Outputs
         self.ui.InputDeviceCombo.addItem(Input)
-        self.ui.InputDeviceCombo.addItems(Inputs)
+        self.ui.InputDeviceCombo.addItems(self.Inputs)
         self.ui.InputDeviceCombo.currentIndexChanged.connect(self.InputDeviceChanged)
 
         self.ui.OutputDeviceCombo.addItem(Output)
-        self.ui.OutputDeviceCombo.addItems(Outputs)
+        self.ui.OutputDeviceCombo.addItems(self.Outputs)
         self.ui.OutputDeviceCombo.currentIndexChanged.connect(self.OuputDeviceChanged)
 
         # Leds
@@ -144,6 +147,7 @@ class MainWindow(QMainWindow):
         self.ui.FileCombo.installEventFilter(self)
 
         # Timer
+        # UpdateSongScreen(self,self.midisong)
         timer = QTimer(self)
         timer.timeout.connect(self.timer)
         timer.start(2000)

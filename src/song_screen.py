@@ -34,7 +34,16 @@ class SongScreenDlg(Ui_SongScreenDlg, QDialog):
     def Update(self,midisong):
         self.midisong = midisong
         self.textBrowser.clear()
-        header_style = " style='color:#FFFFFF;background-color:#333333;font-size: 32px;text-transform: uppercase;' "
+
+        if not self.midisong.Active() and not self.midisong.ready:
+            color = '#993333'
+        elif not self.midisong.ready:
+            color = '#999900'
+        else:
+            color = '#339933'
+
+        header_style = f" style='color:{color};background-color:#333333;font-size: 32px;text-transform: uppercase;' "
+
         text_style = " style='font-size: 18px;' "
         name = self.midisong.GetName()
         name = name.replace('_',' ')
@@ -48,13 +57,10 @@ class SongScreenDlg(Ui_SongScreenDlg, QDialog):
         if self.midisong.GetTracks():
             for i in range(len(self.midisong.GetTracks())):
                 text += f"<br><span{text_style}>track {i} : {self.midisong.tracks[i]}</span>"
-        if not self.midisong.Active() and not self.midisong.ready:
-            text += "<br><br><span{text_style}>(STOPPED)</span>"
-        if not self.midisong.ready:
-            text += "<br><br><span{text_style}>(WAITING CHANNELS...)</span>"
-        else:
-            text += "<br><br><span{text_style}>(RUNNING)</span>"
         self.textBrowser.insertHtml(text)
+        cursor = self.textBrowser.textCursor()
+        cursor.setPosition(0);
+        self.textBrowser.setTextCursor(cursor);
 
     def eventFilter(self, o, e):
         if e.type() == QEvent.DragEnter: #remember to accept the enter event
@@ -70,11 +76,12 @@ class SongScreenDlg(Ui_SongScreenDlg, QDialog):
         return False #remember to return false for other event types
 
     def timer(self):
+        self.Update(self.midisong)
         if self.midisong:
             self.progressBar.setValue(self.midisong.played)
 
     def closeEvent(self, event): # overwritten
-        # print("SongScreenDlg:closeEvent")
+        #self.settings.SaveShowSongInfo(False)
         pass
 
     def quit(self):
