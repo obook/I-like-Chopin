@@ -45,7 +45,7 @@
     <widget class="QLabel" name="label_File">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>21</x>
        <y>114</y>
        <width>71</width>
        <height>22</height>
@@ -61,9 +61,9 @@
     <widget class="QComboBox" name="InputDeviceCombo">
      <property name="geometry">
       <rect>
-       <x>113</x>
+       <x>103</x>
        <y>30</y>
-       <width>331</width>
+       <width>341</width>
        <height>30</height>
       </rect>
      </property>
@@ -71,9 +71,9 @@
     <widget class="QComboBox" name="OutputDeviceCombo">
      <property name="geometry">
       <rect>
-       <x>113</x>
+       <x>103</x>
        <y>70</y>
-       <width>331</width>
+       <width>341</width>
        <height>30</height>
       </rect>
      </property>
@@ -81,7 +81,7 @@
     <widget class="QLabel" name="label_Ouput">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>5</x>
        <y>74</y>
        <width>91</width>
        <height>22</height>
@@ -97,7 +97,7 @@
     <widget class="QLabel" name="label_Input">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>15</x>
        <y>34</y>
        <width>81</width>
        <height>22</height>
@@ -113,9 +113,9 @@
     <widget class="QComboBox" name="FileCombo">
      <property name="geometry">
       <rect>
-       <x>113</x>
+       <x>103</x>
        <y>110</y>
-       <width>331</width>
+       <width>341</width>
        <height>30</height>
       </rect>
      </property>
