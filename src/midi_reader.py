@@ -146,7 +146,7 @@ class ClassThreadMidiReader(Thread):
 
             # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
             if msg.type == 'program_change' and self.settings.GetForceIntrument():
-                if msg.channel != 15: # not for drums
+                if msg.channel != 10: # not for drums
                     msg.program = self.settings.GetPianoProgram()
 
             # Play
