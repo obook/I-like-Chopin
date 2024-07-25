@@ -151,7 +151,7 @@ class ClassThreadMidiReader(Thread):
 
             # Play
             try: # meta messages can't be send to ports
-                if (self.port_out and self.channels[msg.channel]) or msg.type == 'program_change':
+                if self.channels[msg.channel] or msg.type == 'program_change':
                     self.port_out.send(msg)
             except:
                 # print("ERROR->ClassThreadMidiFile:port_out.send type=", type(self.port_out), "msg=", msg)

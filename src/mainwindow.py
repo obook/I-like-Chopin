@@ -205,7 +205,7 @@ class MainWindow(QMainWindow):
         self.MidifileChange(os.path.join(self.settings.GetMidiPath(),self.ui.FileCombo.currentText()))
 
     def MidifileChange(self, filepath):
-        self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+        self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_YELLOW_LED))
         self.MidifileState = False
         self.midisong = ClassMidiSong(filepath)
         self.settings.SaveMidifile(self.midisong.Getfilepath())
