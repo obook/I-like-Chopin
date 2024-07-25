@@ -10,9 +10,9 @@ Funny program for play like Chopin.
 
 Impress your friends with this musical magic trick!
 
-<p align="center">
-    <img src="media/ILC.png"  width="320">
-</p>
+With Rack Synth Device     |  With Virtual Synth
+:-------------------------:|:-------------------------:
+<img src="media/ILC2.png"  width="280"> |  <img src="media/ILC.png"  width="280">
 
 Requirements:
 
