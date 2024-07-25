@@ -44,7 +44,7 @@ class ClassThreadInput(Thread):
         except:
             print(f"MidiInput {self.uuid} midi_input:Error connect from {self.in_device}")
             return
-        self.pParent.PrintStatusBar(f"Waiting:{self.in_device} ...")
+        self.pParent.PrintStatusBar(f"Waiting : {self.in_device} ...")
 
     def callback(self, message):
 

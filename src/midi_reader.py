@@ -106,7 +106,7 @@ class ClassThreadMidiReader(Thread):
             if msg.type == 'note_on':
                 # First note on channels selected
                 if self.channels[msg.channel] and not self.midisong.IsState('playing'):
-                    print(f"MidiReader {self.uuid} ready")
+                    print(f"MidiReader {self.uuid} ready !")
                     self.midisong.SetState(states['playing'])
 
                 # Stats

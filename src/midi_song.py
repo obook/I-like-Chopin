@@ -33,7 +33,7 @@ class ClassMidiSong:
             self.SetState(states['notfound'])
             text = 'NOT FOUND'
         self.__filepath = filepath
-        print(f"MidiSong {self.__uuid} load [{self.GetFilename()} {text}]")
+        print(f"MidiSong {self.__uuid} load [{self.GetFilename()}] {text}")
 
     def __del__(self):
         print(f"MidiSong {self.__uuid} destroyed [{self.GetFilename()}]")
