@@ -10,6 +10,7 @@ from threading import Thread
 from mido import open_output, Message
 
 class ClassThreadOutput(Thread):
+    """Class for output midi to device"""
     out_device = None
     outport = None
     uuid = None

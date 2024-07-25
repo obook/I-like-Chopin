@@ -9,6 +9,7 @@ import sys
 from mainwindow import start
 
 def is_module_available(module_name, quit=True, default=None):
+    """Tool for check dependances"""
     if sys.version_info < (3, 0):
         # python 2
         import importlib
@@ -25,7 +26,7 @@ def is_module_available(module_name, quit=True, default=None):
         if default:
             module_name = default
         print(f"LIBRARY ERROR : Missing module '{module_name}'. Use for example : pip install {module_name}")
-        exit(-1)
+        sys.exit(-1)
     return done
 
 # Check modules

@@ -17,7 +17,7 @@ from midi_reader import ClassThreadMidiReader
 from midi_song import states
 
 class ClassMidiMain:
-
+    """Main Midi Class"""
     keys={"key_on":0,"playback":True,"speed":0,"humanize":0}
 
     # Threads

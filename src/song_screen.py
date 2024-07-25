@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QDialog
 from ui_song_screen import Ui_SongScreenDlg
 
 class SongScreenDlg(Ui_SongScreenDlg, QDialog):
+    """"Windows with song informations"""
     midisong = None
     pParent = None
     settings = None

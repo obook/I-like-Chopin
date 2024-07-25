@@ -14,7 +14,7 @@ import shutil
 import uuid
 
 class ClassSettings:
-
+    """"Class for recall and store preferences and settings"""
     settingspath = os.path.join(os.path.expanduser("~"), ".config")
     settingsfile =  os.path.join(settingspath, "i-like-chopin.json")
     defaultmidipath = os.path.join(os.path.expanduser("~"), ".local","share","i-like-chopin","midi")

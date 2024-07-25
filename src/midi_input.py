@@ -11,6 +11,7 @@ from threading import Thread
 from midi_numbers import number_to_note
 
 class ClassThreadInput(Thread):
+    """Class for input midi to device"""
     in_device = None
     in_port = None
     out_port = None
