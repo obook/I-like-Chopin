@@ -1,4 +1,5 @@
 digraph {
+        bgcolor="#999999";
         splines=false;
         ranksep=0.5;
         fontname="Helvetica,Arial,sans-serif";
