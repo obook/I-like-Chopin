@@ -35,12 +35,12 @@ class SongScreenDlg(Ui_SongScreenDlg, QDialog):
         self.midisong = midisong
         self.textBrowser.clear()
 
-        if not self.midisong.Active() and not self.midisong.ready:
-            color = '#993333'
-        elif not self.midisong.ready:
+        if self.midisong.IsState('cueing'):
             color = '#999900'
-        else:
+        elif self.midisong.IsState('playing'):
             color = '#339933'
+        else:
+            color = '#993333'
 
         header_style = f" style='color:{color};background-color:#333333;font-size: 32px;text-transform: uppercase;' "
 
@@ -54,9 +54,11 @@ class SongScreenDlg(Ui_SongScreenDlg, QDialog):
         text = ""
         text += f"<p{header_style}>{name}</p>"
         text += f"<span{text_style}>Duration : {minutes} minutes {seconds} seconds</span>"
+
         if self.midisong.GetTracks():
             for i in range(len(self.midisong.GetTracks())):
-                text += f"<br><span{text_style}>track {i} : {self.midisong.tracks[i]}</span>"
+                text += f"<br><span{text_style}>track {i} : {self.midisong.GetTracks(i)}</span>"
+
         self.textBrowser.insertHtml(text)
         cursor = self.textBrowser.textCursor()
         cursor.setPosition(0);
@@ -78,7 +80,7 @@ class SongScreenDlg(Ui_SongScreenDlg, QDialog):
     def timer(self):
         self.Update(self.midisong)
         if self.midisong:
-            self.progressBar.setValue(self.midisong.played)
+            self.progressBar.setValue(self.midisong.GetPlayed())
 
     def closeEvent(self, event): # overwritten
         #self.settings.SaveShowSongInfo(False)

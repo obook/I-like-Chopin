@@ -20,7 +20,7 @@ from PySide6 import QtGui
 from PySide6.QtCore import QTimer
 from PySide6.QtGui import QIcon
 from midi_main import ClassMidiMain
-from midi_song import ClassMidiSong
+from midi_song import ClassMidiSong, states
 from settings import ClassSettings
 from informations import ShowInformation
 from song_screen import UpdateSongScreen
@@ -77,18 +77,6 @@ class MainWindow(QMainWindow):
         # Midi class
         self.midi = ClassMidiMain(self,self.ChannelsList)
 
-        # Datas
-        self.Inputs, self.Outputs, IOPorts = self.midi.GetDevices()
-        Input = self.settings.GetInputDevice()
-        Output = self.settings.GetOutputDevice()
-        self.MidiFiles = self.midi.GetMidiFiles()
-        self.midisong = ClassMidiSong(self.settings.GetMidifile())
-
-        # Connections
-        self.midi.ConnectInput(Input)
-        self.midi.ConnectOutput(Output)
-        self.midi.SetMidiSong(self.midisong)
-
         # Push Buttons
         self.ui.pushButton_Panic.clicked.connect(self.Panic)
         self.ui.pushButton_Quit.clicked.connect(self.Quit)
@@ -97,6 +85,10 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,30); }\n")
 
         # ComboBoxes Inputs/Outputs
+        self.Inputs, self.Outputs, IOPorts = self.midi.GetDevices()
+        Input = self.settings.GetInputDevice()
+        Output = self.settings.GetOutputDevice()
+
         self.ui.InputDeviceCombo.addItem(Input)
         self.ui.InputDeviceCombo.addItems(self.Inputs)
         self.ui.InputDeviceCombo.currentIndexChanged.connect(self.InputDeviceChanged)
@@ -138,6 +130,16 @@ class MainWindow(QMainWindow):
         # Special color for drums channel
         self.ChannelsButtonsList[9].setStyleSheet("QPushButton:checked { background-color: rgb(100,50,50); }\n")
 
+        # Datas
+        self.ChannelsList[0] = True # active first channel
+        self.MidiFiles = self.midi.GetMidiFiles()
+        self.midisong = ClassMidiSong(self.settings.GetMidifile())
+
+        # Connections
+        self.midi.ConnectInput(Input)
+        self.midi.ConnectOutput(Output)
+        self.midi.SetMidiSong(self.midisong)
+
         # Midifiles
         self.ui.FileCombo.addItems(self.MidiFiles)
         self.ui.FileCombo.setCurrentText(self.midisong.GetFilename())
@@ -151,6 +153,7 @@ class MainWindow(QMainWindow):
         timer = QTimer(self)
         timer.timeout.connect(self.timer)
         timer.start(2000)
+        #self.timer()
 
     def timer(self):
 
@@ -169,18 +172,19 @@ class MainWindow(QMainWindow):
             self.ConnectOutputState = False
 
         # A revoir : UpdateSongScreen tout le temps
-        if self.midisong.Active() and not self.midisong.ready:
-            self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_YELLOW_LED))
 
-        elif self.midisong.Active() and not self.MidifileState:
+        if self.midisong.GetState() >= states['ready']:
             self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
             self.MidifileState = True
             UpdateSongScreen(self,self.midisong)
 
-        elif not self.midisong.Active():
-            self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
-            self.MidifileState = False
-            UpdateSongScreen(self,self.midisong)
+        elif self.midisong.GetState() == states['cueing']:
+           self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_YELLOW_LED))
+
+        else:
+           self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+           self.MidifileState = False
+           UpdateSongScreen(self,self.midisong)
 
     def InputDeviceChanged(self):
         self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
@@ -209,6 +213,8 @@ class MainWindow(QMainWindow):
         UpdateSongScreen(self,self.midisong)
         self.SetWindowName()
 
+    # Channels
+
     def ChannelsNone(self):
         for n in range(len(self.ChannelsButtonsList)):
             self.ChannelsButtonsList[n].setChecked(False)
@@ -224,12 +230,25 @@ class MainWindow(QMainWindow):
         self.ChannelsButtonsList[0].setChecked(True)
         self.ReadChannels()
 
+    def ChannelsColorize(self):
+
+        for i in range(len(self.ChannelsButtonsList)):
+            self.ChannelsButtonsList[i].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); } QPushButton {color: grey}")
+
+        channels = self.midisong.GetChannels()
+        for key in channels:
+            if channels[key]:
+                self.ChannelsButtonsList[int(key)].setStyleSheet("");
+                self.ChannelsButtonsList[int(key)].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }")
+
     def ReadChannels(self):
         for n in range(len(self.ChannelsButtonsList)):
             if self.ChannelsButtonsList[n].isChecked():
                 self.ChannelsList[n] = True
             else:
                 self.ChannelsList[n] = False
+
+    # Status Bar
 
     def PrintStatusBar(self,message):
         self.ui.statusbar.showMessage(message)

@@ -13,6 +13,7 @@ from os import path
 from midi_input import ClassThreadInput
 from midi_output import ClassThreadOutput
 from midi_reader import ClassThreadMidiReader
+from midi_song import states
 import uuid
 
 class ClassMidiMain:
@@ -148,6 +149,6 @@ class ClassMidiMain:
             self.ThreadOutput = None
 
         if self.midisong:
-            self.midisong.SetActive(False)
+            self.midisong.SetState(states['unknown'])
             self.midisong = None
 

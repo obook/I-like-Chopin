@@ -6,11 +6,11 @@ Created on Wed Jun  5 18:19:14 2024
 """
 from mido import MidiFile
 from threading import Thread
-from midi_numbers import number_to_note
+#from midi_numbers import number_to_note
 import time
-import os
 import random
 import uuid
+from midi_song import states
 
 class ClassThreadMidiReader(Thread):
     midisong = None
@@ -20,8 +20,11 @@ class ClassThreadMidiReader(Thread):
     ready = False
     uuid = None
     total_notes_on = 0
+    notes_on_channels = 0
     current_notes_on = 0
     channels = None
+    channels_notes = {}
+    wait_time = 0
 
     def __init__(self,midisong,keys,channels,pParent):
         Thread.__init__( self )
@@ -40,64 +43,72 @@ class ClassThreadMidiReader(Thread):
     def SetMidiSong(self, midisong): # returns array of tracks names
 
         self.midisong = midisong
+        self.midisong.SetState(states['unknown'])
         tracks = []
         try:
             midi = MidiFile(self.midisong.Getfilepath())
-            #self.midisong.SetDuration(round(midi.length/60,2))
             self.midisong.SetDuration(midi.length/60)
             for i, track in enumerate(midi.tracks):
                 tracks.append(track.name)
 
             self.total_notes_on = 0
+            self.channels_notes = {}
+
             for msg in MidiFile(self.midisong.Getfilepath()):
                 if msg.type == 'note_on':
                     self.total_notes_on +=1
+                    if self.channels[msg.channel]:
+                        self.notes_on_channels +=1
+                    key = str(msg.channel)
+                    if not key in self.channels_notes.keys():
+                        self.channels_notes[key] = 0
+                    self.channels_notes[key] += 1
+
+            self.midisong.SetChannels(self.channels_notes)
+            self.parent.ChannelsColorize()
 
             self.midisong.SetTracks(tracks)
-            self.midisong.SetActive(True)
+            if self.notes_on_channels:
+                self.midisong.SetState(states['cueing'])
+            else:
+                print(f"MidiReader {self.uuid} NO NOTE ON MIDI CHANNELS")
         except:
             print(f"MidiReader {self.uuid} ERROR READING {self.midisong.Getfilepath()}")
             return None
 
     def SetMidiPort(self,port_out):
-        #print(f"MidiReader {self.uuid} SetMidiPort [{port_out}]")
         self.port_out = port_out
 
     def run(self):
 
-        self.midisong.ready = False
-
-        if not self.midisong.Active(): # SetMidiFile failed to get tracks, malformed midifile ?
+        if not self.midisong:
             return
 
-        if self.midisong:
-            if not os.path.isfile(self.midisong.Getfilepath()):
-                print("MidiReader {self.uuid} midisong [{self.midisong.Getfilepath()}] not found")
-                return
-
-        self.midisong.SetActive(True)
+        if not self.midisong.IsState('cueing'):
+            return
 
         for msg in MidiFile(self.midisong.Getfilepath()):
 
             # Stop while running ?
-            if self.midisong:
-                if not self.midisong.Active():
-                    self.stop()
-                    return
+            if not self.midisong:
+                return
 
-            # Note Time
-            if self.midisong.ready:
+            if self.midisong.GetState() < states['cueing']:
+                self.stop()
+                return
+
+            # Wait note time
+            if self.midisong.IsState('playing') and msg.time > self.wait_time:
                 time.sleep(msg.time)
 
             if msg.type == 'note_on':
-                #print(f"MidiReader {self.uuid} note_on msg.channel {msg.channel} self.midisong.ready {self.midisong.ready}")
                 # First note on channels selected
-                if self.channels[msg.channel] and not self.midisong.ready:
+                if self.channels[msg.channel] and not self.midisong.IsState('playing'):
                     print(f"MidiReader {self.uuid} ready")
-                    self.midisong.ready = True
+                    self.midisong.SetState(states['playing'])
 
                 # Stats
-                self.midisong.played = int(100*self.current_notes_on/self.total_notes_on)
+                self.midisong.SetPlayed(int(100*self.current_notes_on/self.total_notes_on))
                 self.current_notes_on += 1
 
                 # Humanize controlled by knob, see midi_input
@@ -109,11 +120,12 @@ class ClassThreadMidiReader(Thread):
                 # Speed controlled by knob, see midi_input
                 msg.time = msg.time + self.keys['speed']/2000 + human
 
-            if not self.midisong.ready:
+            if self.midisong.IsState('cueing'):
                 msg.time = 0
 
             # Pause ?
-            if msg.type == 'note_on' and self.midisong.ready:
+            if msg.type == 'note_on' and self.midisong.IsState('playing'):
+                start_time = time.time()
                 while not self.keys['key_on']: # Loop waiting keyboard
 
                     if not self.channels[msg.channel]:
@@ -123,11 +135,14 @@ class ClassThreadMidiReader(Thread):
                             self.stop()
                             return
 
-                    if not self.midisong.Active():
+                    if not self.midisong.IsState('playing'):
                         self.stop()
                         return
 
                     time.sleep(0.001) # for loop
+
+                # Wait a key how much time ?
+                self.wait_time = time.time() - start_time
 
             # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
             if msg.type == 'program_change' and self.settings.GetForceIntrument():
@@ -142,14 +157,13 @@ class ClassThreadMidiReader(Thread):
                 # print("ERROR->ClassThreadMidiFile:port_out.send type=", type(self.port_out), "msg=", msg)
                 pass
 
-        # End of song
-        self.midisong.played = 100
+        # End of song 
+        self.midisong.SetPlayed(100)
         self.stop()
 
     def stop(self):
-        # print(f"MidiReader {self.uuid} stop")
+        print(f"MidiReader {self.uuid} stop")
         if self.midisong:
-            self.midisong.SetActive(False)
-            self.midisong.ready = False
+            self.midisong.SetState(states['ended'])
         self.port_out = None
 
