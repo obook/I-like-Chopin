@@ -1,0 +1,28 @@
+digraph {
+        bgcolor="#999999";
+        splines=false;
+        ranksep=0.5;
+        fontname="Helvetica,Arial,sans-serif";
+        node[shape=box, color=black, style=filled, fillcolor=white];
+        edge [fontname="Helvetica,Arial,sans-serif", color=black];
+
+        subgraph cluster_0 {
+                label = "Computer";
+                color=blue;
+                MIDIFILE [label="Midi File"];
+                ILC [label="I-Like-Chopin"];
+
+        }
+
+        MIDIFILE -> ILC
+
+
+        subgraph cluster_1 {
+                label = "Physical";
+                color=red;
+                KEYBOARD[label="Daw Mode Keyboard"];
+        }
+
+        KEYBOARD -> ILC [label="",style="dotted"];
+        ILC -> KEYBOARD [label="",labeljust=l,style="dotted"];
+}
