@@ -15,7 +15,7 @@ states = {
 }
 
 class ClassMidiSong:
-    """"Class about midifile informations"""
+    """Class about midifile informations"""
     __filepath = None
     __duration = 0
     __played = 0 #percent

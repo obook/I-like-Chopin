@@ -9,7 +9,7 @@ import sys
 from mainwindow import start
 
 def is_module_available(module_name, quit=True, default=None):
-    """Tool for check dependances"""
+    """Tool for check dependencies"""
     if sys.version_info < (3, 0):
         # python 2
         import importlib

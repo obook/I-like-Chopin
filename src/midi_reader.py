@@ -14,7 +14,7 @@ from mido import MidiFile
 from midi_song import states
 
 class ClassThreadMidiReader(Thread):
-    """" Read midifile and send to output device"""
+    """Read midifile and send to output device"""
     midisong = None
     keys = None
     port_out = None
