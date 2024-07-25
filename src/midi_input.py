@@ -4,10 +4,11 @@
 Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
+import uuid
+
 from mido import open_input
 from threading import Thread
 from midi_numbers import number_to_note
-import uuid
 
 class ClassThreadInput(Thread):
     in_device = None

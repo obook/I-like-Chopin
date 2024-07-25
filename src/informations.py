@@ -5,9 +5,10 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 
+import platform
+
 from PySide6.QtWidgets import QDialog
 from ui_informations import Ui_DialogInformation
-import platform
 
 class InformationsDlg(Ui_DialogInformation, QDialog):
     pParent = None

@@ -4,12 +4,13 @@
 Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
-from mido import MidiFile
-from threading import Thread
-#from midi_numbers import number_to_note
 import time
 import random
 import uuid
+from threading import Thread
+
+from mido import MidiFile
+#from midi_numbers import number_to_note
 from midi_song import states
 
 class ClassThreadMidiReader(Thread):

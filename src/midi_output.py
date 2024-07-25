@@ -4,9 +4,10 @@
 Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
+import uuid
+
 from threading import Thread
 from mido import open_output, Message
-import uuid
 
 class ClassThreadOutput(Thread):
     out_device = None

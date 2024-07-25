@@ -5,16 +5,16 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 
-import mido
+from os import path
 import glob
 import platform
+import uuid
 
-from os import path
+import mido
 from midi_input import ClassThreadInput
 from midi_output import ClassThreadOutput
 from midi_reader import ClassThreadMidiReader
 from midi_song import states
-import uuid
 
 class ClassMidiMain:
 

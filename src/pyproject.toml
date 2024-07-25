@@ -15,3 +15,6 @@ pyside6 = "^6.7.2"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.main]
+extension-pkg-whitelist = ["PySide6"]
