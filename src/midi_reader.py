@@ -111,14 +111,14 @@ class ClassThreadMidiReader(Thread):
                 self.midisong.SetPlayed(int(100*self.current_notes_on/self.total_notes_on))
                 self.current_notes_on += 1
 
-                # Humanize controlled by knob, see midi_input
-                if self.keys['humanize']:
+                # Delay
+
+                if self.keys['humanize']: # Humanize controlled by knob, see midi_input
                     human = random.randrange(0,self.keys['humanize'],1)/2000
                 else:
                     human = 0
 
-                # Speed controlled by knob, see midi_input
-                msg.time = msg.time + self.keys['speed']/2000 + human
+                time.sleep(self.keys['speed']/2000 + human) # Speed controlled by knob, see midi_input
 
             if self.midisong.IsState('cueing'):
                 msg.time = 0
