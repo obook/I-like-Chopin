@@ -14,6 +14,7 @@
         "song_screen.ui",
         "song_screen.py",
         "midi_song.py",
-        "web_server.py"
+        "web_server.py",
+        "web_interfaces.py"
     ]
 }
