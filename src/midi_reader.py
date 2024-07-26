@@ -164,7 +164,7 @@ class ClassThreadMidiReader(Thread):
         self.stop()
 
     def stop(self):
-        print(f"MidiReader {self.uuid} stop")
+        # print(f"MidiReader {self.uuid} stop")
         if self.midisong:
             self.midisong.SetState(states['ended'])
         self.port_out = None

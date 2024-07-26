@@ -24,8 +24,7 @@ from midi_song import ClassMidiSong, states
 from settings import ClassSettings
 from informations import ShowInformation
 from song_screen import UpdateSongScreen
-#from web_server import ClassThreadWebServer
-from web_server import ClassWebServer
+from web_server import ClassWebServer, server_interfaces
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -152,6 +151,7 @@ class MainWindow(QMainWindow):
 
         # Web server
         self.web_server = ClassWebServer(self)
+        self.server_interfaces= self.web_server.GetInterfaces()
         self.web_server.start()
 
         # Timer

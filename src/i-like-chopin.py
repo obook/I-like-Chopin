@@ -34,5 +34,6 @@ is_module_available('PySide6')
 is_module_available('mido')
 if not is_module_available('python-rtmidi', False):
     is_module_available('rtmidi', True, 'python-rtmidi')
-
+#is_module_available('socket')
+#is_module_available('netifaces', True, 'netifaces2')
 start()
