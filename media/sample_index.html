@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<style>
+
+body {
+    background-color:#000000;
+    overflow-wrap: break-word;
+}
+
+.title{
+    font-size: calc(.5em + 3vw);
+    color:#339933;
+    background-color:#333333;
+    text-transform: uppercase;
+}
+
+.folder{
+    color:#fdf6f6;
+    font-size: calc(.5em + 2vw);
+    background-color:#333333;
+    text-transform: uppercase;
+}
+
+.song{
+    color:#fdf6f6;
+    font-size: calc(.5em + 2vw);
+    background-color:#333333;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.song a{
+    font-size: calc(.5em + 2vw);
+    color:#333333;
+    background-color:#fdf6f6;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.container {
+    display: flex;
+    flex-wrap: nowrap; 
+    /* OU wrap;
+    OU wrap-reverse; */
+}
+
+</style>
+</head>
+<body>
+<h1><div class='title'>SELECT XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX007</div></h1>
+<div class=".container">
+    <div class='folder'>CHOPIN</div> <div class='song'><a href='?name={midifile}'>MUSIC 1</a></div>
+    <div class='folder'>BREL</div>  <div class='song'><a href='?name={midifile}'>MUSIC 2</a></div>
+    <div class='folder'>MOZART</div> <div class='song'><a href='?name={midifile}'>MUSIC 3</a></div>
+</div>
+</body></html>
