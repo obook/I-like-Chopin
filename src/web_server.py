@@ -98,12 +98,16 @@ class Handler(BaseHTTPRequestHandler):
         <body>
         '''
 
-        html += f"<h1><span class='title'>{os.path.basename(name)}</span></h1>"
+        name = os.path.basename(name)
+        name = name.replace('_',' ')
+        name = name.replace('-',' ')
+
+        html += f"<h1><span class='title'>{pathlib.Path(name).stem}</span></h1>"
 
         html +="<div class='.container'>"
         for midifile in server_midifiles:
             path = pathlib.PurePath(midifile)
-            html += f"<div class='folder'>{path.parent.name}</div> <div class='song'><a href='?name={midifile}'>{os.path.basename(midifile)}</a></div>"
+            html += f"<div class='folder'>{path.parent.name}</div> <div class='song'><a href='?name={midifile}'>&nbsp;{pathlib.Path(midifile).stem}&nbsp; </a></div>"
         html += "</div>"
 
         html += "</body></html>"
