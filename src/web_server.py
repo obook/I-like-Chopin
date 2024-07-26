@@ -49,7 +49,7 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
         color = '#339933'
         header_style = f" style='color:{color};background-color:#333333;font-size: 32px;text-transform: uppercase;' "
         text_style = " style='font-size: 18px;' "
-        html = f"<html><head></head><body><h1><span{header_style}>SELECT {name}</span></h1>"
+        html = f"<!DOCTYPE html><html><head><meta charset='utf-8'></head><body><h1><span{header_style}>SELECT {name}</span></h1>"
 
         for midifile in midifiles:
             html += f"<span{text_style}><a href='?name={midifile}'>{midifile}</a></span><br>"
