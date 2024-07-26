@@ -24,6 +24,7 @@ from midi_song import ClassMidiSong, states
 from settings import ClassSettings
 from informations import ShowInformation
 from song_screen import UpdateSongScreen
+from web_server import ClassThreadWebServer
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -147,6 +148,10 @@ class MainWindow(QMainWindow):
 
         # Drop file
         self.ui.FileCombo.installEventFilter(self)
+
+        # Web server
+        self.web_server = ClassThreadWebServer(self)
+        self.web_server.start()
 
         # Timer
         # UpdateSongScreen(self,self.midisong)
@@ -302,10 +307,19 @@ class MainWindow(QMainWindow):
     # End
 
     def closeEvent(self, event): # overwritten
-        self.midi.quit()
+        #self.midi.quit()
+        self.Quit()
 
     def Quit(self):
-        self.midi.quit()
+
+        if self.midi:
+            self.midi.quit()
+        self.midi = None
+
+        if self.web_server:
+            self.web_server.quit()
+        self.web_server = None
+
         app.quit()
 
 def start():
