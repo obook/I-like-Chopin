@@ -22,3 +22,6 @@ Requirements:
 * PySide6==6.7.1
 
 Soundfont used : https://musical-artifacts.com/artifacts/4161
+
+Thanks to [cyri11e](https://github.com/cyri11e)  for the tests on MacOS
+
