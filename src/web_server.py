@@ -61,6 +61,8 @@ class Handler(BaseHTTPRequestHandler):
             color:#339933;
             background-color:#333333;
             text-transform: uppercase;
+            border-radius: 10px;
+            text-indent:5px;
         }
 
         .folder{
@@ -84,6 +86,7 @@ class Handler(BaseHTTPRequestHandler):
             background-color:#fdf6f6;
             text-transform: uppercase;
             text-decoration: none;
+            border-radius: 10px;
         }
 
         .container {
@@ -98,16 +101,19 @@ class Handler(BaseHTTPRequestHandler):
         <body>
         '''
 
-        name = os.path.basename(name)
+        name = pathlib.Path(name).stem # os.path.basename(name)
         name = name.replace('_',' ')
         name = name.replace('-',' ')
 
-        html += f"<h1><span class='title'>{pathlib.Path(name).stem}</span></h1>"
+        html += f"<h1><div class='title'>&nbsp;{name}&nbsp;</div></h1>"
 
         html +="<div class='.container'>"
         for midifile in server_midifiles:
             path = pathlib.PurePath(midifile)
-            html += f"<div class='folder'>{path.parent.name}</div> <div class='song'><a href='?name={midifile}'>&nbsp;{pathlib.Path(midifile).stem}&nbsp; </a></div>"
+            name = pathlib.Path(midifile).stem
+            name = name.replace('_',' ')
+            name = name.replace('-',' ')
+            html += f"<div class='folder'>{path.parent.name}</div> <div class='song'><a href='?name={midifile}'> &nbsp; {name} &nbsp; </a></div>"
         html += "</div>"
 
         html += "</body></html>"
