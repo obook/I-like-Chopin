@@ -15,14 +15,7 @@ digraph {
         }
 
         MIDIFILE -> ILC
-
-
-        subgraph cluster_1 {
-                label = "Physical";
-                color=red;
-                KEYBOARD[label="Daw Mode Keyboard"];
-        }
-
-        KEYBOARD -> ILC [label="",style="dotted"];
-        ILC -> KEYBOARD [label="",labeljust=l,style="dotted"];
+        KEYBOARD[label="", image="Pianos_keyboard.png"];
+        KEYBOARD -> ILC [label="MIDI",style="dotted"];
+        ILC -> KEYBOARD [label="IN/OUT",labeljust=l,style="dotted"];
 }
