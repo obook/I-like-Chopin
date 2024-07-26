@@ -5,7 +5,7 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 
-from os import path
+import os
 import glob
 import platform
 import uuid
@@ -91,8 +91,8 @@ class ClassMidiMain:
     # List of midifiles from folder midi (see json file created)
     def GetMidiFiles(self):
         midifiles = []
-        for file in sorted(glob.glob(self.settings.GetMidiPath()+"/*.mid")):
-            midifiles.append(path.basename(file))
+        for file in sorted(glob.glob(os.path.join(self.settings.GetMidiPath(),"*.mid"))):
+            midifiles.append(os.path.basename(file))
         return midifiles
 
     def SetMidiSong(self, midisong):
