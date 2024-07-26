@@ -23,7 +23,7 @@ class ClassMidiMain:
     # Threads
     ThreadInput = None
     ThreadOutput = None
-    ThreadMidiFile = None
+    ThreadMidiReader = None
 
     midisong = None
     channels = None
@@ -99,22 +99,22 @@ class ClassMidiMain:
         self.midisong = midisong
         self.pParent.SetWindowName()
 
-        if self.ThreadMidiFile:
-            self.ThreadMidiFile.stop()
-            self.ThreadMidiFile = None
+        if self.ThreadMidiReader:
+            self.ThreadMidiReader.stop()
+            self.ThreadMidiReader = None
 
-        self.ThreadMidiFile = ClassThreadMidiReader(self.midisong, self.keys, self.channels,self.pParent)
-        tracks = self.ThreadMidiFile.SetMidiSong(self.midisong)
+        self.ThreadMidiReader = ClassThreadMidiReader(self.midisong, self.keys, self.channels,self.pParent)
+        tracks = self.ThreadMidiReader.SetMidiSong(self.midisong)
 
         if self.ThreadOutput:
             port = self.ThreadOutput.getport()
-            self.ThreadMidiFile.SetMidiPort(port)
-            self.ThreadMidiFile.start()
+            self.ThreadMidiReader.SetMidiPort(port)
+            self.ThreadMidiReader.start()
 
         return tracks # array of tracks names
 
     def Playback(self):
-        self.ThreadMidiFile.start()
+        self.ThreadMidiReader.start()
         pass
 
     def Mode(self, playback=True):
@@ -123,9 +123,9 @@ class ClassMidiMain:
         self.keys['playback']= playback
 
     def Stop(self):
-        if self.ThreadMidiFile :
-            self.ThreadMidiFile.quit()
-            self.ThreadMidiFile = None
+        if self.ThreadMidiReader :
+            self.ThreadMidiReader.stop()
+            self.ThreadMidiReader = None
 
     def Panic(self):
         if self.ThreadOutput:
@@ -134,10 +134,10 @@ class ClassMidiMain:
         self.pParent.PrintStatusBar("")
 
     def quit(self):
-        if self.ThreadMidiFile:
-            self.ThreadMidiFile.SetMidiPort(None) # stop send
-            self.ThreadMidiFile.stop()
-            self.ThreadMidiFile = None
+        if self.ThreadMidiReader:
+            self.ThreadMidiReader.SetMidiPort(None) # stop send
+            self.ThreadMidiReader.stop()
+            self.ThreadMidiReader = None
 
         if self.ThreadInput:
             self.ThreadInput.stop()
