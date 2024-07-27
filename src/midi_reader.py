@@ -178,7 +178,7 @@ class ClassThreadMidiReader(Thread):
                     self.port_out.send(msg)
             except:
                 if not self.port_out:
-                    print(f"/!\ClassThreadMidiFile : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]")
+                    print(f"/!\MidiReader : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]")
                 # if not msg.type in filter:
                 #    print(f"/!\ClassThreadMidiFile : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]")
 
