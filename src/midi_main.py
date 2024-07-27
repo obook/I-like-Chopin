@@ -14,7 +14,6 @@ import mido
 from midi_input import ClassThreadInput
 from midi_output import ClassThreadOutput
 from midi_reader import ClassThreadMidiReader
-from midi_song import states
 
 class ClassMidiMain:
     """Main Midi Class"""
@@ -23,11 +22,11 @@ class ClassMidiMain:
     # Threads
     ThreadInput = None
     ThreadOutput = None
-    ThreadMidiFile = None
+    ThreadMidiReader = None
 
     midisong = None
     channels = None
-    uuid = None
+    uuid = uuid.uuid4()
 
     settings = None
 
@@ -35,7 +34,6 @@ class ClassMidiMain:
         self.pParent = pParent
         self.settings = self.pParent.settings
         self.channels = channels
-        self.uuid = uuid.uuid4()
         print(f"MidiMain {self.uuid} created")
 
     def __del__(self):
@@ -77,11 +75,17 @@ class ClassMidiMain:
 
     def ConnectOutput(self, out_device):
 
-        if self.ThreadOutput:
-            self.ThreadOutput.stop()
+        if self.ThreadMidiReader:
+            self.ThreadMidiReader.SetMidiPort(None)
 
-        self.ThreadOutput = ClassThreadOutput(out_device, self.keys, self.pParent)
-        self.port_out = self.ThreadOutput.start()
+        self.ThreadOutput = ClassThreadOutput(out_device, self.pParent)
+        self.ThreadOutput.start()
+        self.port_out = self.ThreadOutput.getport() # dans certains cas, retourne None
+        if not self.port_out:
+            print(f"/!\ MidiMain {self.uuid} ThreadOutput.getport NONE")
+
+        if self.ThreadMidiReader:
+            self.ThreadMidiReader.SetMidiPort(self.port_out)
 
     def ConnectOutputState(self):
         if self.ThreadOutput:
@@ -95,26 +99,31 @@ class ClassMidiMain:
             midifiles.append(os.path.basename(file))
         return midifiles
 
-    def SetMidiSong(self, midisong):
-        self.midisong = midisong
-        self.pParent.SetWindowName()
+    def SetMidiSong(self, midifile):
 
-        if self.ThreadMidiFile:
-            self.ThreadMidiFile.stop()
-            self.ThreadMidiFile = None
+        if self.ThreadMidiReader:
+            self.ThreadMidiReader.stop()
+            self.ThreadMidiReader = None
 
-        self.ThreadMidiFile = ClassThreadMidiReader(self.midisong, self.keys, self.channels,self.pParent)
-        tracks = self.ThreadMidiFile.SetMidiSong(self.midisong)
+        self.ThreadMidiReader = ClassThreadMidiReader(midifile, self.keys, self.channels,self.pParent)
+        self.midisong = self.ThreadMidiReader.LoadMidiSong() # Crash ?
 
         if self.ThreadOutput:
             port = self.ThreadOutput.getport()
-            self.ThreadMidiFile.SetMidiPort(port)
-            self.ThreadMidiFile.start()
+            self.ThreadMidiReader.SetMidiPort(port)
+            self.ThreadMidiReader.start()
 
-        return tracks # array of tracks names
+        self.pParent.SetWindowName()
+
+        return self.midisong
+
+    def GetMidiSong(self):
+        if not self.ThreadMidiReader:
+            return None
+        return self.ThreadMidiReader.midisong
 
     def Playback(self):
-        self.ThreadMidiFile.start()
+        self.ThreadMidiReader.start()
         pass
 
     def Mode(self, playback=True):
@@ -123,9 +132,9 @@ class ClassMidiMain:
         self.keys['playback']= playback
 
     def Stop(self):
-        if self.ThreadMidiFile :
-            self.ThreadMidiFile.quit()
-            self.ThreadMidiFile = None
+        if self.ThreadMidiReader :
+            self.ThreadMidiReader.stop()
+            self.ThreadMidiReader = None
 
     def Panic(self):
         if self.ThreadOutput:
@@ -134,10 +143,10 @@ class ClassMidiMain:
         self.pParent.PrintStatusBar("")
 
     def quit(self):
-        if self.ThreadMidiFile:
-            self.ThreadMidiFile.SetMidiPort(None) # stop send
-            self.ThreadMidiFile.stop()
-            self.ThreadMidiFile = None
+        if self.ThreadMidiReader:
+            self.ThreadMidiReader.SetMidiPort(None) # stop send
+            self.ThreadMidiReader.stop()
+            self.ThreadMidiReader = None
 
         if self.ThreadInput:
             self.ThreadInput.stop()
@@ -147,8 +156,3 @@ class ClassMidiMain:
             self.ThreadOutput.panic()
             self.ThreadOutput.stop()
             self.ThreadOutput = None
-
-        if self.midisong:
-            self.midisong.SetState(states['unknown'])
-            self.midisong = None
-

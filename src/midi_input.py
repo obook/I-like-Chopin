@@ -12,13 +12,13 @@ from midi_numbers import number_to_note
 
 class ClassThreadInput(Thread):
     """Class for input midi to device"""
+    uuid = uuid.uuid4()
     in_device = None
     in_port = None
     out_port = None
     pParent = None
     settings = None
     running = False
-    uuid = None
 
     def __init__(self, in_device, keys, pParent):
         Thread.__init__( self )
@@ -27,7 +27,6 @@ class ClassThreadInput(Thread):
         self.in_device = in_device
         self.keys = keys
         self.running = True
-        self.uuid = uuid.uuid4()
         print(f"MidiInput {self.uuid} created [{self.in_device}]")
 
     def __del__(self):

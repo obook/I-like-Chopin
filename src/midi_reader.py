@@ -11,16 +11,16 @@ from threading import Thread
 
 from mido import MidiFile
 #from midi_numbers import number_to_note
-from midi_song import states
+from midi_song import ClassMidiSong, states
 
 class ClassThreadMidiReader(Thread):
     """Read midifile and send to output device"""
+    uuid = uuid.uuid4()
     midisong = None
     keys = None
     port_out = None
     settings = None
     ready = False
-    uuid = None
     total_notes_on = 0
     notes_on_channels = 0
     current_notes_on = 0
@@ -28,30 +28,32 @@ class ClassThreadMidiReader(Thread):
     channels_notes = {}
     wait_time = 0
 
-    def __init__(self,midisong,keys,channels,pParent):
+    def __init__(self,midifile,keys,channels,pParent):
         Thread.__init__( self )
         self.parent = pParent
         self.settings = self.parent.settings
-        self.midisong = midisong
+        self.midisong = ClassMidiSong(midifile)
+        self.midisong.SetState(states['unknown'])
         self.keys = keys
         self.channels = channels
-        self.uuid = uuid.uuid4()
-        print(f"MidiReader {self.uuid} created [{self.midisong.GetFilename()}]")
+        print(f"MidiReader {self.uuid} created [{self.midisong.Getfilepath()}]")
 
     def __del__(self):
-        print(f"MidiReader {self.uuid} destroyed [{self.midisong.GetFilename()}]")
-        self.midisong = None
+        print(f"MidiReader {self.uuid} destroyed [{self.midisong.Getfilepath()}]")
 
-    def SetMidiSong(self, midisong): # returns array of tracks names
-
-        self.midisong = midisong
-        self.midisong.SetState(states['unknown'])
+    def LoadMidiSong(self): # not used
+        if not self.midisong:
+            return
         tracks = []
+
         try:
+
             midi = MidiFile(self.midisong.Getfilepath())
             self.midisong.SetDuration(midi.length/60)
             for i, track in enumerate(midi.tracks):
                 tracks.append(track.name)
+
+            self.midisong.SetTracks(tracks)
 
             self.total_notes_on = 0
             self.channels_notes = {}
@@ -67,16 +69,17 @@ class ClassThreadMidiReader(Thread):
                     self.channels_notes[key] += 1
 
             self.midisong.SetChannels(self.channels_notes)
-            self.parent.ChannelsColorize()
+            # self.parent.ChannelsColorize()
 
-            self.midisong.SetTracks(tracks)
             if self.notes_on_channels:
                 self.midisong.SetState(states['cueing'])
             else:
                 print(f"MidiReader {self.uuid} NO NOTE ON MIDI CHANNELS")
         except:
+            self.midisong.SetState(states['bad'])
             print(f"MidiReader {self.uuid} ERROR READING {self.midisong.Getfilepath()}")
-            return None
+
+        return self.midisong
 
     def SetMidiPort(self,port_out):
         self.port_out = port_out
@@ -148,23 +151,43 @@ class ClassThreadMidiReader(Thread):
 
             # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
             if msg.type == 'program_change' and self.settings.GetForceIntrument():
-                if msg.channel != 10: # not for drums
+                if msg.channel != 9: # not for drums
                     msg.program = self.settings.GetPianoProgram()
 
             # Play
+            filter =[
+            'program_change',
+            'sysex',
+            'text',
+            'track_name',
+            'set_tempo',
+            'time_signature',
+            'key_signature',
+            'midi_port',
+            'sequencer_specific',
+            'copyright',
+            'cue_marker',
+            'marker',
+            'smpte_offset',
+            'lyrics',
+            'end_of_track',
+            'instrument_name'
+            ]
             try: # meta messages can't be send to ports
-                if self.channels[msg.channel] or msg.type == 'program_change':
+                if self.channels[msg.channel] or msg.type == 'program_change' and self.port_out:
                     self.port_out.send(msg)
             except:
-                # print("ERROR->ClassThreadMidiFile:port_out.send type=", type(self.port_out), "msg=", msg)
-                pass
+                if not self.port_out:
+                    print(f"/!\ClassThreadMidiFile : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]")
+                # if not msg.type in filter:
+                #    print(f"/!\ClassThreadMidiFile : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]")
 
         # End of song 
         self.midisong.SetPlayed(100)
         self.stop()
 
     def stop(self):
-        print(f"MidiReader {self.uuid} stop")
+        # print(f"MidiReader {self.uuid} stop")
         if self.midisong:
             self.midisong.SetState(states['ended'])
         self.port_out = None
