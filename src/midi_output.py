@@ -37,9 +37,9 @@ class ClassThreadOutput(Thread):
         self.forcePiano()
 
     def forcePiano(self):
-        print(f"MidiOutput {self.uuid} forcePiano")
         if self.outport :
             if self.settings.GetForceIntrument():
+                print(f"MidiOutput {self.uuid} forcePiano")
                 init_message = Message('program_change')
                 # TODO : select bank 0 by control_change
                 # See https://music.stackexchange.com/questions/95786/how-do-you-implement-control-change-messages-using-the-mido-library

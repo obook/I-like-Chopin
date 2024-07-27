@@ -177,9 +177,10 @@ class ClassThreadMidiReader(Thread):
                 if self.channels[msg.channel] or msg.type == 'program_change' and self.port_out:
                     self.port_out.send(msg)
             except:
-                if not msg.type in filter:
+                if not self.port_out:
                     print(f"/!\ClassThreadMidiFile : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]")
-                pass
+                # if not msg.type in filter:
+                #    print(f"/!\ClassThreadMidiFile : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]")
 
         # End of song 
         self.midisong.SetPlayed(100)
