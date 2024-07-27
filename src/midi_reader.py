@@ -45,37 +45,39 @@ class ClassThreadMidiReader(Thread):
         if not self.midisong:
             return
         tracks = []
-        #try:
-        midi = MidiFile(self.midisong.Getfilepath())
-        self.midisong.SetDuration(midi.length/60)
-        for i, track in enumerate(midi.tracks):
-            tracks.append(track.name)
 
-        self.midisong.SetTracks(tracks)
+        try:
 
-        self.total_notes_on = 0
-        self.channels_notes = {}
+            midi = MidiFile(self.midisong.Getfilepath())
+            self.midisong.SetDuration(midi.length/60)
+            for i, track in enumerate(midi.tracks):
+                tracks.append(track.name)
 
-        for msg in MidiFile(self.midisong.Getfilepath()):
-            if msg.type == 'note_on':
-                self.total_notes_on +=1
-                if self.channels[msg.channel]:
-                    self.notes_on_channels +=1
-                key = str(msg.channel)
-                if not key in self.channels_notes.keys():
-                    self.channels_notes[key] = 0
-                self.channels_notes[key] += 1
+            self.midisong.SetTracks(tracks)
 
-        self.midisong.SetChannels(self.channels_notes)
-        # self.parent.ChannelsColorize()
+            self.total_notes_on = 0
+            self.channels_notes = {}
 
-        if self.notes_on_channels:
-            self.midisong.SetState(states['cueing'])
-        else:
-            print(f"MidiReader {self.uuid} NO NOTE ON MIDI CHANNELS")
-        #except:
-        #    self.midisong.SetState(states['bad'])
-        #   print(f"MidiReader {self.uuid} ERROR READING {self.midisong.Getfilepath()}")
+            for msg in MidiFile(self.midisong.Getfilepath()):
+                if msg.type == 'note_on':
+                    self.total_notes_on +=1
+                    if self.channels[msg.channel]:
+                        self.notes_on_channels +=1
+                    key = str(msg.channel)
+                    if not key in self.channels_notes.keys():
+                        self.channels_notes[key] = 0
+                    self.channels_notes[key] += 1
+
+            self.midisong.SetChannels(self.channels_notes)
+            # self.parent.ChannelsColorize()
+
+            if self.notes_on_channels:
+                self.midisong.SetState(states['cueing'])
+            else:
+                print(f"MidiReader {self.uuid} NO NOTE ON MIDI CHANNELS")
+        except:
+            self.midisong.SetState(states['bad'])
+            print(f"MidiReader {self.uuid} ERROR READING {self.midisong.Getfilepath()}")
 
         return self.midisong
 
