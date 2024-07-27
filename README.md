@@ -24,3 +24,5 @@ Requirements:
 Soundfont used : https://musical-artifacts.com/artifacts/4161
 
 Some other SoundFonts : https://sites.google.com/site/soundfonts4u/
+
+Thank you to [cyri11e](https://github.com/cyri11e) for carrying out the program tests on MacOS and for his great patience.
