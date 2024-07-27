@@ -46,6 +46,12 @@ class ClassMidiSong:
     def GetName(self): # without extension, eg : toto
         return Path(self.__filepath).stem
 
+    def GetCleanName(self): # without extension, eg : toto
+        name = self.GetName()
+        name = name.replace('_',' ')
+        name = name.replace('-',' ')
+        return name.upper()
+
     def SetDuration(self, duration):
         self.__duration = duration # in minutes
 
