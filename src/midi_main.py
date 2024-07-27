@@ -113,23 +113,9 @@ class ClassMidiMain:
             self.ThreadMidiReader.SetMidiPort(port)
             self.ThreadMidiReader.start()
 
-        '''
-
-
-
-
-
-
-
-
-        if self.ThreadOutput:
-            port = self.ThreadOutput.getport()
-            self.ThreadMidiReader.SetMidiPort(port)
-            self.ThreadMidiReader.start()
-        '''
         self.pParent.SetWindowName()
 
-        return self.midisong  # array of tracks names
+        return self.midisong
 
     def GetMidiSong(self):
         if not self.ThreadMidiReader:
@@ -170,8 +156,3 @@ class ClassMidiMain:
             self.ThreadOutput.panic()
             self.ThreadOutput.stop()
             self.ThreadOutput = None
-        '''
-        if self.midisong:
-            self.midisong.SetState(states['unknown'])
-            self.midisong = None
-        '''
