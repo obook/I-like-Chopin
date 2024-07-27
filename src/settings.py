@@ -15,6 +15,7 @@ import uuid
 
 class ClassSettings:
     """Class for recall and store preferences and settings"""
+    uuid = uuid.uuid4()
     settingspath = os.path.join(os.path.expanduser("~"), ".config")
     settingsfile =  os.path.join(settingspath, "i-like-chopin.json")
     defaultmidipath = os.path.join(os.path.expanduser("~"), ".local","share","i-like-chopin","midi")
@@ -28,10 +29,7 @@ class ClassSettings:
     "PianoProgram":0,
     "ShowSongInfo":False}
 
-    uuid = None
-
     def __init__(self):
-        self.uuid = uuid.uuid4()
         self.application_path = os.path.dirname(os.path.realpath(__file__))
         print(f"Settings {self.uuid} reading [{self.settingsfile}]")
         if not os.path.isdir(self.settingspath):

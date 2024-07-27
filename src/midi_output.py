@@ -11,18 +11,15 @@ from mido import open_output, Message
 
 class ClassThreadOutput(Thread):
     """Class for output midi to device"""
+    uuid =  uuid.uuid4()
     out_device = None
     outport = None
-    uuid = None
     settings = None
 
-    def __init__(self, out_device, keys, pParent):
+    def __init__(self, out_device, pParent):
         Thread.__init__( self )
-        self.pParent = pParent
-        self.settings = self.pParent.settings
+        self.settings = pParent.settings
         self.out_device = out_device
-        self.keys = keys
-        self.uuid = uuid.uuid4()
         print(f"MidiOutput {self.uuid} created [{self.out_device}]")
 
     def __del__(self):
@@ -34,27 +31,26 @@ class ClassThreadOutput(Thread):
             self.outport = open_output(self.out_device,autoreset=True)
         except:
             self.outport = None
-            print(f"MidiOutput {self.uuid} midi_output open [{self.out_device}] ERROR")
-            return
+            print(f"/!\MidiOutput {self.uuid} midi_output open [{self.out_device}] ERROR")
 
         # Set all channels to Piano ('Acoustic Grand Piano') if set
         self.forcePiano()
 
-        return self.outport
-
     def forcePiano(self):
-        if self.settings.GetForceIntrument():
-            init_message = Message('program_change')
-            # TODO : select bank 0 by control_change
-            # See https://music.stackexchange.com/questions/95786/how-do-you-implement-control-change-messages-using-the-mido-library
-            init_message.program = self.settings.GetPianoProgram() # Bank 0 Intrument 0
-            for i in range(16):
-                init_message.channel = i
-                if i != 10 : # not for drums
-                    try:
-                        self.outport.send(init_message)
-                    except:
-                        pass
+        print(f"MidiOutput {self.uuid} forcePiano")
+        if self.outport :
+            if self.settings.GetForceIntrument():
+                init_message = Message('program_change')
+                # TODO : select bank 0 by control_change
+                # See https://music.stackexchange.com/questions/95786/how-do-you-implement-control-change-messages-using-the-mido-library
+                init_message.program = self.settings.GetPianoProgram() # Bank 0 Intrument 0
+                for i in range(16):
+                    init_message.channel = i
+                    if i != 10 : # not for drums
+                        try:
+                            self.outport.send(init_message)
+                        except:
+                            print(f"MidiOutput {self.uuid} self.outport.send ERROR")
 
     def send(self, message):
         if self.outport :

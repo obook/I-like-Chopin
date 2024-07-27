@@ -40,7 +40,8 @@ class Handler(BaseHTTPRequestHandler):
             print(f"WebServer {self.uuid} request [{name}]")
             if server_parent:
                 try:
-                    server_parent.MidifileChange(name)
+                    server_parent.MidifileChange(name) # Crash
+                    pass
                 except:
                     pass
 
@@ -52,48 +53,39 @@ class Handler(BaseHTTPRequestHandler):
         <style>
 
         body {
+            font-size: calc(.5em + 2vw);
+            color:#ffffff;
             background-color:#000000;
             overflow-wrap: break-word;
+            text-transform: uppercase;
         }
 
         .title{
             font-size: calc(.5em + 3vw);
             color:#339933;
             background-color:#333333;
-            text-transform: uppercase;
             border-radius: 10px;
-            text-indent:5px;
-        }
-
-        .folder{
-            color:#fdf6f6;
-            font-size: calc(.5em + 2vw);
-            background-color:#333333;
-            text-transform: uppercase;
-        }
-
-        .song{
-            color:#fdf6f6;
-            font-size: calc(.5em + 2vw);
-            background-color:#333333;
-            text-transform: uppercase;
-            text-decoration: none;
-        }
-
-        .song a{
-            font-size: calc(.5em + 2vw);
-            color:#333333;
-            background-color:#fdf6f6;
-            text-transform: uppercase;
-            text-decoration: none;
-            border-radius: 10px;
+            text-indent:10px;
         }
 
         .container {
             display: flex;
             flex-wrap: nowrap;
+            flex-direction: column;
+            font-size: calc(.5em + 2vw);
+            background-color:#333333;
+            border-radius: 10px;
+            text-indent: 10px;
             /* OU wrap;
             OU wrap-reverse; */
+        }
+
+        a {
+            font-size: calc(.5em + 2vw);
+            background-color:#ffffff;
+            color:#333333;
+            text-decoration: none;
+            border-radius: 5px;
         }
 
         </style>
@@ -107,7 +99,7 @@ class Handler(BaseHTTPRequestHandler):
 
         html += f"<h1><div class='title'>&nbsp;{name}&nbsp;</div></h1>"
 
-        html +="<div class='.container'>"
+        html +="<div class='container'>"
         for midifile in server_midifiles:
             path = pathlib.PurePath(midifile)
             name = pathlib.Path(midifile).stem
@@ -119,6 +111,9 @@ class Handler(BaseHTTPRequestHandler):
         html += "</body></html>"
         self.wfile.write(bytes(html, "utf8"))
         return
+
+    def log_message(self, format, *args):
+            pass
 
 class ClassWebServer(Thread):
     uuid = uuid.uuid4()
@@ -144,10 +139,13 @@ class ClassWebServer(Thread):
             server_interfaces.append(url)
             print(f"WebServer {self.uuid} {url} serve [{server_parent.settings.GetMidiPath()}]")
 
+        #print(f"WebServer {self.uuid} ready")
+
     def __del__(self):
         print(f"WebServer {self.uuid} destroyed")
 
     def run(self):
+        #print(f"WebServer {self.uuid} run")
         try:
             self.server = ThreadingHTTPServer(('0.0.0.0', self.port), Handler)
             self.server.allow_reuse_address = True

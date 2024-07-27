@@ -5,57 +5,48 @@
 <style>
 
 body {
+    font-size: calc(.5em + 2vw);
+    color:#ffffff;
     background-color:#000000;
     overflow-wrap: break-word;
+    text-transform: uppercase;
 }
 
 .title{
     font-size: calc(.5em + 3vw);
     color:#339933;
     background-color:#333333;
-    text-transform: uppercase;
     border-radius: 10px;
     text-indent:10px;
 }
 
-.folder{
-    color:#fdf6f6;
-    font-size: calc(.5em + 2vw);
-    background-color:#333333;
-    text-transform: uppercase;
-}
-
-.song{
-    color:#fdf6f6;
-    font-size: calc(.5em + 2vw);
-    background-color:#333333;
-    text-transform: uppercase;
-    text-decoration: none;
-}
-
-.song a{
-    font-size: calc(.5em + 2vw);
-    color:#333333;
-    background-color:#fdf6f6;
-    text-transform: uppercase;
-    text-decoration: none;
-    border-radius: 10px;
-}
-
 .container {
     display: flex;
-    flex-wrap: nowrap; 
+    flex-wrap: nowrap;
+    flex-direction: column;
+    font-size: calc(.5em + 2vw);
+    background-color:#333333;
+    border-radius: 10px;
+    text-indent: 10px;
     /* OU wrap;
     OU wrap-reverse; */
+}
+
+a {
+    font-size: calc(.5em + 2vw);
+    background-color:#ffffff;
+    color:#333333;
+    text-decoration: none;
+    border-radius: 5px;
 }
 
 </style>
 </head>
 <body>
-<h1><div class='title'>SELECT XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX007</div></h1>
-<div class=".container">
-    <div class='folder'>CHOPIN</div> <div class='song'><a href='?name={midifile}'>MUSIC 1</a></div>
-    <div class='folder'>BREL</div>  <div class='song'><a href='?name={midifile}'>MUSIC 2</a></div>
-    <div class='folder'>MOZART</div> <div class='song'><a href='?name={midifile}'>MUSIC 3</a></div>
+<h1><div class='title'>MIDIFILES</div></h1>
+<div class="container">
+    <div class='folder'>CHOPIN Frédéric</div> <div class='song'><a href='?name={midifile}'>Prelude-in-C-Minor-Opus-28-Nr-20</a></div>
+    <div class='folder'>Bach Jean-Sébastien</div>  <div class='song'><a href='?name={midifile}'>Toccata et fugue en ré mineur BWV 565</a></div>
+    <div class='folder'>MOZART Wolfgang Amadeus</div> <div class='song'><a href='?name={midifile}'>Sonate pour piano no 3 en si bémol majeur K.281</a></div>
 </div>
 </body></html>

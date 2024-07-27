@@ -22,21 +22,20 @@ class ClassMidiSong:
     __tracks = []
     __channels = {}
     __active = False
-    __uuid = None
     __ready = False # wait first key on keyboard
     __state = states['unknown']
+    __uuid = uuid.uuid4()
 
     def __init__(self, filepath):
-        self.__uuid = uuid.uuid4()
         text =''
         if not os.path.isfile(filepath):
             self.SetState(states['notfound'])
             text = 'NOT FOUND'
         self.__filepath = filepath
-        print(f"MidiSong {self.__uuid} load [{self.GetFilename()}] {text}")
+        print(f"MidiSong {self.__uuid} load [{self.Getfilepath()}] {text}")
 
     def __del__(self):
-        print(f"MidiSong {self.__uuid} destroyed [{self.GetFilename()}]")
+        print(f"MidiSong {self.__uuid} destroyed [{self.Getfilepath()}]")
 
     def Getfilepath(self): # complete path and filename
         return self.__filepath
