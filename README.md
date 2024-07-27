@@ -22,3 +22,5 @@ Requirements:
 * PySide6==6.7.1
 
 Soundfont used : https://musical-artifacts.com/artifacts/4161
+
+Some other SoundFonts : https://sites.google.com/site/soundfonts4u/
