@@ -12,7 +12,7 @@ Impress your friends with this musical magic trick!
 
 With a Virtual Synth       |With Keyboard in Daw Mode  | With Rack Synth Device
 :-------------------------:|:-------------------------:|:-------------------------:
-<img src="media/ILC.png"  width="280"> | <img src="media/ILC3.png"  width="210"> | <img src="media/ILC2.png"  width="230">
+<img src="media/ILC.png"  width="280"> | <img src="media/ILC3.png"  width="130"> | <img src="media/ILC2.png"  width="220">
 
 Requirements:
 

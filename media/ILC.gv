@@ -16,13 +16,7 @@ digraph {
 
         MIDIFILE -> ILC
         ILC -> SYNTH [label="Correct Key"];
-
-        subgraph cluster_1 {
-                label = "Physical";
-                color=red;
-                KEYBOARD[label="Master Keyboard"];
-        }
-
+        KEYBOARD[label="", image="Pianos_keyboard.png"];
         KEYBOARD -> ILC [label="Any Key",style="dotted"];
         SOUNDEVICE[label="Sound Device"];
         SYNTH -> SOUNDEVICE [label="Audio"];
