@@ -46,7 +46,7 @@ class ClassThreadOutput(Thread):
                 init_message.program = self.settings.GetPianoProgram() # Bank 0 Intrument 0
                 for i in range(16):
                     init_message.channel = i
-                    if i != 10 : # not for drums
+                    if i != 9 : # not for drums
                         try:
                             self.outport.send(init_message)
                         except:
