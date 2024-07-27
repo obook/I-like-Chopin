@@ -10,6 +10,7 @@ import os
 import uuid
 import glob
 import pathlib
+import json
 from threading import Thread
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse
@@ -27,15 +28,35 @@ class Handler(BaseHTTPRequestHandler):
     uuid = uuid.uuid4()
 
     def do_GET(self):
+        global server_parent
+
         # print(f"MyHttpRequestHandler {self.uuid} do_GET")
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
+
 
         # Extract query param
         name = 'MIDIFILES'
         query_components = parse_qs(urlparse(self.path).query)
-        if 'name' in query_components:
+
+        if self.path == '/status.json':
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+
+            data=json.dumps(
+                {
+                    "played": server_parent.midisong.GetPlayed(),
+                    "duration": round(server_parent.midisong.GetDuration(),2),
+                    "nameclean": server_parent.midisong.GetCleanName()
+                }
+            )
+
+            self.wfile.write(data.encode(encoding='utf_8'))
+            return
+
+        elif 'name' in query_components:
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
             name = query_components["name"][0]
             print(f"WebServer {self.uuid} request [{name}]")
             if server_parent:
@@ -52,10 +73,15 @@ class Handler(BaseHTTPRequestHandler):
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <style>
 
+        :root {
+          --success: #00b894;
+          --progress: #e17055;
+        }
+
         body {
             font-size: calc(.5em + 2vw);
             color:#ffffff;
-            background-color:#000000;
+            background-color:#554455;
             overflow-wrap: break-word;
             text-transform: uppercase;
         }
@@ -66,6 +92,23 @@ class Handler(BaseHTTPRequestHandler):
             background-color:#333333;
             border-radius: 10px;
             text-indent:10px;
+        }
+
+
+        progress::-moz-progress-bar { background: green; }
+        progress::-webkit-progress-value { background: green; }
+        progress { color: green; }
+
+        #bar {
+            width: 100%;
+            height: 2rem;
+            text-align: center;
+            color: white;
+            background-image: green;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border-radius: 10px;
         }
 
         .container {
@@ -97,8 +140,13 @@ class Handler(BaseHTTPRequestHandler):
         name = name.replace('_',' ')
         name = name.replace('-',' ')
 
-        html += f"<h1><div class='title'>&nbsp;{name}&nbsp;</div></h1>"
+        # Title
+        html += "<div class='title'>"
+        html += f"&nbsp;<span id='name'>{server_parent.midisong.GetCleanName()}</span>&nbsp;"
+        html += "<progress id='bar' value='0' max='100'>0%</progress>"
+        html += " </div>"
 
+        # Files
         html +="<div class='container'>"
         for midifile in server_midifiles:
             path = pathlib.PurePath(midifile)
@@ -108,12 +156,29 @@ class Handler(BaseHTTPRequestHandler):
             html += f"<div class='folder'>{path.parent.name}</div> <div class='song'><a href='?name={midifile}'> &nbsp; {name} &nbsp; </a></div>"
         html += "</div>"
 
-        html += "</body></html>"
+        html += '''
+
+        <script>
+        async function getStats() {
+            const response = await fetch('/status.json');
+            const data = await response.json();
+            console.log(data)
+            document.getElementById('bar').value=data.played
+            document.getElementById('name').textContent=data.nameclean
+        }
+        setInterval(getStats, 2000);
+        </script>
+
+        </body></html>
+        '''
+
         self.wfile.write(bytes(html, "utf8"))
         return
 
+
     def log_message(self, format, *args):
             pass
+
 
 class ClassWebServer(Thread):
     uuid = uuid.uuid4()

@@ -4,10 +4,15 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <style>
 
+:root {
+  --success: #00b894;
+  --progress: #e17055;
+}
+
 body {
     font-size: calc(.5em + 2vw);
     color:#ffffff;
-    background-color:#000000;
+    background-color:#554455;
     overflow-wrap: break-word;
     text-transform: uppercase;
 }
@@ -18,6 +23,23 @@ body {
     background-color:#333333;
     border-radius: 10px;
     text-indent:10px;
+}
+
+
+progress::-moz-progress-bar { background: green; }
+progress::-webkit-progress-value { background: green; }
+progress { color: green; }
+
+#bar {
+    width: 100%;
+    height: 2rem;
+    text-align: center;
+    color: white;
+    background-image: green;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 10px;
 }
 
 .container {
@@ -43,10 +65,26 @@ a {
 </style>
 </head>
 <body>
-<h1><div class='title'>MIDIFILES</div></h1>
+<div class='title'>
+    MIDIFILES
+    <div>Durée : <span id='duree'>XXX</span></div>
+    <progress id='bar' value="0" max="100">50%</progress>
+</div>
+
 <div class="container">
     <div class='folder'>CHOPIN Frédéric</div> <div class='song'><a href='?name={midifile}'>Prelude-in-C-Minor-Opus-28-Nr-20</a></div>
     <div class='folder'>Bach Jean-Sébastien</div>  <div class='song'><a href='?name={midifile}'>Toccata et fugue en ré mineur BWV 565</a></div>
     <div class='folder'>MOZART Wolfgang Amadeus</div> <div class='song'><a href='?name={midifile}'>Sonate pour piano no 3 en si bémol majeur K.281</a></div>
 </div>
+
+<script>
+async function getStats() {
+    console.log('getStats')
+    const response = await fetch('/status.json');
+    const data = await response.json();
+    document.getElementById('bar').value=data.played
+}
+setInterval(getStats, 2000);
+</script>
+
 </body></html>
