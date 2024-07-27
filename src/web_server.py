@@ -153,6 +153,9 @@ class ClassWebServer(Thread):
         except:
             print(f"/!\ WebServer {self.uuid} CAN NOT SERVE ON PORT {self.port}")
 
+    def GetPort(self):
+        return self.port
+
     def GetInterfaces(self):
         return server_interfaces
 

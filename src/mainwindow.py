@@ -14,6 +14,7 @@ pip install python-rtmidi
 """
 import sys
 import os
+import webbrowser
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from PySide6 import QtGui
@@ -82,6 +83,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Info.clicked.connect(self.Informations)
         self.ui.pushButton_Mode.clicked.connect(self.Mode)
         self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,30); }\n")
+        self.ui.pushButton_FileIndex.clicked.connect(self.OpenBrowser)
 
         # ComboBoxes Inputs/Outputs
         self.Inputs, self.Outputs, IOPorts = self.midi.GetDevices()
@@ -132,7 +134,6 @@ class MainWindow(QMainWindow):
         # Datas
         self.ChannelsList[0] = True # active first channel
         self.MidiFiles = self.midi.GetMidiFiles()
-        #self.midisong = ClassMidiSong()
 
         # Connections
         self.midi.ConnectInput(Input)
@@ -141,10 +142,6 @@ class MainWindow(QMainWindow):
 
         # Midifiles
         self.ui.FileCombo.addItems(self.MidiFiles)
-        #self.midisong = self.midi.GetMidiSong()
-        if not self.midisong:
-            print("--> WARNING")
-
         self.ui.FileCombo.setCurrentText(self.midisong.GetFilename())
         self.ui.FileCombo.currentIndexChanged.connect(self.MidifileChanged)
 
@@ -157,11 +154,9 @@ class MainWindow(QMainWindow):
         self.web_server.start()
 
         # Timer
-        # UpdateSongScreen(self,self.midisong)
         timer = QTimer(self)
         timer.timeout.connect(self.timer)
         timer.start(2000)
-        #self.timer()
 
     def timer(self):
 
@@ -228,7 +223,6 @@ class MainWindow(QMainWindow):
         self.ui.FileCombo.setCurrentText(self.MidiFiles[self.MidifilesIndex])
 
     # Channels
-
     def ChannelsNone(self):
         for n in range(len(self.ChannelsButtonsList)):
             self.ChannelsButtonsList[n].setChecked(False)
@@ -263,10 +257,10 @@ class MainWindow(QMainWindow):
                 self.ChannelsList[n] = False
 
     # Status Bar
-
     def PrintStatusBar(self,message):
         self.ui.statusbar.showMessage(message)
 
+    # Midi control buttons
     def PrintSpeed(self,speed): #0 to 126
         if speed :
             self.ui.pushButton_Speed.setText(f"Speed -{speed}")
@@ -293,6 +287,9 @@ class MainWindow(QMainWindow):
             self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,30); }\n")
         self.midi.Mode(self.mode_playback)
 
+    def OpenBrowser(self):
+        webbrowser.open(f'http://127.0.0.1:{self.web_server.GetPort()}')
+
     def Panic(self):
         self.midi.Panic()
 
@@ -307,9 +304,7 @@ class MainWindow(QMainWindow):
         UpdateSongScreen(self, self.midisong)
 
     # End
-
     def closeEvent(self, event): # overwritten
-        #self.midi.quit()
         self.Quit()
 
     def Quit(self):
