@@ -16,6 +16,7 @@ from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
 from web_interfaces import get_interfaces
+from midi_song import states
 
 server_parent = None
 server_midifiles = []
@@ -26,12 +27,12 @@ class ClassWebConfig:
 
 class Handler(BaseHTTPRequestHandler):
     uuid = uuid.uuid4()
+    global server_parent
+    midisong = None
 
     def do_GET(self):
-        global server_parent
-
         # print(f"MyHttpRequestHandler {self.uuid} do_GET")
-
+        self.midisong = server_parent.midisong
 
         # Extract query param
         name = 'MIDIFILES'
@@ -44,9 +45,10 @@ class Handler(BaseHTTPRequestHandler):
 
             data=json.dumps(
                 {
-                    "played": server_parent.midisong.GetPlayed(),
-                    "duration": round(server_parent.midisong.GetDuration(),2),
-                    "nameclean": server_parent.midisong.GetCleanName()
+                    "played":self.midisong.GetPlayed(),
+                    "duration":round(self.midisong.GetDuration(),2),
+                    "nameclean":self.midisong.GetCleanName(),
+                    "state":self.midisong.GetState()
                 }
             )
 
@@ -66,111 +68,111 @@ class Handler(BaseHTTPRequestHandler):
                 except:
                     pass
 
-        html = '''
-        <!DOCTYPE html>
-        <html><head>
-        <meta charset='utf-8'>
-        <meta name='viewport' content='width=device-width, initial-scale=1'>
-        <style>
+        html = f"""<!DOCTYPE html>
+<html><head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>I Like Chopin</title>
+<style>
 
-        :root {
-          --success: #00b894;
-          --progress: #e17055;
-        }
+:root {{
+  --success: #00b894;
+  --progress: #e17055;
+}}
 
-        body {
-            font-size: calc(.5em + 2vw);
-            color:#ffffff;
-            background-color:#554455;
-            overflow-wrap: break-word;
-            text-transform: uppercase;
-        }
+body {{
+    font-size: calc(.5em + 2vw);
+    color:#ffffff;
+    background-color:#554455;
+    overflow-wrap: break-word;
+    text-transform: uppercase;
+}}
 
-        .title{
-            font-size: calc(.5em + 3vw);
-            color:#339933;
-            background-color:#333333;
-            border-radius: 10px;
-            text-indent:10px;
-        }
+.title{{
+    font-size: calc(.5em + 3vw);
+    color:#ffff00;
+    background-color:#000000;
+    border-radius: 10px;
+    text-indent:10px;
+}}
 
+.container {{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    font-size: calc(.5em + 2vw);
+    background-color:#333333;
+    border-radius: 10px;
+    text-indent: 10px;
+    /* OU wrap;
+    OU wrap-reverse; */
+}}
 
-        progress::-moz-progress-bar { background: green; }
-        progress::-webkit-progress-value { background: green; }
-        progress { color: green; }
+a {{
+    font-size: calc(.5em + 2vw);
+    background-color:#ffffff;
+    color:#333333;
+    text-decoration: none;
+    border-radius: 5px;
+}}
 
-        #bar {
-            width: 100%;
-            height: 2rem;
-            text-align: center;
-            color: white;
-            background-image: green;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            border-radius: 10px;
-        }
+.inline,
+.block {{
+  line-height: 100px;
+  font-size: 12px;
+  letter-spacing: 20px;
+  white-space: nowrap;
+  margin: 10px 0;
+  border-radius: 10px;
+}}
 
-        .container {
-            display: flex;
-            flex-wrap: nowrap;
-            flex-direction: column;
-            font-size: calc(.5em + 2vw);
-            background-color:#333333;
-            border-radius: 10px;
-            text-indent: 10px;
-            /* OU wrap;
-            OU wrap-reverse; */
-        }
+.block progress {{
+  display: block;
+  width: 100%;
+}}
 
-        a {
-            font-size: calc(.5em + 2vw);
-            background-color:#ffffff;
-            color:#333333;
-            text-decoration: none;
-            border-radius: 5px;
-        }
+</style>
+</head>
+<body>
 
-        </style>
-        </head>
-        <body>
-        '''
+<div class='title'>
+    &nbsp;<span id='name'>{server_parent.midisong.GetCleanName()}</span>&nbsp;
+    <div>Duration : <span ud='duration'>{round(server_parent.midisong.GetDuration(),2)}</span> minutes</div>
+</div>
 
-        name = pathlib.Path(name).stem # os.path.basename(name)
-        name = name.replace('_',' ')
-        name = name.replace('-',' ')
+<div class="block"><progress id='bar' value='0' max='100'>0%</progress></div>
 
-        # Title
-        html += "<div class='title'>"
-        html += f"&nbsp;<span id='name'>{server_parent.midisong.GetCleanName()}</span>&nbsp;"
-        html += "<progress id='bar' value='0' max='100'>0%</progress>"
-        html += " </div>"
+        """
 
         # Files
-        html +="<div class='container'>"
+        html += "<div class='container'>\n"
         for midifile in server_midifiles:
             path = pathlib.PurePath(midifile)
             name = pathlib.Path(midifile).stem
             name = name.replace('_',' ')
             name = name.replace('-',' ')
-            html += f"<div class='folder'>{path.parent.name}</div> <div class='song'><a href='?name={midifile}'> &nbsp; {name} &nbsp; </a></div>"
-        html += "</div>"
+            html += f"<div class='folder'>{path.parent.name}</div> <div class='song'><a href='?name={midifile}'> &nbsp; {name} &nbsp; </a></div>\n"
+        html += "</div>\n"
 
-        html += '''
+        html += '''<script>
+async function getStats() {
+    const response = await fetch('/status.json');
+    const data = await response.json();
+    console.log(data)
+    document.getElementById('bar').value=data.played
+    document.getElementById('name').textContent=data.nameclean
+    if (data.state <0)
+        document.getElementById('name').style.color = '#ff0000';
+    else if (data.state <2)
+        document.getElementById('name').style.color = '#ffff00';
+    else
+        document.getElementById('name').style.color = '#00ff00';
+}
+setInterval(getStats, 2000);
+</script>
 
-        <script>
-        async function getStats() {
-            const response = await fetch('/status.json');
-            const data = await response.json();
-            console.log(data)
-            document.getElementById('bar').value=data.played
-            document.getElementById('name').textContent=data.nameclean
-        }
-        setInterval(getStats, 2000);
-        </script>
-
-        </body></html>
-        '''
+</body></html>
+    '''
 
         self.wfile.write(bytes(html, "utf8"))
         return
