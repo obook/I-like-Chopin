@@ -16,7 +16,7 @@ With a Virtual Synth       |With Keyboard in Daw Mode  | With Rack Synth Device
 :-------------------------:|:-------------------------:|:-------------------------:
 <img src="media/ILC.png"  width="280"> | <img src="media/ILC3.png"  width="130"> | <img src="media/ILC2.png"  width="220">
 
-# Recommanded usage:
+# Recommanded usage
 
 ```bash
 pip install poetry
@@ -25,7 +25,7 @@ poetry install
 poetry run python i-like-chopin.py
 ```
 
-# Programs and libraries used:
+# Programs and libraries used
 
 * Python 3.10.12
 * mido==1.2.10
