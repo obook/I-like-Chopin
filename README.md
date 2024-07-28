@@ -14,12 +14,22 @@ With a Virtual Synth       |With Keyboard in Daw Mode  | With Rack Synth Device
 :-------------------------:|:-------------------------:|:-------------------------:
 <img src="media/ILC.png"  width="280"> | <img src="media/ILC3.png"  width="130"> | <img src="media/ILC2.png"  width="220">
 
-Requirements:
+Recommanded usage:
+
+```bash
+pip install poetry
+cd src
+poetry install
+poetry run python i-like-chopin.py
+```
+
+Libraries used:
 
 * Python 3.1x
 * mido==1.2.10
 * python-rtmidi==1.4.7
 * PySide6==6.7.1
+* netifaces2==0.0.22
 
 Soundfont used : https://musical-artifacts.com/artifacts/4161
 
