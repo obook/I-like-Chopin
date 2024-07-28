@@ -24,7 +24,6 @@ from midi_main import ClassMidiMain
 from midi_song import states
 from settings import ClassSettings
 from informations import ShowInformation
-from song_screen import UpdateSongScreen
 from web_server import ClassWebServer
 
 # Important:
@@ -83,7 +82,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Info.clicked.connect(self.Informations)
         self.ui.pushButton_Mode.clicked.connect(self.Mode)
         self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,30); }\n")
-        self.ui.pushButton_FileIndex.clicked.connect(self.OpenBrowser)
+        self.ui.pushButton_Files.clicked.connect(self.OpenBrowser)
 
         # ComboBoxes Inputs/Outputs
         self.Inputs, self.Outputs, IOPorts = self.midi.GetDevices()
@@ -141,12 +140,7 @@ class MainWindow(QMainWindow):
         self.MidifileChange(self.settings.GetMidifile())
 
         # Midifiles
-        self.ui.FileCombo.addItems(self.MidiFiles)
-        self.ui.FileCombo.setCurrentText(self.midisong.GetFilename())
-        self.ui.FileCombo.currentIndexChanged.connect(self.MidifileChanged)
-
-        # Drop file
-        self.ui.FileCombo.installEventFilter(self)
+        self.ui.pushButton_Files.setText(self.midisong.GetCleanName())
 
         # Web server
         self.web_server = ClassWebServer(self)
@@ -176,20 +170,17 @@ class MainWindow(QMainWindow):
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
             self.ConnectOutputState = False
 
-        # A revoir : UpdateSongScreen tout le temps
         if self.midisong:
             if self.midisong.GetState() >= states['ready']:
                 self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
-                UpdateSongScreen(self,self.midisong)
 
             elif self.midisong.GetState() == states['cueing']:
                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_YELLOW_LED))
 
             else:
                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
-               UpdateSongScreen(self,self.midisong)
 
-            self.SetWindowName()
+            self.SetFileButtonText()
             self.ChannelsColorize()
 
     def InputDeviceChanged(self):
@@ -205,22 +196,26 @@ class MainWindow(QMainWindow):
         out_device = self.ui.OutputDeviceCombo.currentText()
         self.settings.SaveOutputDevice(out_device)
         self.midi.ConnectOutput(out_device)
-        #self.midi.SetMidiSong(self.midisong)
 
+    '''
     def MidifileChanged(self):
         self.MidifileChange(os.path.join(self.settings.GetMidiPath(),self.ui.FileCombo.currentText()))
+    '''
 
     def MidifileChange(self, filepath): # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         self.settings.SaveMidifile(filepath)
         self.midisong = self.midi.SetMidiSong(filepath)
 
     def ChangeMidiFile(self,value): # External Midi command
+        print("--> ChangeMidiFile NOT ACTIVE")
+        '''
         # value 0-127
         step = int(128/len(self.MidiFiles))
         self.MidifilesIndex = min(int(value/step),len(self.MidiFiles)-1)
         self.ui.pushButton_FileIndex.setText(f"MidiFile {self.MidifilesIndex+1}/{len(self.MidiFiles)}")
         self.midi.Panic()
         self.ui.FileCombo.setCurrentText(self.MidiFiles[self.MidifilesIndex])
+        '''
 
     # Channels
     def ChannelsNone(self):
@@ -293,15 +288,13 @@ class MainWindow(QMainWindow):
     def Panic(self):
         self.midi.Panic()
 
-    def SetWindowName(self):
+    def SetFileButtonText(self):
         if self.midisong:
-            self.setWindowTitle(f"I Like Chopin : {self.midisong.GetName()}")
+            # self.setWindowTitle(f"I Like Chopin : {self.midisong.GetCleanName()}")
+            self.ui.pushButton_Files.setText(self.midisong.GetCleanName())
 
     def Informations(self):
         ShowInformation(self)
-
-    def SongScreen(self):
-        UpdateSongScreen(self, self.midisong)
 
     # End
     def closeEvent(self, event): # overwritten

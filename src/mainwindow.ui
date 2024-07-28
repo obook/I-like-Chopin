@@ -52,7 +52,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Library</string>
+      <string>File</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -61,7 +61,7 @@
     <widget class="QComboBox" name="InputDeviceCombo">
      <property name="geometry">
       <rect>
-       <x>103</x>
+       <x>110</x>
        <y>30</y>
        <width>331</width>
        <height>30</height>
@@ -71,7 +71,7 @@
     <widget class="QComboBox" name="OutputDeviceCombo">
      <property name="geometry">
       <rect>
-       <x>103</x>
+       <x>110</x>
        <y>70</y>
        <width>331</width>
        <height>30</height>
@@ -108,22 +108,6 @@
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="FileCombo">
-     <property name="geometry">
-      <rect>
-       <x>103</x>
-       <y>110</y>
-       <width>331</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="acceptDrops">
-      <bool>false</bool>
-     </property>
-     <property name="editable">
-      <bool>false</bool>
      </property>
     </widget>
     <widget class="QLabel" name="labelStatusInput">
@@ -163,6 +147,19 @@
      </property>
      <property name="text">
       <string>LED</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_Files">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>110</y>
+       <width>331</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>PushButton</string>
      </property>
     </widget>
    </widget>

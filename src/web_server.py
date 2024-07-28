@@ -10,11 +10,13 @@ import os
 import uuid
 import glob
 import pathlib
+import json
 from threading import Thread
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
 from web_interfaces import get_interfaces
+from string import Template
 
 server_parent = None
 server_midifiles = []
@@ -25,100 +27,71 @@ class ClassWebConfig:
 
 class Handler(BaseHTTPRequestHandler):
     uuid = uuid.uuid4()
+    global server_parent
+    midisong = None
 
     def do_GET(self):
         # print(f"MyHttpRequestHandler {self.uuid} do_GET")
+        self.midisong = server_parent.midisong
+
+        # Extract query param
+        query_components = parse_qs(urlparse(self.path).query)
+
+        if self.path == '/status.json':
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+
+            data=json.dumps(
+                {
+                    "played":self.midisong.GetPlayed(),
+                    "duration":round(self.midisong.GetDuration(),2),
+                    "nameclean":self.midisong.GetCleanName(),
+                    "state":self.midisong.GetState()
+                }
+            )
+
+            self.wfile.write(data.encode(encoding='utf_8'))
+            return
+
+        elif 'play' in query_components:
+            midifile = query_components["play"][0]
+            print(f"WebServer {self.uuid} request [{midifile}]")
+            if server_parent:
+                try:
+                    server_parent.MidifileChange(midifile)
+                except:
+                    pass
+
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
 
-        # Extract query param
-        name = 'MIDIFILES'
-        query_components = parse_qs(urlparse(self.path).query)
-        if 'name' in query_components:
-            name = query_components["name"][0]
-            print(f"WebServer {self.uuid} request [{name}]")
-            if server_parent:
-                try:
-                    server_parent.MidifileChange(name) # Crash
-                    pass
-                except:
-                    pass
+        file = open(server_parent.settings.GetIndexTemplate(), "r")
+        template = Template(file.read())
+        file.close()
 
-        html = '''
-        <!DOCTYPE html>
-        <html><head>
-        <meta charset='utf-8'>
-        <meta name='viewport' content='width=device-width, initial-scale=1'>
-        <style>
-
-        body {
-            font-size: calc(.5em + 2vw);
-            color:#ffffff;
-            background-color:#000000;
-            overflow-wrap: break-word;
-            text-transform: uppercase;
-        }
-
-        .title{
-            font-size: calc(.5em + 3vw);
-            color:#339933;
-            background-color:#333333;
-            border-radius: 10px;
-            text-indent:10px;
-        }
-
-        .container {
-            display: flex;
-            flex-wrap: nowrap;
-            flex-direction: column;
-            font-size: calc(.5em + 2vw);
-            background-color:#333333;
-            border-radius: 10px;
-            text-indent: 10px;
-            /* OU wrap;
-            OU wrap-reverse; */
-        }
-
-        a {
-            font-size: calc(.5em + 2vw);
-            background-color:#ffffff;
-            color:#333333;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-
-        </style>
-        </head>
-        <body>
-        '''
-
-        name = pathlib.Path(name).stem # os.path.basename(name)
-        name = name.replace('_',' ')
-        name = name.replace('-',' ')
-
-        html += f"<h1><div class='title'>&nbsp;{name}&nbsp;</div></h1>"
-
-        html +="<div class='container'>"
+        # Files
+        fileslist = ""
         for midifile in server_midifiles:
             path = pathlib.PurePath(midifile)
-            name = pathlib.Path(midifile).stem
-            name = name.replace('_',' ')
-            name = name.replace('-',' ')
-            html += f"<div class='folder'>{path.parent.name}</div> <div class='song'><a href='?name={midifile}'> &nbsp; {name} &nbsp; </a></div>"
-        html += "</div>"
+            midiname = pathlib.Path(midifile).stem
+            midiname = midiname.replace('_',' ')
+            midiname = midiname.replace('-',' ')
+            fileslist += f"<div class='folder'>{path.parent.name}</div> <div class='song'><a href='?play={midifile}'> &nbsp; {midiname} &nbsp; </a></div>\n"
 
-        html += "</body></html>"
-        self.wfile.write(bytes(html, "utf8"))
+        index = template.substitute(name=server_parent.midisong.GetCleanName(),duration="",midifiles=fileslist)
+        self.wfile.write(bytes(index, "utf8"))
         return
 
-    def log_message(self, format, *args):
+
+    def log_message(self, format, *args): # no message in terminal
             pass
 
 class ClassWebServer(Thread):
     uuid = uuid.uuid4()
-    port = 8888
     server = None
+    port = 8888
 
     def __init__(self,parent):
         global server_midifiles
@@ -127,10 +100,10 @@ class ClassWebServer(Thread):
 
         Thread.__init__( self )
         server_parent = parent
+        self.port = server_parent.settings.GetServerPort()
         print(f"WebServer {self.uuid} created")
 
         for file in sorted(glob.glob(os.path.join(parent.settings.GetMidiPath(),"**", "*.mid"), recursive = True)):
-            # print(f"WebServer {self.uuid} MIDI FOUND [{file}]")
             server_midifiles.append(file)
 
         interfaces = get_interfaces(True, False)
@@ -139,13 +112,10 @@ class ClassWebServer(Thread):
             server_interfaces.append(url)
             print(f"WebServer {self.uuid} {url} serve [{server_parent.settings.GetMidiPath()}]")
 
-        #print(f"WebServer {self.uuid} ready")
-
     def __del__(self):
         print(f"WebServer {self.uuid} destroyed")
 
     def run(self):
-        #print(f"WebServer {self.uuid} run")
         try:
             self.server = ThreadingHTTPServer(('0.0.0.0', self.port), Handler)
             self.server.allow_reuse_address = True

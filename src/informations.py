@@ -65,7 +65,6 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.textBrowser.setTextCursor(cursor);
 
         self.checkBox_PrintTerminalMsg.setChecked(self.settings.GetPrintTerm())
-        self.checkBox_ShowSongInfo.setChecked(self.settings.GetShowSongInfo())
         self.checkBox_ForceIntrument0.setChecked(self.settings.GetForceIntrument())
 
         self.checkBox_ForceIntrument0.setText(f"Force piano (prog {self.settings.GetPianoProgram()})")
@@ -74,10 +73,7 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
 
     def quit(self):
         self.settings.SavePrintTerm(self.checkBox_PrintTerminalMsg.isChecked())
-        self.settings.SaveShowSongInfo(self.checkBox_ShowSongInfo.isChecked())
         self.settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
-        if self.checkBox_ShowSongInfo.isChecked():
-            self.pParent.SongScreen()
         self.close()
 
 def ShowInformation(pParent):

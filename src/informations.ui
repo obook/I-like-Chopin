@@ -41,7 +41,7 @@
    <widget class="QCheckBox" name="checkBox_PrintTerminalMsg">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>256</x>
       <y>30</y>
       <width>141</width>
       <height>23</height>
@@ -54,7 +54,7 @@
    <widget class="QCheckBox" name="checkBox_ForceIntrument0">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>52</x>
       <y>30</y>
       <width>141</width>
       <height>23</height>
@@ -62,19 +62,6 @@
     </property>
     <property name="text">
      <string>Force Piano (Prog 0)</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_ShowSongInfo">
-    <property name="geometry">
-     <rect>
-      <x>166</x>
-      <y>30</y>
-      <width>121</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Open Song info</string>
     </property>
    </widget>
   </widget>

@@ -113,7 +113,7 @@ class ClassMidiMain:
             self.ThreadMidiReader.SetMidiPort(port)
             self.ThreadMidiReader.start()
 
-        self.pParent.SetWindowName()
+        self.pParent.SetFileButtonText()
 
         return self.midisong
 
