@@ -16,7 +16,6 @@ from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
 from web_interfaces import get_interfaces
-from midi_song import states
 from string import Template
 
 server_parent = None
