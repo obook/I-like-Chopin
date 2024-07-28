@@ -90,7 +90,10 @@ class Handler(BaseHTTPRequestHandler):
             midilist_html +="</div>"
 
         index_html = template.substitute(name=server_parent.midisong.GetCleanName(),duration="",midifiles=midilist_html)
-        self.wfile.write(bytes(index_html, "utf8"))
+        try:
+            self.wfile.write(bytes(index_html, "utf8"))
+        except: # web browser disconnected
+            pass
         return
 
     def log_message(self, format, *args): # no message in terminal

@@ -34,7 +34,7 @@ class ClassThreadOutput(Thread):
             self.outport = open_output(self.out_device,autoreset=True)
         except:
             self.outport = None
-            print(f"|!|MidiOutput {self.uuid} midi_output open [{self.out_device}] ERROR")
+            print(f"|!| MidiOutput {self.uuid} midi_output open [{self.out_device}] ERROR")
 
         # Set all channels to Piano ('Acoustic Grand Piano') if set
         self.forcePiano()
