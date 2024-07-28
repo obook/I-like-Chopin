@@ -82,6 +82,9 @@ class Handler(BaseHTTPRequestHandler):
             list = server_mididict[key]
             for midifile in list:
                 midiname = pathlib.Path(midifile).stem
+                midiname = midiname.replace('_',' ')
+                midiname = midiname.replace('-',' ')
+                midiname.upper()
                 midilist_html +=f"<p><a href='?play={midifile}'> &nbsp; {midiname} &nbsp; </a></p>"
 
             midilist_html +="</div>"
