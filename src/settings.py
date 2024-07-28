@@ -20,7 +20,7 @@ class ClassSettings:
     settingspath = os.path.join(os.path.expanduser("~"), ".config")
     settingsfile =  os.path.join(settingspath, "i-like-chopin.json")
     defaultmidipath = os.path.join(os.path.expanduser("~"), ".local","share","i-like-chopin","midi")
-    indextemplate = os.path.join(applicationpath,'template','index-template.html')
+    serverindextemplate = os.path.join(applicationpath,'template','index-template.html')
     config = {
     "InputDevice": '(None)',
     "OutputDevice": '(None)',
@@ -75,7 +75,7 @@ class ClassSettings:
         return self.applicationpath
 
     def GetIndexTemplate(self):
-        return self.indextemplate
+        return self.serverindextemplate
 
     '''
     Globals settings functions
@@ -135,8 +135,5 @@ class ClassSettings:
     def SavePianoProgram(self,value): # not used
         return self.SetSetting('PianoProgram', value)
 
-    def GetShowSongInfo(self):
-        return self.GetSetting('ShowSongInfo',False)
-
-    def SaveShowSongInfo(self,value):
-        return self.SetSetting('ShowSongInfo', value)
+    def GetServerPort(self):
+        return self.GetSetting('ServerPort',8888)

@@ -36,7 +36,6 @@ class Handler(BaseHTTPRequestHandler):
         self.midisong = server_parent.midisong
 
         # Extract query param
-        name = 'MIDIFILES'
         query_components = parse_qs(urlparse(self.path).query)
 
         if self.path == '/status.json':
@@ -87,14 +86,13 @@ class Handler(BaseHTTPRequestHandler):
         return
 
 
-    def log_message(self, format, *args):
+    def log_message(self, format, *args): # no message in terminal
             pass
-
 
 class ClassWebServer(Thread):
     uuid = uuid.uuid4()
-    port = 8888
     server = None
+    port = 8888
 
     def __init__(self,parent):
         global server_midifiles
@@ -103,10 +101,10 @@ class ClassWebServer(Thread):
 
         Thread.__init__( self )
         server_parent = parent
+        self.port = server_parent.settings.GetServerPort()
         print(f"WebServer {self.uuid} created")
 
         for file in sorted(glob.glob(os.path.join(parent.settings.GetMidiPath(),"**", "*.mid"), recursive = True)):
-            # print(f"WebServer {self.uuid} MIDI FOUND [{file}]")
             server_midifiles.append(file)
 
         interfaces = get_interfaces(True, False)
@@ -115,13 +113,10 @@ class ClassWebServer(Thread):
             server_interfaces.append(url)
             print(f"WebServer {self.uuid} {url} serve [{server_parent.settings.GetMidiPath()}]")
 
-        #print(f"WebServer {self.uuid} ready")
-
     def __del__(self):
         print(f"WebServer {self.uuid} destroyed")
 
     def run(self):
-        #print(f"WebServer {self.uuid} run")
         try:
             self.server = ThreadingHTTPServer(('0.0.0.0', self.port), Handler)
             self.server.allow_reuse_address = True

@@ -24,7 +24,6 @@ from midi_main import ClassMidiMain
 from midi_song import states
 from settings import ClassSettings
 from informations import ShowInformation
-from song_screen import UpdateSongScreen
 from web_server import ClassWebServer
 
 # Important:
@@ -171,18 +170,15 @@ class MainWindow(QMainWindow):
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
             self.ConnectOutputState = False
 
-        # A revoir : UpdateSongScreen tout le temps
         if self.midisong:
             if self.midisong.GetState() >= states['ready']:
                 self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
-                UpdateSongScreen(self,self.midisong)
 
             elif self.midisong.GetState() == states['cueing']:
                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_YELLOW_LED))
 
             else:
                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
-               UpdateSongScreen(self,self.midisong)
 
             self.SetFileButtonText()
             self.ChannelsColorize()
@@ -299,9 +295,6 @@ class MainWindow(QMainWindow):
 
     def Informations(self):
         ShowInformation(self)
-
-    def SongScreen(self):
-        UpdateSongScreen(self, self.midisong)
 
     # End
     def closeEvent(self, event): # overwritten
