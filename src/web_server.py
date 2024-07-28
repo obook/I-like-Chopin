@@ -138,7 +138,7 @@ class ClassWebServer(Thread):
             self.server.allow_reuse_address = True
             self.server.serve_forever()
         except:
-            print(f"/!\ WebServer {self.uuid} CAN NOT SERVE ON PORT {self.port}")
+            print(f"|!| WebServer {self.uuid} CAN NOT SERVE ON PORT {self.port}")
 
     def GetPort(self):
         return self.port
