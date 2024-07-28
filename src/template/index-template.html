@@ -55,6 +55,8 @@ a {
     border-radius: 5px;
 }
 
+/* Progress bar */
+
 .block {
   line-height: 100px;
   font-size: 12px;
@@ -69,6 +71,37 @@ a {
   width: 100%;
 }
 
+/* Accordeon 
+From : https://www.w3schools.com/howto/howto_js_accordion.asp
+*/
+
+.accordion {
+  /* background-color: #eee; */
+  color:#ffffff;
+  background-color:#333333;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: calc(.5em + 3vw);
+  transition: 0.4s;
+  border-radius: 10px;
+}
+
+.active, .accordion:hover {
+  background-color: #818181;
+}
+
+.panel {
+  padding: 0 18px;
+  /* background-color: white; */
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
 </style>
 </head>
 <body>
@@ -80,6 +113,22 @@ a {
 
 <div class="block"><progress id='progressbar' value="0" max="100"></progress></div>
 
+<!-- just for tests
+<button class="accordion">Section 1</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 2</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 3</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+ -->
 <div class="container">
     ${midifiles}
 </div>
@@ -99,6 +148,22 @@ async function getStats() {
         document.getElementById('name').style.color = '#00ff00';
 }
 setInterval(getStats, 2000);
+
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.maxHeight) {
+      panel.style.maxHeight = null;
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+    } 
+  });
+}
+
 </script>
 
 </body></html>

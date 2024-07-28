@@ -21,6 +21,7 @@ from string import Template
 server_parent = None
 server_midifiles = []
 server_interfaces = []
+server_mididict = {}
 
 class ClassWebConfig:
     pass
@@ -31,6 +32,9 @@ class Handler(BaseHTTPRequestHandler):
     midisong = None
 
     def do_GET(self):
+        global server_midifiles_files # old
+        global server_mididict
+
         # print(f"MyHttpRequestHandler {self.uuid} do_GET")
         self.midisong = server_parent.midisong
 
@@ -72,18 +76,19 @@ class Handler(BaseHTTPRequestHandler):
         file.close()
 
         # Files
-        fileslist = ""
-        for midifile in server_midifiles:
-            path = pathlib.PurePath(midifile)
-            midiname = pathlib.Path(midifile).stem
-            midiname = midiname.replace('_',' ')
-            midiname = midiname.replace('-',' ')
-            fileslist += f"<div class='folder'>{path.parent.name}</div> <div class='song'><a href='?play={midifile}'> &nbsp; {midiname} &nbsp; </a></div>\n"
+        midilist_html = ""
+        for key in server_mididict.keys():
+            midilist_html += f"<button class='accordion'>{key}</button><div class='panel'>"
+            list = server_mididict[key]
+            for midifile in list:
+                midiname = pathlib.Path(midifile).stem
+                midilist_html +=f"<p><a href='?play={midifile}'> &nbsp; {midiname} &nbsp; </a></p>"
 
-        index = template.substitute(name=server_parent.midisong.GetCleanName(),duration="",midifiles=fileslist)
-        self.wfile.write(bytes(index, "utf8"))
+            midilist_html +="</div>"
+
+        index_html = template.substitute(name=server_parent.midisong.GetCleanName(),duration="",midifiles=midilist_html)
+        self.wfile.write(bytes(index_html, "utf8"))
         return
-
 
     def log_message(self, format, *args): # no message in terminal
             pass
@@ -98,13 +103,22 @@ class ClassWebServer(Thread):
         global server_parent
         global server_interfaces
 
+        global server_mididict
+
         Thread.__init__( self )
         server_parent = parent
         self.port = server_parent.settings.GetServerPort()
         print(f"WebServer {self.uuid} created")
 
         for file in sorted(glob.glob(os.path.join(parent.settings.GetMidiPath(),"**", "*.mid"), recursive = True)):
-            server_midifiles.append(file)
+            path = pathlib.PurePath(file)
+            server_midifiles.append(file) # ancienne méthode
+
+            if not any(path.parent.name in keys for keys in server_mididict): # not in dictionnary
+                server_mididict[path.parent.name] = [file]
+            else: # in dictionnary
+                list = server_mididict[path.parent.name]
+                list.append(file)
 
         interfaces = get_interfaces(True, False)
         for interface in interfaces :
