@@ -16,9 +16,11 @@ import uuid
 class ClassSettings:
     """Class for recall and store preferences and settings"""
     uuid = uuid.uuid4()
+    applicationpath = os.path.dirname(os.path.realpath(__file__))
     settingspath = os.path.join(os.path.expanduser("~"), ".config")
     settingsfile =  os.path.join(settingspath, "i-like-chopin.json")
     defaultmidipath = os.path.join(os.path.expanduser("~"), ".local","share","i-like-chopin","midi")
+    indextemplate = os.path.join(applicationpath,'template','index-template.html')
     config = {
     "InputDevice": '(None)',
     "OutputDevice": '(None)',
@@ -30,7 +32,6 @@ class ClassSettings:
     "ShowSongInfo":False}
 
     def __init__(self):
-        self.application_path = os.path.dirname(os.path.realpath(__file__))
         print(f"Settings {self.uuid} reading [{self.settingsfile}]")
         if not os.path.isdir(self.settingspath):
             os.makedirs(self.settingspath, exist_ok=True)
@@ -67,7 +68,17 @@ class ClassSettings:
         return self.settingsfile
 
     '''
-    Globals functions
+    Tools functions
+    '''
+
+    def GetApplicationPath(self):
+        return self.applicationpath
+
+    def GetIndexTemplate(self):
+        return self.indextemplate
+
+    '''
+    Globals settings functions
     '''
 
     def GetSetting(self,key,default=None):

@@ -17,6 +17,7 @@ from urllib.parse import urlparse
 from urllib.parse import parse_qs
 from web_interfaces import get_interfaces
 from midi_song import states
+from string import Template
 
 server_parent = None
 server_midifiles = []
@@ -55,126 +56,34 @@ class Handler(BaseHTTPRequestHandler):
             self.wfile.write(data.encode(encoding='utf_8'))
             return
 
-        elif 'name' in query_components:
-            self.send_response(200)
-            self.send_header("Content-type", "text/html")
-            self.end_headers()
-            name = query_components["name"][0]
-            print(f"WebServer {self.uuid} request [{name}]")
+        elif 'play' in query_components:
+            midifile = query_components["play"][0]
+            print(f"WebServer {self.uuid} request [{midifile}]")
             if server_parent:
                 try:
-                    server_parent.MidifileChange(name) # Crash
-                    pass
+                    server_parent.MidifileChange(midifile)
                 except:
                     pass
 
-        html = f"""<!DOCTYPE html>
-<html><head>
-<meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'>
-<title>I Like Chopin</title>
-<style>
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
 
-:root {{
-  --success: #00b894;
-  --progress: #e17055;
-}}
-
-body {{
-    font-size: calc(.5em + 2vw);
-    color:#ffffff;
-    background-color:#554455;
-    overflow-wrap: break-word;
-    text-transform: uppercase;
-}}
-
-.title{{
-    font-size: calc(.5em + 3vw);
-    color:#ffff00;
-    background-color:#000000;
-    border-radius: 10px;
-    text-indent:10px;
-}}
-
-.container {{
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    font-size: calc(.5em + 2vw);
-    background-color:#333333;
-    border-radius: 10px;
-    text-indent: 10px;
-    /* OU wrap;
-    OU wrap-reverse; */
-}}
-
-a {{
-    font-size: calc(.5em + 2vw);
-    background-color:#ffffff;
-    color:#333333;
-    text-decoration: none;
-    border-radius: 5px;
-}}
-
-.inline,
-.block {{
-  line-height: 100px;
-  font-size: 12px;
-  letter-spacing: 20px;
-  white-space: nowrap;
-  margin: 10px 0;
-  border-radius: 10px;
-}}
-
-.block progress {{
-  display: block;
-  width: 100%;
-}}
-
-</style>
-</head>
-<body>
-
-<div class='title'>
-    &nbsp;<span id='name'>{server_parent.midisong.GetCleanName()}</span>&nbsp;
-    <div>Duration : <span ud='duration'>{round(server_parent.midisong.GetDuration(),2)}</span> minutes</div>
-</div>
-
-<div class="block"><progress id='bar' value='0' max='100'>0%</progress></div>
-
-        """
+        file = open(server_parent.settings.GetIndexTemplate(), "r")
+        template = Template(file.read())
+        file.close()
 
         # Files
-        html += "<div class='container'>\n"
+        fileslist = ""
         for midifile in server_midifiles:
             path = pathlib.PurePath(midifile)
-            name = pathlib.Path(midifile).stem
-            name = name.replace('_',' ')
-            name = name.replace('-',' ')
-            html += f"<div class='folder'>{path.parent.name}</div> <div class='song'><a href='?name={midifile}'> &nbsp; {name} &nbsp; </a></div>\n"
-        html += "</div>\n"
+            midiname = pathlib.Path(midifile).stem
+            midiname = midiname.replace('_',' ')
+            midiname = midiname.replace('-',' ')
+            fileslist += f"<div class='folder'>{path.parent.name}</div> <div class='song'><a href='?play={midifile}'> &nbsp; {midiname} &nbsp; </a></div>\n"
 
-        html += '''<script>
-async function getStats() {
-    const response = await fetch('/status.json');
-    const data = await response.json();
-    console.log(data)
-    document.getElementById('bar').value=data.played
-    document.getElementById('name').textContent=data.nameclean
-    if (data.state <0)
-        document.getElementById('name').style.color = '#ff0000';
-    else if (data.state <2)
-        document.getElementById('name').style.color = '#ffff00';
-    else
-        document.getElementById('name').style.color = '#00ff00';
-}
-setInterval(getStats, 2000);
-</script>
-
-</body></html>
-    '''
-
-        self.wfile.write(bytes(html, "utf8"))
+        index = template.substitute(name=server_parent.midisong.GetCleanName(),duration="",midifiles=fileslist)
+        self.wfile.write(bytes(index, "utf8"))
         return
 
 

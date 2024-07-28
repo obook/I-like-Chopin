@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<style>
+
+body {
+    font-size: calc(.5em + 2vw);
+    color:#ffffff;
+    background-color:#554455;
+    overflow-wrap: break-word;
+    text-transform: uppercase;
+}
+
+.title{
+    font-size: calc(.5em + 3vw);
+    color:#339933;
+    background-color:#333333;
+    border-radius: 10px;
+    text-indent:10px;
+}
+
+.name{
+    font-size: calc(.5em + 3vw);
+    color:#ffff00;
+    background-color:#333333;
+    border-radius: 10px;
+    text-indent:10px;
+}
+
+.informations{
+    color:#9b9a9a;
+    font-size: calc(.5em + 0.1vw);
+    background-color:#333333;
+    border-radius: 10px;
+    text-indent:10px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    font-size: calc(.5em + 2vw);
+    background-color:#333333;
+    border-radius: 10px;
+    text-indent: 10px;
+}
+
+a {
+    font-size: calc(.5em + 2vw);
+    background-color:#ffffff;
+    color:#333333;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.block {
+  line-height: 100px;
+  font-size: 12px;
+  letter-spacing: 20px;
+  white-space: nowrap;
+  margin: 10px 0;
+  border-radius: 10px;
+}
+
+.block progress {
+  display: block;
+  width: 100%;
+}
+
+</style>
+</head>
+<body>
+
+<div class='title'>
+    <div class="name" id="name">${name}</div>
+    <div class="informations">Duration : <span id='duration'>${duration}</div>
+</div>
+
+<div class="block"><progress id='progressbar' value="0" max="100"></progress></div>
+
+<div class="container">
+    ${midifiles}
+</div>
+
+<script>
+async function getStats() {
+    const response = await fetch('status.json');
+    const data = await response.json();
+    document.getElementById('progressbar').value=data.played
+    document.getElementById('name').textContent=data.nameclean
+    document.getElementById('duration').textContent=data.duration
+    if (data.state <0)
+        document.getElementById('name').style.color = '#ff0000';
+    else if (data.state <2)
+        document.getElementById('name').style.color = '#ffff00';
+    else
+        document.getElementById('name').style.color = '#00ff00';
+}
+setInterval(getStats, 2000);
+</script>
+
+</body></html>
