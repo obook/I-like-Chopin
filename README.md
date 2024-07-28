@@ -6,7 +6,7 @@ Funny program for play like Chopin.
     <img src="media/20240717_192901.png"  width="600">
 </p>
 
-"I like Chopin" is a very special MIDI player for Linux, Mac or Windows that uses Python 3, the Mido library and Qt6. Any random key pressed on a physical master keyboard plays the correct note from the MIDI file. When all keys are released, the MIDI player stops. You need a physical MIDI master keyboard connected to the computer. The selection of music is done by an internal web server, at the address 127.0.0.1:8888.
+"I like Chopin" is a very special MIDI player for Linux, Mac or Windows that uses Python 3, the Mido library and Qt6. Any random key pressed on a physical master keyboard plays the correct note from the MIDI file. When all keys are released, the MIDI player stops. You need a physical MIDI master keyboard connected to the computer. The selection of music is done by an internal web server, at the URL http://127.0.0.1:8888.
 
 Impress your friends with this musical magic trick!
 
