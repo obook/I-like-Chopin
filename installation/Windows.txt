@@ -1,6 +1,15 @@
 Main installation guideline for Microsoft Windows
 -------------------------------------------------
 
+1. Use poetry
+-------------
+pip install poetry
+cd src
+poetry install
+poetry run python i-like-chopin.py
+
+2. Manual installation
+-----------------------
 ! Set in python installer "Use admin privileges when installing py.exe" and "Add python.exe to PATH"
 ! At the end, press "Disable path lenght limit"
 
