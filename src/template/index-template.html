@@ -249,6 +249,7 @@ async function getStats() {
     console.error('---> SERVER DISCONNECTED');
     document.getElementById('name').style.color = '#ff0000';
     document.getElementById('name').textContent="OFFLINE"
+    document.getElementById('duration').textContent=""
     throw error;
   }
 }
