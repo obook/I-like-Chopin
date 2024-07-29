@@ -63,6 +63,7 @@ class Ui_MainWindow(object):
         self.pushButton_Files = QPushButton(self.groupBoxDevices)
         self.pushButton_Files.setObjectName(u"pushButton_Files")
         self.pushButton_Files.setGeometry(QRect(110, 110, 331, 31))
+        self.pushButton_Files.setAcceptDrops(True)
         self.groupBox_2 = QGroupBox(self.centralwidget)
         self.groupBox_2.setObjectName(u"groupBox_2")
         self.groupBox_2.setGeometry(QRect(10, 155, 481, 141))
