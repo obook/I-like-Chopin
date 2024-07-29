@@ -16,7 +16,6 @@ body {
 .title{
     font-size: calc(.5em + 3vw);
     color:#339933;
-    background-color:#333333;
     border-radius: 10px;
     text-indent:10px;
 }
@@ -24,7 +23,6 @@ body {
 .name{
     font-size: calc(.5em + 3vw);
     color:#ffff00;
-    background-color:#333333;
     border-radius: 10px;
     text-indent:10px;
 }
@@ -32,18 +30,14 @@ body {
 .informations{
     color:#9b9a9a;
     font-size: calc(.5em + 0.1vw);
-    background-color:#333333;
-    border-radius: 10px;
     text-indent:10px;
 }
 
 .container {
-    display: flex;
+  display: flex;
     flex-wrap: nowrap;
     flex-direction: column;
     font-size: calc(.5em + 2vw);
-    background-color:#333333;
-    border-radius: 10px;
     text-indent: 10px;
 }
 
@@ -76,7 +70,6 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 */
 
 .accordion {
-  /* background-color: #eee; */
   color:#ffffff;
   background-color:#333333;
   cursor: pointer;
@@ -96,23 +89,34 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 
 .panel {
   padding: 0 18px;
-  /* background-color: white; */
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
+}
+
+/* Sticky nav header */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color:#222222;
+  padding: 1rem;
+  border-radius: 10px;
 }
 
 </style>
 </head>
 <body>
 
-<div class='title'>
+<nav class="navbar">
+  <div class='title'>
     <div class="name" id="name">${name}</div>
     <div class="informations">Duration : <span id='duration'>${duration}</div>
-</div>
+  </div>
+  <div class="block"><progress id='progressbar' value="0" max="100"></progress></div>
+</nav>
 
-<div class="block"><progress id='progressbar' value="0" max="100"></progress></div>
-
+<main>
 <!-- just for tests
 <button class="accordion">Section 1</button>
 <div class="panel">
@@ -128,13 +132,108 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 <div class="panel">
   <p>Lorem ipsum...</p>
 </div>
- -->
-<div class="container">
-    ${midifiles}
+
+<button class="accordion">Section 1</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
 </div>
 
+<button class="accordion">Section 2</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 3</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 1</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 2</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 3</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 1</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 2</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 3</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 1</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 2</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 3</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 1</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 2</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 3</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 1</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 2</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+
+<button class="accordion">Section 3</button>
+<div class="panel">
+  <p>Lorem ipsum...</p>
+</div>
+ -->
+
+<div class="container">
+  ${midifiles} 
+</div>
+
+</main>
+
 <script>
+
 async function getStats() {
+  try {
     const response = await fetch('status.json');
     const data = await response.json();
     document.getElementById('progressbar').value=data.played
@@ -146,7 +245,13 @@ async function getStats() {
         document.getElementById('name').style.color = '#ffff00';
     else
         document.getElementById('name').style.color = '#00ff00';
+  } catch (error) {
+    console.error('---> SERVER DISCONNECTED');
+    document.getElementById('name').style.color = '#ff0000';
+    throw error;
+  }
 }
+
 setInterval(getStats, 2000);
 
 var acc = document.getElementsByClassName("accordion");
