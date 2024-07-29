@@ -18,7 +18,7 @@ import webbrowser
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from PySide6 import QtGui
-from PySide6.QtCore import QTimer
+from PySide6.QtCore import QTimer, QEvent
 from PySide6.QtGui import QIcon
 from midi_main import ClassMidiMain
 from midi_song import states
@@ -83,6 +83,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Mode.clicked.connect(self.Mode)
         self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,30); }\n")
         self.ui.pushButton_Files.clicked.connect(self.OpenBrowser)
+        self.ui.pushButton_Files.installEventFilter(self) # drop files
 
         # ComboBoxes Inputs/Outputs
         self.Inputs, self.Outputs, IOPorts = self.midi.GetDevices()
@@ -295,6 +296,18 @@ class MainWindow(QMainWindow):
 
     def Informations(self):
         ShowInformation(self)
+
+    def eventFilter(self, o, e): # drop files
+        if e.type() == QEvent.DragEnter: #remember to accept the enter event
+            e.acceptProposedAction()
+            return True
+        if e.type() == QEvent.Drop:
+            data = e.mimeData()
+            urls = data.urls()
+            if ( urls and urls[0].scheme() == 'file' ):
+                self.MidifileChange(urls[0].path())
+            return True
+        return False #remember to return false for other event types
 
     # End
     def closeEvent(self, event): # overwritten

@@ -13,8 +13,7 @@ import pathlib
 import json
 from threading import Thread
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
-from urllib.parse import urlparse
-from urllib.parse import parse_qs
+from urllib.parse import urlparse, parse_qs, quote
 from web_interfaces import get_interfaces
 from string import Template
 
@@ -85,7 +84,7 @@ class Handler(BaseHTTPRequestHandler):
                 midiname = midiname.replace('_',' ')
                 midiname = midiname.replace('-',' ')
                 midiname.upper()
-                midilist_html +=f"<p><a href='?play={midifile}'> &nbsp; {midiname} &nbsp; </a></p>"
+                midilist_html +=f"<p><a href='?play={quote(midifile)}'> &nbsp; {midiname} &nbsp; </a></p>"
 
             midilist_html +="</div>"
 
