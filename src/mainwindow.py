@@ -175,7 +175,7 @@ class MainWindow(QMainWindow):
             if self.midisong.GetState() >= states['ready']:
                 self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
 
-            elif self.midisong.GetState() == states['cueing']:
+            elif self.midisong.IsState(states['cueing']):
                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_YELLOW_LED))
 
             else:
