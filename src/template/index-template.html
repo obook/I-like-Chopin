@@ -111,7 +111,7 @@ nav {
 <nav class="navbar">
   <div class='title'>
     <div class="name" id="name">${name}</div>
-    <div class="informations">Duration : <span id='duration'>${duration}</div>
+    <div class="informations">Duration : <span id='duration'>${duration}</span> <span id='mode'></div></div>
   </div>
   <div class="block"><progress id='progressbar' value="0" max="100"></progress></div>
 </nav>
@@ -247,6 +247,15 @@ async function getStats() {
         document.getElementById('name').style.color = '#ffff00';
     else
         document.getElementById('name').style.color = '#00ff00';
+    if (data.mode == 1)
+      document.getElementById('mode').textContent=("(mode Chopin)")
+    else if (data.mode == 2)
+      document.getElementById('mode').textContent=("(mode Passthrough)")
+    else if (data.mode == 3)
+      document.getElementById('mode').textContent=("(mode Player)")
+    else
+      document.getElementById('mode').textContent=("")
+
   } catch (error) {
     console.error('---> NETWORK ERROR : ', error);
     document.getElementById('name').style.color = '#ff0000';

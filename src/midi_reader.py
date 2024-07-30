@@ -155,7 +155,7 @@ class ClassThreadMidiReader(Thread):
                 if msg.type == 'note_on' and self.channels[msg.channel]:
                     text = f"Keys\t{self.keys['key_on']}"
                     note, octave = number_to_note(msg.note)
-                    text = text + f"\t\t {note}{octave} \t\t [{msg.note}]"
+                    text = text + f"\t\t {note}{octave}\t\t [{msg.note}]"
                     self.parent.PrintStatusBar(text)
 
             # Playback : wait keyboard

@@ -50,7 +50,8 @@ class Handler(BaseHTTPRequestHandler):
                     "played":self.midisong.GetPlayed(),
                     "duration":round(self.midisong.GetDuration(),2),
                     "nameclean":self.midisong.GetCleanName(),
-                    "state":self.midisong.GetState()
+                    "state":self.midisong.GetState(),
+                    "mode":self.midisong.GetMode()
                 }
             )
 

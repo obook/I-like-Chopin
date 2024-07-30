@@ -98,8 +98,13 @@ class ClassMidiSong:
             return True
         return False
 
+    # Modes : 'chopin' (wait keyboard) - 'passthrough' (keyboard to synth) - 'player' (autoplay midifile)
+
     def SetMode(self,value): # EG : SetMode(modes['passthrough'])
         self.__mode = value
+
+    def GetMode(self):
+        return self.__mode
 
     def IsMode(self,value): # EG : IsMode(modes['player'])
         if self.__mode == value:

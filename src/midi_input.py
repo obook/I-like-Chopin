@@ -76,7 +76,7 @@ class ClassThreadInput(Thread):
             text = f"Keys\t{self.keys['key_on']}"
             if message.type == 'note_on': # or message.type == 'note_off':
                 note, octave = number_to_note(message.note)
-                text = text + f"\t\t {note}{octave} \t\t [{message.note}]"
+                text = text + f"\t\t {note}{octave}\t\t [{message.note}]"
             self.pParent.PrintStatusBar(text)
 
         # Playback/Passthrough mode
