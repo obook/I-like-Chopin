@@ -43,6 +43,7 @@ class ClassThreadMidiReader(Thread):
         print(f"MidiReader {self.uuid} destroyed [{self.midisong.Getfilepath()}]")
 
     def LoadMidiSong(self, mode):
+
         if not self.midisong:
             return
 
@@ -99,6 +100,9 @@ class ClassThreadMidiReader(Thread):
 
         if self.midisong.IsMode(modes['player']):
             time.sleep(3) # more elegant
+
+        elif self.midisong.IsMode(modes['passthrough']): # Here ?
+            return
 
         for msg in MidiFile(self.midisong.Getfilepath()):
 
@@ -237,6 +241,10 @@ class ClassThreadMidiReader(Thread):
                     if not msg.type in filter:
                        print(f"|!| MidiReader : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]")
                     '''
+
+                # Loop until passthrough mode active
+                while self.midisong.IsMode(modes['passthrough']):
+                    time.sleep(0.5)
 
         # End of song 
         self.midisong.SetPlayed(100)

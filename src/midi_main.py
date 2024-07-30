@@ -112,6 +112,10 @@ class ClassMidiMain:
 
         if self.ThreadOutput:
             port = self.ThreadOutput.getport()
+
+            if self.ThreadInput:
+                 self.ThreadInput.SetOutPort(port)
+
             self.ThreadMidiReader.SetMidiPort(port)
             self.ThreadMidiReader.start()
 

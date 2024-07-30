@@ -132,6 +132,11 @@ class ClassSettings:
     def GetMode(self):
         return self.GetSetting('Mode',modes['chopin'])
 
+    def IsMode(self,mode): # EG IsMode(modes['chopin'])
+        if self.GetMode() == mode:
+            return True
+        return False
+
     def SaveMode(self,value):
         return self.SetSetting('Mode', value)
 

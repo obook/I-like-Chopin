@@ -62,17 +62,6 @@ class ClassThreadInput(Thread):
             elif message.control == 51 and message.value == 127:
                 self.pParent.ChangePlayerMode()
 
-        # Playback/Passthrough mode
-        if self.settings.GetMode() == modes['passthrough']:
-            self.keys['key_on'] = 0
-            # Play
-            try: # meta messages can't be send to ports
-                if self.out_port:
-                    self.out_port.send(message)
-            except:
-                pass
-            return
-
         # Keys pressed counter
         if message.type == 'note_on':
             self.keys['key_on'] +=1
@@ -83,12 +72,25 @@ class ClassThreadInput(Thread):
         if self.keys['key_on'] < 0:
             self.keys['key_on'] = 0
 
-        if self.settings.GetMode() == modes['chopin']:
+        if not self.settings.IsMode(modes['player']):
             text = f"Keys\t{self.keys['key_on']}"
             if message.type == 'note_on': # or message.type == 'note_off':
                 note, octave = number_to_note(message.note)
                 text = text + f"\t\t {note}{octave} \t\t [{message.note}]"
             self.pParent.PrintStatusBar(text)
+
+        # Playback/Passthrough mode
+        if self.settings.IsMode(modes['passthrough']):
+            self.keys['key_on'] = 0
+            # Play
+            try: # meta messages can't be send to ports
+                if self.out_port:
+                    self.out_port.send(message)
+                else:
+                    print("---> NO PORT")
+            except:
+                pass
+            return
 
     def active(self):
         if self.in_port :
