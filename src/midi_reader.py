@@ -11,6 +11,7 @@ from threading import Thread
 
 from mido import MidiFile
 from midi_song import ClassMidiSong, states, modes
+from midi_numbers import number_to_note
 
 class ClassThreadMidiReader(Thread):
     """Read midifile and send to output device"""
@@ -97,12 +98,9 @@ class ClassThreadMidiReader(Thread):
             return
 
         if self.midisong.IsMode(modes['player']):
-            self.midisong.SetState(states['playing'])
-            self.parent.PrintStatusBar("Autoplay...")
+            time.sleep(3) # more elegant
 
         for msg in MidiFile(self.midisong.Getfilepath()):
-
-            # print("--> msg =", msg)
 
             # Stop while running ?
             if not self.midisong:
@@ -112,28 +110,59 @@ class ClassThreadMidiReader(Thread):
                 self.stop()
                 return
 
-            if self.midisong.IsMode(modes['player']): # just a player -> missing = skip times notes before the channel
+            # Just a Midi player
+            if self.midisong.IsMode(modes['player']):
+
+                if self.midisong.IsState(states['cueing']):
+                    msg.time = 0
+
                 time.sleep(msg.time)
-                if msg.type == 'note_on':# Stats
-                    self.midisong.SetPlayed(int(100*self.current_notes_on/self.total_notes_on))
-                    self.current_notes_on += 1
+
+                if msg.type == 'note_on':
+                    if self.channels[msg.channel] and not self.midisong.IsState(states['playing']): # First note on channels selected
+                        print(f"MidiReader {self.uuid} ready !")
+                        self.midisong.SetState(states['playing'])
+                    # Stats
+                    if msg.type == 'note_on':
+                        self.midisong.SetPlayed(int(100*self.current_notes_on/self.total_notes_on))
+                        self.current_notes_on += 1
+
+                    # Delay
+                    if self.keys['humanize']: # Humanize controlled by knob, see midi_input
+                        human = random.randrange(0,self.keys['humanize'],1)/2000
+                    else:
+                        human = 0
+
+                    time.sleep(self.keys['speed']/2000 + human) # Speed controlled by knob, see midi_input
+
+                # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
+                if msg.type == 'program_change' and self.settings.GetForceIntrument():
+                    if msg.channel != 9: # not for drums
+                        msg.program = self.settings.GetPianoProgram()
+
                 try: # meta messages can't be send to ports
-                    # if self.channels[msg.channel] or msg.type == 'program_change' and self.port_out:
-                    self.port_out.send(msg)
+                    if self.channels[msg.channel] or msg.type == 'program_change' and self.port_out:
+                        self.port_out.send(msg)
                 except:
                     pass
                     #if not self.port_out:
                     #    print(f"|!| MidiReader : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]")
 
-            elif self.midisong.IsMode(modes['chopin']): # playback
+                if msg.type == 'note_on' and self.channels[msg.channel]:
+                    text = f"Keys\t{self.keys['key_on']}"
+                    note, octave = number_to_note(msg.note)
+                    text = text + f"\t\t {note}{octave} \t\t [{msg.note}]"
+                    self.parent.PrintStatusBar(text)
+
+            # Playback : wait keyboard
+            elif self.midisong.IsMode(modes['chopin']):
 
                 # Wait note time
                 if self.midisong.IsState(states['playing']) and msg.time > self.wait_time:
                     time.sleep(msg.time)
 
                 if msg.type == 'note_on':
-                    # First note on channels selected
-                    if self.channels[msg.channel] and not self.midisong.IsState(states['playing']):
+                    if self.channels[msg.channel] and not self.midisong.IsState(states['playing']): # First note on channels selected
                         print(f"MidiReader {self.uuid} ready !")
                         self.midisong.SetState(states['playing'])
 
@@ -142,7 +171,6 @@ class ClassThreadMidiReader(Thread):
                     self.current_notes_on += 1
 
                     # Delay
-
                     if self.keys['humanize']: # Humanize controlled by knob, see midi_input
                         human = random.randrange(0,self.keys['humanize'],1)/2000
                     else:

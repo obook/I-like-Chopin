@@ -64,15 +64,12 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         cursor.setPosition(0);
         self.textBrowser.setTextCursor(cursor);
 
-        self.checkBox_PrintTerminalMsg.setChecked(self.settings.GetPrintTerm())
         self.checkBox_ForceIntrument0.setChecked(self.settings.GetForceIntrument())
-
         self.checkBox_ForceIntrument0.setText(f"Force piano (prog {self.settings.GetPianoProgram()})")
 
         # WARNING HERE -> Send now force piano to device if set
 
     def quit(self):
-        self.settings.SavePrintTerm(self.checkBox_PrintTerminalMsg.isChecked())
         self.settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
         self.close()
 

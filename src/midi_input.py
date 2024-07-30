@@ -9,6 +9,7 @@ import uuid
 from mido import open_input
 from threading import Thread
 from midi_numbers import number_to_note
+from midi_song import modes
 
 class ClassThreadInput(Thread):
     """Class for input midi to device"""
@@ -43,14 +44,10 @@ class ClassThreadInput(Thread):
         except:
             print(f"MidiInput {self.uuid} midi_input:Error connect from {self.in_device}")
             return
-        self.pParent.PrintStatusBar(f"Waiting : {self.in_device} ...")
+        if self.settings.GetMode() == modes['chopin']:
+            self.pParent.PrintStatusBar(f"Waiting : {self.in_device} ...")
 
     def callback(self, message):
-
-        if self.settings.GetPrintTerm():
-            filter =['clock','stop','note_off']
-            if message.type not in filter:
-                print(f"MidiInput {self.uuid}:{message}")
 
         # Control change - Midi commands
         if message.type =='control_change':
@@ -63,10 +60,10 @@ class ClassThreadInput(Thread):
             elif message.control == 77:
                 self.pParent.ChangeMidiFile(message.value)
             elif message.control == 51 and message.value == 127:
-                self.pParent.Mode()
+                self.pParent.ChangePlayerMode()
 
         # Playback/Passthrough mode
-        if not self.keys['playback']:
+        if self.settings.GetMode() == modes['passthrough']:
             self.keys['key_on'] = 0
             # Play
             try: # meta messages can't be send to ports
@@ -86,11 +83,12 @@ class ClassThreadInput(Thread):
         if self.keys['key_on'] < 0:
             self.keys['key_on'] = 0
 
-        text = f"Keys\t{self.keys['key_on']}"
-        if message.type == 'note_on': # or message.type == 'note_off':
-            note, octave = number_to_note(message.note)
-            text = text + f"\t\t {note}{octave} \t\t [{message.note}]"
-        self.pParent.PrintStatusBar(text)
+        if self.settings.GetMode() == modes['chopin']:
+            text = f"Keys\t{self.keys['key_on']}"
+            if message.type == 'note_on': # or message.type == 'note_off':
+                note, octave = number_to_note(message.note)
+                text = text + f"\t\t {note}{octave} \t\t [{message.note}]"
+            self.pParent.PrintStatusBar(text)
 
     def active(self):
         if self.in_port :

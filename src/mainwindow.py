@@ -21,7 +21,7 @@ from PySide6 import QtGui
 from PySide6.QtCore import QTimer, QEvent
 from PySide6.QtGui import QIcon
 from midi_main import ClassMidiMain
-from midi_song import states
+from midi_song import states, modes
 from settings import ClassSettings
 from informations import ShowInformation
 from web_server import ClassWebServer
@@ -57,7 +57,6 @@ class MainWindow(QMainWindow):
 
     ConnectInputState = False
     ConnectOutputState = False
-    mode_playback = True
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -80,10 +79,13 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Panic.clicked.connect(self.Panic)
         self.ui.pushButton_Quit.clicked.connect(self.Quit)
         self.ui.pushButton_Info.clicked.connect(self.Informations)
-        self.ui.pushButton_Mode.clicked.connect(self.Mode)
-        self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,30); }\n")
+        self.ui.pushButton_Mode.clicked.connect(self.ChangePlayerMode)
         self.ui.pushButton_Files.clicked.connect(self.OpenBrowser)
         self.ui.pushButton_Files.installEventFilter(self) # drop files
+
+        # Force chopin mode
+        self.settings.SaveMode(modes['chopin'])
+        self.SetPlayerModeButtons()
 
         # ComboBoxes Inputs/Outputs
         self.Inputs, self.Outputs, IOPorts = self.midi.GetDevices()
@@ -269,19 +271,36 @@ class MainWindow(QMainWindow):
         else:
             self.ui.pushButton_Humanize.setText("Humanize")
 
-    def Mode(self):
-
-        if self.mode_playback :
-            self.mode_playback = False
-            self.ui.pushButton_Mode.setText("Passthrough")
-            self.ui.pushButton_Mode.setChecked(True)
-            self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(100,0,0); }\n")
-        else:
-            self.mode_playback = True
-            self.ui.pushButton_Mode.setText("Playback")
-            self.ui.pushButton_Mode.setChecked(False)
+    def SetPlayerModeButtons(self):
+        if self.settings.GetMode() == modes['chopin']:
             self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,30); }\n")
-        self.midi.Mode(self.mode_playback)
+            self.ui.pushButton_Mode.setText("Chopin")
+            self.ui.pushButton_Mode.setChecked(False)
+
+        elif self.settings.GetMode() == modes['passthrough']:
+            self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,80); }\n")
+            self.ui.pushButton_Mode.setText("Passthrough")
+            self.ui.pushButton_Mode.setChecked(False)
+
+        elif self.settings.GetMode() == modes['player']:
+            self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,30,80); }\n")
+            self.ui.pushButton_Mode.setText("Player")
+            self.ui.pushButton_Mode.setChecked(False)
+
+    def ChangePlayerMode(self): # button mode pressed or called by midi_inpout
+
+        if self.settings.GetMode() == modes['chopin']:
+            self.settings.SaveMode(modes['passthrough'])
+
+        elif self.settings.GetMode() == modes['passthrough']:
+            self.settings.SaveMode(modes['player'])
+
+        elif self.settings.GetMode() == modes['player']:
+            # stop Song here ?
+            self.settings.SaveMode(modes['chopin'])
+
+        self.SetPlayerModeButtons()
+        self.midi.ChangeMidiMode(self.settings.GetMode())
 
     def OpenBrowser(self):
         webbrowser.open(f'http://127.0.0.1:{self.web_server.GetPort()}')

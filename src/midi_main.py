@@ -15,13 +15,9 @@ from midi_input import ClassThreadInput
 from midi_output import ClassThreadOutput
 from midi_reader import ClassThreadMidiReader
 
-
-from midi_song import ClassMidiSong, states, modes
-
-
 class ClassMidiMain:
     """Main Midi Class"""
-    keys={"key_on":0,"playback":True,"speed":0,"humanize":0}
+    keys={"key_on":0,"speed":0,"humanize":0}
 
     # Threads
     ThreadInput = None
@@ -111,12 +107,8 @@ class ClassMidiMain:
 
         self.ThreadMidiReader = ClassThreadMidiReader(midifile, self.keys, self.channels,self.pParent)
 
-
-
-        # Future use : 3 modes = player (just midi player) , chopin (wait keyboard) and passthrough
-        self.midisong = self.ThreadMidiReader.LoadMidiSong(modes['chopin']) # Mode : modes['player'] or  modes['chopin']
-
-
+        # 3 modes = player (just midi player) , chopin (wait keyboard) and passthrough
+        self.midisong = self.ThreadMidiReader.LoadMidiSong(self.settings.GetMode())
 
         if self.ThreadOutput:
             port = self.ThreadOutput.getport()
@@ -126,6 +118,9 @@ class ClassMidiMain:
         self.pParent.SetFileButtonText()
 
         return self.midisong
+
+    def ChangeMidiMode(self,mode):
+        self.midisong.SetMode(mode)
 
     def GetMidiSong(self):
         if not self.ThreadMidiReader:

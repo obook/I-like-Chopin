@@ -38,23 +38,10 @@
    <property name="title">
     <string>Options</string>
    </property>
-   <widget class="QCheckBox" name="checkBox_PrintTerminalMsg">
-    <property name="geometry">
-     <rect>
-      <x>256</x>
-      <y>30</y>
-      <width>141</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Print msg to Terminal</string>
-    </property>
-   </widget>
    <widget class="QCheckBox" name="checkBox_ForceIntrument0">
     <property name="geometry">
      <rect>
-      <x>52</x>
+      <x>160</x>
       <y>30</y>
       <width>141</width>
       <height>23</height>

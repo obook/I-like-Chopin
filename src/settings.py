@@ -12,6 +12,7 @@ import json
 import os
 import shutil
 import uuid
+from midi_song import modes
 
 class ClassSettings:
     """Class for recall and store preferences and settings"""
@@ -24,12 +25,10 @@ class ClassSettings:
     config = {
     "InputDevice": '(None)',
     "OutputDevice": '(None)',
-    "MidiFilepath":"(None)",
     "MidiPath":defaultmidipath,
-    "PrintTerm":False,
     "ForceInstrument":False,
     "PianoProgram":0,
-    "ShowSongInfo":False}
+    "Mode":modes['chopin']}
 
     def __init__(self):
         print(f"Settings {self.uuid} reading [{self.settingsfile}]")
@@ -41,6 +40,7 @@ class ClassSettings:
                 shutil.copytree( midifiles_path_src, self.defaultmidipath )
             except:
                 print(f"Settings {self.uuid} unable de copy midifiles [{self.defaultmidipath}]")
+        self.LoadConfig()
 
     def __del__(self):
         print(f"Settings {self.uuid} destroyed [{self.settingsfile}]")
@@ -117,12 +117,6 @@ class ClassSettings:
     def GetMidiPath(self):
          return self.GetSetting('MidiPath',self.defaultmidipath)
 
-    def GetPrintTerm(self):
-        return self.GetSetting('PrintTerm',False)
-
-    def SavePrintTerm(self,value):
-        return self.SetSetting('PrintTerm', value)
-
     def GetForceIntrument(self):
         return self.GetSetting('ForceInstrument',False)
 
@@ -134,6 +128,12 @@ class ClassSettings:
 
     def SavePianoProgram(self,value): # not used
         return self.SetSetting('PianoProgram', value)
+
+    def GetMode(self):
+        return self.GetSetting('Mode',modes['chopin'])
+
+    def SaveMode(self,value):
+        return self.SetSetting('Mode', value)
 
     def GetServerPort(self):
         return self.GetSetting('ServerPort',8888)
