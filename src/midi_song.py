@@ -87,7 +87,7 @@ class ClassMidiSong:
     def GetChannels(self):
         return self.__channels
 
-    def SetState(self,value):
+    def SetState(self,value): # EG : SetState(states['cueing'])
         self.__state = value
 
     def GetState(self):
