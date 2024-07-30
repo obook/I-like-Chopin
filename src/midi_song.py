@@ -14,6 +14,14 @@ states = {
 'playing':3
 }
 
+modes = {
+'error':-1,
+'unknown':0,
+'chopin':1,
+'passthrough':2,
+'player':3
+}
+
 class ClassMidiSong:
     """Class about midifile informations"""
     __filepath = None
@@ -24,6 +32,7 @@ class ClassMidiSong:
     __active = False
     __ready = False # wait first key on keyboard
     __state = states['unknown']
+    __mode = modes['chopin']
     __uuid = uuid.uuid4()
 
     def __init__(self, filepath):
@@ -84,7 +93,20 @@ class ClassMidiSong:
     def GetState(self):
         return self.__state
 
-    def IsState(self,key):
-        if self.__state == states[key]:
+    def SetMode(self,value): # EG : SetMode(modes['passthrough'])
+        self.__mode = value
+    '''
+    def GetMode(self):
+        return self.__mode
+    '''
+    def IsState(self,state): # EG : IsState(states['cueing'])
+        if self.__state == state:
             return True
         return False
+
+    def IsMode(self,mode): # EG : IsMode(modes['player'])
+        if self.__mode == mode:
+            return True
+        return False
+
+
