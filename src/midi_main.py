@@ -15,9 +15,11 @@ from midi_input import ClassThreadInput
 from midi_output import ClassThreadOutput
 from midi_reader import ClassThreadMidiReader
 
+
 class ClassMidiMain:
     """Main Midi Class"""
-    keys={"key_on":0,"speed":0,"humanize":0}
+
+    keys = {"key_on": 0, "speed": 0, "humanize": 0}
 
     # Threads
     ThreadInput = None
@@ -45,18 +47,18 @@ class ClassMidiMain:
         IOPorts = []
 
         for i, port_name in enumerate(mido.get_output_names()):
-            if platform.system() == "Linux": # cleanup linux ports
-                port_name = port_name[:port_name.rfind(' ')]
+            if platform.system() == "Linux":  # cleanup linux ports
+                port_name = port_name[: port_name.rfind(" ")]
             Outputs.append(port_name)
 
         for i, port_name in enumerate(mido.get_input_names()):
-            if platform.system() == "Linux": # cleanup linux ports
-                port_name = port_name[:port_name.rfind(' ')]
+            if platform.system() == "Linux":  # cleanup linux ports
+                port_name = port_name[: port_name.rfind(" ")]
             Inputs.append(port_name)
 
-        for i, port_name in enumerate(mido.get_ioport_names()): # not used
-            if platform.system() == "Linux": # cleanup linux ports
-                port_name = port_name[:port_name.rfind(' ')]
+        for i, port_name in enumerate(mido.get_ioport_names()):  # not used
+            if platform.system() == "Linux":  # cleanup linux ports
+                port_name = port_name[: port_name.rfind(" ")]
             IOPorts.append(port_name)
 
         return Inputs, Outputs, IOPorts
@@ -80,7 +82,7 @@ class ClassMidiMain:
 
         self.ThreadOutput = ClassThreadOutput(out_device, self.pParent)
         self.ThreadOutput.start()
-        self.port_out = self.ThreadOutput.getport() # dans certains cas, retourne None
+        self.port_out = self.ThreadOutput.getport()  # dans certains cas, retourne None
         if not self.port_out:
             print(f"|!| MidiMain {self.uuid} ThreadOutput.getport NONE")
 
@@ -95,7 +97,9 @@ class ClassMidiMain:
     # List of midifiles from folder midi (see json file created)
     def GetMidiFiles(self):
         midifiles = []
-        for file in sorted(glob.glob(os.path.join(self.settings.GetMidiPath(),"*.mid"))):
+        for file in sorted(
+            glob.glob(os.path.join(self.settings.GetMidiPath(), "*.mid"))
+        ):
             midifiles.append(os.path.basename(file))
         return midifiles
 
@@ -105,7 +109,9 @@ class ClassMidiMain:
             self.ThreadMidiReader.stop()
             self.ThreadMidiReader = None
 
-        self.ThreadMidiReader = ClassThreadMidiReader(midifile, self.keys, self.channels,self.pParent)
+        self.ThreadMidiReader = ClassThreadMidiReader(
+            midifile, self.keys, self.channels, self.pParent
+        )
 
         # 3 modes = player (just midi player) , chopin (wait keyboard) and passthrough
         self.midisong = self.ThreadMidiReader.LoadMidiSong(self.settings.GetMode())
@@ -114,7 +120,7 @@ class ClassMidiMain:
             port = self.ThreadOutput.getport()
 
             if self.ThreadInput:
-                 self.ThreadInput.SetOutPort(port)
+                self.ThreadInput.SetOutPort(port)
 
             self.ThreadMidiReader.SetMidiPort(port)
             self.ThreadMidiReader.start()
@@ -123,7 +129,7 @@ class ClassMidiMain:
 
         return self.midisong
 
-    def ChangeMidiMode(self,mode):
+    def ChangeMidiMode(self, mode):
         self.midisong.SetMode(mode)
 
     def GetMidiSong(self):
@@ -138,22 +144,22 @@ class ClassMidiMain:
     def Mode(self, playback=True):
         out_port = self.ThreadOutput.getport()
         self.ThreadInput.SetOutPort(out_port)
-        self.keys['playback']= playback
+        self.keys["playback"] = playback
 
     def Stop(self):
-        if self.ThreadMidiReader :
+        if self.ThreadMidiReader:
             self.ThreadMidiReader.stop()
             self.ThreadMidiReader = None
 
     def Panic(self):
         if self.ThreadOutput:
             self.ThreadOutput.panic()
-        self.keys['key_on'] = 0
+        self.keys["key_on"] = 0
         self.pParent.PrintStatusBar("")
 
     def quit(self):
         if self.ThreadMidiReader:
-            self.ThreadMidiReader.SetMidiPort(None) # stop send
+            self.ThreadMidiReader.SetMidiPort(None)  # stop send
             self.ThreadMidiReader.stop()
             self.ThreadMidiReader = None
 

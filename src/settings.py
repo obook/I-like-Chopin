@@ -14,21 +14,28 @@ import shutil
 import uuid
 from midi_song import modes
 
+
 class ClassSettings:
     """Class for recall and store preferences and settings"""
+
     uuid = uuid.uuid4()
     applicationpath = os.path.dirname(os.path.realpath(__file__))
     settingspath = os.path.join(os.path.expanduser("~"), ".config")
-    settingsfile =  os.path.join(settingspath, "i-like-chopin.json")
-    defaultmidipath = os.path.join(os.path.expanduser("~"), ".local","share","i-like-chopin","midi")
-    serverindextemplate = os.path.join(applicationpath,'template','index-template.html')
+    settingsfile = os.path.join(settingspath, "i-like-chopin.json")
+    defaultmidipath = os.path.join(
+        os.path.expanduser("~"), ".local", "share", "i-like-chopin", "midi"
+    )
+    serverindextemplate = os.path.join(
+        applicationpath, "template", "index-template.html"
+    )
     config = {
-    "InputDevice": '(None)',
-    "OutputDevice": '(None)',
-    "MidiPath":defaultmidipath,
-    "ForceInstrument":False,
-    "PianoProgram":0,
-    "Mode":modes['chopin']}
+        "InputDevice": "(None)",
+        "OutputDevice": "(None)",
+        "MidiPath": defaultmidipath,
+        "ForceInstrument": False,
+        "PianoProgram": 0,
+        "Mode": modes["chopin"],
+    }
 
     def __init__(self):
         print(f"Settings {self.uuid} reading [{self.settingsfile}]")
@@ -37,9 +44,11 @@ class ClassSettings:
         if not os.path.isdir(self.defaultmidipath):
             midifiles_path_src = os.path.join(self.application_path, "midi")
             try:
-                shutil.copytree( midifiles_path_src, self.defaultmidipath )
+                shutil.copytree(midifiles_path_src, self.defaultmidipath)
             except:
-                print(f"Settings {self.uuid} unable de copy midifiles [{self.defaultmidipath}]")
+                print(
+                    f"Settings {self.uuid} unable de copy midifiles [{self.defaultmidipath}]"
+                )
         self.LoadConfig()
 
     def __del__(self):
@@ -47,7 +56,7 @@ class ClassSettings:
 
     def LoadConfig(self):
         try:
-            with open(self.settingsfile, 'r') as f:
+            with open(self.settingsfile, "r") as f:
                 self.config = json.load(f)
                 f.close
         except:
@@ -57,7 +66,7 @@ class ClassSettings:
 
     def SaveConfig(self):
         try:
-            with open(self.settingsfile, 'w') as f:
+            with open(self.settingsfile, "w") as f:
                 json.dump(self.config, f)
                 f.close
         except:
@@ -67,9 +76,9 @@ class ClassSettings:
     def GetConfigPath(self):
         return self.settingsfile
 
-    '''
+    """
     Tools functions
-    '''
+    """
 
     def GetApplicationPath(self):
         return self.applicationpath
@@ -77,68 +86,68 @@ class ClassSettings:
     def GetIndexTemplate(self):
         return self.serverindextemplate
 
-    '''
+    """
     Globals settings functions
-    '''
+    """
 
-    def GetSetting(self,key,default=None):
+    def GetSetting(self, key, default=None):
         self.LoadConfig()
         if not key in self.config:
             self.config[key] = default
             self.SaveConfig()
         return self.config[key]
 
-    def SetSetting(self,key,value):
+    def SetSetting(self, key, value):
         self.config[key] = value
         return self.SaveConfig()
 
-    '''
+    """
     Individuals functions
-    '''
+    """
 
     def GetInputDevice(self):
-        return self.GetSetting('InputDevice','(None)')
+        return self.GetSetting("InputDevice", "(None)")
 
-    def SaveInputDevice(self,value):
-        return self.SetSetting('InputDevice', value)
+    def SaveInputDevice(self, value):
+        return self.SetSetting("InputDevice", value)
 
     def GetOutputDevice(self):
-        return self.GetSetting('OutputDevice','(None)')
+        return self.GetSetting("OutputDevice", "(None)")
 
-    def SaveOutputDevice(self,value):
-        return self.SetSetting('OutputDevice', value)
+    def SaveOutputDevice(self, value):
+        return self.SetSetting("OutputDevice", value)
 
     def GetMidifile(self):
-        return self.GetSetting('MidiSong','(None)')
+        return self.GetSetting("MidiSong", "(None)")
 
-    def SaveMidifile(self,value):
-        return self.SetSetting('MidiSong', value)
+    def SaveMidifile(self, value):
+        return self.SetSetting("MidiSong", value)
 
     def GetMidiPath(self):
-         return self.GetSetting('MidiPath',self.defaultmidipath)
+        return self.GetSetting("MidiPath", self.defaultmidipath)
 
     def GetForceIntrument(self):
-        return self.GetSetting('ForceInstrument',False)
+        return self.GetSetting("ForceInstrument", False)
 
-    def SaveForceIntrument(self,value):
-        return self.SetSetting('ForceInstrument', value)
+    def SaveForceIntrument(self, value):
+        return self.SetSetting("ForceInstrument", value)
 
     def GetPianoProgram(self):
-        return self.GetSetting('PianoProgram',0)
+        return self.GetSetting("PianoProgram", 0)
 
-    def SavePianoProgram(self,value): # not used
-        return self.SetSetting('PianoProgram', value)
+    def SavePianoProgram(self, value):  # not used
+        return self.SetSetting("PianoProgram", value)
 
     def GetMode(self):
-        return self.GetSetting('Mode',modes['chopin'])
+        return self.GetSetting("Mode", modes["chopin"])
 
-    def IsMode(self,mode): # EG IsMode(modes['chopin'])
+    def IsMode(self, mode):  # EG IsMode(modes['chopin'])
         if self.GetMode() == mode:
             return True
         return False
 
-    def SaveMode(self,value):
-        return self.SetSetting('Mode', value)
+    def SaveMode(self, value):
+        return self.SetSetting("Mode", value)
 
     def GetServerPort(self):
-        return self.GetSetting('ServerPort',8888)
+        return self.GetSetting("ServerPort", 8888)

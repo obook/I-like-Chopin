@@ -32,28 +32,29 @@ from web_server import ClassWebServer
 from ui_mainwindow import Ui_MainWindow
 
 application_path = os.path.dirname(os.path.realpath(__file__))
-ICON_APPLICATION = application_path+'/icons/svg/i-like-chopin.svg'
+ICON_APPLICATION = application_path + "/icons/svg/i-like-chopin.svg"
 # Define status icons
-ICON_RED_LED = application_path+'/icons/led/led-red-on.png'
-ICON_GREEN_LED = application_path+'/icons/led/green-led-on.png'
-ICON_YELLOW_LED = application_path+'/icons/led/yellow-led-on.png'
-ICON_LED_OFF = application_path+'/icons/led/led-off.png'
+ICON_RED_LED = application_path + "/icons/led/led-red-on.png"
+ICON_GREEN_LED = application_path + "/icons/led/green-led-on.png"
+ICON_YELLOW_LED = application_path + "/icons/led/yellow-led-on.png"
+ICON_LED_OFF = application_path + "/icons/led/led-off.png"
 
 app = None
+
 
 class MainWindow(QMainWindow):
 
     settings = ClassSettings()
     ChannelsButtonsList = []
-    ChannelsList = [False]*16
+    ChannelsList = [False] * 16
 
     Inputs = []
     Outputs = []
 
-    MidiFiles=[]
-    MidifilesIndex = 0 # ?
+    MidiFiles = []
+    MidifilesIndex = 0  # ?
     midi = None
-    midisong = None # current midisong
+    midisong = None  # current midisong
 
     ConnectInputState = False
     ConnectOutputState = False
@@ -61,7 +62,7 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
-        self.setFixedSize(504,434)
+        self.setFixedSize(504, 434)
         self.ui.setupUi(self)
 
         # Application icon X.org->correct - Wayland->not implemented
@@ -69,11 +70,11 @@ class MainWindow(QMainWindow):
         my_icon.addFile(ICON_APPLICATION)
         self.setWindowIcon(my_icon)
 
-        #StatusBar
+        # StatusBar
         self.ui.statusbar.setSizeGripEnabled(False)
 
         # Midi class
-        self.midi = ClassMidiMain(self,self.ChannelsList)
+        self.midi = ClassMidiMain(self, self.ChannelsList)
 
         # Push Buttons
         self.ui.pushButton_Panic.clicked.connect(self.Panic)
@@ -81,10 +82,10 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Info.clicked.connect(self.Informations)
         self.ui.pushButton_Mode.clicked.connect(self.ChangePlayerMode)
         self.ui.pushButton_Files.clicked.connect(self.OpenBrowser)
-        self.ui.pushButton_Files.installEventFilter(self) # drop files
+        self.ui.pushButton_Files.installEventFilter(self)  # drop files
 
         # Force chopin mode
-        self.settings.SaveMode(modes['chopin'])
+        self.settings.SaveMode(modes["chopin"])
         self.SetPlayerModeButtons()
 
         # ComboBoxes Inputs/Outputs
@@ -117,24 +118,30 @@ class MainWindow(QMainWindow):
 
         grid = self.ui.gridLayout
         for n in range(8):
-            self.ChannelsButtonsList.append(QPushButton(str(n+1)))
-            self.ChannelsButtonsList[n].setCheckable(True);
+            self.ChannelsButtonsList.append(QPushButton(str(n + 1)))
+            self.ChannelsButtonsList[n].setCheckable(True)
             self.ChannelsButtonsList[n].clicked.connect(self.ReadChannels)
-            self.ChannelsButtonsList[n].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }\n")
-            grid.addWidget(self.ChannelsButtonsList[n],1,n)
+            self.ChannelsButtonsList[n].setStyleSheet(
+                "QPushButton:checked { background-color: rgb(50,100,50); }\n"
+            )
+            grid.addWidget(self.ChannelsButtonsList[n], 1, n)
         for n in range(8):
-            self.ChannelsButtonsList.append(QPushButton(str(n+8+1)))
-            self.ChannelsButtonsList[n+8].setCheckable(True);
-            self.ChannelsButtonsList[n+8].clicked.connect(self.ReadChannels)
-            self.ChannelsButtonsList[n+8].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }\n")
-            grid.addWidget(self.ChannelsButtonsList[n+8],2,n)
+            self.ChannelsButtonsList.append(QPushButton(str(n + 8 + 1)))
+            self.ChannelsButtonsList[n + 8].setCheckable(True)
+            self.ChannelsButtonsList[n + 8].clicked.connect(self.ReadChannels)
+            self.ChannelsButtonsList[n + 8].setStyleSheet(
+                "QPushButton:checked { background-color: rgb(50,100,50); }\n"
+            )
+            grid.addWidget(self.ChannelsButtonsList[n + 8], 2, n)
 
         self.ChannelsFirst()
         # Special color for drums channel
-        self.ChannelsButtonsList[9].setStyleSheet("QPushButton:checked { background-color: rgb(100,50,50); }\n")
+        self.ChannelsButtonsList[9].setStyleSheet(
+            "QPushButton:checked { background-color: rgb(100,50,50); }\n"
+        )
 
         # Datas
-        self.ChannelsList[0] = True # active first channel
+        self.ChannelsList[0] = True  # active first channel
         self.MidiFiles = self.midi.GetMidiFiles()
 
         # Connections
@@ -147,7 +154,7 @@ class MainWindow(QMainWindow):
 
         # Web server
         self.web_server = ClassWebServer(self)
-        self.server_interfaces= self.web_server.GetInterfaces()
+        self.server_interfaces = self.web_server.GetInterfaces()
         self.web_server.start()
 
         # Timer
@@ -159,7 +166,7 @@ class MainWindow(QMainWindow):
 
         self.midisong = self.midi.GetMidiSong()
 
-        if self.midi.ConnectInputState() and not self.ConnectInputState :
+        if self.midi.ConnectInputState() and not self.ConnectInputState:
             self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
             self.ConnectInputState = True
         elif not self.midi.ConnectInputState():
@@ -174,14 +181,14 @@ class MainWindow(QMainWindow):
             self.ConnectOutputState = False
 
         if self.midisong:
-            if self.midisong.GetState() >= states['ready']:
+            if self.midisong.GetState() >= states["ready"]:
                 self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
 
-            elif self.midisong.IsState(states['cueing']):
-               self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_YELLOW_LED))
+            elif self.midisong.IsState(states["cueing"]):
+                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_YELLOW_LED))
 
             else:
-               self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
 
             self.SetFileButtonText()
             self.ChannelsColorize()
@@ -200,25 +207,27 @@ class MainWindow(QMainWindow):
         self.settings.SaveOutputDevice(out_device)
         self.midi.ConnectOutput(out_device)
 
-    '''
+    """
     def MidifileChanged(self):
         self.MidifileChange(os.path.join(self.settings.GetMidiPath(),self.ui.FileCombo.currentText()))
-    '''
+    """
 
-    def MidifileChange(self, filepath): # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
+    def MidifileChange(
+        self, filepath
+    ):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         self.settings.SaveMidifile(filepath)
         self.midisong = self.midi.SetMidiSong(filepath)
 
-    def ChangeMidiFile(self,value): # External Midi command
+    def ChangeMidiFile(self, value):  # External Midi command
         print("--> ChangeMidiFile NOT ACTIVE")
-        '''
+        """
         # value 0-127
         step = int(128/len(self.MidiFiles))
         self.MidifilesIndex = min(int(value/step),len(self.MidiFiles)-1)
         self.ui.pushButton_FileIndex.setText(f"MidiFile {self.MidifilesIndex+1}/{len(self.MidiFiles)}")
         self.midi.Panic()
         self.ui.FileCombo.setCurrentText(self.MidiFiles[self.MidifilesIndex])
-        '''
+        """
 
     # Channels
     def ChannelsNone(self):
@@ -240,12 +249,16 @@ class MainWindow(QMainWindow):
         if self.midisong:
             channels = self.midisong.GetChannels()
             for i in range(len(self.ChannelsButtonsList)):
-                self.ChannelsButtonsList[i].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); } QPushButton {color: grey}")
+                self.ChannelsButtonsList[i].setStyleSheet(
+                    "QPushButton:checked { background-color: rgb(50,100,50); } QPushButton {color: grey}"
+                )
 
             for key in channels:
                 if channels[key]:
-                    self.ChannelsButtonsList[int(key)].setStyleSheet("");
-                    self.ChannelsButtonsList[int(key)].setStyleSheet("QPushButton:checked { background-color: rgb(50,100,50); }")
+                    self.ChannelsButtonsList[int(key)].setStyleSheet("")
+                    self.ChannelsButtonsList[int(key)].setStyleSheet(
+                        "QPushButton:checked { background-color: rgb(50,100,50); }"
+                    )
 
     def ReadChannels(self):
         for n in range(len(self.ChannelsButtonsList)):
@@ -255,55 +268,61 @@ class MainWindow(QMainWindow):
                 self.ChannelsList[n] = False
 
     # Status Bar
-    def PrintStatusBar(self,message):
+    def PrintStatusBar(self, message):
         self.ui.statusbar.showMessage(message)
 
     # Midi control buttons
-    def PrintSpeed(self,speed): #0 to 126
-        if speed :
+    def PrintSpeed(self, speed):  # 0 to 126
+        if speed:
             self.ui.pushButton_Speed.setText(f"Speed -{speed}")
         else:
             self.ui.pushButton_Speed.setText("Speed")
 
-    def PrintHumanize(self,value):
-        if value :
+    def PrintHumanize(self, value):
+        if value:
             self.ui.pushButton_Humanize.setText(f"Humanize {value}")
         else:
             self.ui.pushButton_Humanize.setText("Humanize")
 
     def SetPlayerModeButtons(self):
-        if self.settings.GetMode() == modes['chopin']:
-            self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,30); }\n")
+        if self.settings.GetMode() == modes["chopin"]:
+            self.ui.pushButton_Mode.setStyleSheet(
+                "QPushButton { background-color: rgb(30,80,30); }\n"
+            )
             self.ui.pushButton_Mode.setText("Chopin")
             self.ui.pushButton_Mode.setChecked(False)
 
-        elif self.settings.GetMode() == modes['passthrough']:
-            self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,80,80); }\n")
+        elif self.settings.GetMode() == modes["passthrough"]:
+            self.ui.pushButton_Mode.setStyleSheet(
+                "QPushButton { background-color: rgb(30,80,80); }\n"
+            )
             self.ui.pushButton_Mode.setText("Passthrough")
             self.ui.pushButton_Mode.setChecked(False)
 
-        elif self.settings.GetMode() == modes['player']:
-            self.ui.pushButton_Mode.setStyleSheet("QPushButton { background-color: rgb(30,30,80); }\n")
+        elif self.settings.GetMode() == modes["player"]:
+            self.ui.pushButton_Mode.setStyleSheet(
+                "QPushButton { background-color: rgb(30,30,80); }\n"
+            )
             self.ui.pushButton_Mode.setText("Player")
             self.ui.pushButton_Mode.setChecked(False)
 
-    def ChangePlayerMode(self): # button mode pressed or called by midi_inpout
+    def ChangePlayerMode(self):  # button mode pressed or called by midi_inpout
 
-        if self.settings.GetMode() == modes['chopin']:
-            self.settings.SaveMode(modes['passthrough'])
+        if self.settings.GetMode() == modes["chopin"]:
+            self.settings.SaveMode(modes["passthrough"])
 
-        elif self.settings.GetMode() == modes['passthrough']:
-            self.settings.SaveMode(modes['player'])
+        elif self.settings.GetMode() == modes["passthrough"]:
+            self.settings.SaveMode(modes["player"])
 
-        elif self.settings.GetMode() == modes['player']:
+        elif self.settings.GetMode() == modes["player"]:
             # stop Song here ?
-            self.settings.SaveMode(modes['chopin'])
+            self.settings.SaveMode(modes["chopin"])
 
         self.SetPlayerModeButtons()
         self.midi.ChangeMidiMode(self.settings.GetMode())
 
     def OpenBrowser(self):
-        webbrowser.open(f'http://127.0.0.1:{self.web_server.GetPort()}')
+        webbrowser.open(f"http://127.0.0.1:{self.web_server.GetPort()}")
 
     def Panic(self):
         self.midi.Panic()
@@ -316,20 +335,20 @@ class MainWindow(QMainWindow):
     def Informations(self):
         ShowInformation(self)
 
-    def eventFilter(self, o, e): # drop files
-        if e.type() == QEvent.DragEnter: #remember to accept the enter event
+    def eventFilter(self, o, e):  # drop files
+        if e.type() == QEvent.DragEnter:  # remember to accept the enter event
             e.acceptProposedAction()
             return True
         if e.type() == QEvent.Drop:
             data = e.mimeData()
             urls = data.urls()
-            if ( urls and urls[0].scheme() == 'file' ):
+            if urls and urls[0].scheme() == "file":
                 self.MidifileChange(urls[0].path())
             return True
-        return False #remember to return false for other event types
+        return False  # remember to return false for other event types
 
     # End
-    def closeEvent(self, event): # overwritten
+    def closeEvent(self, event):  # overwritten
         self.Quit()
 
     def Quit(self):
@@ -344,16 +363,16 @@ class MainWindow(QMainWindow):
 
         app.quit()
 
+
 def start():
     global app
     if not QApplication.instance():
         app = QApplication(sys.argv)
-        app.setStyle('Fusion') # Windows dark theme
+        app.setStyle("Fusion")  # Windows dark theme
     else:
         app = QApplication.instance()
     widget = MainWindow()
     # For Linux Wayland, must be .desktop filename = Set QMainWindow icon
-    app.setDesktopFileName("org.obook.i-like-chopin");
+    app.setDesktopFileName("org.obook.i-like-chopin")
     widget.show()
     sys.exit(app.exec())
-

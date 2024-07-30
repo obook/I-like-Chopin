@@ -10,15 +10,17 @@ import platform
 from PySide6.QtWidgets import QDialog
 from ui_informations import Ui_DialogInformation
 
+
 class InformationsDlg(Ui_DialogInformation, QDialog):
     pParent = None
     settings = None
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.pParent = parent
         self.settings = self.pParent.settings
         self.setupUi(self)
-        self.setFixedSize(481,361)
+        self.setFixedSize(481, 361)
         self.setWindowTitle("Informations")
         self.pushButton_Close.clicked.connect(self.quit)
         style = " style='color:#FFFFFF;background-color:#333333;'"
@@ -61,17 +63,20 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.textBrowser.setOpenLinks(False)
         self.textBrowser.insertHtml(text)
         cursor = self.textBrowser.textCursor()
-        cursor.setPosition(0);
-        self.textBrowser.setTextCursor(cursor);
+        cursor.setPosition(0)
+        self.textBrowser.setTextCursor(cursor)
 
         self.checkBox_ForceIntrument0.setChecked(self.settings.GetForceIntrument())
-        self.checkBox_ForceIntrument0.setText(f"Force piano (prog {self.settings.GetPianoProgram()})")
+        self.checkBox_ForceIntrument0.setText(
+            f"Force piano (prog {self.settings.GetPianoProgram()})"
+        )
 
         # WARNING HERE -> Send now force piano to device if set
 
     def quit(self):
         self.settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
         self.close()
+
 
 def ShowInformation(pParent):
     dlg = InformationsDlg(pParent)
