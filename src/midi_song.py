@@ -99,13 +99,13 @@ class ClassMidiSong:
     def GetMode(self):
         return self.__mode
     '''
-    def IsState(self,state): # EG : IsState(states['cueing'])
-        if self.__state == state:
+    def IsState(self,value): # EG : IsState(states['cueing'])
+        if self.__state == value:
             return True
         return False
 
-    def IsMode(self,mode): # EG : IsMode(modes['player'])
-        if self.__mode == mode:
+    def IsMode(self,value): # EG : IsMode(modes['player'])
+        if self.__mode == value:
             return True
         return False
 
