@@ -174,7 +174,8 @@ class ClassThreadMidiReader(Thread):
                 if msg.type == "note_on" and self.channels[msg.channel]:
                     note, octave = number_to_note(msg.note)
                     text = f"{note}{octave}\t\t [{msg.note}]"
-                    self.statusbar_activity.emit(text)
+                    self.pParent.SetStatusBar(text) # BAD
+                    # self.statusbar_activity.emit(text)
 
             # Playback : wait keyboard
             elif self.midisong.IsMode(modes["chopin"]):
