@@ -151,7 +151,8 @@ class MainWindow(QMainWindow):
         self.MidifileChange(self.settings.GetMidifile())
 
         # Midifiles
-        self.ui.pushButton_Files.setText(self.midisong.GetCleanName())
+        if self.midisong:
+            self.ui.pushButton_Files.setText(self.midisong.GetCleanName())
 
         # Web server
         self.web_server = ClassWebServer(self)

@@ -101,7 +101,9 @@ class ClassMidiMain:
 
         if self.ThreadMidiReader:
             self.ThreadMidiReader.stop()
-            self.ThreadMidiReader = None
+        '''
+            # self.ThreadMidiReader = None
+        '''
 
         self.ThreadMidiReader = ClassThreadMidiReader(
             midifile, self.keys, self.channels, self.pParent
@@ -154,8 +156,8 @@ class ClassMidiMain:
     def quit(self):
         if self.ThreadMidiReader:
             self.ThreadMidiReader.stop()
-            self.ThreadMidiReader.SetMidiPort(None)  # stop send
-            self.ThreadMidiReader.terminate();
+            # self.ThreadMidiReader.SetMidiPort(None)  # stop send
+            # NOT recommanded self.ThreadMidiReader.terminate();
             self.ThreadMidiReader = None
 
         if self.ThreadInput:

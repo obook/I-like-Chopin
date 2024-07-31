@@ -7,13 +7,15 @@ Created on Wed Jun  5 18:19:14 2024
 import time
 import random
 import uuid
-from PySide6.QtCore import QThread, Signal
+#from PySide6.QtCore import QThread, Signal # for instance, crash
+from threading import Thread
 
 from mido import MidiFile
 from midi_song import ClassMidiSong, states, modes
 from midi_numbers import number_to_note
 
-class ClassThreadMidiReader(QThread):
+class ClassThreadMidiReader(Thread):
+#class ClassThreadMidiReader(QThread):
     """Read midifile and send to output device"""
 
     uuid = uuid.uuid4()
@@ -30,21 +32,21 @@ class ClassThreadMidiReader(QThread):
     channels_notes = {}
     wait_time = 0
 
-    statusbar_activity = Signal(str)
+    #statusbar_activity = Signal(str)
 
     def __init__(self, midifile, keys, channels, pParent):
-        QThread.__init__(self)
+        Thread.__init__(self)
         self.pParent = pParent
         self.settings = self.pParent.settings
         self.midisong = ClassMidiSong(midifile)
         self.midisong.SetState(states["unknown"])
         self.keys = keys
         self.channels = channels
-        self.statusbar_activity.connect(self.pParent.SetStatusBar)
+        # self.statusbar_activity.connect(self.pParent.SetStatusBar)
         print(f"MidiReader {self.uuid} created [{self.midisong.Getfilepath()}]")
 
     def __del__(self):
-        print(f"MidiReader {self.uuid} destroyed [{self.midisong.Getfilepath()}]")
+        print(f"MidiReader {self.uuid} destroyed")
 
     def LoadMidiSong(self, mode):
 
@@ -282,7 +284,10 @@ class ClassThreadMidiReader(QThread):
                     time.sleep(0.5)
 
         # End of song
-        self.stop()
+        # NO do not kill midisong
+        # self.stop()
+        self.midisong.SetState(states["ended"])
+        self.midisong.SetPlayed(100)
 
     def stop(self):
         if self.midisong:
