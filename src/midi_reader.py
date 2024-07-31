@@ -77,7 +77,7 @@ class ClassThreadMidiReader(Thread):
                     self.channels_notes[key] += 1
 
             self.midisong.SetChannels(self.channels_notes)
-            # self.parent.ChannelsColorize()
+            # self.parent.ChannelsSetButtons()
 
             if self.notes_on_channels:
                 self.midisong.SetState(states["cueing"])

@@ -62,7 +62,8 @@ class ClassThreadOutput(QThread):
                     init_message.channel = i
                     if i != 9:  # not for drums
                         try:
-                            self.outport.send(init_message)
+                            # self.outport.send(init_message)
+                            self.pParent.midi.ThreadOutput.send(init_message) # Maladroit
                         except:
                             print(f"MidiOutput {self.uuid} self.outport.send ERROR")
 

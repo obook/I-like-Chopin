@@ -192,7 +192,8 @@ class MainWindow(QMainWindow):
                 self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
 
             self.SetFileButtonText()
-            self.ChannelsColorize()
+            self.ChannelsSetButtons()
+            # just for led off
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
 
     def InputDeviceChanged(self):
@@ -210,7 +211,7 @@ class MainWindow(QMainWindow):
                 self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
 
     def SetLedOutput(self,value): # 0 or 1
-        if value:
+        if value and self.midi.ConnectOutputState():
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LIGHT_LED))
         else:
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
@@ -222,11 +223,6 @@ class MainWindow(QMainWindow):
         self.settings.SaveOutputDevice(out_device)
         self.midi.ConnectOutput(out_device)
 
-    """
-    def MidifileChanged(self):
-        self.MidifileChange(os.path.join(self.settings.GetMidiPath(),self.ui.FileCombo.currentText()))
-    """
-
     def MidifileChange(
         self, filepath
     ):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
@@ -234,7 +230,7 @@ class MainWindow(QMainWindow):
         self.midisong = self.midi.SetMidiSong(filepath)
 
     def ChangeMidiFile(self, value):  # External Midi command
-        print("--> ChangeMidiFile NOT ACTIVE")
+        print("--> ChangeMidiFile NOT ACTIVE FOR INSTANCE")
         """
         # value 0-127
         step = int(128/len(self.MidiFiles))
@@ -260,7 +256,7 @@ class MainWindow(QMainWindow):
         self.ChannelsButtonsList[0].setChecked(True)
         self.ReadChannels()
 
-    def ChannelsColorize(self):
+    def ChannelsSetButtons(self):
         if self.midisong:
             channels = self.midisong.GetChannels()
             for i in range(len(self.ChannelsButtonsList)):
