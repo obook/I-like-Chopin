@@ -101,9 +101,7 @@ class ClassMidiMain:
 
         if self.ThreadMidiReader:
             self.ThreadMidiReader.stop()
-        '''
-            # self.ThreadMidiReader = None
-        '''
+            self.ThreadMidiReader = None
 
         self.ThreadMidiReader = ClassThreadMidiReader(
             midifile, self.keys, self.channels, self.pParent
