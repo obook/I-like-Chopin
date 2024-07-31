@@ -7,13 +7,11 @@ Created on Wed Jun  5 18:19:14 2024
 import uuid
 
 from mido import open_input
-from threading import Thread
 from midi_numbers import number_to_note
 from midi_song import modes
+from PySide6.QtCore import QThread, Signal
 
-
-class ClassThreadInput(Thread):
-    """Class for input midi to device"""
+class ClassThreadInput(QThread):
 
     uuid = uuid.uuid4()
     in_device = None
@@ -23,13 +21,17 @@ class ClassThreadInput(Thread):
     settings = None
     running = False
 
+    led_activity = Signal(int)
+
     def __init__(self, in_device, keys, pParent):
-        Thread.__init__(self)
+        QThread.__init__(self)
+
         self.pParent = pParent
         self.settings = self.pParent.settings
         self.in_device = in_device
         self.keys = keys
         self.running = True
+        self.led_activity.connect(self.pParent.SetLedInput)
         print(f"MidiInput {self.uuid} created [{self.in_device}]")
 
     def __del__(self):
@@ -68,8 +70,10 @@ class ClassThreadInput(Thread):
 
         # Keys pressed counter
         if message.type == "note_on":
+            self.led_activity.emit(1)
             self.keys["key_on"] += 1
         elif message.type == "note_off":
+            self.led_activity.emit(0)
             self.keys["key_on"] -= 1
 
         # Rares cases

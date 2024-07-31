@@ -36,11 +36,12 @@ ICON_APPLICATION = application_path + "/icons/svg/i-like-chopin.svg"
 # Define status icons
 ICON_RED_LED = application_path + "/icons/led/led-red-on.png"
 ICON_GREEN_LED = application_path + "/icons/led/green-led-on.png"
+ICON_GREEN_LIGHT_LED = application_path + "/icons/led/greenlight-led-on.png"
 ICON_YELLOW_LED = application_path + "/icons/led/yellow-led-on.png"
+ICON_BLUE_LED = application_path + "/icons/led/blue-led-on.png"
 ICON_LED_OFF = application_path + "/icons/led/led-off.png"
 
 app = None
-
 
 class MainWindow(QMainWindow):
 
@@ -192,6 +193,7 @@ class MainWindow(QMainWindow):
 
             self.SetFileButtonText()
             self.ChannelsColorize()
+            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
 
     def InputDeviceChanged(self):
         self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
@@ -199,6 +201,19 @@ class MainWindow(QMainWindow):
         in_device = self.ui.InputDeviceCombo.currentText()
         self.settings.SaveInputDevice(in_device)
         self.midi.ConnectInput(in_device)
+
+    def SetLedInput(self,value): # value 0 or 1 is NOT used
+        if self.midi:
+            if self.midi.keys['key_on'] > 0:
+                self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LIGHT_LED))
+            else:
+                self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
+
+    def SetLedOutput(self,value): # 0 or 1
+        if value:
+            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LIGHT_LED))
+        else:
+            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
 
     def OuputDeviceChanged(self):
         self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_RED_LED))

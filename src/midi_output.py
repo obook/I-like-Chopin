@@ -6,24 +6,28 @@ Created on Wed Jun  5 18:19:14 2024
 """
 import uuid
 import time
-from threading import Thread
+
 from mido import open_output, Message
+from PySide6.QtCore import QThread, Signal
 
-
-class ClassThreadOutput(Thread):
+class ClassThreadOutput(QThread):
     """Class for output midi to device"""
 
     uuid = uuid.uuid4()
+    pParent = None
     out_device = None
     outport = None
     settings = None
-
     please_wait = False
 
+    led_activity = Signal(int)
+
     def __init__(self, out_device, pParent):
-        Thread.__init__(self)
+        QThread.__init__(self)
+        self.pParent = pParent
         self.settings = pParent.settings
         self.out_device = out_device
+        self.led_activity.connect(self.pParent.SetLedOutput)
         print(f"MidiOutput {self.uuid} created [{self.out_device}]")
 
     def __del__(self):
@@ -63,8 +67,15 @@ class ClassThreadOutput(Thread):
                             print(f"MidiOutput {self.uuid} self.outport.send ERROR")
 
     def send(self, message):
+        if message.type == "note_on":
+            self.led_activity.emit(1)
+        else:
+            self.led_activity.emit(0)
         if self.outport:
-            self.outport.send(message)
+            try:
+                self.outport.send(message)
+            except:
+                pass
 
     def getport(self):
         while self.please_wait == True:

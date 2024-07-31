@@ -82,12 +82,6 @@ class ClassMidiMain:
 
         self.ThreadOutput = ClassThreadOutput(out_device, self.pParent)
         self.ThreadOutput.start()
-        self.port_out = self.ThreadOutput.getport()  # dans certains cas, retourne None
-        if not self.port_out:
-            print(f"|!| MidiMain {self.uuid} ThreadOutput.getport NONE")
-
-        if self.ThreadMidiReader:
-            self.ThreadMidiReader.SetMidiPort(self.port_out)
 
     def ConnectOutputState(self):
         if self.ThreadOutput:

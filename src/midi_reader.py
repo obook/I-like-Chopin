@@ -160,7 +160,8 @@ class ClassThreadMidiReader(Thread):
                         or msg.type == "program_change"
                         and self.port_out
                     ):
-                        self.port_out.send(msg)
+                        # self.port_out.send(msg)
+                        self.parent.midi.ThreadOutput.send(msg) # TRES MALADROIT
                 except:
                     pass
                     # if not self.port_out:
@@ -243,7 +244,8 @@ class ClassThreadMidiReader(Thread):
                         or msg.type == "program_change"
                         and self.port_out
                     ):
-                        self.port_out.send(msg)
+                        #self.port_out.send(msg) On devrait passer par le thread output
+                        self.parent.midi.ThreadOutput.send(msg) # TRES MALADROIT
                 except:
                     if not self.port_out:
                         print(
