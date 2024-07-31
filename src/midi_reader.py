@@ -7,14 +7,13 @@ Created on Wed Jun  5 18:19:14 2024
 import time
 import random
 import uuid
-from threading import Thread
+from PySide6.QtCore import QThread
 
 from mido import MidiFile
 from midi_song import ClassMidiSong, states, modes
 from midi_numbers import number_to_note
 
-
-class ClassThreadMidiReader(Thread):
+class ClassThreadMidiReader(QThread):
     """Read midifile and send to output device"""
 
     uuid = uuid.uuid4()
@@ -32,7 +31,7 @@ class ClassThreadMidiReader(Thread):
     wait_time = 0
 
     def __init__(self, midifile, keys, channels, pParent):
-        Thread.__init__(self)
+        QThread.__init__(self)
         self.parent = pParent
         self.settings = self.parent.settings
         self.midisong = ClassMidiSong(midifile)
@@ -214,6 +213,7 @@ class ClassThreadMidiReader(Thread):
                 # Pause ?
                 if msg.type == "note_on" and self.midisong.IsState(states["playing"]):
                     start_time = time.time()
+
                     while not self.keys["key_on"]:  # Loop waiting keyboard
 
                         if not self.channels[msg.channel]:
@@ -284,7 +284,7 @@ class ClassThreadMidiReader(Thread):
         self.stop()
 
     def stop(self):
-        # print(f"MidiReader {self.uuid} stop")
         if self.midisong:
             self.midisong.SetState(states["ended"])
         self.port_out = None
+        self.terminate(); # important

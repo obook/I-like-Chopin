@@ -153,8 +153,9 @@ class ClassMidiMain:
 
     def quit(self):
         if self.ThreadMidiReader:
-            self.ThreadMidiReader.SetMidiPort(None)  # stop send
             self.ThreadMidiReader.stop()
+            #self.ThreadMidiReader.terminate();
+            self.ThreadMidiReader.SetMidiPort(None)  # stop send
             self.ThreadMidiReader = None
 
         if self.ThreadInput:
