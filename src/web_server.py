@@ -18,14 +18,13 @@ from web_interfaces import get_interfaces
 from string import Template
 
 server_parent = None
-server_midifiles = []
 server_interfaces = []
 server_mididict = {}
 
-
+'''
 class ClassWebConfig:
     pass
-
+'''
 
 class Handler(BaseHTTPRequestHandler):
     uuid = uuid.uuid4()
@@ -114,7 +113,7 @@ class ClassWebServer(Thread):
     port = 8888
 
     def __init__(self, parent):
-        global server_midifiles
+
         global server_parent
         global server_interfaces
 
@@ -132,7 +131,6 @@ class ClassWebServer(Thread):
             )
         ):
             path = pathlib.PurePath(file)
-            server_midifiles.append(file)  # ancienne méthode
 
             if not any(
                 path.parent.name in keys for keys in server_mididict

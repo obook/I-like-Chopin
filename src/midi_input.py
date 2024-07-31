@@ -22,6 +22,7 @@ class ClassThreadInput(QThread):
     running = False
 
     led_activity = Signal(int)
+    statusbar_activity = Signal(str)
 
     def __init__(self, in_device, keys, pParent):
         QThread.__init__(self)
@@ -32,6 +33,7 @@ class ClassThreadInput(QThread):
         self.keys = keys
         self.running = True
         self.led_activity.connect(self.pParent.SetLedInput)
+        self.statusbar_activity.connect(self.pParent.SetStatusBar)
         print(f"MidiInput {self.uuid} created [{self.in_device}]")
 
     def __del__(self):
@@ -51,7 +53,7 @@ class ClassThreadInput(QThread):
             )
             return
         if self.settings.GetMode() == modes["chopin"]:
-            self.pParent.PrintStatusBar(f"Waiting : {self.in_device} ...")
+            self.statusbar_activity.emit(f"Waiting : {self.in_device} ...")
 
     def callback(self, message):
 
@@ -81,11 +83,10 @@ class ClassThreadInput(QThread):
             self.keys["key_on"] = 0
 
         if not self.settings.IsMode(modes["player"]):
-            text = f"Keys\t{self.keys['key_on']}"
             if message.type == "note_on":  # or message.type == 'note_off':
                 note, octave = number_to_note(message.note)
-                text = text + f"\t\t {note}{octave}\t\t [{message.note}]"
-            self.pParent.PrintStatusBar(text)
+                text = f"{note}{octave}\t\t [{message.note}]"
+                self.statusbar_activity.emit(text)
 
         # Playback/Passthrough mode
         if self.settings.IsMode(modes["passthrough"]):

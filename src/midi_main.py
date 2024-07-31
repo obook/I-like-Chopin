@@ -149,13 +149,13 @@ class ClassMidiMain:
         if self.ThreadOutput:
             self.ThreadOutput.panic()
         self.keys["key_on"] = 0
-        self.pParent.PrintStatusBar("")
+        self.pParent.SetStatusBar("") # via slot ?
 
     def quit(self):
         if self.ThreadMidiReader:
             self.ThreadMidiReader.stop()
-            #self.ThreadMidiReader.terminate();
             self.ThreadMidiReader.SetMidiPort(None)  # stop send
+            self.ThreadMidiReader.terminate();
             self.ThreadMidiReader = None
 
         if self.ThreadInput:

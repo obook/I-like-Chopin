@@ -7,7 +7,7 @@ Created on Wed Jun  5 18:19:14 2024
 import time
 import random
 import uuid
-from PySide6.QtCore import QThread
+from PySide6.QtCore import QThread, Signal
 
 from mido import MidiFile
 from midi_song import ClassMidiSong, states, modes
@@ -17,7 +17,7 @@ class ClassThreadMidiReader(QThread):
     """Read midifile and send to output device"""
 
     uuid = uuid.uuid4()
-    parent = None
+    pParent = None
     midisong = None
     keys = None
     port_out = None
@@ -30,14 +30,17 @@ class ClassThreadMidiReader(QThread):
     channels_notes = {}
     wait_time = 0
 
+    statusbar_activity = Signal(str)
+
     def __init__(self, midifile, keys, channels, pParent):
         QThread.__init__(self)
-        self.parent = pParent
-        self.settings = self.parent.settings
+        self.pParent = pParent
+        self.settings = self.pParent.settings
         self.midisong = ClassMidiSong(midifile)
         self.midisong.SetState(states["unknown"])
         self.keys = keys
         self.channels = channels
+        self.statusbar_activity.connect(self.pParent.SetStatusBar)
         print(f"MidiReader {self.uuid} created [{self.midisong.Getfilepath()}]")
 
     def __del__(self):
@@ -76,7 +79,7 @@ class ClassThreadMidiReader(QThread):
                     self.channels_notes[key] += 1
 
             self.midisong.SetChannels(self.channels_notes)
-            # self.parent.ChannelsSetButtons()
+            # self.pParent.ChannelsSetButtons()
 
             if self.notes_on_channels:
                 self.midisong.SetState(states["cueing"])
@@ -160,17 +163,16 @@ class ClassThreadMidiReader(QThread):
                         and self.port_out
                     ):
                         # self.port_out.send(msg)
-                        self.parent.midi.ThreadOutput.send(msg) # TRES MALADROIT
+                        self.pParent.midi.ThreadOutput.send(msg) # TRES MALADROIT
                 except:
                     pass
                     # if not self.port_out:
                     #    print(f"|!| MidiReader : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]")
 
                 if msg.type == "note_on" and self.channels[msg.channel]:
-                    text = f"Keys\t{self.keys['key_on']}"
                     note, octave = number_to_note(msg.note)
-                    text = text + f"\t\t {note}{octave}\t\t [{msg.note}]"
-                    self.parent.PrintStatusBar(text)
+                    text = f"{note}{octave}\t\t [{msg.note}]"
+                    self.statusbar_activity.emit(text)
 
             # Playback : wait keyboard
             elif self.midisong.IsMode(modes["chopin"]):
@@ -245,7 +247,7 @@ class ClassThreadMidiReader(QThread):
                         and self.port_out
                     ):
                         #self.port_out.send(msg) On devrait passer par le thread output
-                        self.parent.midi.ThreadOutput.send(msg) # TRES MALADROIT
+                        self.pParent.midi.ThreadOutput.send(msg) # TRES MALADROIT
                 except:
                     if not self.port_out:
                         print(
@@ -280,11 +282,10 @@ class ClassThreadMidiReader(QThread):
                     time.sleep(0.5)
 
         # End of song
-        self.midisong.SetPlayed(100)
         self.stop()
 
     def stop(self):
         if self.midisong:
             self.midisong.SetState(states["ended"])
+            self.midisong.SetPlayed(100)
         self.port_out = None
-        self.terminate(); # important

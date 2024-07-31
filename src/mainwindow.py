@@ -203,19 +203,6 @@ class MainWindow(QMainWindow):
         self.settings.SaveInputDevice(in_device)
         self.midi.ConnectInput(in_device)
 
-    def SetLedInput(self,value): # value 0 or 1 is NOT used
-        if self.midi:
-            if self.midi.keys['key_on'] > 0:
-                self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LIGHT_LED))
-            else:
-                self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
-
-    def SetLedOutput(self,value): # 0 or 1
-        if value and self.midi.ConnectOutputState():
-            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LIGHT_LED))
-        else:
-            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
-
     def OuputDeviceChanged(self):
         self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
         self.ConnectOutputState = False
@@ -278,10 +265,6 @@ class MainWindow(QMainWindow):
             else:
                 self.ChannelsList[n] = False
 
-    # Status Bar
-    def PrintStatusBar(self, message):
-        self.ui.statusbar.showMessage(message)
-
     # Midi control buttons
     def PrintSpeed(self, speed):  # 0 to 126
         if speed:
@@ -331,6 +314,25 @@ class MainWindow(QMainWindow):
 
         self.SetPlayerModeButtons()
         self.midi.ChangeMidiMode(self.settings.GetMode())
+
+    # Signal receiver
+    def SetLedInput(self,value): # value (0 or 1) is NOT used here
+        if self.midi:
+            if self.midi.keys['key_on'] > 0:
+                self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LIGHT_LED))
+            else:
+                self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
+
+    # Signal receiver
+    def SetLedOutput(self,value): # 0 or 1
+        if value and self.midi.ConnectOutputState():
+            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LIGHT_LED))
+        else:
+            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
+
+    # Signal receiver
+    def SetStatusBar(self, message):
+        self.ui.statusbar.showMessage(message)
 
     def OpenBrowser(self):
         webbrowser.open(f"http://127.0.0.1:{self.web_server.GetPort()}")
