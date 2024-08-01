@@ -16,7 +16,7 @@ from midi_output import ClassThreadOutput
 from midi_reader import ClassThreadMidiReader
 
 
-class ClassMidiMain:
+class ClassMidiMain(QObject):
     """Main Midi Class"""
 
     keys = {"key_on": 0, "speed": 0, "humanize": 0}
