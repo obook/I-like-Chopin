@@ -126,10 +126,12 @@ class ClassThreadMidiReader(Thread):
                 return
 
             # VERY DANGEROUS BUT FUN (TOUCH INTERFACE)
+            '''
             if msg.type == "note_on": # RISK CRASH
                 self.pParent.SetLedFile(1)
             elif msg.type == "note_on":
                 self.pParent.SetLedFile(0)
+            '''
 
             # Just a Midi player
             if self.midisong.IsMode(modes["player"]):
