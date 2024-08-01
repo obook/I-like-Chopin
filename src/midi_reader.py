@@ -7,6 +7,7 @@ Created on Wed Jun  5 18:19:14 2024
 import time
 import random
 import uuid
+import os
 
 # from PySide6.QtCore import QThread, Signal # for instance, crash or block interface at startup
 from threading import Thread
@@ -44,12 +45,12 @@ class ClassThreadMidiReader(Thread):
         self.pParent = pParent
         self.midi = self.pParent.midi
         self.settings = self.pParent.settings
-        self.midisong = ClassMidiSong(midifile)
-        self.midisong.SetState(states["unknown"])
         self.keys = keys
         self.channels = channels
         # self.statusbar_activity.connect(self.pParent.SetStatusBar)
-        print(f"MidiReader {self.uuid} created [{self.midisong.Getfilepath()}]")
+        print(f"MidiReader {self.uuid} created [{os.path.basename(midifile)}]")
+        self.midisong = ClassMidiSong(midifile)
+        # self.midisong.SetState(states["unknown"])
 
     def __del__(self):
         print(f"MidiReader {self.uuid} destroyed")

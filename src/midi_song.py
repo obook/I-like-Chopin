@@ -32,6 +32,7 @@ class ClassMidiSong:
     __uuid = uuid.uuid4()
 
     def __init__(self, filepath):
+        self.__state = states["unknown"]
         text = ""
         if not os.path.isfile(filepath):
             self.SetState(states["notfound"])
