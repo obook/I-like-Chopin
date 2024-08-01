@@ -177,7 +177,7 @@ class ClassThreadMidiReader(Thread):
 
                 if msg.type == "note_on" and self.channels[msg.channel]:
                     note, octave = number_to_note(msg.note)
-                    text = f"{note}{octave}\t\t [{msg.note}]"
+                    text = f"[{msg.note}]\t\t{note}{octave}"
                     self.midi.SendStatusBar(text)
                     # self.statusbar_activity.emit(text)
 

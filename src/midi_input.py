@@ -96,7 +96,7 @@ class ClassThreadInput(QThread):
 
             if msg.type == "note_on":  # or message.type == 'note_off':
                 note, octave = number_to_note(msg.note)
-                text = f"{note}{octave}\t\t [{msg.note}]"
+                text = f"[{msg.note}]\t\t{note}{octave}"
                 self.statusbar_activity.emit(text)
 
             # Playback/Passthrough mode
