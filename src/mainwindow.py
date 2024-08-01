@@ -139,7 +139,7 @@ class MainWindow(QMainWindow):
         self.ChannelsFirst()
         # Special color for drums channel
         self.ChannelsButtonsList[9].setStyleSheet(
-            "QPushButton:checked { background-color: rgb(100,50,50); }\n"
+            "QPushButton {background-color: rgb(100,50,50);}"
         )
 
         # Datas
@@ -247,18 +247,30 @@ class MainWindow(QMainWindow):
 
     def ChannelsSetButtons(self):
         if self.midisong:
-            channels = self.midisong.GetChannels()
+            # Cleanup
             for i in range(len(self.ChannelsButtonsList)):
-                self.ChannelsButtonsList[i].setStyleSheet(
-                    "QPushButton:checked { background-color: rgb(50,100,50); } QPushButton {color: grey}"
-                )
-
-            for key in channels:
-                if channels[key]:
-                    self.ChannelsButtonsList[int(key)].setStyleSheet("")
-                    self.ChannelsButtonsList[int(key)].setStyleSheet(
-                        "QPushButton:checked { background-color: rgb(50,100,50); }"
+                self.ChannelsButtonsList[i].setStyleSheet("")
+                if i == 9:
+                    self.ChannelsButtonsList[i].setStyleSheet(
+                        "QPushButton:checked { background-color: rgb(50,100,50); } QPushButton {color: rgb(100,50,50); background-color: rgb(100,50,50);}"
                     )
+                else:
+                    self.ChannelsButtonsList[i].setStyleSheet(
+                        "QPushButton:checked { background-color: rgb(50,100,50); } QPushButton {color: grey}"
+                    )
+            # Set
+            channels = self.midisong.GetChannels()
+            for key in channels:
+                if channels[key]: # Show button
+                    self.ChannelsButtonsList[int(key)].setStyleSheet("")
+                    if int(key) == 9:
+                        self.ChannelsButtonsList[int(key)].setStyleSheet(
+                            "QPushButton:checked { background-color: rgb(50,100,50); } QPushButton {background-color: rgb(100,50,50);}"
+                        )
+                    else:
+                        self.ChannelsButtonsList[int(key)].setStyleSheet(
+                            "QPushButton:checked { background-color: rgb(50,100,50); }"
+                        )
 
     def ReadChannels(self):
         for n in range(len(self.ChannelsButtonsList)):
@@ -297,7 +309,7 @@ class MainWindow(QMainWindow):
 
         elif self.settings.GetMode() == modes["player"]:
             self.ui.pushButton_Mode.setStyleSheet(
-                "QPushButton { background-color: rgb(30,30,80); }\n"
+                "QPushButton { background-color: rgb(46,82,168); }\n"
             )
             self.ui.pushButton_Mode.setText("Player")
             self.ui.pushButton_Mode.setChecked(False)

@@ -53,7 +53,7 @@ class ClassThreadMidiReader(Thread):
         # self.midisong.SetState(states["unknown"])
 
     def __del__(self):
-        print(f"MidiReader {self.uuid} destroyed")
+        print(f"MidiReader {self.uuid} destroyed [{self.midisong.GetFilename()}]")
 
     def LoadMidiSong(self, mode):
 
@@ -197,7 +197,7 @@ class ClassThreadMidiReader(Thread):
                     if self.channels[msg.channel] and not self.midisong.IsState(
                         states["playing"]
                     ):  # First note on channels selected
-                        print(f"MidiReader {self.uuid} ready !")
+                        print(f"MidiReader {self.uuid} ready [{self.midisong.GetFilename()}]")
                         self.midisong.SetState(states["playing"])
 
                     # Stats
