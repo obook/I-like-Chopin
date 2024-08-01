@@ -7,15 +7,17 @@ Created on Wed Jun  5 18:19:14 2024
 import time
 import random
 import uuid
-#from PySide6.QtCore import QThread, Signal # for instance, crash
+
+# from PySide6.QtCore import QThread, Signal # for instance, crash
 from threading import Thread
 
 from mido import MidiFile
 from midi_song import ClassMidiSong, states, modes
 from midi_numbers import number_to_note
 
+
 class ClassThreadMidiReader(Thread):
-#class ClassThreadMidiReader(QThread):
+    # class ClassThreadMidiReader(QThread):
     """Read midifile and send to output device"""
 
     uuid = uuid.uuid4()
@@ -31,8 +33,9 @@ class ClassThreadMidiReader(Thread):
     channels = None
     channels_notes = {}
     wait_time = 0
+    running = False
 
-    #statusbar_activity = Signal(str)
+    # statusbar_activity = Signal(str)
 
     def __init__(self, midifile, keys, channels, pParent):
         Thread.__init__(self)
@@ -110,15 +113,23 @@ class ClassThreadMidiReader(Thread):
         elif self.midisong.IsMode(modes["passthrough"]):  # Here ?
             return
 
+        self.running = True
+
         for msg in MidiFile(self.midisong.Getfilepath()):
 
             # Stop while running ?
-            if not self.midisong:
+            if not self.running:
                 return
 
             if self.midisong.GetState() < states["cueing"]:
                 self.stop()
                 return
+
+            # VERY DANGEROUS BUT FUN (TOUCH INTERFACE)
+            if msg.type == "note_on": # RISK CRASH
+                self.pParent.SetLedFile(1)
+            elif msg.type == "note_on":
+                self.pParent.SetLedFile(0)
 
             # Just a Midi player
             if self.midisong.IsMode(modes["player"]):
@@ -158,23 +169,12 @@ class ClassThreadMidiReader(Thread):
                     if msg.channel != 9:  # not for drums
                         msg.program = self.settings.GetPianoProgram()
 
-                try:  # meta messages can't be send to ports
-                    if (
-                        self.channels[msg.channel]
-                        or msg.type == "program_change"
-                        and self.port_out
-                    ):
-                        # self.port_out.send(msg)
-                        self.pParent.midi.ThreadOutput.send(msg) # TRES MALADROIT
-                except:
-                    pass
-                    # if not self.port_out:
-                    #    print(f"|!| MidiReader : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]")
+                self.pParent.midi.SendOutput(msg)
 
                 if msg.type == "note_on" and self.channels[msg.channel]:
                     note, octave = number_to_note(msg.note)
                     text = f"{note}{octave}\t\t [{msg.note}]"
-                    self.pParent.SetStatusBar(text) # BAD
+                    self.pParent.SetStatusBar(text)  # BAD
                     # self.statusbar_activity.emit(text)
 
             # Playback : wait keyboard
@@ -243,42 +243,30 @@ class ClassThreadMidiReader(Thread):
                         msg.program = self.settings.GetPianoProgram()
 
                 # Play
-                try:  # meta messages can't be send to ports
-                    if (
-                        self.channels[msg.channel]
-                        or msg.type == "program_change"
-                        and self.port_out
-                    ):
-                        #self.port_out.send(msg) On devrait passer par le thread output
-                        self.pParent.midi.ThreadOutput.send(msg) # TRES MALADROIT
-                except:
-                    if not self.port_out:
-                        print(
-                            f"|!| MidiReader : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]"
-                        )
-                    """
-                    filter =[
-                    'program_change',
-                    'sysex',
-                    'text',
-                    'track_name',
-                    'set_tempo',
-                    'time_signature',
-                    'key_signature',
-                    'midi_port',
-                    'sequencer_specific',
-                    'copyright',
-                    'cue_marker',
-                    'marker',
-                    'smpte_offset',
-                    'lyrics',
-                    'end_of_track',
-                    'instrument_name'
-                    ]
+                self.pParent.midi.SendOutput(msg)
+                """
+                filter =[
+                'program_change',
+                'sysex',
+                'text',
+                'track_name',
+                'set_tempo',
+                'time_signature',
+                'key_signature',
+                'midi_port',
+                'sequencer_specific',
+                'copyright',
+                'cue_marker',
+                'marker',
+                'smpte_offset',
+                'lyrics',
+                'end_of_track',
+                'instrument_name'
+                ]
 
-                    if not msg.type in filter:
-                       print(f"|!| MidiReader : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]")
-                    """
+                if not msg.type in filter:
+                   print(f"|!| MidiReader : can not send type=[{msg.type}] msg=[{msg}] to [{self.port_out}]")
+                """
 
                 # Loop until passthrough mode active
                 while self.midisong.IsMode(modes["passthrough"]):
@@ -291,7 +279,10 @@ class ClassThreadMidiReader(Thread):
         self.midisong.SetPlayed(100)
 
     def stop(self):
+
+        print(f"MidiReader {self.uuid} stop [{self.midisong.GetFilename()}] !")
+
         if self.midisong:
             self.midisong.SetState(states["ended"])
             self.midisong.SetPlayed(100)
-        self.port_out = None
+        self.running = False

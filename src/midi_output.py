@@ -10,6 +10,7 @@ import time
 from mido import open_output, Message
 from PySide6.QtCore import QThread, Signal
 
+
 class ClassThreadOutput(QThread):
     """Class for output midi to device"""
 
@@ -50,9 +51,9 @@ class ClassThreadOutput(QThread):
         self.please_wait = False
 
         while self.running:
-            time.sleep(1) # or self
+            time.sleep(1)  # or self
 
-        if  self.outport:
+        if self.outport:
             if not self.outport.closed:
                 self.outport.close()
 
@@ -70,8 +71,7 @@ class ClassThreadOutput(QThread):
                     init_message.channel = i
                     if i != 9:  # not for drums
                         try:
-                            # self.outport.send(init_message)
-                            self.pParent.midi.ThreadOutput.send(init_message) # Maladroit
+                            self.outport.send(init_message)
                         except:
                             print(f"MidiOutput {self.uuid} self.outport.send ERROR")
 

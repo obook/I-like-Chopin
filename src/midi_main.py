@@ -15,7 +15,10 @@ import mido
 from midi_input import ClassThreadInput
 from midi_output import ClassThreadOutput
 from midi_reader import ClassThreadMidiReader
+from midi_song import ClassMidiSong, states, modes
+
 from PySide6.QtCore import QObject
+
 
 class ClassMidiMain(QObject):
     """Main Midi Class"""
@@ -72,10 +75,10 @@ class ClassMidiMain(QObject):
         self.ThreadInput = ClassThreadInput(in_device, self.keys, self.pParent)
         self.ThreadInput.start()
 
-    def ConnectInputState(self): # A revoir en utilisant les ports
+    def GetInputPort(self):
         if self.ThreadInput:
             return self.ThreadInput.getport()
-        return False
+        return None
 
     def ConnectOutput(self, out_device):
 
@@ -85,10 +88,21 @@ class ClassMidiMain(QObject):
         self.ThreadOutput = ClassThreadOutput(out_device, self.pParent)
         self.ThreadOutput.start()
 
-    def ConnectOutputState(self):
+    def GetOuputPort(self):
         if self.ThreadOutput:
             return self.ThreadOutput.getport()
-        return False
+        return None
+
+    def SendOutput(self, msg):
+        if self.ThreadOutput:
+            if self.settings.IsMode(modes["passthrough"]):
+                return self.ThreadOutput.send(msg)
+            elif msg.type == "note_on" or msg.type == "note_off":
+                if self.pParent.ChannelsList[msg.channel]:
+                    return self.ThreadOutput.send(msg)
+            else:
+                return self.ThreadOutput.send(msg)
+        return None
 
     # List of midifiles from folder midi (see json file created)
     def GetMidiFiles(self):
@@ -151,7 +165,7 @@ class ClassMidiMain(QObject):
         if self.ThreadOutput:
             self.ThreadOutput.panic()
         self.keys["key_on"] = 0
-        self.pParent.SetStatusBar("") # via slot ?
+        self.pParent.SetStatusBar("")  # via slot ?
 
     def quit(self):
         if self.ThreadMidiReader:

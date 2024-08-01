@@ -43,6 +43,7 @@ ICON_LED_OFF = application_path + "/icons/led/led-off.png"
 
 app = None
 
+
 class MainWindow(QMainWindow):
 
     settings = ClassSettings()
@@ -166,21 +167,21 @@ class MainWindow(QMainWindow):
 
     def timer(self):
 
-        self.midisong = self.midi.GetMidiSong()
-
-        if self.midi.ConnectInputState() and not self.ConnectInputState:
+        if self.midi.GetInputPort() and not self.ConnectInputState:
             self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
             self.ConnectInputState = True
-        elif not self.midi.ConnectInputState():
+        elif not self.midi.GetInputPort():
             self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
             self.ConnectInputState = False
 
-        if self.midi.ConnectOutputState() and not self.ConnectOutputState:
+        if self.midi.GetOuputPort() and not self.ConnectOutputState:
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
             self.ConnectOutputState = True
-        elif not self.midi.ConnectOutputState():
+        elif not self.midi.GetOuputPort():
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
             self.ConnectOutputState = False
+
+        self.midisong = self.midi.GetMidiSong()
 
         if self.midisong:
             if self.midisong.GetState() >= states["ready"]:
@@ -317,19 +318,26 @@ class MainWindow(QMainWindow):
         self.midi.ChangeMidiMode(self.settings.GetMode())
 
     # Signal receiver
-    def SetLedInput(self,value): # value (0 or 1) is NOT used here
+    def SetLedInput(self, value):  # value (0 or 1) is NOT used here
         if self.midi:
-            if self.midi.keys['key_on'] > 0:
+            if self.midi.keys["key_on"] > 0:
                 self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LIGHT_LED))
             else:
                 self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
 
     # Signal receiver
-    def SetLedOutput(self,value): # 0 or 1
-        if value and self.midi.ConnectOutputState():
+    def SetLedOutput(self, value):  # 0 or 1
+        if value and self.midi.GetOuputPort():
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LIGHT_LED))
         else:
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
+
+    # Signal receiver
+    def SetLedFile(self, value):  # 0 or 1
+        if value:
+            self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LIGHT_LED))
+        else:
+            self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
 
     # Signal receiver
     def SetStatusBar(self, message):

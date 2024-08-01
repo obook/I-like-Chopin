@@ -12,6 +12,7 @@ from midi_numbers import number_to_note
 from midi_song import modes
 from PySide6.QtCore import QThread, Signal
 
+
 class ClassThreadInput(QThread):
 
     uuid = None
@@ -57,33 +58,33 @@ class ClassThreadInput(QThread):
             self.statusbar_activity.emit(f"Waiting : {self.in_device} ...")
 
         while self.running:
-            time.sleep(1) # or self
+            time.sleep(1)  # or self
 
         if self.in_port:
             self.in_port.callback = None
             if not self.in_port.closed:
                 self.in_port.close()
 
-    def callback(self, message):
+    def callback(self, msg):
 
         # Control change - Midi commands
-        if message.type == "control_change":
-            if message.control == 71:
-                self.keys["humanize"] = message.value  # 0 to 127
-                self.pParent.PrintHumanize(message.value)
-            elif message.control == 76:
-                self.keys["speed"] = message.value  # 0 to 127
-                self.pParent.PrintSpeed(message.value)
-            elif message.control == 77:
-                self.pParent.ChangeMidiFile(message.value)
-            elif message.control == 51 and message.value == 127:
+        if msg.type == "control_change":
+            if msg.control == 71:
+                self.keys["humanize"] = msg.value  # 0 to 127
+                self.pParent.PrintHumanize(msg.value)
+            elif msg.control == 76:
+                self.keys["speed"] = msg.value  # 0 to 127
+                self.pParent.PrintSpeed(msg.value)
+            elif msg.control == 77:
+                self.pParent.ChangeMidiFile(msg.value)
+            elif msg.control == 51 and msg.value == 127:
                 self.pParent.ChangePlayerMode()
 
         # Keys pressed counter
-        if message.type == "note_on":
+        if msg.type == "note_on":
             self.led_activity.emit(1)
             self.keys["key_on"] += 1
-        elif message.type == "note_off":
+        elif msg.type == "note_off":
             self.led_activity.emit(0)
             self.keys["key_on"] -= 1
 
@@ -92,23 +93,17 @@ class ClassThreadInput(QThread):
             self.keys["key_on"] = 0
 
         if not self.settings.IsMode(modes["player"]):
-            if message.type == "note_on":  # or message.type == 'note_off':
-                note, octave = number_to_note(message.note)
-                text = f"{note}{octave}\t\t [{message.note}]"
+
+            if msg.type == "note_on":  # or message.type == 'note_off':
+                note, octave = number_to_note(msg.note)
+                text = f"{note}{octave}\t\t [{msg.note}]"
                 self.statusbar_activity.emit(text)
 
-        # Playback/Passthrough mode
-        if self.settings.IsMode(modes["passthrough"]):
-            self.keys["key_on"] = 0
-            # Play
-            try:  # meta messages can't be send to ports
-                if self.out_port:
-                    self.out_port.send(message)
-                else:
-                    print("---> NO PORT")
-            except:
-                pass
-            return
+            # Playback/Passthrough mode
+            if self.settings.IsMode(modes["passthrough"]):
+                self.keys["key_on"] = 0
+                # Play
+                self.pParent.midi.SendOutput(msg)
 
     def getport(self):
         if self.in_port:

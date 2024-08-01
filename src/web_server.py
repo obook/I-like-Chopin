@@ -21,10 +21,11 @@ server_parent = None
 server_interfaces = []
 server_mididict = {}
 
-'''
+"""
 class ClassWebConfig:
     pass
-'''
+"""
+
 
 class Handler(BaseHTTPRequestHandler):
     uuid = uuid.uuid4()
