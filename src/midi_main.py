@@ -17,8 +17,7 @@ from midi_output import ClassThreadOutput
 from midi_reader import ClassThreadMidiReader
 from midi_song import ClassMidiSong, states, modes
 
-from PySide6.QtCore import QObject
-
+from PySide6.QtCore import QObject, Signal
 
 class ClassMidiMain(QObject):
     """Main Midi Class"""
@@ -33,6 +32,8 @@ class ClassMidiMain(QObject):
     midisong = None
     channels = None
     uuid = uuid.uuid4()
+    statusbar_activity = Signal(str)
+    led_file_activity = Signal(int)
 
     settings = None
 
@@ -41,6 +42,8 @@ class ClassMidiMain(QObject):
         self.pParent = pParent
         self.settings = self.pParent.settings
         self.channels = channels
+        self.statusbar_activity.connect(self.pParent.SetStatusBar)
+        self.led_file_activity.connect(self.pParent.SetLedFile)
         print(f"MidiMain {self.uuid} created")
 
     def __del__(self):
@@ -155,6 +158,13 @@ class ClassMidiMain(QObject):
         out_port = self.ThreadOutput.getport()
         self.ThreadInput.SetOutPort(out_port)
         self.keys["playback"] = playback
+
+    # Send signals
+    def SendStatusBar(self, msg):
+        self.statusbar_activity.emit(msg)
+
+    def SendLedFile(self, value):
+        self.led_file_activity.emit(value)
 
     def Stop(self):
         if self.ThreadMidiReader:

@@ -22,6 +22,7 @@ class ClassThreadMidiReader(Thread):
 
     uuid = uuid.uuid4()
     pParent = None
+    midi = None
     midisong = None
     keys = None
     port_out = None
@@ -40,6 +41,7 @@ class ClassThreadMidiReader(Thread):
     def __init__(self, midifile, keys, channels, pParent):
         Thread.__init__(self)
         self.pParent = pParent
+        self.midi = self.pParent.midi
         self.settings = self.pParent.settings
         self.midisong = ClassMidiSong(midifile)
         self.midisong.SetState(states["unknown"])
@@ -125,13 +127,13 @@ class ClassThreadMidiReader(Thread):
                 self.stop()
                 return
 
-            # VERY DANGEROUS BUT FUN (TOUCH INTERFACE)
-            '''
-            if msg.type == "note_on": # RISK CRASH
-                self.pParent.SetLedFile(1)
+            # For fun
+            if msg.type == "note_on":
+                if self.channels[msg.channel]:
+                    self.midi.SendLedFile(1)
             elif msg.type == "note_on":
-                self.pParent.SetLedFile(0)
-            '''
+                if self.channels[msg.channel]:
+                    self.midi.SendLedFile(0)
 
             # Just a Midi player
             if self.midisong.IsMode(modes["player"]):
@@ -176,7 +178,7 @@ class ClassThreadMidiReader(Thread):
                 if msg.type == "note_on" and self.channels[msg.channel]:
                     note, octave = number_to_note(msg.note)
                     text = f"{note}{octave}\t\t [{msg.note}]"
-                    self.pParent.SetStatusBar(text)  # BAD
+                    self.midi.SendStatusBar(text)
                     # self.statusbar_activity.emit(text)
 
             # Playback : wait keyboard
