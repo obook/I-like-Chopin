@@ -8,7 +8,7 @@ import time
 import random
 import uuid
 
-# from PySide6.QtCore import QThread, Signal # for instance, crash
+# from PySide6.QtCore import QThread, Signal # for instance, crash or block interface at startup
 from threading import Thread
 
 from mido import MidiFile
@@ -20,7 +20,7 @@ class ClassThreadMidiReader(Thread):
     # class ClassThreadMidiReader(QThread):
     """Read midifile and send to output device"""
 
-    uuid = uuid.uuid4()
+    uuid = None
     pParent = None
     midi = None
     midisong = None
@@ -40,6 +40,7 @@ class ClassThreadMidiReader(Thread):
 
     def __init__(self, midifile, keys, channels, pParent):
         Thread.__init__(self)
+        self.uuid = uuid.uuid4()
         self.pParent = pParent
         self.midi = self.pParent.midi
         self.settings = self.pParent.settings
