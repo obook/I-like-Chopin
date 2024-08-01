@@ -262,7 +262,7 @@
     </property>
     <widget class="QPushButton" name="pushButton_FileIndex">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="geometry">
       <rect>

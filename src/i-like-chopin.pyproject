@@ -13,6 +13,7 @@
         "i-like-chopin.py",
         "midi_song.py",
         "web_server.py",
-        "web_interfaces.py"
+        "web_interfaces.py",
+        "history.py"
     ]
 }

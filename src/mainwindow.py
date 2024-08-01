@@ -20,11 +20,13 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from PySide6 import QtGui
 from PySide6.QtCore import QTimer, QEvent
 from PySide6.QtGui import QIcon
+
 from midi_main import ClassMidiMain
 from midi_song import states, modes
 from settings import ClassSettings
 from informations import ShowInformation
 from web_server import ClassWebServer
+from history import ClassHistory
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -47,6 +49,8 @@ app = None
 class MainWindow(QMainWindow):
 
     settings = ClassSettings()
+    history = ClassHistory()
+
     ChannelsButtonsList = []
     ChannelsList = [False] * 16
 
@@ -57,6 +61,7 @@ class MainWindow(QMainWindow):
     MidifilesIndex = 0  # ?
     midi = None
     midisong = None  # current midisong
+    lastmidifile = None
 
     ConnectInputState = False
     ConnectOutputState = False
@@ -150,6 +155,7 @@ class MainWindow(QMainWindow):
         self.midi.ConnectInput(Input)
         self.midi.ConnectOutput(Output)
         self.MidifileChange(self.settings.GetMidifile())
+        self.lastmidifile = self.settings.GetMidifile()
 
         # Midifiles
         if self.midisong:
@@ -217,17 +223,25 @@ class MainWindow(QMainWindow):
     ):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         self.settings.SaveMidifile(filepath)
         self.midisong = self.midi.SetMidiSong(filepath)
+        self.lastmidifile = filepath
+        self.history.AddHistory(filepath)
 
     def ChangeMidiFile(self, value):  # External Midi command
-        print("--> ChangeMidiFile NOT ACTIVE FOR INSTANCE")
-        """
+        # print("--> ChangeMidiFile NOT ACTIVE FOR INSTANCE")
+
         # value 0-127
-        step = int(128/len(self.MidiFiles))
-        self.MidifilesIndex = min(int(value/step),len(self.MidiFiles)-1)
-        self.ui.pushButton_FileIndex.setText(f"MidiFile {self.MidifilesIndex+1}/{len(self.MidiFiles)}")
-        self.midi.Panic()
-        self.ui.FileCombo.setCurrentText(self.MidiFiles[self.MidifilesIndex])
-        """
+        files = self.history.GetHistory()
+        step = int(128/len(files))
+        FilesIndex = min(int(value/step),len(files)-1)
+        if  self.lastmidifile != files[FilesIndex]:
+            self.ui.pushButton_FileIndex.setText(f"MidiFile {FilesIndex+1}/{len(files)}")
+
+            # il faut afficher le titre, puis au bout d'une seconde s'il n'a pas changé, charger la chanson
+            # parce qu'il charge et décharge pour rien le reader à chaque fois
+
+            self.midi.Panic()
+            self.lastmidifile = files[FilesIndex]
+            self.MidifileChange(files[FilesIndex])
 
     # Channels
     def ChannelsNone(self):

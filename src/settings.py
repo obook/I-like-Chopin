@@ -18,7 +18,7 @@ from midi_song import modes
 class ClassSettings:
     """Class for recall and store preferences and settings"""
 
-    uuid = uuid.uuid4()
+    uuid = None
     applicationpath = os.path.dirname(os.path.realpath(__file__))
     settingspath = os.path.join(os.path.expanduser("~"), ".config")
     settingsfile = os.path.join(settingspath, "i-like-chopin.json")
@@ -38,7 +38,8 @@ class ClassSettings:
     }
 
     def __init__(self):
-        print(f"Settings {self.uuid} reading [{self.settingsfile}]")
+        self.uuid = uuid.uuid4()
+        print(f"Settings {self.uuid} read [{self.settingsfile}]")
         if not os.path.isdir(self.settingspath):
             os.makedirs(self.settingspath, exist_ok=True)
         if not os.path.isdir(self.defaultmidipath):

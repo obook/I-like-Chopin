@@ -95,7 +95,7 @@ class Ui_MainWindow(object):
         self.groupBox_3.setSizePolicy(sizePolicy)
         self.pushButton_FileIndex = QPushButton(self.groupBox_3)
         self.pushButton_FileIndex.setObjectName(u"pushButton_FileIndex")
-        self.pushButton_FileIndex.setEnabled(False)
+        self.pushButton_FileIndex.setEnabled(True)
         self.pushButton_FileIndex.setGeometry(QRect(245, 30, 100, 30))
         self.pushButton_FileIndex.setCheckable(False)
         self.pushButton_Speed = QPushButton(self.groupBox_3)
