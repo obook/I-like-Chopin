@@ -34,7 +34,7 @@ class ClassSettings:
         "MidiPath": defaultmidipath,
         "ForceInstrument": False,
         "PianoProgram": 0,
-        "Mode": modes["chopin"],
+        "Mode": modes["playback"],
     }
 
     def __init__(self):
@@ -139,9 +139,9 @@ class ClassSettings:
         return self.SetSetting("PianoProgram", value)
 
     def GetMode(self):
-        return self.GetSetting("Mode", modes["chopin"])
+        return self.GetSetting("Mode", modes["playback"])
 
-    def IsMode(self, mode):  # EG IsMode(modes['chopin'])
+    def IsMode(self, mode):  # EG IsMode(modes['playback'])
         if self.GetMode() == mode:
             return True
         return False

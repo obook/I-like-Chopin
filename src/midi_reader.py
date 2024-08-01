@@ -180,7 +180,7 @@ class ClassThreadMidiReader(Thread):
                     # self.statusbar_activity.emit(text)
 
             # Playback : wait keyboard
-            elif self.midisong.IsMode(modes["chopin"]):
+            elif self.midisong.IsMode(modes["playback"]):
 
                 # Wait note time
                 if (

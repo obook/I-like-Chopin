@@ -14,7 +14,7 @@ states = {
     "playing": 3,
 }
 
-modes = {"error": -1, "unknown": 0, "chopin": 1, "passthrough": 2, "player": 3}
+modes = {"error": -1, "unknown": 0, "playback": 1, "passthrough": 2, "player": 3}
 
 
 class ClassMidiSong:
@@ -28,7 +28,7 @@ class ClassMidiSong:
     __active = False
     __ready = False  # wait first key on keyboard
     __state = states["unknown"]
-    __mode = modes["chopin"]
+    __mode = modes["playback"]
     __uuid = uuid.uuid4()
 
     def __init__(self, filepath):

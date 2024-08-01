@@ -54,7 +54,7 @@ class ClassThreadInput(QThread):
                 f"MidiInput {self.uuid} midi_input:Error connect from {self.in_device}"
             )
             return
-        if self.settings.GetMode() == modes["chopin"]:
+        if self.settings.GetMode() == modes["playback"]:
             self.statusbar_activity.emit(f"Waiting : {self.in_device} ...")
 
         while self.running:

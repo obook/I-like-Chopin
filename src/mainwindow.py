@@ -87,7 +87,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Files.installEventFilter(self)  # drop files
 
         # Force chopin mode
-        self.settings.SaveMode(modes["chopin"])
+        self.settings.SaveMode(modes["playback"])
         self.SetPlayerModeButtons()
 
         # ComboBoxes Inputs/Outputs
@@ -281,11 +281,11 @@ class MainWindow(QMainWindow):
             self.ui.pushButton_Humanize.setText("Humanize")
 
     def SetPlayerModeButtons(self):
-        if self.settings.GetMode() == modes["chopin"]:
+        if self.settings.GetMode() == modes["playback"]:
             self.ui.pushButton_Mode.setStyleSheet(
                 "QPushButton { background-color: rgb(30,80,30); }\n"
             )
-            self.ui.pushButton_Mode.setText("Chopin")
+            self.ui.pushButton_Mode.setText("Playback")
             self.ui.pushButton_Mode.setChecked(False)
 
         elif self.settings.GetMode() == modes["passthrough"]:
@@ -304,7 +304,7 @@ class MainWindow(QMainWindow):
 
     def ChangePlayerMode(self):  # button mode pressed or called by midi_inpout
 
-        if self.settings.GetMode() == modes["chopin"]:
+        if self.settings.GetMode() == modes["playback"]:
             self.settings.SaveMode(modes["passthrough"])
 
         elif self.settings.GetMode() == modes["passthrough"]:
@@ -312,7 +312,7 @@ class MainWindow(QMainWindow):
 
         elif self.settings.GetMode() == modes["player"]:
             # stop Song here ?
-            self.settings.SaveMode(modes["chopin"])
+            self.settings.SaveMode(modes["playback"])
 
         self.SetPlayerModeButtons()
         self.midi.ChangeMidiMode(self.settings.GetMode())
