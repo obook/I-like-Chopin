@@ -5,6 +5,7 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 import uuid
+import time
 
 from mido import open_input
 from midi_numbers import number_to_note
@@ -13,7 +14,7 @@ from PySide6.QtCore import QThread, Signal
 
 class ClassThreadInput(QThread):
 
-    uuid = uuid.uuid4()
+    uuid = None
     in_device = None
     in_port = None
     out_port = None
@@ -26,7 +27,7 @@ class ClassThreadInput(QThread):
 
     def __init__(self, in_device, keys, pParent):
         QThread.__init__(self)
-
+        self.uuid = uuid.uuid4()
         self.pParent = pParent
         self.settings = self.pParent.settings
         self.in_device = in_device
@@ -43,7 +44,7 @@ class ClassThreadInput(QThread):
         self.out_port = out_port
 
     def run(self):
-        self.stop()
+
         try:
             self.in_port = open_input(self.in_device, callback=self.callback)
             self.running = True
@@ -54,6 +55,14 @@ class ClassThreadInput(QThread):
             return
         if self.settings.GetMode() == modes["chopin"]:
             self.statusbar_activity.emit(f"Waiting : {self.in_device} ...")
+
+        while self.running:
+            time.sleep(1) # or self
+
+        if self.in_port:
+            self.in_port.callback = None
+            if not self.in_port.closed:
+                self.in_port.close()
 
     def callback(self, message):
 
@@ -101,14 +110,10 @@ class ClassThreadInput(QThread):
                 pass
             return
 
-    def active(self):
+    def getport(self):
         if self.in_port:
-            return True
-        return False
+            return self.in_port
+        return None
 
     def stop(self):
-        # print(f"MidiInput {self.uuid} stop")
         self.running = False
-        if self.in_port:
-            self.in_port.close()
-            self.in_port = None

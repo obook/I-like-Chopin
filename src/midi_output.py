@@ -19,6 +19,7 @@ class ClassThreadOutput(QThread):
     outport = None
     settings = None
     please_wait = False
+    running = False
 
     led_activity = Signal(int)
 
@@ -35,9 +36,9 @@ class ClassThreadOutput(QThread):
 
     def run(self):
         self.please_wait = True
-        self.stop()
         try:
             self.outport = open_output(self.out_device, autoreset=True)
+            self.running = True
         except:
             self.outport = None
             print(
@@ -47,6 +48,13 @@ class ClassThreadOutput(QThread):
         # Set all channels to Piano ('Acoustic Grand Piano') if set
         self.forcePiano()
         self.please_wait = False
+
+        while self.running:
+            time.sleep(1) # or self
+
+        if  self.outport:
+            if not self.outport.closed:
+                self.outport.close()
 
     def forcePiano(self):
         if self.outport:
@@ -88,13 +96,15 @@ class ClassThreadOutput(QThread):
             self.outport.panic()
             self.forcePiano()
 
-    def active(self):
+    def reset(self):
         if self.outport:
-            return True
-        return False
+            self.outport.reset()
+            self.outport.panic()
+
+    def getport(self):
+        while self.please_wait == True:
+            time.sleep(0.01)
+        return self.outport
 
     def stop(self):
-        # print(f"MidiOutput {self.uuid} stop")
-        if self.outport:
-            self.outport.close()
-            self.outport = None
+        self.running = False

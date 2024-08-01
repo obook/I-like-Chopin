@@ -367,13 +367,13 @@ class MainWindow(QMainWindow):
 
     def Quit(self):
 
-        if self.midi:
-            self.midi.quit()
-        self.midi = None
-
         if self.web_server:
             self.web_server.stop()
         self.web_server = None
+
+        if self.midi:
+            self.midi.quit()
+        self.midi = None
 
         app.quit()
 

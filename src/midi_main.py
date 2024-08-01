@@ -9,12 +9,13 @@ import os
 import glob
 import platform
 import uuid
+import time
 
 import mido
 from midi_input import ClassThreadInput
 from midi_output import ClassThreadOutput
 from midi_reader import ClassThreadMidiReader
-
+from PySide6.QtCore import QObject
 
 class ClassMidiMain(QObject):
     """Main Midi Class"""
@@ -33,6 +34,7 @@ class ClassMidiMain(QObject):
     settings = None
 
     def __init__(self, pParent, channels):
+        QObject.__init__(self)
         self.pParent = pParent
         self.settings = self.pParent.settings
         self.channels = channels
@@ -70,9 +72,9 @@ class ClassMidiMain(QObject):
         self.ThreadInput = ClassThreadInput(in_device, self.keys, self.pParent)
         self.ThreadInput.start()
 
-    def ConnectInputState(self):
+    def ConnectInputState(self): # A revoir en utilisant les ports
         if self.ThreadInput:
-            return self.ThreadInput.active()
+            return self.ThreadInput.getport()
         return False
 
     def ConnectOutput(self, out_device):
@@ -85,7 +87,7 @@ class ClassMidiMain(QObject):
 
     def ConnectOutputState(self):
         if self.ThreadOutput:
-            return self.ThreadOutput.active()
+            return self.ThreadOutput.getport()
         return False
 
     # List of midifiles from folder midi (see json file created)
@@ -154,15 +156,17 @@ class ClassMidiMain(QObject):
     def quit(self):
         if self.ThreadMidiReader:
             self.ThreadMidiReader.stop()
-            # self.ThreadMidiReader.SetMidiPort(None)  # stop send
-            # NOT recommanded self.ThreadMidiReader.terminate();
             self.ThreadMidiReader = None
 
         if self.ThreadInput:
             self.ThreadInput.stop()
+            while self.ThreadInput.isRunning():
+                time.sleep(0.01)
             self.ThreadInput = None
 
         if self.ThreadOutput:
-            self.ThreadOutput.panic()
+            self.ThreadOutput.reset()
             self.ThreadOutput.stop()
+            while self.ThreadOutput.isRunning():
+                time.sleep(0.01)
             self.ThreadOutput = None

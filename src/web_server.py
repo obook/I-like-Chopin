@@ -46,13 +46,15 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "application/json")
             self.end_headers()
 
+            midisong = server_parent.midi.GetMidiSong()
+
             data = json.dumps(
                 {
-                    "played": self.midisong.GetPlayed(),
-                    "duration": round(self.midisong.GetDuration(), 2),
-                    "nameclean": self.midisong.GetCleanName(),
-                    "state": self.midisong.GetState(),
-                    "mode": self.midisong.GetMode(),
+                    "played": midisong.GetPlayed(),
+                    "duration": round(midisong.GetDuration(), 2),
+                    "nameclean": midisong.GetCleanName(),
+                    "state": midisong.GetState(),
+                    "mode": midisong.GetMode(),
                 }
             )
 
