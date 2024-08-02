@@ -3,6 +3,7 @@
 import os
 import json
 import uuid
+from pathlib import Path
 
 class ClassHistory:
     uuid = None
@@ -29,6 +30,17 @@ class ClassHistory:
         except: # not yet exists
             pass
 
+        # cleanup
+        new_history = []
+        for i in range(len(self.history)):
+            # json do not load null
+            try:
+                if os.path.isfile(self.history[i]):
+                    new_history.append(self.history[i])
+            except:
+                    pass
+        self.history = new_history
+
     def SaveHistory(self):
         try:
             with open(self.historyfile, "w") as f:
@@ -53,6 +65,17 @@ class ClassHistory:
         reversed.reverse() # last first
         '''
         return self.history
+
+    def GetName(self, index):  # without extension, eg : toto
+        if index > len(self.history):
+            return "<None>"
+        return Path(self.history[index]).stem
+
+    def GetCleanName(self, index):  # without extension, eg : toto
+        name = self.GetName(index)
+        name = name.replace("_", " ")
+        name = name.replace("-", " ")
+        return name.upper()
 
 
 

@@ -49,17 +49,19 @@ class Handler(BaseHTTPRequestHandler):
 
             midisong = server_parent.midi.GetMidiSong()
 
-            data = json.dumps(
-                {
-                    "played": midisong.GetPlayed(),
-                    "duration": round(midisong.GetDuration(), 2),
-                    "nameclean": midisong.GetCleanName(),
-                    "state": midisong.GetState(),
-                    "mode": midisong.GetMode(),
-                }
-            )
+            if midisong :
+                data = json.dumps(
+                    {
+                        "played": midisong.GetPlayed(),
+                        "duration": round(midisong.GetDuration(), 2),
+                        "nameclean": midisong.GetCleanName(),
+                        "state": midisong.GetState(),
+                        "mode": midisong.GetMode(),
+                    }
+                )
 
-            self.wfile.write(data.encode(encoding="utf_8"))
+                self.wfile.write(data.encode(encoding="utf_8"))
+
             return
 
         elif "play" in query_components:

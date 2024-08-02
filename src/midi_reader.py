@@ -42,6 +42,9 @@ class ClassThreadMidiReader(Thread):
     def __init__(self, midifile, keys, channels, pParent):
         Thread.__init__(self)
         self.uuid = uuid.uuid4()
+        if not midifile:
+            print(f"MidiReader {self.uuid} midifile=None")
+            return
         self.pParent = pParent
         self.midi = self.pParent.midi
         self.settings = self.pParent.settings
@@ -285,10 +288,10 @@ class ClassThreadMidiReader(Thread):
         self.midisong.SetPlayed(100)
 
     def stop(self):
-
-        print(f"MidiReader {self.uuid} stop [{self.midisong.GetFilename()}] !")
-
         if self.midisong:
+            print(f"MidiReader {self.uuid} stop [{self.midisong.GetFilename()}] !")
             self.midisong.SetState(states["ended"])
             self.midisong.SetPlayed(100)
+        else:
+            print("MidiReader {self.uuid} stop")
         self.running = False

@@ -62,6 +62,7 @@ class MainWindow(QMainWindow):
     midi = None
     midisong = None  # current midisong
     lastmidifile = None
+    nextmidifile = None
 
     ConnectInputState = False
     ConnectOutputState = False
@@ -156,6 +157,7 @@ class MainWindow(QMainWindow):
         self.midi.ConnectOutput(Output)
         self.MidifileChange(self.settings.GetMidifile())
         self.lastmidifile = self.settings.GetMidifile()
+        self.nextmidifile = self.nextmidifile
 
         # Midifiles
         if self.midisong:
@@ -172,7 +174,16 @@ class MainWindow(QMainWindow):
         timer.start(2000)
 
     def timer(self):
+        ''' A revoir
+        if self.nextmidifile != self.lastmidifile:
 
+            print(f"TIMER se prépare à charger nextmidifile {self.nextmidifile}")
+
+            self.lastmidifile = self.nextmidifile
+            self.midi.Panic()
+            self.MidifileChange(self.nextmidifile)
+            return
+        '''
         if self.midi.GetInputPort() and not self.ConnectInputState:
             self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
             self.ConnectInputState = True
@@ -235,6 +246,12 @@ class MainWindow(QMainWindow):
         FilesIndex = min(int(value/step),len(files)-1)
         if  self.lastmidifile != files[FilesIndex]:
             self.ui.pushButton_FileIndex.setText(f"MidiFile {FilesIndex+1}/{len(files)}")
+            clean_name = self.history.GetCleanName(FilesIndex)
+
+            self.ui.pushButton_Files.setText(self.history.GetCleanName(FilesIndex)) # est écrasé, par timer ?
+
+            # print(f"--> nextmidifile index {FilesIndex} file {files[FilesIndex]}")
+            # self.nextmidifile = files[FilesIndex]
 
             # il faut afficher le titre, puis au bout d'une seconde s'il n'a pas changé, charger la chanson
             # parce qu'il charge et décharge pour rien le reader à chaque fois
@@ -242,6 +259,7 @@ class MainWindow(QMainWindow):
             self.midi.Panic()
             self.lastmidifile = files[FilesIndex]
             self.MidifileChange(files[FilesIndex])
+
 
     # Channels
     def ChannelsNone(self):
