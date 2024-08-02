@@ -122,7 +122,7 @@ class ClassThreadMidiReader(Thread):
             return
 
         self.running = True
-        human = 0
+        # human = 0
 
         for msg in MidiFile(self.midisong.Getfilepath()):
 
@@ -148,7 +148,8 @@ class ClassThreadMidiReader(Thread):
                 if self.midisong.IsState(states["cueing"]):
                     msg.time = 0
 
-                time.sleep(msg.time+human)
+                # time.sleep(msg.time+human)
+                time.sleep(msg.time)
 
                 if msg.type == "note_on":
                     if self.channels[msg.channel] and not self.midisong.IsState(
@@ -170,11 +171,11 @@ class ClassThreadMidiReader(Thread):
                         human = self.midisong.Humanize(self.keys["humanize"])
                     else:
                         human = 0
-                    '''
+
                     time.sleep(
                         self.keys["speed"] / 2000 + human
                     )  # Speed controlled by knob, see midi_input
-                    '''
+
 
                 # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
                 if msg.type == "program_change" and self.settings.GetForceIntrument():
@@ -197,7 +198,8 @@ class ClassThreadMidiReader(Thread):
                     self.midisong.IsState(states["playing"])
                     and msg.time > self.wait_time
                 ):
-                    time.sleep(msg.time+human)
+                    #time.sleep(msg.time+human)
+                    time.sleep(msg.time)
 
                 if msg.type == "note_on":
                     if self.channels[msg.channel] and not self.midisong.IsState(
@@ -219,11 +221,11 @@ class ClassThreadMidiReader(Thread):
                         human = self.midisong.Humanize(self.keys["humanize"])
                     else:
                         human = 0
-                    '''
+
                     time.sleep(
                         self.keys["speed"] / 2000 + human
                     )  # Speed controlled by knob, see midi_input
-                    '''
+
 
                 if self.midisong.IsState(states["cueing"]):
                     msg.time = 0
