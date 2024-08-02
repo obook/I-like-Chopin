@@ -62,6 +62,11 @@ class Handler(BaseHTTPRequestHandler):
 
                 self.wfile.write(data.encode(encoding="utf_8"))
 
+                if not self.wfile.closed:
+                    self.wfile.flush()
+                #self.wfile.close()
+                #self.rfile.close()
+
             return
 
         elif "play" in query_components:
@@ -110,6 +115,11 @@ class Handler(BaseHTTPRequestHandler):
         except:  # web browser disconnected
             pass
         return
+
+        if not self.wfile.closed:
+            self.wfile.flush()
+        #self.wfile.close()
+        #self.rfile.close()
 
     def log_message(self, format, *args):  # no message in terminal
         pass
