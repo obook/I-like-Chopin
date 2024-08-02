@@ -15,7 +15,7 @@ import mido
 from midi_input import ClassThreadInput
 from midi_output import ClassThreadOutput
 from midi_reader import ClassThreadMidiReader
-from midi_song import ClassMidiSong, states, modes
+from midi_song import modes
 
 from PySide6.QtCore import QObject, Signal
 
@@ -175,7 +175,11 @@ class ClassMidiMain(QObject):
         if self.ThreadOutput:
             self.ThreadOutput.panic()
         self.keys["key_on"] = 0
-        self.pParent.SetStatusBar("")  # via slot ?
+        self.statusbar_activity.emit("")
+
+    def ResetOutput(self):
+        if self.ThreadOutput:
+             self.ThreadOutput.reset()
 
     def quit(self):
         if self.ThreadMidiReader:

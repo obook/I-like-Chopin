@@ -124,6 +124,9 @@ class ClassThreadMidiReader(Thread):
         self.running = True
         # human = 0
 
+        # Before play, reset...
+        self.pParent.midi.ResetOutput()
+
         for msg in MidiFile(self.midisong.Getfilepath()):
 
             # Stop while running ?

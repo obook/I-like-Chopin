@@ -101,10 +101,5 @@ class ClassThreadOutput(QThread):
             self.outport.reset()
             self.outport.panic()
 
-    def getport(self):
-        while self.please_wait == True:
-            time.sleep(0.01)
-        return self.outport
-
     def stop(self):
         self.running = False
