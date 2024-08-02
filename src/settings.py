@@ -35,6 +35,7 @@ class ClassSettings:
         "ForceInstrument": False,
         "PianoProgram": 0,
         "Mode": modes["playback"],
+        "SustainChannel":64 # Sustain/Forte
     }
 
     def __init__(self):
@@ -152,3 +153,8 @@ class ClassSettings:
 
     def GetServerPort(self):
         return self.GetSetting("ServerPort", 8888)
+
+    def GetSustainChannel(self):
+        return self.GetSetting("SustainChannel", 61)
+
+

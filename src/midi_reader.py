@@ -5,10 +5,9 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 import time
-import random
 import uuid
 import os
-from math import sqrt, pi
+from mido import Message
 
 # from PySide6.QtCore import QThread, Signal # for instance, crash or block interface at startup
 from threading import Thread
@@ -236,7 +235,8 @@ class ClassThreadMidiReader(Thread):
                 # Pause ?
                 if msg.type == "note_on" and self.midisong.IsState(states["playing"]):
                     start_time = time.time()
-
+                    start_time_loop = time.time()
+                    pedal_off = False
                     while not self.keys["key_on"]:  # Loop waiting keyboard
 
                         if not self.channels[msg.channel]:
@@ -250,7 +250,15 @@ class ClassThreadMidiReader(Thread):
                             self.stop()
                             return
 
+                        # Si trop long, enlever la pédale
+                        # controller 64->0
+                        if not pedal_off and time.time() - start_time_loop > 1.5:
+                            msg =Message('control_change', control=self.settings.GetSustainChannel(), value=0)
+                            self.pParent.midi.SendOutput(msg)
+                            pedal_off = True
+
                         time.sleep(0.001)  # for loop
+
 
                     # Wait a key how much time ?
                     self.wait_time = time.time() - start_time
