@@ -58,7 +58,7 @@ class ClassThreadInput(QThread):
             self.statusbar_activity.emit(f"Waiting : {self.in_device} ...")
 
         while self.running:
-            time.sleep(1)  # or self
+            self.sleep(1)
 
         if self.in_port:
             self.in_port.callback = None

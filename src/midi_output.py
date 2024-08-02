@@ -51,7 +51,7 @@ class ClassThreadOutput(QThread):
         self.please_wait = False
 
         while self.running:
-            time.sleep(1)  # or self
+            self.sleep(1)  # or self
 
         if self.outport:
             if not self.outport.closed:
