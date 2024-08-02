@@ -71,7 +71,7 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
-        self.setFixedSize(504, 434)
+        self.setFixedSize(504, 466)
         self.ui.setupUi(self)
 
         # Application icon X.org->correct - Wayland->not implemented
@@ -109,6 +109,24 @@ class MainWindow(QMainWindow):
         self.ui.OutputDeviceCombo.addItem(Output)
         self.ui.OutputDeviceCombo.addItems(self.Outputs)
         self.ui.OutputDeviceCombo.currentIndexChanged.connect(self.OuputDeviceChanged)
+
+        # ProgressBar
+        self.ui.progressBar.setRange(0,100)
+        self.ui.progressBar.setValue(0)
+        self.ui.progressBar.setStyleSheet(
+        "QProgressBar {"
+            "border: 2px;"
+            "border-radius: 30px;"
+        "}"
+        "QProgressBar::chunk {"
+        "margin: 4px;"
+        "background-color: qlineargradient("
+        "x0: 0, x2: 1, "
+        "stop: 0 green, stop: 0.6 green, "
+        "stop: 0.8 orange, "
+        "stop: 1 red);"
+        "}"
+        )
 
         # Leds
         self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_LED_OFF))
@@ -211,6 +229,8 @@ class MainWindow(QMainWindow):
             else:
                 self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
 
+            self.ui.progressBar.setValue(self.midisong.GetPlayed())
+
             self.SetFileButtonText()
             self.ChannelsSetButtons()
             # just for led off
@@ -247,7 +267,7 @@ class MainWindow(QMainWindow):
         FilesIndex = min(int(value/step),len(files)-1)
         if  self.lastmidifile != files[FilesIndex]:
             self.ui.pushButton_FileIndex.setText(f"MidiFile {FilesIndex+1}/{len(files)}")
-            clean_name = self.history.GetCleanName(FilesIndex)
+            # clean_name = self.history.GetCleanName(FilesIndex)
 
             self.ui.pushButton_Files.setText(self.history.GetCleanName(FilesIndex)) # est écrasé, par timer ?
 
