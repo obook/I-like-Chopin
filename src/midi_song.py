@@ -3,6 +3,7 @@
 import os
 from pathlib import Path
 import uuid
+import random
 
 states = {
     "bad": -3,
@@ -107,3 +108,14 @@ class ClassMidiSong:
         if self.__mode == value:
             return True
         return False
+
+    def Humanize(self, key): # key=0-127
+        # on devrait faire varier +/- le time de la note courante...
+        if random.random() < 0.4:
+            return random.random()*key/1024
+        else:
+            return 0
+
+
+
+

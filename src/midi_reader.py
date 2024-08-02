@@ -8,6 +8,7 @@ import time
 import random
 import uuid
 import os
+from math import sqrt, pi
 
 # from PySide6.QtCore import QThread, Signal # for instance, crash or block interface at startup
 from threading import Thread
@@ -121,6 +122,7 @@ class ClassThreadMidiReader(Thread):
             return
 
         self.running = True
+        human = 0
 
         for msg in MidiFile(self.midisong.Getfilepath()):
 
@@ -146,13 +148,13 @@ class ClassThreadMidiReader(Thread):
                 if self.midisong.IsState(states["cueing"]):
                     msg.time = 0
 
-                time.sleep(msg.time)
+                time.sleep(msg.time+human)
 
                 if msg.type == "note_on":
                     if self.channels[msg.channel] and not self.midisong.IsState(
                         states["playing"]
                     ):  # First note on channels selected
-                        print(f"MidiReader {self.uuid} ready !")
+                        print(f"MidiReader {self.uuid} player ready [{self.midisong.GetFilename()}]")
                         self.midisong.SetState(states["playing"])
                     # Stats
                     if msg.type == "note_on":
@@ -165,13 +167,14 @@ class ClassThreadMidiReader(Thread):
                     if self.keys[
                         "humanize"
                     ]:  # Humanize controlled by knob, see midi_input
-                        human = random.randrange(0, self.keys["humanize"], 1) / 2000
+                        human = self.midisong.Humanize(self.keys["humanize"])
                     else:
                         human = 0
-
+                    '''
                     time.sleep(
                         self.keys["speed"] / 2000 + human
                     )  # Speed controlled by knob, see midi_input
+                    '''
 
                 # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
                 if msg.type == "program_change" and self.settings.GetForceIntrument():
@@ -194,13 +197,13 @@ class ClassThreadMidiReader(Thread):
                     self.midisong.IsState(states["playing"])
                     and msg.time > self.wait_time
                 ):
-                    time.sleep(msg.time)
+                    time.sleep(msg.time+human)
 
                 if msg.type == "note_on":
                     if self.channels[msg.channel] and not self.midisong.IsState(
                         states["playing"]
                     ):  # First note on channels selected
-                        print(f"MidiReader {self.uuid} ready [{self.midisong.GetFilename()}]")
+                        print(f"MidiReader {self.uuid} playback ready [{self.midisong.GetFilename()}]")
                         self.midisong.SetState(states["playing"])
 
                     # Stats
@@ -213,13 +216,14 @@ class ClassThreadMidiReader(Thread):
                     if self.keys[
                         "humanize"
                     ]:  # Humanize controlled by knob, see midi_input
-                        human = random.randrange(0, self.keys["humanize"], 1) / 2000
+                        human = self.midisong.Humanize(self.keys["humanize"])
                     else:
                         human = 0
-
+                    '''
                     time.sleep(
                         self.keys["speed"] / 2000 + human
                     )  # Speed controlled by knob, see midi_input
+                    '''
 
                 if self.midisong.IsState(states["cueing"]):
                     msg.time = 0
