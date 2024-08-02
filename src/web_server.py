@@ -75,7 +75,10 @@ class Handler(BaseHTTPRequestHandler):
 
         self.send_response(200)
         self.send_header("Content-type", "text/html")
-        self.end_headers()
+        try:
+            self.end_headers()
+        except:
+            pass
 
         file = open(server_parent.settings.GetIndexTemplate(), "r")
         template = Template(file.read())
