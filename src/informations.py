@@ -46,6 +46,10 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         for output in self.pParent.Outputs:
             text += f"{output}<br>"
 
+        text += f"<p{style}>INPUTS/OUTPUTS</p>"
+        for output in self.pParent.InputsOutputs:
+            text += f"{output}<br>"
+
         text += f"<p{style}>HUMANIZE</p>"
         text += "control_change:control 71 (set your midi-device)"
 

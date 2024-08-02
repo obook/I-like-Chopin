@@ -56,6 +56,7 @@ class MainWindow(QMainWindow):
 
     Inputs = []
     Outputs = []
+    InputsOutputs = []
 
     MidiFiles = []
     MidifilesIndex = 0  # ?
@@ -97,7 +98,7 @@ class MainWindow(QMainWindow):
         self.SetPlayerModeButtons()
 
         # ComboBoxes Inputs/Outputs
-        self.Inputs, self.Outputs, IOPorts = self.midi.GetDevices()
+        self.Inputs, self.Outputs, self.InputsOutputs = self.midi.GetDevices()
         Input = self.settings.GetInputDevice()
         Output = self.settings.GetOutputDevice()
 
