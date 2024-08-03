@@ -64,6 +64,7 @@ class MainWindow(QMainWindow):
     midisong = None  # current midisong
     lastmidifile = None
     nextmidifile = None
+    history_index = 0
 
     ConnectInputState = False
     ConnectOutputState = False
@@ -258,6 +259,14 @@ class MainWindow(QMainWindow):
         self.lastmidifile = filepath
         self.history.AddHistory(filepath)
 
+    def NextMidifile(self): # from web server
+        files = self.history.GetHistory()
+        if self.history_index > len(files)-1:
+            self.history_index =0
+        self.MidifileChange(files[self.history_index])
+        self.history_index += 1
+
+    # Midi command
     def ChangeMidiFile(self, value):  # External Midi command
         # print("--> ChangeMidiFile NOT ACTIVE FOR INSTANCE")
 
