@@ -144,7 +144,7 @@ async function getStats() {
     document.getElementById('name').textContent=data.nameclean;
     const minutes = Math.floor(data.duration);
     const seconds = Math.floor((data.duration - minutes)*60);
-    document.getElementById('duration').textContent=minutes+"′"+String(seconds).padStart(2, '0');
+    document.getElementById('duration').textContent=minutes+"'"+String(seconds).padStart(2, '0');
     if (data.state <0)
         document.getElementById('name').style.color = '#ff0000';
     else if (data.state <2)
