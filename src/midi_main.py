@@ -34,6 +34,7 @@ class ClassMidiMain(QObject):
     uuid = uuid.uuid4()
     statusbar_activity = Signal(str)
     led_file_activity = Signal(int)
+    readerstop_activity = Signal()
 
     settings = None
 
@@ -119,8 +120,10 @@ class ClassMidiMain(QObject):
     def SetMidiSong(self, midifile):
 
         if self.ThreadMidiReader:
-            self.ThreadMidiReader.stop()
-            self.ThreadMidiReader = None
+            self.readerstop_activity.emit()
+            self.ThreadMidiReader.stop() # test
+            while self.ThreadMidiReader.isRunning():
+                time.sleep(0.01)
 
         self.ThreadMidiReader = ClassThreadMidiReader(
             midifile, self.keys, self.channels, self.pParent
@@ -139,6 +142,8 @@ class ClassMidiMain(QObject):
             self.ThreadMidiReader.start()
 
         self.pParent.SetFileButtonText()
+
+        self.readerstop_activity.connect(self.ThreadMidiReader.stop)
 
         return self.midisong
 
@@ -166,6 +171,11 @@ class ClassMidiMain(QObject):
     def SendLedFile(self, value):
         self.led_file_activity.emit(value)
 
+    def StopPlayer(self):
+        if self.ThreadMidiReader:
+            self.ThreadMidiReader.stop() # test
+        self.readerstop_activity.emit()
+
     def Stop(self):
         if self.ThreadMidiReader:
             self.ThreadMidiReader.stop()
@@ -183,7 +193,10 @@ class ClassMidiMain(QObject):
 
     def quit(self):
         if self.ThreadMidiReader:
-            self.ThreadMidiReader.stop()
+            self.readerstop_activity.emit()
+            self.ThreadMidiReader.stop() # test
+            while self.ThreadMidiReader.isRunning():
+                time.sleep(0.01)
             self.ThreadMidiReader = None
 
         if self.ThreadInput:

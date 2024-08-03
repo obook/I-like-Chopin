@@ -16,8 +16,9 @@ from mido import MidiFile
 from midi_song import ClassMidiSong, states, modes
 from midi_numbers import number_to_note
 
+from PySide6.QtCore import QThread, Signal # Essai
 
-class ClassThreadMidiReader(Thread):
+class ClassThreadMidiReader(QThread):
     # class ClassThreadMidiReader(QThread):
     """Read midifile and send to output device"""
 
@@ -37,10 +38,11 @@ class ClassThreadMidiReader(Thread):
     wait_time = 0
     running = False
 
-    # statusbar_activity = Signal(str)
+    statusbar_activity = Signal(str)
+    led_activity = Signal(int)
 
     def __init__(self, midifile, keys, channels, pParent):
-        Thread.__init__(self)
+        QThread.__init__(self)
         self.uuid = uuid.uuid4()
         if not midifile:
             print(f"MidiReader {self.uuid} midifile=None")
@@ -50,10 +52,10 @@ class ClassThreadMidiReader(Thread):
         self.settings = self.pParent.settings
         self.keys = keys
         self.channels = channels
-        # self.statusbar_activity.connect(self.pParent.SetStatusBar)
+        self.statusbar_activity.connect(self.pParent.SetStatusBar)
+        self.led_activity.connect(self.pParent.SetLedFile)
         print(f"MidiReader {self.uuid} created [{os.path.basename(midifile)}]")
         self.midisong = ClassMidiSong(midifile)
-        # self.midisong.SetState(states["unknown"])
 
     def __del__(self):
         print(f"MidiReader {self.uuid} destroyed [{self.midisong.GetFilename()}]")
@@ -121,7 +123,6 @@ class ClassThreadMidiReader(Thread):
             return
 
         self.running = True
-        # human = 0
 
         # Before play, reset...
         self.pParent.midi.ResetOutput()
@@ -132,20 +133,24 @@ class ClassThreadMidiReader(Thread):
             if not self.running:
                 return
 
-            if self.midisong.GetState() < states["cueing"]:
-                self.stop()
+            if self.midisong.GetState() < states["cueing"]: # not used
                 return
 
-            # For fun
+            # For fun, but DANGEROUS ?
             if msg.type == "note_on":
                 if self.channels[msg.channel]:
-                    self.midi.SendLedFile(1)
+                    # self.midi.SendLedFile(1)
+                    self.led_activity.emit(1)
             elif msg.type == "note_on":
                 if self.channels[msg.channel]:
-                    self.midi.SendLedFile(0)
+                    # self.midi.SendLedFile(0)
+                    self.led_activity.emit(0)
 
             # Just a Midi player
             if self.midisong.IsMode(modes["player"]):
+
+                # For loop
+                self.sleep(0.001) # Give time to QThread
 
                 # Delay : Humanize controlled by knob, see midi_input
                 human = 0
@@ -183,8 +188,8 @@ class ClassThreadMidiReader(Thread):
                 if msg.type == "note_on" and self.channels[msg.channel]:
                     note, octave = number_to_note(msg.note)
                     text = f"[{msg.note}]\t\t{note}{octave}"
-                    self.midi.SendStatusBar(text)
-                    # self.statusbar_activity.emit(text)
+                    # self.midi.SendStatusBar(text)
+                    self.statusbar_activity.emit(text)
 
             # Playback : wait keyboard
             elif self.midisong.IsMode(modes["playback"]):
@@ -244,7 +249,7 @@ class ClassThreadMidiReader(Thread):
                             self.pParent.midi.SendOutput(msg)
                             pedal_off = True
 
-                        time.sleep(0.001)  # for loop
+                        self.sleep(0.001)  # for loop
 
 
                     # Wait a key how much time ?
@@ -283,7 +288,7 @@ class ClassThreadMidiReader(Thread):
 
                 # Loop until passthrough mode active
                 while self.midisong.IsMode(modes["passthrough"]):
-                    time.sleep(0.5)
+                    self.sleep(0.5)
 
         # End of song
         # NO do not kill midisong

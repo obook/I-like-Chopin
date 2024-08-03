@@ -11,7 +11,7 @@ states = {
     "ended": -1,
     "unknown": 0,
     "cueing": 1,
-    "ready": 2,  # wait a keyboard key
+    "ready": 2,  # wait a first keyboard key
     "playing": 3,
 }
 
