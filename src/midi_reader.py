@@ -147,37 +147,31 @@ class ClassThreadMidiReader(Thread):
             # Just a Midi player
             if self.midisong.IsMode(modes["player"]):
 
+                # Delay : Humanize controlled by knob, see midi_input
+                human = 0
+                if msg.type == "note_on" and self.keys["humanize"]:
+                    human = self.midisong.HumanizeDuration(msg.time, self.keys["humanize"])
+
                 if self.midisong.IsState(states["cueing"]):
                     msg.time = 0
 
-                # time.sleep(msg.time+human)
-                time.sleep(msg.time)
+                # Time for the note
+                time.sleep(msg.time+human+self.keys["speed"] / 2000 )
 
                 if msg.type == "note_on":
+
                     if self.channels[msg.channel] and not self.midisong.IsState(
                         states["playing"]
                     ):  # First note on channels selected
                         print(f"MidiReader {self.uuid} player ready [{self.midisong.GetFilename()}]")
                         self.midisong.SetState(states["playing"])
+
                     # Stats
                     if msg.type == "note_on":
                         self.midisong.SetPlayed(
                             int(100 * self.current_notes_on / self.total_notes_on)
                         )
                         self.current_notes_on += 1
-
-                    # Delay
-                    if self.keys[
-                        "humanize"
-                    ]:  # Humanize controlled by knob, see midi_input
-                        human = self.midisong.Humanize(self.keys["humanize"])
-                    else:
-                        human = 0
-
-                    time.sleep(
-                        self.keys["speed"] / 2000 + human
-                    )  # Speed controlled by knob, see midi_input
-
 
                 # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
                 if msg.type == "program_change" and self.settings.GetForceIntrument():
@@ -200,8 +194,14 @@ class ClassThreadMidiReader(Thread):
                     self.midisong.IsState(states["playing"])
                     and msg.time > self.wait_time
                 ):
-                    #time.sleep(msg.time+human)
-                    time.sleep(msg.time)
+
+                    # Delay : Humanize controlled by knob, see midi_input
+                    human = 0
+                    if msg.type == "note_on" and self.keys["humanize"]:
+                        human = self.midisong.HumanizeDuration(msg.time, self.keys["humanize"])
+
+                    # Time for the note
+                    time.sleep(msg.time+human+self.keys["speed"] / 2000 )
 
                 if msg.type == "note_on":
                     if self.channels[msg.channel] and not self.midisong.IsState(
@@ -215,19 +215,6 @@ class ClassThreadMidiReader(Thread):
                         int(100 * self.current_notes_on / self.total_notes_on)
                     )
                     self.current_notes_on += 1
-
-                    # Delay
-                    if self.keys[
-                        "humanize"
-                    ]:  # Humanize controlled by knob, see midi_input
-                        human = self.midisong.Humanize(self.keys["humanize"])
-                    else:
-                        human = 0
-
-                    time.sleep(
-                        self.keys["speed"] / 2000 + human
-                    )  # Speed controlled by knob, see midi_input
-
 
                 if self.midisong.IsState(states["cueing"]):
                     msg.time = 0

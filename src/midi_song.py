@@ -109,12 +109,13 @@ class ClassMidiSong:
             return True
         return False
 
-    def Humanize(self, key): # key=0-127
-        # on devrait faire varier +/- le time de la note courante...
-        if random.random() < 0.4:
-            return random.random()*key/1024
-        else:
-            return 0
+    def HumanizeDuration(self, duration, key): # key=0-127 duration=original note duration
+        delay = random.random()*key/1024
+        if random.random() < 0.6: # 60% fastest
+            delay = -1*delay
+        if duration+delay <0:
+             delay = -1*delay
+        return delay # for calculate new_time = msg.time+delay
 
 
 
