@@ -39,12 +39,6 @@ With a Virtual Synth       |With Keyboard in Daw Mode  | With Rack Synth Device
 * netifaces2==0.0.22
 * qrcode==7.4.2
 
-# Soundfont
-
-Soundfont used : https://musical-artifacts.com/artifacts/4161
-
-Some other SoundFonts : https://sites.google.com/site/soundfonts4u/
-
 # Thanks
 
 Thank you to [cyri11e](https://github.com/cyri11e) for carrying out the program tests on MacOS and for his great patience.
