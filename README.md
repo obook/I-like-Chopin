@@ -28,7 +28,7 @@ poetry run python i-like-chopin.py
 With a Virtual Synth       |With Piano in Daw Mode     | With Rack Synth
 :-------------------------:|:-------------------------:|:-------------------------:
 <img src="media/ILC.png"  width="280"> | <img src="media/ILC3.png"  width="130"> | <img src="media/ILC2.png"  width="220">
-                           | (Local Mode Off)                   |
+
 # Programs and libraries used
 
 * Python 3.10.12
