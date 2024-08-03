@@ -104,7 +104,7 @@ class Handler(BaseHTTPRequestHandler):
                 midiname = midiname.replace("_", " ")
                 midiname = midiname.replace("-", " ")
                 midiname.upper()
-                midilist_html += f"<p><a href='?play={quote(midifile)}'> &nbsp; {midiname} &nbsp; </a></p>"
+                midilist_html += f"<p><a href='?play={quote(midifile)}'> &nbsp; {midiname} &nbsp; </a></p>\n"
 
             midilist_html += "</div>"
 
@@ -112,6 +112,9 @@ class Handler(BaseHTTPRequestHandler):
             name=server_parent.midisong.GetCleanName(),
             duration="",
             midifiles=midilist_html,
+
+            # A finir ...
+            qrcodes="" #"<img src='https://upload.wikimedia.org/wikipedia/commons/4/41/QR_Code_Example.svg'>"
         )
         try:
             self.wfile.write(bytes(index_html, "utf8"))
