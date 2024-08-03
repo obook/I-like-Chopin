@@ -22,9 +22,9 @@ class ClassSettings:
     applicationpath = os.path.dirname(os.path.realpath(__file__))
     settingspath = os.path.join(os.path.expanduser("~"), ".config")
     settingsfile = os.path.join(settingspath, "i-like-chopin.json")
-    defaultmidipath = os.path.join(
-        os.path.expanduser("~"), ".local", "share", "i-like-chopin", "midi"
-    )
+    localpath = os.path.join(
+    os.path.expanduser("~"), ".local", "share", "i-like-chopin")
+    defaultmidipath = os.path.join(localpath, "midi")
     serverindextemplate = os.path.join(
         applicationpath, "template", "index-template.html"
     )
@@ -35,7 +35,11 @@ class ClassSettings:
         "ForceInstrument": False,
         "PianoProgram": 0,
         "Mode": modes["playback"],
-        "SustainChannel":64 # Sustain/Forte
+        "SustainChannel":64, # Sustain/Forte
+        "HumanizeChannel":71,
+        "SpeedControlChannel":76,
+        "FilesControlChannel":77,
+        "RtMidiBackend":"" # Empty, LINUX_ALSA or UNIX_JACK
     }
 
     def __init__(self):
@@ -56,6 +60,9 @@ class ClassSettings:
     def __del__(self):
         print(f"Settings {self.uuid} destroyed [{self.settingsfile}]")
 
+    """
+    Load/Save settings File
+    """
     def LoadConfig(self):
         try:
             with open(self.settingsfile, "r") as f:
@@ -75,18 +82,20 @@ class ClassSettings:
             return False
         return True
 
-    def GetConfigPath(self):
-        return self.settingsfile
-
     """
     Tools functions
     """
-
     def GetApplicationPath(self):
         return self.applicationpath
 
     def GetIndexTemplate(self):
         return self.serverindextemplate
+
+    def GetLocalPath(self):
+        return self.localpath
+
+    def GetConfigPath(self):
+        return self.settingsfile
 
     """
     Globals settings functions
@@ -134,9 +143,6 @@ class ClassSettings:
     def SaveForceIntrument(self, value):
         return self.SetSetting("ForceInstrument", value)
 
-    def GetPianoProgram(self):
-        return self.GetSetting("PianoProgram", 0)
-
     def SavePianoProgram(self, value):  # not used
         return self.SetSetting("PianoProgram", value)
 
@@ -150,6 +156,13 @@ class ClassSettings:
 
     def SaveMode(self, value):
         return self.SetSetting("Mode", value)
+
+    """
+    Only manual editing
+    """
+
+    def GetPianoProgram(self):
+        return self.GetSetting("PianoProgram", 0)
 
     def GetServerPort(self):
         return self.GetSetting("ServerPort", 8888)

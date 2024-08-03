@@ -11,6 +11,10 @@ import uuid
 import glob
 import pathlib
 import json
+import qrcode
+import qrcode.image.svg
+import io
+
 from threading import Thread
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, quote
@@ -20,6 +24,7 @@ from string import Template
 server_parent = None
 server_interfaces = []
 server_mididict = {}
+svgqrcode_list = []
 
 """
 class ClassWebConfig:
@@ -30,6 +35,7 @@ class ClassWebConfig:
 class Handler(BaseHTTPRequestHandler):
     uuid = uuid.uuid4()
     global server_parent
+    global svgqrcode_list
     midisong = None
 
     def do_GET(self):
@@ -101,14 +107,20 @@ class Handler(BaseHTTPRequestHandler):
                 midiname = midiname.replace("_", " ")
                 midiname = midiname.replace("-", " ")
                 midiname.upper()
-                midilist_html += f"<p><a href='?play={quote(midifile)}'> &nbsp; {midiname} &nbsp; </a></p>"
+                midilist_html += f"<p><a href='?play={quote(midifile)}'> &nbsp; {midiname} &nbsp; </a></p>\n"
 
             midilist_html += "</div>"
+
+        # QRcodes
+        images = ""
+        for code in svgqrcode_list:
+            images += code.replace("<?xml version='1.0' encoding='UTF-8'?>","")
 
         index_html = template.substitute(
             name=server_parent.midisong.GetCleanName(),
             duration="",
             midifiles=midilist_html,
+            qrcodes=images,
         )
         try:
             self.wfile.write(bytes(index_html, "utf8"))
@@ -134,8 +146,8 @@ class ClassWebServer(Thread):
 
         global server_parent
         global server_interfaces
-
         global server_mididict
+        global svgqrcode_list
 
         Thread.__init__(self)
         server_parent = parent
@@ -162,9 +174,16 @@ class ClassWebServer(Thread):
         for interface in interfaces:
             url = f"http://{interface['ip']}:{self.port}"
             server_interfaces.append(url)
+
             print(
                 f"WebServer {self.uuid} {url} serve [{server_parent.settings.GetMidiPath()}]"
             )
+            if not "127.0.0.1" in url:
+                img = qrcode.make(url, image_factory=qrcode.image.svg.SvgPathImage, box_size=10)
+                buffer = io.BytesIO()
+                img.save(buffer)
+                buffer.seek(0)
+                svgqrcode_list.append(buffer.getvalue().decode("utf-8"))
 
     def __del__(self):
         print(f"WebServer {self.uuid} destroyed")
@@ -188,3 +207,5 @@ class ClassWebServer(Thread):
             self.server.server_close()
             self.server.shutdown()
             self.server = None
+
+
