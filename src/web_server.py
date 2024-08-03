@@ -208,19 +208,4 @@ class ClassWebServer(Thread):
             self.server.shutdown()
             self.server = None
 
-def svg_encode(svg):
-    # Ref: https://bl.ocks.org/jennyknuth/222825e315d45a738ed9d6e04c7a88d0
-    # Encode an SVG string so it can be embedded into a data URL.
-    enc_chars = '"%#{}<>' # Encode these to %hex
-    #enc_chars_maybe = '&|[]^`;?:@=' # Add to enc_chars on exception
-    svg_enc = ''
-    # Translate character by character
-    for c in str(svg):
-        if c in enc_chars:
-            if c == '"':
-                svg_enc += "'"
-            else:
-                svg_enc += '%' + format(ord(c), "x")
-        else:
-            svg_enc += c
-    return ' '.join(svg_enc.split()) # Compact whitespace
+
