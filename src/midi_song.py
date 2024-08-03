@@ -115,6 +115,9 @@ class ClassMidiSong:
             delay = -1*delay
         if duration+delay <0:
              delay = -1*delay
+             # A revoir ..
+        if duration+delay <0:
+            return 0
         return delay # for calculate new_time = msg.time+delay
 
 
