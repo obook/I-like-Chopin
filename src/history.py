@@ -59,12 +59,8 @@ class ClassHistory:
             self.SaveHistory()
 
     def GetHistory(self):
-        ''' trop de problèmes pour l'instant
-
-        reversed = self.history
-        reversed.reverse() # last first
-        '''
-        return self.history
+        reversed = self.history.copy().reverse() # reverse or not ?
+        return reversed
 
     def GetName(self, index):  # without extension, eg : toto
         if index > len(self.history):
