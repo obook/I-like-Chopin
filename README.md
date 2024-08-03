@@ -32,6 +32,7 @@ poetry run python i-like-chopin.py
 * python-rtmidi==1.4.7
 * PySide6==6.7.1
 * netifaces2==0.0.22
+* qrcode==7.4.2
 
 # Soundfont
 

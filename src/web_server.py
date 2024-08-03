@@ -11,6 +11,9 @@ import uuid
 import glob
 import pathlib
 import json
+import qrcode
+import qrcode.image.svg
+
 from threading import Thread
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, quote
@@ -134,7 +137,6 @@ class ClassWebServer(Thread):
 
         global server_parent
         global server_interfaces
-
         global server_mididict
 
         Thread.__init__(self)
@@ -162,9 +164,13 @@ class ClassWebServer(Thread):
         for interface in interfaces:
             url = f"http://{interface['ip']}:{self.port}"
             server_interfaces.append(url)
+
             print(
                 f"WebServer {self.uuid} {url} serve [{server_parent.settings.GetMidiPath()}]"
             )
+            if not "127.0.0.1" in url:
+                img = qrcode.make(url, image_factory=qrcode.image.svg.SvgImage)
+                img.save(os.path.join(server_parent.settings.GetLocalPath(), f"{interface['ip']}.svg"))
 
     def __del__(self):
         print(f"WebServer {self.uuid} destroyed")

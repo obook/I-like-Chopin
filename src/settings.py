@@ -22,9 +22,9 @@ class ClassSettings:
     applicationpath = os.path.dirname(os.path.realpath(__file__))
     settingspath = os.path.join(os.path.expanduser("~"), ".config")
     settingsfile = os.path.join(settingspath, "i-like-chopin.json")
-    defaultmidipath = os.path.join(
-        os.path.expanduser("~"), ".local", "share", "i-like-chopin", "midi"
-    )
+    localpath = os.path.join(
+    os.path.expanduser("~"), ".local", "share", "i-like-chopin")
+    defaultmidipath = os.path.join(localpath, "midi")
     serverindextemplate = os.path.join(
         applicationpath, "template", "index-template.html"
     )
@@ -74,6 +74,9 @@ class ClassSettings:
         except:
             return False
         return True
+
+    def GetLocalPath(self):
+        return self.localpath
 
     def GetConfigPath(self):
         return self.settingsfile

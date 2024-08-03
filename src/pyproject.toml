@@ -12,6 +12,7 @@ python-rtmidi = "^1.5.8"
 pyside6 = "^6.7.2"
 requests = "^2.32.3"
 netifaces2 = "^0.0.22"
+qrcode = "^7.4.2"
 
 
 [build-system]
