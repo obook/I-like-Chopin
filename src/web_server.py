@@ -13,6 +13,7 @@ import pathlib
 import json
 import qrcode
 import qrcode.image.svg
+import io
 
 from threading import Thread
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
@@ -23,6 +24,7 @@ from string import Template
 server_parent = None
 server_interfaces = []
 server_mididict = {}
+svgqrcode_list = []
 
 """
 class ClassWebConfig:
@@ -33,6 +35,7 @@ class ClassWebConfig:
 class Handler(BaseHTTPRequestHandler):
     uuid = uuid.uuid4()
     global server_parent
+    global svgqrcode_list
     midisong = None
 
     def do_GET(self):
@@ -108,13 +111,16 @@ class Handler(BaseHTTPRequestHandler):
 
             midilist_html += "</div>"
 
+        # QRcodes
+        images = ""
+        for code in svgqrcode_list:
+            images += code.replace("<?xml version='1.0' encoding='UTF-8'?>","")
+
         index_html = template.substitute(
             name=server_parent.midisong.GetCleanName(),
             duration="",
             midifiles=midilist_html,
-
-            # A finir ...
-            qrcodes="" #"<img src='https://upload.wikimedia.org/wikipedia/commons/4/41/QR_Code_Example.svg'>"
+            qrcodes=images,
         )
         try:
             self.wfile.write(bytes(index_html, "utf8"))
@@ -141,6 +147,7 @@ class ClassWebServer(Thread):
         global server_parent
         global server_interfaces
         global server_mididict
+        global svgqrcode_list
 
         Thread.__init__(self)
         server_parent = parent
@@ -172,8 +179,11 @@ class ClassWebServer(Thread):
                 f"WebServer {self.uuid} {url} serve [{server_parent.settings.GetMidiPath()}]"
             )
             if not "127.0.0.1" in url:
-                img = qrcode.make(url, image_factory=qrcode.image.svg.SvgImage)
-                img.save(os.path.join(server_parent.settings.GetLocalPath(), f"{interface['ip']}.svg"))
+                img = qrcode.make(url, image_factory=qrcode.image.svg.SvgPathImage, box_size=10)
+                buffer = io.BytesIO()
+                img.save(buffer)
+                buffer.seek(0)
+                svgqrcode_list.append(buffer.getvalue().decode("utf-8"))
 
     def __del__(self):
         print(f"WebServer {self.uuid} destroyed")
@@ -197,3 +207,20 @@ class ClassWebServer(Thread):
             self.server.server_close()
             self.server.shutdown()
             self.server = None
+
+def svg_encode(svg):
+    # Ref: https://bl.ocks.org/jennyknuth/222825e315d45a738ed9d6e04c7a88d0
+    # Encode an SVG string so it can be embedded into a data URL.
+    enc_chars = '"%#{}<>' # Encode these to %hex
+    #enc_chars_maybe = '&|[]^`;?:@=' # Add to enc_chars on exception
+    svg_enc = ''
+    # Translate character by character
+    for c in str(svg):
+        if c in enc_chars:
+            if c == '"':
+                svg_enc += "'"
+            else:
+                svg_enc += '%' + format(ord(c), "x")
+        else:
+            svg_enc += c
+    return ' '.join(svg_enc.split()) # Compact whitespace
