@@ -6,7 +6,7 @@ Created on Wed Jun  5 18:19:14 2024
 """
 
 import platform
-
+import mido
 from PySide6.QtWidgets import QDialog
 from ui_informations import Ui_DialogInformation
 
@@ -27,6 +27,12 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         text = ""
         text += f"<p{style}>SYSTEM</p>"
         text += f"{platform.system()}"
+
+        text += f"<p{style}>API AVAILABLE</p>"
+        backend = str(mido.backend)
+        backend.replace("<","")
+        backend.replace(">","")
+        text += f"{mido.backend.module.get_api_names()}"
 
         text += f"<p{style}>WEB SERVER</p>"
         for interface in self.pParent.server_interfaces:
