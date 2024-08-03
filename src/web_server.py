@@ -75,7 +75,7 @@ class Handler(BaseHTTPRequestHandler):
 
             return
 
-        elif "play" in query_components:
+        if "play" in query_components:
             midifile = query_components["play"][0]
             print(f"WebServer {self.uuid} request [{midifile}]")
             if server_parent:
@@ -91,11 +91,17 @@ class Handler(BaseHTTPRequestHandler):
                     server_parent.midi.StopPlayer() # VERY DANGEROUS !
                 except:
                     pass
+            elif server_parent and action=='next':
+                try:
+                    server_parent.NextMidifile() # VERY DANGEROUS !
+                except:
+                    pass
             self.send_response(302)
             self.send_header('Location', "/")
             self.end_headers()
             return
 
+        # send index.html
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         try:
