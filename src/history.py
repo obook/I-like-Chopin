@@ -59,8 +59,12 @@ class ClassHistory:
             self.SaveHistory()
 
     def GetHistory(self):
+        '''
+        Can not : because song 0 is alway last song
         reversed = self.history.copy().reverse() # reverse or not ?
         return reversed
+        '''
+        return self.history
 
     def GetName(self, index):  # without extension, eg : toto
         if index > len(self.history):
