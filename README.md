@@ -2,19 +2,17 @@
 Funny program for play like Chopin.
 (tribute to Gazebo)
 
+"*In memory of all the electric pianos bought for children who no longer use them.*"
+
 <p align="center">
     <img src="media/20240717_192901.png"  width="600">
 </p>
 
 # Description
 
-"I like Chopin" is a very special MIDI player for Linux, Mac or Windows that uses Python3. Any random key pressed on a physical master keyboard plays the correct note from the MIDI file. When all keys are released, the MIDI player stops. You need a physical MIDI master keyboard connected to the computer. The selection of music is done by an internal web server, at the URL http://127.0.0.1:8888.
+"I like Chopin" is a very special MIDI player for Linux, Mac and Windows that uses Python3. With three operating modes: simple MIDI **player**, **passthrough**, and the last **playback** allows you to play like Chopin.It is a cleaver mode that ensures any key you press on the keyboard will always play the correct note from a selected MIDI file. You need a physical MIDI keyboard or piano connected to the computer, the selection of music is done by an internal web server, at the URL http://127.0.0.1:8888.
 
-Impress your friends with this musical magic trick!
-
-With a Virtual Synth       |With Keyboard in Daw Mode  | With Rack Synth Device
-:-------------------------:|:-------------------------:|:-------------------------:
-<img src="media/ILC.png"  width="280"> | <img src="media/ILC3.png"  width="130"> | <img src="media/ILC2.png"  width="220">
+Bring your piano back to life and impress your friends with this musical magic trick!
 
 # Recommanded usage
 
@@ -24,6 +22,13 @@ cd src
 poetry install
 poetry run python i-like-chopin.py
 ```
+
+# Connections
+
+With a Virtual Synth       |With Keyboard in Daw Mode  | With Rack Synth Device
+:-------------------------:|:-------------------------:|:-------------------------:
+<img src="media/ILC.png"  width="280"> | <img src="media/ILC3.png"  width="130"> | <img src="media/ILC2.png"  width="220">
+
 
 # Programs and libraries used
 
