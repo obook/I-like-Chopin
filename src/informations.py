@@ -32,11 +32,11 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         backend = str(mido.backend)
         backend.replace("<","")
         backend.replace(">","")
-        text += f"{mido.backend.module.get_api_names()}"
+        text += f"{mido.backend.module.get_api_names()}\n"
 
         text += f"<p{style}>WEB SERVER</p>"
         for interface in self.pParent.server_interfaces:
-            text += f"{interface}<br>"
+            text += f"<div>{interface}</div>"
 
         text += f"<p{style}>CONFIG FILE</p>"
         text += f"{self.settings.GetConfigPath()}"
@@ -46,15 +46,15 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
 
         text += f"<p{style}>OUTPUTS</p>"
         for input in self.pParent.Inputs:
-            text += f"{input}<br>"
+            text += f"<div>{input}</div>"
 
         text += f"<p{style}>INPUTS</p>"
         for output in self.pParent.Outputs:
-            text += f"{output}<br>"
+            text += f"<div>{output}</div>"
 
         text += f"<p{style}>INPUTS/OUTPUTS</p>"
         for output in self.pParent.InputsOutputs:
-            text += f"{output}<br>"
+            text += f"<div>{output}</div>"
 
         text += f"<p{style}>HUMANIZE</p>"
         text += "control_change:control 71 (set your midi-device)"
