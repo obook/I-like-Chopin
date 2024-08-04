@@ -185,12 +185,14 @@ async function getStats() {
     const minutes = Math.floor(data.duration);
     const seconds = Math.floor((data.duration - minutes)*60);
     document.getElementById('duration').textContent=minutes+"'"+String(seconds).padStart(2, '0');
+
     if (data.state <0)
         document.getElementById('name').style.color = '#ff0000';
     else if (data.state <2)
         document.getElementById('name').style.color = '#ffff00';
     else
         document.getElementById('name').style.color = '#00ff00';
+      
     if (data.mode == 1)
       document.getElementById('mode').textContent="Playback";
     else if (data.mode == 2)
@@ -198,7 +200,7 @@ async function getStats() {
     else if (data.mode == 3)
       document.getElementById('mode').textContent="Player";
     else
-      document.getElementById('mode').textContent="";
+      document.getElementById('mode').textContent="Mode";
 
   } catch (error) {
     console.error('---> NETWORK ERROR : ', error);
