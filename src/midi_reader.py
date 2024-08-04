@@ -9,8 +9,7 @@ import uuid
 import os
 from mido import Message
 
-# from PySide6.QtCore import QThread, Signal # for instance, crash or block interface at startup
-from threading import Thread
+# from threading import Thread
 
 from mido import MidiFile
 from midi_song import ClassMidiSong, states, modes

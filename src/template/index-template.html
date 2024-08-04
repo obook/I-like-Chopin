@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html><head>
-<meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'>
-<title>I Like Chopin</title>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>I Like Chopin</title>
 <style>
 
 body {
@@ -11,10 +12,10 @@ body {
     background-color:#554455;
     overflow-wrap: break-word;
     text-transform: uppercase;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 /* Navbar */
-
 nav {
   position: sticky;
   top: 0;
@@ -44,32 +45,33 @@ nav {
     text-indent:10px;
 }
 
-.container {
+
+/* Songs */
+.midifiles {
     display: flex;
     flex-wrap: nowrap;
     flex-direction: column;
-    font-size: calc(.5em + 2vw);
-    text-indent: 10px;
+    text-decoration: none;
 }
 
-/* Songs */
 a {
+    text-indent: 10px;
+    text-indent: 20px;
     font-size: calc(.5em + 2vw);
-    background-color:#ffffff;
     color:#333333;
     text-decoration: none;
     border-radius: 5px;
 }
 
-/* Progress bar */
 
+/* Progress bar */
 .block {
   line-height: 100px;
   font-size: 12px;
-  letter-spacing: 20px;
   white-space: nowrap;
   margin: 10px 0;
   border-radius: 10px;
+  opacity: 0.5;
 }
 
 .block progress {
@@ -100,32 +102,30 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 }
 
 .panel {
+  background-color:#bbbbbb;
   padding: 0 18px;
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
+  border-radius: 10px;
 }
 
-/* Player */
-
-
-.playercontainer{ */
-  border-radius: 5px;
-  color:lightgray;
-  font-size: calc(.5em + 3vw);
+/* Player buttons */
+.playercontainer{
   text-indent:10px;
   opacity: 0.33;
-  /*
-  z-index: -1;
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  */
 }
 
-.panelcontainer {
+.playerbutton{
+  color:aquamarine;
+  background-color:#333333;
+  font-size: calc(.5em + 2vw);
+  text-transform: uppercase;
+  border-radius: 5px;
+}
 
-
+.playerbutton:active{
+    background:olive;
 }
 
 </style>
@@ -135,16 +135,22 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 <nav class="navbar">
   <div class='header'>
     <div class="filename" id="name">${name}</div>
-    <div class="duration">Duration : <span id='duration'>${duration}</span></div></div>
+    <div class="duration"><span id='folder'>${folder}</span>&nbsp;<span id='duration'>${duration}</span></div>
   </div>
   <div class="block"><progress id='progressbar' value="0" max="100"></progress></div>
-  <div class="playercontainer"><a href="?do=stop">&nbsp;STOP&nbsp;</a> <a href="?do=replay">&nbsp;REPLAY&nbsp;</a> <a href="?do=next">&nbsp;NEXT&nbsp;</a> <a href="?do=mode">&nbsp;<span id="mode">MODE</span>&nbsp;</a></div>
+    <div class="playercontainer">
+      <button class="playerbutton" onclick="location.href='?do=stop'" type="button">STOP</button>
+      <button class="playerbutton" onclick="location.href='?do=replay'" type="button">REPLAY</button>
+      <button class="playerbutton" onclick="location.href='?do=next'" type="button">NEXT</button>
+      <button class="playerbutton" onclick="location.href='?do=mode'" type="button"><span id="mode">MODE</span></button>
+    </div>
 </nav>
 
 <main>
 <!-- just for tests
 <button class="accordion">Section 1</button>
 <div class="panel">
+  <button class="song" onclick="location.href='/'" type="button">www.example.com</button>
   <p><a href="">Lorem ipsum...</a></p>
 </div>
 
@@ -162,10 +168,10 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 <div class="panel">
   <p><a href="">Lorem ipsum...</a></p>
 </div>
+ -->
 
--->
-<div class="container">
-  ${midifiles} 
+<div class="midifiles">
+  ${midifiles}
 </div>
 
 <div>
@@ -175,19 +181,21 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 </main>
 
 <script>
-
 async function getStats() {
   try {
     const response = await fetch('status.json');
     const data = await response.json();
     document.getElementById('progressbar').value=data.played;
     document.getElementById('name').textContent=data.nameclean;
+    document.getElementById('folder').textContent=data.folder
     const minutes = Math.floor(data.duration);
     const seconds = Math.floor((data.duration - minutes)*60);
-    document.getElementById('duration').textContent=minutes+"'"+String(seconds).padStart(2, '0');
+    document.getElementById('duration').textContent=" (" + minutes+"'"+String(seconds).padStart(2, '0')+")";
 
-    if (data.state <0)
+    if (data.state <0) {
         document.getElementById('name').style.color = '#ff0000';
+        document.getElementById('folder').textContent="";
+    }
     else if (data.state <2)
         document.getElementById('name').style.color = '#ffff00';
     else
@@ -206,6 +214,7 @@ async function getStats() {
     console.error('---> NETWORK ERROR : ', error);
     document.getElementById('name').style.color = '#ff0000';
     document.getElementById('name').textContent="OFFLINE";
+    document.getElementById('folder').textContent="";
     document.getElementById('duration').textContent="";
     document.getElementById('progressbar').value=0;
     throw error;
@@ -230,5 +239,4 @@ for (i = 0; i < acc.length; i++) {
 }
 
 </script>
-
 </body></html>

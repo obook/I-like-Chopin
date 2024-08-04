@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 
 import os
-from pathlib import Path
+from pathlib import Path, PurePath
 import uuid
 import random
 
@@ -46,6 +46,9 @@ class ClassMidiSong:
 
     def Getfilepath(self):  # complete path and filename
         return self.__filepath
+
+    def GetParent(self): # A/B/C/D.mid return C
+        return PurePath(self.__filepath).parent.name
 
     def GetFilename(self):  # with extension, eg : toto.mid
         return os.path.basename(self.__filepath)

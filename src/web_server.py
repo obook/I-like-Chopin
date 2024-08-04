@@ -15,7 +15,9 @@ import qrcode
 import qrcode.image.svg
 import io
 
-from threading import Thread
+#from threading import Thread
+from PySide6.QtCore import QThread, Signal # Essai
+
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, quote
 from web_interfaces import get_interfaces
@@ -41,10 +43,9 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         global server_midifiles_files  # old
         global server_mididict
+        self.midisong = server_parent.midi.GetMidiSong()
 
-        # print(f"MyHttpRequestHandler {self.uuid} do_GET")
-        self.midisong = server_parent.midisong
-
+        # if midisong ?
         # Extract query param
         query_components = parse_qs(urlparse(self.path).query)
 
@@ -53,16 +54,15 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "application/json")
             self.end_headers()
 
-            midisong = server_parent.midi.GetMidiSong()
-
-            if midisong :
+            if self.midisong :
                 data = json.dumps(
                     {
-                        "played": midisong.GetPlayed(),
-                        "duration": round(midisong.GetDuration(), 2),
-                        "nameclean": midisong.GetCleanName(),
-                        "state": midisong.GetState(),
-                        "mode": midisong.GetMode(),
+                        "played": self.midisong.GetPlayed(),
+                        "duration": round(self.midisong.GetDuration(), 2),
+                        "nameclean": self.midisong.GetCleanName(),
+                        "folder": self.midisong.GetParent(),
+                        "state": self.midisong.GetState(),
+                        "mode": self.midisong.GetMode(),
                     }
                 )
 
@@ -130,7 +130,7 @@ class Handler(BaseHTTPRequestHandler):
                 f"<button class='accordion'>{key}</button><div class='panel'>"
             )
             list = server_mididict[key]
-            for midifile in list:
+            for midifile in sorted(list, key=lambda s: s.lower()):
                 midiname = pathlib.Path(midifile).stem
                 midiname = midiname.replace("_", " ")
                 midiname = midiname.replace("-", " ")
@@ -145,7 +145,8 @@ class Handler(BaseHTTPRequestHandler):
             images += code.replace("<?xml version='1.0' encoding='UTF-8'?>","")
 
         index_html = template.substitute(
-            name=server_parent.midisong.GetCleanName(),
+            name=self.midisong.GetCleanName(),
+            folder=self.midisong.GetParent(),
             duration="",
             midifiles=midilist_html,
             qrcodes=images,
@@ -165,7 +166,7 @@ class Handler(BaseHTTPRequestHandler):
         pass
 
 
-class ClassWebServer(Thread):
+class ClassWebServer(QThread):
     uuid = uuid.uuid4()
     server = None
     port = 8888
@@ -177,7 +178,7 @@ class ClassWebServer(Thread):
         global server_mididict
         global svgqrcode_list
 
-        Thread.__init__(self)
+        QThread.__init__(self)
         server_parent = parent
         self.port = server_parent.settings.GetServerPort()
         print(f"WebServer {self.uuid} created")
