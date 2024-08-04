@@ -19,8 +19,9 @@ if [ "$answer" = "${answer#[Nn]}" ] ;then
     # Desktop
     sudo rm /usr/share/applications/org.obook.i-like-chopin.desktop
 
-    # Config
+    # Config and history
     rm ~/.config/i-like-chopin.json
+    rm ~/.config/i-like-chopin-history.json
 
     echo Done
 
