@@ -8,7 +8,7 @@ from pathlib import Path
 class ClassHistory:
     uuid = None
     applicationpath = os.path.dirname(os.path.realpath(__file__))
-    settingspath = os.path.join(os.path.expanduser("~"), ".config")
+    settingspath = os.path.join(os.path.expanduser("~"), ".config", "i-like-chopin")
     historyfile = os.path.join(settingspath, "i-like-chopin-history.json")
     history = []
 
