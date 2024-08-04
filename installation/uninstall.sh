@@ -3,7 +3,7 @@
 printf 'Uninstall I-Like-Chopin (y/n)? '
 read answer
 
-if [ "$answer" = "${answer#[Yy]}" ] ;then
+if [ "$answer" = "${answer#[Nn]}" ] ;then
 
     # Program
     sudo rm -R /usr/share/i-like-chopin 2> /dev/null
