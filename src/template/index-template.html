@@ -26,14 +26,14 @@ nav {
 }
 
 .header{
-    font-size: calc(.5em + 3vw);
+    font-size: calc(.5em + 1vw);
     color:#339933;
     border-radius: 10px;
     text-indent:10px;
 }
 
 .filename{
-    font-size: calc(.5em + 3vw);
+    font-size: calc(.5em + 2vw);
     color:#ffff00;
     border-radius: 10px;
     text-indent:10px;
@@ -92,7 +92,7 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
   border: none;
   text-align: left;
   outline: none;
-  font-size: calc(.5em + 3vw);
+  font-size: calc(.5em + 2vw);
   transition: 0.4s;
   border-radius: 10px;
 }
@@ -119,7 +119,7 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 .playerbutton{
   color:aquamarine;
   background-color:#333333;
-  font-size: calc(.5em + 2vw);
+  font-size: calc(.5em + 1vw);
   text-transform: uppercase;
   border-radius: 5px;
 }
@@ -142,6 +142,7 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
       <button class="playerbutton" onclick="location.href='?do=stop'" type="button">STOP</button>
       <button class="playerbutton" onclick="location.href='?do=replay'" type="button">REPLAY</button>
       <button class="playerbutton" onclick="location.href='?do=next'" type="button">NEXT</button>
+      <button class="playerbutton" onclick="location.href='/'" type="button">REFRESH</button>
       <button class="playerbutton" onclick="location.href='?do=mode'" type="button"><span id="mode">MODE</span></button>
     </div>
 </nav>
@@ -195,6 +196,10 @@ async function getStats() {
     if (data.state <0) {
         document.getElementById('name').style.color = '#ff0000';
         document.getElementById('folder').textContent="";
+        if  (data.state ==-4)  {/* no track to play */
+           document.getElementById('duration').textContent="! NO ACTIVE TRACK TO PLAY";
+        }
+
     }
     else if (data.state <2)
         document.getElementById('name').style.color = '#ffff00';
