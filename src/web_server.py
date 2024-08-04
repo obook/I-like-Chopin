@@ -96,6 +96,11 @@ class Handler(BaseHTTPRequestHandler):
                     server_parent.NextMidifile() # VERY DANGEROUS !
                 except:
                     pass
+            elif server_parent and action=='mode':
+                try:
+                    server_parent.ChangePlayerMode() # VERY DANGEROUS !
+                except:
+                    pass
             self.send_response(302)
             self.send_header('Location', "/")
             self.end_headers()

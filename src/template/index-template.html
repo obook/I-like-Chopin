@@ -135,10 +135,10 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 <nav class="navbar">
   <div class='header'>
     <div class="filename" id="name">${name}</div>
-    <div class="duration">Duration : <span id='duration'>${duration}</span> <span id='mode'></div></div>
+    <div class="duration">Duration : <span id='duration'>${duration}</span></div></div>
   </div>
   <div class="block"><progress id='progressbar' value="0" max="100"></progress></div>
-  <div class="playercontainer"><a href="?do=stop">&nbsp;STOP&nbsp;</a> <a href="?do=next">&nbsp;NEXT&nbsp;</a></div>
+  <div class="playercontainer"><a href="?do=stop">&nbsp;STOP&nbsp;</a> <a href="?do=next">&nbsp;NEXT&nbsp;</a> <a href="?do=mode">&nbsp;<span id="mode">MODE</span>&nbsp;</a></div>
 </nav>
 
 <main>
@@ -192,13 +192,13 @@ async function getStats() {
     else
         document.getElementById('name').style.color = '#00ff00';
     if (data.mode == 1)
-      document.getElementById('mode').textContent=("(Playback)")
+      document.getElementById('mode').textContent="Playback";
     else if (data.mode == 2)
-      document.getElementById('mode').textContent=("(Passthrough)")
+      document.getElementById('mode').textContent="Passthrough";
     else if (data.mode == 3)
-      document.getElementById('mode').textContent=("(Player)")
+      document.getElementById('mode').textContent="Player";
     else
-      document.getElementById('mode').textContent=("")
+      document.getElementById('mode').textContent="";
 
   } catch (error) {
     console.error('---> NETWORK ERROR : ', error);
