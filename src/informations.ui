@@ -41,9 +41,9 @@
    <widget class="QCheckBox" name="checkBox_ForceIntrument0">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>140</x>
       <y>30</y>
-      <width>141</width>
+      <width>191</width>
       <height>23</height>
      </rect>
     </property>
