@@ -251,15 +251,17 @@ class MainWindow(QMainWindow):
         self.settings.SaveOutputDevice(out_device)
         self.midi.ConnectOutput(out_device)
 
-    def MidifileChange(
-        self, filepath
-    ):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
+    def MidifileChange(self, filepath):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         self.settings.SaveMidifile(filepath)
         self.midisong = self.midi.SetMidiSong(filepath)
         self.lastmidifile = filepath
         self.history.AddHistory(filepath)
 
-    def NextMidifile(self): # from web server
+    def MidifileReplay(self):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
+        if self.lastmidifile:
+            self.midisong = self.midi.SetMidiSong(self.lastmidifile)
+
+    def NextMidifile(self): # from web server ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         files = self.history.GetHistory()
         if self.history_index > len(files)-1:
             self.history_index =0

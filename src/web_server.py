@@ -96,6 +96,11 @@ class Handler(BaseHTTPRequestHandler):
                     server_parent.NextMidifile() # VERY DANGEROUS !
                 except:
                     pass
+            elif server_parent and action=='replay':
+                try:
+                    server_parent.MidifileReplay() # VERY DANGEROUS !
+                except:
+                    pass
             elif server_parent and action=='mode':
                 try:
                     server_parent.ChangePlayerMode() # VERY DANGEROUS !
