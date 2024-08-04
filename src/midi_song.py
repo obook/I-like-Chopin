@@ -6,6 +6,7 @@ import uuid
 import random
 
 states = {
+    "notracktoplay": -4,
     "bad": -3,
     "notfound": -2,
     "ended": -1,
@@ -16,7 +17,6 @@ states = {
 }
 
 modes = {"error": -1, "unknown": 0, "playback": 1, "passthrough": 2, "player": 3}
-
 
 class ClassMidiSong:
     """Class about midifile informations"""

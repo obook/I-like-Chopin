@@ -29,13 +29,17 @@ class ClassThreadMidiReader(QThread):
     port_out = None
     settings = None
     ready = False
+    running = False
+
     total_notes_on = 0
     notes_on_channels = 0
     current_notes_on = 0
     channels = None
     channels_notes = {}
     wait_time = 0
-    running = False
+
+    sustain_pedal = 0
+    sustain_pedal_off = False
 
     statusbar_activity = Signal(str)
     led_activity = Signal(int)
@@ -98,6 +102,7 @@ class ClassThreadMidiReader(QThread):
                 self.midisong.SetState(states["cueing"])
             else:
                 print(f"MidiReader {self.uuid} NO NOTE ON MIDI CHANNELS")
+                self.midisong.SetState(states["notracktoplay"])
         except:
             self.midisong.SetState(states["bad"])
             print(f"MidiReader {self.uuid} ERROR READING {self.midisong.Getfilepath()}")
@@ -135,14 +140,17 @@ class ClassThreadMidiReader(QThread):
             if self.midisong.GetState() < states["cueing"]: # not used
                 return
 
-            # For fun, but DANGEROUS ?
+            # Sustain pedal memory
+            if msg.type == "control_change":
+                if msg.control == self.settings.GetSustainChannel():
+                    self.sustain_pedal = msg.value
+
+            # For fun
             if msg.type == "note_on":
                 if self.channels[msg.channel]:
-                    # self.midi.SendLedFile(1)
                     self.led_activity.emit(1)
             elif msg.type == "note_on":
                 if self.channels[msg.channel]:
-                    # self.midi.SendLedFile(0)
                     self.led_activity.emit(0)
 
             # Just a Midi player
@@ -193,6 +201,12 @@ class ClassThreadMidiReader(QThread):
             # Playback : wait keyboard
             elif self.midisong.IsMode(modes["playback"]):
 
+                # restore sustain pedal value (after pause)
+                if self.sustain_pedal_off and self.sustain_pedal :
+                    msg = Message('control_change', control=self.settings.GetSustainChannel(), value=self.sustain_pedal)
+                    self.pParent.midi.SendOutput(msg)
+                    self.sustain_pedal_off = False
+
                 # Wait note time
                 if (
                     self.midisong.IsState(states["playing"])
@@ -227,7 +241,7 @@ class ClassThreadMidiReader(QThread):
                 if msg.type == "note_on" and self.midisong.IsState(states["playing"]):
                     start_time = time.time()
                     start_time_loop = time.time()
-                    pedal_off = False
+                    self.pedal_off = False
                     while not self.keys["key_on"]:  # Loop waiting keyboard
 
                         if not self.channels[msg.channel]:
@@ -242,13 +256,14 @@ class ClassThreadMidiReader(QThread):
                             return
 
                         # Si trop long, enlever la pédale
+                        # le problème c'est qu'il faut la remettre avant de reprendre !
                         # controller 64->0
-                        if not pedal_off and time.time() - start_time_loop > 1.5:
-                            msg =Message('control_change', control=self.settings.GetSustainChannel(), value=0)
+                        if self.sustain_pedal and time.time() - start_time_loop > 1.5:
+                            msg = Message('control_change', control=self.settings.GetSustainChannel(), value=0)
                             self.pParent.midi.SendOutput(msg)
-                            pedal_off = True
+                            self.sustain_pedal_off = True
 
-                        self.sleep(0.001)  # for loop
+                        self.sleep(0.001)  # for QT loop (give time)
 
 
                     # Wait a key how much time ?
