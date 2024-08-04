@@ -1,11 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Created on Fri Jul 26 07:12:28 2024
 @author: obooklage
+Custom response code server by Cees Timmerman, 2023-07-11.
+Run and visit http://localhost:4444/300 for example.
 """
-
-"""Custom response code server by Cees Timmerman, 2023-07-11.
-Run and visit http://localhost:4444/300 for example."""
-
 import os
 import uuid
 import glob
@@ -15,7 +15,6 @@ import qrcode
 import qrcode.image.svg
 import io
 
-# from threading import Thread
 from PySide6.QtCore import QThread, Signal  # Essai
 
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
@@ -27,12 +26,6 @@ server_parent = None
 server_interfaces = []
 server_mididict = {}
 svgqrcode_list = []
-
-"""
-class ClassWebConfig:
-    pass
-"""
-
 
 class Handler(BaseHTTPRequestHandler):
     uuid = uuid.uuid4()
@@ -70,8 +63,6 @@ class Handler(BaseHTTPRequestHandler):
 
                 if not self.wfile.closed:
                     self.wfile.flush()
-                # self.wfile.close()
-                # self.rfile.close()
 
             return
 
@@ -80,7 +71,7 @@ class Handler(BaseHTTPRequestHandler):
             print(f"WebServer {self.uuid} request [{midifile}]")
             if server_parent:
                 try:
-                    server_parent.MidifileChange(midifile)  # VERY DANGEROUS !
+                    server_parent.MidifileChange(midifile)  # DANGEROUS ?
                 except:
                     pass
 
@@ -88,22 +79,22 @@ class Handler(BaseHTTPRequestHandler):
             action = query_components["do"][0]
             if server_parent and action == "stop":
                 try:
-                    server_parent.midi.StopPlayer()  # VERY DANGEROUS !
+                    server_parent.midi.StopPlayer()  # DANGEROUS ?
                 except:
                     pass
             elif server_parent and action == "next":
                 try:
-                    server_parent.NextMidifile()  # VERY DANGEROUS !
+                    server_parent.NextMidifile()  # DANGEROUS ?
                 except:
                     pass
             elif server_parent and action == "replay":
                 try:
-                    server_parent.MidifileReplay()  # VERY DANGEROUS !
+                    server_parent.MidifileReplay()  # DANGEROUS ?
                 except:
                     pass
             elif server_parent and action == "mode":
                 try:
-                    server_parent.ChangePlayerMode()  # VERY DANGEROUS !
+                    server_parent.ChangePlayerMode()  # DANGEROUS ?
                 except:
                     pass
             self.send_response(302)
@@ -149,7 +140,7 @@ class Handler(BaseHTTPRequestHandler):
             folder=self.midisong.GetParent(),
             duration="",
             midifiles=midilist_html,
-            qrcodes=images,
+            qrcodes=images
         )
         try:
             self.wfile.write(bytes(index_html, "utf8"))
@@ -159,8 +150,6 @@ class Handler(BaseHTTPRequestHandler):
 
         if not self.wfile.closed:
             self.wfile.flush()
-        # self.wfile.close()
-        # self.rfile.close()
 
     def log_message(self, format, *args):  # no message in terminal
         pass

@@ -1,5 +1,9 @@
-# This Python file uses the following encoding: utf-8
-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun  5 18:19:14 2024
+@author: obooklage
+"""
 import os
 from pathlib import Path, PurePath
 import uuid
@@ -17,7 +21,6 @@ states = {
 }
 
 modes = {"error": -1, "unknown": 0, "playback": 1, "passthrough": 2, "player": 3}
-
 
 class ClassMidiSong:
     """Class about midifile informations"""

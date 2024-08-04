@@ -13,8 +13,7 @@
 # Exemple de liste obtenue :
 # [{'ip': '192.168.56.1'}, {'ip': '169.254.229.202'}]
 
-import netifaces  # compatible avec netifaces2
-
+import netifaces  # compatible with netifaces2
 
 # Sous fonction de remplissage de la liste des IP
 def __add_ip(family_addresses: list, liste: list, local: bool = False) -> bool:

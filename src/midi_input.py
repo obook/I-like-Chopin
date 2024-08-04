@@ -12,7 +12,6 @@ from midi_numbers import number_to_note
 from midi_song import modes
 from PySide6.QtCore import QThread, Signal
 
-
 class ClassThreadInput(QThread):
 
     uuid = None

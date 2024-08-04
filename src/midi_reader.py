@@ -9,19 +9,14 @@ import uuid
 import os
 from mido import Message
 
-# from threading import Thread
-
 from mido import MidiFile
 from midi_song import ClassMidiSong, states, modes
 from midi_numbers import number_to_note
 
-from PySide6.QtCore import QThread, Signal  # Essai
-
+from PySide6.QtCore import QThread, Signal
 
 class ClassThreadMidiReader(QThread):
-    # class ClassThreadMidiReader(QThread):
     """Read midifile and send to output device"""
-
     uuid = None
     pParent = None
     midi = None

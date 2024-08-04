@@ -4,7 +4,6 @@
 Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
-
 import os
 import glob
 import platform
@@ -18,7 +17,6 @@ from midi_reader import ClassThreadMidiReader
 from midi_song import modes
 
 from PySide6.QtCore import QObject, Signal
-
 
 class ClassMidiMain(QObject):
     """Main Midi Class"""
@@ -158,7 +156,6 @@ class ClassMidiMain(QObject):
 
     def Playback(self):
         self.ThreadMidiReader.start()
-        pass
 
     def Mode(self, playback=True):
         out_port = self.ThreadOutput.getport()

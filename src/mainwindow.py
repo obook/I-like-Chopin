@@ -3,14 +3,6 @@
 """
 Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
-
-Windows
--------
-pip uninstall rtmidi
-pip uninstall python-rtmidi
-pip install mido
-pip install python-rtmidi
-
 """
 import sys
 import os

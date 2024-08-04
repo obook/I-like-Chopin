@@ -3,17 +3,12 @@
 """
 Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
-
-TODO : mutiples calls for nothing..
-
 """
-
 import json
 import os
 import shutil
 import uuid
 from midi_song import modes
-
 
 class ClassSettings:
     """Class for recall and store preferences and settings"""
