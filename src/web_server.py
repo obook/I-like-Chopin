@@ -15,8 +15,8 @@ import qrcode
 import qrcode.image.svg
 import io
 
-#from threading import Thread
-from PySide6.QtCore import QThread, Signal # Essai
+# from threading import Thread
+from PySide6.QtCore import QThread, Signal  # Essai
 
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, quote
@@ -54,7 +54,7 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "application/json")
             self.end_headers()
 
-            if self.midisong :
+            if self.midisong:
                 data = json.dumps(
                     {
                         "played": self.midisong.GetPlayed(),
@@ -70,8 +70,8 @@ class Handler(BaseHTTPRequestHandler):
 
                 if not self.wfile.closed:
                     self.wfile.flush()
-                #self.wfile.close()
-                #self.rfile.close()
+                # self.wfile.close()
+                # self.rfile.close()
 
             return
 
@@ -80,34 +80,34 @@ class Handler(BaseHTTPRequestHandler):
             print(f"WebServer {self.uuid} request [{midifile}]")
             if server_parent:
                 try:
-                    server_parent.MidifileChange(midifile) # VERY DANGEROUS !
+                    server_parent.MidifileChange(midifile)  # VERY DANGEROUS !
                 except:
                     pass
 
         elif "do" in query_components:
             action = query_components["do"][0]
-            if server_parent and action=='stop':
+            if server_parent and action == "stop":
                 try:
-                    server_parent.midi.StopPlayer() # VERY DANGEROUS !
+                    server_parent.midi.StopPlayer()  # VERY DANGEROUS !
                 except:
                     pass
-            elif server_parent and action=='next':
+            elif server_parent and action == "next":
                 try:
-                    server_parent.NextMidifile() # VERY DANGEROUS !
+                    server_parent.NextMidifile()  # VERY DANGEROUS !
                 except:
                     pass
-            elif server_parent and action=='replay':
+            elif server_parent and action == "replay":
                 try:
-                    server_parent.MidifileReplay() # VERY DANGEROUS !
+                    server_parent.MidifileReplay()  # VERY DANGEROUS !
                 except:
                     pass
-            elif server_parent and action=='mode':
+            elif server_parent and action == "mode":
                 try:
-                    server_parent.ChangePlayerMode() # VERY DANGEROUS !
+                    server_parent.ChangePlayerMode()  # VERY DANGEROUS !
                 except:
                     pass
             self.send_response(302)
-            self.send_header('Location', "/")
+            self.send_header("Location", "/")
             self.end_headers()
             return
 
@@ -142,7 +142,7 @@ class Handler(BaseHTTPRequestHandler):
         # QRcodes
         images = ""
         for code in svgqrcode_list:
-            images += code.replace("<?xml version='1.0' encoding='UTF-8'?>","")
+            images += code.replace("<?xml version='1.0' encoding='UTF-8'?>", "")
 
         index_html = template.substitute(
             name=self.midisong.GetCleanName(),
@@ -159,8 +159,8 @@ class Handler(BaseHTTPRequestHandler):
 
         if not self.wfile.closed:
             self.wfile.flush()
-        #self.wfile.close()
-        #self.rfile.close()
+        # self.wfile.close()
+        # self.rfile.close()
 
     def log_message(self, format, *args):  # no message in terminal
         pass
@@ -208,7 +208,9 @@ class ClassWebServer(QThread):
                 f"WebServer {self.uuid} {url} serve [{server_parent.settings.GetMidiPath()}]"
             )
             if not "127.0.0.1" in url:
-                img = qrcode.make(url, image_factory=qrcode.image.svg.SvgPathImage, box_size=10)
+                img = qrcode.make(
+                    url, image_factory=qrcode.image.svg.SvgPathImage, box_size=10
+                )
                 buffer = io.BytesIO()
                 img.save(buffer)
                 buffer.seek(0)
@@ -236,5 +238,3 @@ class ClassWebServer(QThread):
             self.server.server_close()
             self.server.shutdown()
             self.server = None
-
-

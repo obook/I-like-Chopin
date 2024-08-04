@@ -5,6 +5,7 @@ import json
 import uuid
 from pathlib import Path
 
+
 class ClassHistory:
     uuid = None
     applicationpath = os.path.dirname(os.path.realpath(__file__))
@@ -27,7 +28,7 @@ class ClassHistory:
             with open(self.historyfile, "r") as f:
                 self.history = json.load(f)
                 f.close
-        except: # not yet exists
+        except:  # not yet exists
             pass
 
         # cleanup
@@ -38,7 +39,7 @@ class ClassHistory:
                 if os.path.isfile(self.history[i]):
                     new_history.append(self.history[i])
             except:
-                    pass
+                pass
         self.history = new_history
 
     def SaveHistory(self):
@@ -54,16 +55,16 @@ class ClassHistory:
     def AddHistory(self, midifile):
         if not midifile in self.history:
             if len(self.history) > 127:
-                self.history.pop(0) # remove fist
+                self.history.pop(0)  # remove fist
             self.history.append(midifile)
             self.SaveHistory()
 
     def GetHistory(self):
-        '''
+        """
         Can not : because song 0 is alway last song
         reversed = self.history.copy().reverse() # reverse or not ?
         return reversed
-        '''
+        """
         return self.history
 
     def GetName(self, index):  # without extension, eg : toto
@@ -76,7 +77,3 @@ class ClassHistory:
         name = name.replace("_", " ")
         name = name.replace("-", " ")
         return name.upper()
-
-
-
-

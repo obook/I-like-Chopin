@@ -18,6 +18,7 @@ states = {
 
 modes = {"error": -1, "unknown": 0, "playback": 1, "passthrough": 2, "player": 3}
 
+
 class ClassMidiSong:
     """Class about midifile informations"""
 
@@ -47,7 +48,7 @@ class ClassMidiSong:
     def Getfilepath(self):  # complete path and filename
         return self.__filepath
 
-    def GetParent(self): # A/B/C/D.mid return C
+    def GetParent(self):  # A/B/C/D.mid return C
         return PurePath(self.__filepath).parent.name
 
     def GetFilename(self):  # with extension, eg : toto.mid
@@ -112,17 +113,15 @@ class ClassMidiSong:
             return True
         return False
 
-    def HumanizeDuration(self, duration, key): # key=0-127 duration=original note duration
-        delay = random.random()*key/1024
-        if random.random() < 0.6: # 60% fastest
-            delay = -1*delay
-        if duration+delay <0:
-             delay = -1*delay
-             # A revoir ..
-        if duration+delay <0:
+    def HumanizeDuration(
+        self, duration, key
+    ):  # key=0-127 duration=original note duration
+        delay = random.random() * key / 1024
+        if random.random() < 0.6:  # 60% fastest
+            delay = -1 * delay
+        if duration + delay < 0:
+            delay = -1 * delay
+            # A revoir ..
+        if duration + delay < 0:
             return 0
-        return 0 # buggy delay # for calculate new_time = msg.time+delay
-
-
-
-
+        return 0  # buggy delay # for calculate new_time = msg.time+delay

@@ -19,6 +19,7 @@ from midi_song import modes
 
 from PySide6.QtCore import QObject, Signal
 
+
 class ClassMidiMain(QObject):
     """Main Midi Class"""
 
@@ -121,7 +122,7 @@ class ClassMidiMain(QObject):
 
         if self.ThreadMidiReader:
             self.readerstop_activity.emit()
-            self.ThreadMidiReader.stop() # test
+            self.ThreadMidiReader.stop()  # test
             while self.ThreadMidiReader.isRunning():
                 time.sleep(0.01)
 
@@ -173,7 +174,7 @@ class ClassMidiMain(QObject):
 
     def StopPlayer(self):
         if self.ThreadMidiReader:
-            self.ThreadMidiReader.stop() # test
+            self.ThreadMidiReader.stop()  # test
         self.readerstop_activity.emit()
 
     def Stop(self):
@@ -189,12 +190,12 @@ class ClassMidiMain(QObject):
 
     def ResetOutput(self):
         if self.ThreadOutput:
-             self.ThreadOutput.reset()
+            self.ThreadOutput.reset()
 
     def quit(self):
         if self.ThreadMidiReader:
             self.readerstop_activity.emit()
-            self.ThreadMidiReader.stop() # test
+            self.ThreadMidiReader.stop()  # test
             while self.ThreadMidiReader.isRunning():
                 time.sleep(0.01)
             self.ThreadMidiReader = None

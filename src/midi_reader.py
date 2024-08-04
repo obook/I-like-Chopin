@@ -15,7 +15,8 @@ from mido import MidiFile
 from midi_song import ClassMidiSong, states, modes
 from midi_numbers import number_to_note
 
-from PySide6.QtCore import QThread, Signal # Essai
+from PySide6.QtCore import QThread, Signal  # Essai
+
 
 class ClassThreadMidiReader(QThread):
     # class ClassThreadMidiReader(QThread):
@@ -137,7 +138,7 @@ class ClassThreadMidiReader(QThread):
             if not self.running:
                 return
 
-            if self.midisong.GetState() < states["cueing"]: # not used
+            if self.midisong.GetState() < states["cueing"]:  # not used
                 return
 
             # Sustain pedal memory
@@ -157,25 +158,29 @@ class ClassThreadMidiReader(QThread):
             if self.midisong.IsMode(modes["player"]):
 
                 # For loop
-                self.sleep(0.001) # Give time to QThread
+                self.sleep(0.001)  # Give time to QThread
 
                 # Delay : Humanize controlled by knob, see midi_input
                 human = 0
                 if msg.type == "note_on" and self.keys["humanize"]:
-                    human = self.midisong.HumanizeDuration(msg.time, self.keys["humanize"])
+                    human = self.midisong.HumanizeDuration(
+                        msg.time, self.keys["humanize"]
+                    )
 
                 if self.midisong.IsState(states["cueing"]):
                     msg.time = 0
 
                 # Time for the note
-                time.sleep(msg.time+human+self.keys["speed"] / 2000 )
+                time.sleep(msg.time + human + self.keys["speed"] / 2000)
 
                 if msg.type == "note_on":
 
                     if self.channels[msg.channel] and not self.midisong.IsState(
                         states["playing"]
                     ):  # First note on channels selected
-                        print(f"MidiReader {self.uuid} player ready [{self.midisong.GetFilename()}]")
+                        print(
+                            f"MidiReader {self.uuid} player ready [{self.midisong.GetFilename()}]"
+                        )
                         self.midisong.SetState(states["playing"])
 
                     # Stats
@@ -202,8 +207,12 @@ class ClassThreadMidiReader(QThread):
             elif self.midisong.IsMode(modes["playback"]):
 
                 # restore sustain pedal value (after pause)
-                if self.sustain_pedal_off and self.sustain_pedal :
-                    msg = Message('control_change', control=self.settings.GetSustainChannel(), value=self.sustain_pedal)
+                if self.sustain_pedal_off and self.sustain_pedal:
+                    msg = Message(
+                        "control_change",
+                        control=self.settings.GetSustainChannel(),
+                        value=self.sustain_pedal,
+                    )
                     self.pParent.midi.SendOutput(msg)
                     self.sustain_pedal_off = False
 
@@ -216,16 +225,20 @@ class ClassThreadMidiReader(QThread):
                     # Delay : Humanize controlled by knob, see midi_input
                     human = 0
                     if msg.type == "note_on" and self.keys["humanize"]:
-                        human = self.midisong.HumanizeDuration(msg.time, self.keys["humanize"])
+                        human = self.midisong.HumanizeDuration(
+                            msg.time, self.keys["humanize"]
+                        )
 
                     # Time for the note
-                    time.sleep(msg.time+human+self.keys["speed"] / 2000 )
+                    time.sleep(msg.time + human + self.keys["speed"] / 2000)
 
                 if msg.type == "note_on":
                     if self.channels[msg.channel] and not self.midisong.IsState(
                         states["playing"]
                     ):  # First note on channels selected
-                        print(f"MidiReader {self.uuid} playback ready [{self.midisong.GetFilename()}]")
+                        print(
+                            f"MidiReader {self.uuid} playback ready [{self.midisong.GetFilename()}]"
+                        )
                         self.midisong.SetState(states["playing"])
 
                     # Stats
@@ -259,12 +272,15 @@ class ClassThreadMidiReader(QThread):
                         # le problème c'est qu'il faut la remettre avant de reprendre !
                         # controller 64->0
                         if self.sustain_pedal and time.time() - start_time_loop > 1.5:
-                            msg = Message('control_change', control=self.settings.GetSustainChannel(), value=0)
+                            msg = Message(
+                                "control_change",
+                                control=self.settings.GetSustainChannel(),
+                                value=0,
+                            )
                             self.pParent.midi.SendOutput(msg)
                             self.sustain_pedal_off = True
 
                         self.sleep(0.001)  # for QT loop (give time)
-
 
                     # Wait a key how much time ?
                     self.wait_time = time.time() - start_time

@@ -25,10 +25,13 @@ class ClassSettings:
     settingsfile = os.path.join(settingspath, "i-like-chopin.json")
 
     localpath = os.path.join(
-    os.path.expanduser("~"), ".local", "share", "i-like-chopin")
+        os.path.expanduser("~"), ".local", "share", "i-like-chopin"
+    )
     defaultmidipath = os.path.join(localpath, "midi")
 
-    serverindextemplate = os.path.join(applicationpath, "template", "index-template.html")
+    serverindextemplate = os.path.join(
+        applicationpath, "template", "index-template.html"
+    )
 
     config = {
         "InputDevice": "(None)",
@@ -37,11 +40,11 @@ class ClassSettings:
         "ForceInstrument": False,
         "PianoProgram": 0,
         "Mode": modes["playback"],
-        "SustainChannel":64, # Sustain/Forte
-        "HumanizeChannel":71,
-        "SpeedControlChannel":76,
-        "FilesControlChannel":77,
-        "RtMidiBackend":"" # Empty, LINUX_ALSA or UNIX_JACK
+        "SustainChannel": 64,  # Sustain/Forte
+        "HumanizeChannel": 71,
+        "SpeedControlChannel": 76,
+        "FilesControlChannel": 77,
+        "RtMidiBackend": "",  # Empty, LINUX_ALSA or UNIX_JACK
     }
 
     def __init__(self):
@@ -65,6 +68,7 @@ class ClassSettings:
     """
     Load/Save settings File
     """
+
     def LoadConfig(self):
         try:
             with open(self.settingsfile, "r") as f:
@@ -77,7 +81,7 @@ class ClassSettings:
 
     def SaveConfig(self):
         try:
-            with open(self.settingsfile, "w", newline='\r\n') as f:
+            with open(self.settingsfile, "w", newline="\r\n") as f:
                 json.dump(self.config, f, indent=4, sort_keys=True, ensure_ascii=False)
                 f.close
         except:
@@ -87,6 +91,7 @@ class ClassSettings:
     """
     Tools functions
     """
+
     def GetApplicationPath(self):
         return self.applicationpath
 
@@ -171,5 +176,3 @@ class ClassSettings:
 
     def GetSustainChannel(self):
         return self.GetSetting("SustainChannel", 61)
-
-

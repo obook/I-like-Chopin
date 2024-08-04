@@ -30,8 +30,8 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
 
         text += f"<p{style}>API AVAILABLE</p>"
         backend = str(mido.backend)
-        backend.replace("<","")
-        backend.replace(">","")
+        backend.replace("<", "")
+        backend.replace(">", "")
         text += f"{mido.backend.module.get_api_names()}\n"
 
         text += f"<p{style}>WEB SERVER</p>"

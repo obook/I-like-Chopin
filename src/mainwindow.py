@@ -112,21 +112,21 @@ class MainWindow(QMainWindow):
         self.ui.OutputDeviceCombo.currentIndexChanged.connect(self.OuputDeviceChanged)
 
         # ProgressBar
-        self.ui.progressBar.setRange(0,100)
+        self.ui.progressBar.setRange(0, 100)
         self.ui.progressBar.setValue(0)
         self.ui.progressBar.setStyleSheet(
-        "QProgressBar {"
+            "QProgressBar {"
             "border: 2px;"
             "border-radius: 30px;"
-        "}"
-        "QProgressBar::chunk {"
-        "margin: 4px;"
-        "background-color: qlineargradient("
-        "x0: 0, x2: 1, "
-        "stop: 0 green, stop: 0.6 green, "
-        "stop: 0.8 orange, "
-        "stop: 1 red);"
-        "}"
+            "}"
+            "QProgressBar::chunk {"
+            "margin: 4px;"
+            "background-color: qlineargradient("
+            "x0: 0, x2: 1, "
+            "stop: 0 green, stop: 0.6 green, "
+            "stop: 0.8 orange, "
+            "stop: 1 red);"
+            "}"
         )
 
         # Leds
@@ -194,7 +194,7 @@ class MainWindow(QMainWindow):
         timer.start(2000)
 
     def timer(self):
-        ''' A revoir
+        """A revoir
         if self.nextmidifile != self.lastmidifile:
 
             print(f"TIMER se prépare à charger nextmidifile {self.nextmidifile}")
@@ -203,7 +203,7 @@ class MainWindow(QMainWindow):
             self.midi.Panic()
             self.MidifileChange(self.nextmidifile)
             return
-        '''
+        """
         if self.midi.GetInputPort() and not self.ConnectInputState:
             self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
             self.ConnectInputState = True
@@ -251,7 +251,9 @@ class MainWindow(QMainWindow):
         self.settings.SaveOutputDevice(out_device)
         self.midi.ConnectOutput(out_device)
 
-    def MidifileChange(self, filepath):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
+    def MidifileChange(
+        self, filepath
+    ):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         self.settings.SaveMidifile(filepath)
         self.midisong = self.midi.SetMidiSong(filepath)
         self.lastmidifile = filepath
@@ -261,10 +263,12 @@ class MainWindow(QMainWindow):
         if self.lastmidifile:
             self.midisong = self.midi.SetMidiSong(self.lastmidifile)
 
-    def NextMidifile(self): # from web server ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
+    def NextMidifile(
+        self,
+    ):  # from web server ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         files = self.history.GetHistory()
-        if self.history_index > len(files)-1:
-            self.history_index =0
+        if self.history_index > len(files) - 1:
+            self.history_index = 0
         self.MidifileChange(files[self.history_index])
         self.history_index += 1
 
@@ -274,13 +278,17 @@ class MainWindow(QMainWindow):
 
         # value 0-127
         files = self.history.GetHistory()
-        step = int(128/len(files))
-        FilesIndex = min(int(value/step),len(files)-1)
-        if  self.lastmidifile != files[FilesIndex]:
-            self.ui.pushButton_FileIndex.setText(f"MidiFile {FilesIndex+1}/{len(files)}")
+        step = int(128 / len(files))
+        FilesIndex = min(int(value / step), len(files) - 1)
+        if self.lastmidifile != files[FilesIndex]:
+            self.ui.pushButton_FileIndex.setText(
+                f"MidiFile {FilesIndex+1}/{len(files)}"
+            )
             # clean_name = self.history.GetCleanName(FilesIndex)
 
-            self.ui.pushButton_Files.setText(self.history.GetCleanName(FilesIndex)) # est écrasé, par timer ?
+            self.ui.pushButton_Files.setText(
+                self.history.GetCleanName(FilesIndex)
+            )  # est écrasé, par timer ?
 
             # print(f"--> nextmidifile index {FilesIndex} file {files[FilesIndex]}")
             # self.nextmidifile = files[FilesIndex]
@@ -291,7 +299,6 @@ class MainWindow(QMainWindow):
             self.midi.Panic()
             self.lastmidifile = files[FilesIndex]
             self.MidifileChange(files[FilesIndex])
-
 
     # Channels
     def ChannelsNone(self):
@@ -325,7 +332,7 @@ class MainWindow(QMainWindow):
             # Set
             channels = self.midisong.GetChannels()
             for key in channels:
-                if channels[key]: # Show button
+                if channels[key]:  # Show button
                     self.ChannelsButtonsList[int(key)].setStyleSheet("")
                     if int(key) == 9:
                         self.ChannelsButtonsList[int(key)].setStyleSheet(
