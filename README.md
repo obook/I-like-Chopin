@@ -10,7 +10,7 @@ Funny program for play like Chopin.
 
 # Description
 
-"I like Chopin" is a very special MIDI player for Linux, Mac and Windows that uses Python3. With three operating modes: simple MIDI **player**, **passthrough**, and **playback**. The last allows you to play like Chopin.It is a awesome mode that ensures any key you press on the keyboard will always play the correct note from a selected MIDI file. You need a physical MIDI keyboard or piano connected to the computer, the selection of music is done by an internal web server, at the URL http://127.0.0.1:8888.
+"I like Chopin" is a very special MIDI player for Linux, Mac and Windows that uses Python3 with three operating modes: simple MIDI **player**, **passthrough**, and **playback**. The last allows you to play like Chopin.It is a awesome mode that ensures any key you press on the keyboard will always play the correct note from a selected MIDI file. You need a physical MIDI keyboard or piano connected to the computer, the selection of music is done by an internal web server, at the URL http://127.0.0.1:8888.
 
 Bring your piano back to life and impress your friends with this musical magic trick!
 
