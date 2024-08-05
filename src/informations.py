@@ -66,13 +66,13 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
             text += f"<div>{output}</div>"
 
         text += f"<p{style}>HUMANIZE</p>"
-        text += "control_change:control 71 (set your midi-device)"
+        text += "control_change:control 71 - set your midi-device"
 
         text += f"<p{style}>SPEED CONTROL</p>"
-        text += "control_change:control 76 (set your midi-device)"
+        text += "control_change:control 76  - set your midi-device"
 
         text += f"<p{style}>MIDIFILE SELECT</p>"
-        text += "control_change:control 77 (set your midi-device)"
+        text += "control_change:control 1 (modulation) - set your midi-device"
 
         text += f"<p{style}>MODE TOGGLE PLAYBACK / PASSTHROUGH</p>"
         text += "control_change:control 51 (set your midi-device)"
