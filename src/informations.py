@@ -28,6 +28,15 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         text += f"<p{style}>SYSTEM</p>"
         text += f"{platform.system()}"
 
+        text += f"<p{style}>BACKEND USED</p>"
+        text += f"{mido.backend.name}\n"
+
+        text += f"<p{style}>API USED</p>"
+        backend = str(mido.backend)
+        backend.replace("<", "")
+        backend.replace(">", "")
+        text += f"{mido.backend.module.get_api_names()[mido.backend.module._get_api_id()]}\n"
+
         text += f"<p{style}>API AVAILABLE</p>"
         backend = str(mido.backend)
         backend.replace("<", "")
