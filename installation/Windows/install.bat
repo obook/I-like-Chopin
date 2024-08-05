@@ -7,12 +7,12 @@ if errorlevel 1 goto errorNoPython
 :: Execute stuff...
 python.exe -m pip install --upgrade pip
 python.exe -m pip install poetry
-echo Excecute in src folder : poetry run python i-like-chopin.py
+echo Execute in src folder : poetry run python i-like-chopin.py
 :: Once done, exit the batch file -- skips executing the errorNoPython section
 goto:eof
 
 :errorNoPython
 echo.
-echo Error^: Vous devez installer Python3 depuis https://www.python.org/ pour utiliser ce programme
-set /p DUMMY=Appuyer sur entrer pour quitter...
+echo Error^: Install Python3 from https://www.python.org/ pour utiliser ce programme
+set /p DUMMY=Press any key...
 :eof
