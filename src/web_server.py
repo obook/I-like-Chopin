@@ -4,7 +4,6 @@
 Created on Fri Jul 26 07:12:28 2024
 @author: obooklage
 Custom response code server by Cees Timmerman, 2023-07-11.
-Run and visit http://localhost:4444/300 for example.
 """
 import os
 import uuid
@@ -14,6 +13,7 @@ import json
 import qrcode
 import qrcode.image.svg
 import io
+from functools import partial
 
 from PySide6.QtCore import QThread, Signal  # Essai
 
@@ -22,22 +22,23 @@ from urllib.parse import urlparse, parse_qs, quote
 from web_interfaces import get_interfaces
 from string import Template
 
-server_parent = None
-server_interfaces = []
-server_mididict = {}
-svgqrcode_list = []
-
-class Handler(BaseHTTPRequestHandler):
-    uuid = uuid.uuid4()
-    global server_parent
-    global svgqrcode_list
+class RequestHandler(BaseHTTPRequestHandler):
+    uuid = None
     midisong = None
+    # get from init
+    pParent = None
+    midifiles_dict = {}
+    qrcodes_list = []
+
+    def __init__(self, parent, midifiles_dict, qrcodes_list, *args, **kwargs):
+        self.uuid = uuid.uuid4()
+        self.pParent = parent
+        self.midisong = parent.midi.GetMidiSong()
+        self.midifiles_dict = midifiles_dict
+        self.qrcodes_list = qrcodes_list
+        super().__init__(*args, **kwargs)
 
     def do_GET(self):
-        global server_midifiles_files  # old
-        global server_mididict
-        self.midisong = server_parent.midi.GetMidiSong()
-
         # if midisong ?
         # Extract query param
         query_components = parse_qs(urlparse(self.path).query)
@@ -69,32 +70,32 @@ class Handler(BaseHTTPRequestHandler):
         if "play" in query_components:
             midifile = query_components["play"][0]
             print(f"WebServer {self.uuid} request [{midifile}]")
-            if server_parent:
+            if self.pParent:
                 try:
-                    server_parent.MidifileChange(midifile)  # DANGEROUS ?
+                    self.pParent.MidifileChange(midifile)  # DANGEROUS ?
                 except:
                     pass
 
         elif "do" in query_components:
             action = query_components["do"][0]
-            if server_parent and action == "stop":
+            if self.pParent and action == "stop":
                 try:
-                    server_parent.midi.StopPlayer()  # DANGEROUS ?
+                    self.pParent.midi.StopPlayer()  # DANGEROUS ?
                 except:
                     pass
-            elif server_parent and action == "next":
+            elif self.pParent and action == "next":
                 try:
-                    server_parent.NextMidifile()  # DANGEROUS ?
+                    self.pParent.NextMidifile()  # DANGEROUS ?
                 except:
                     pass
-            elif server_parent and action == "replay":
+            elif self.pParent and action == "replay":
                 try:
-                    server_parent.MidifileReplay()  # DANGEROUS ?
+                    self.pParent.MidifileReplay()  # DANGEROUS ?
                 except:
                     pass
-            elif server_parent and action == "mode":
+            elif self.pParent and action == "mode":
                 try:
-                    server_parent.ChangePlayerMode()  # DANGEROUS ?
+                    self.pParent.ChangePlayerMode()  # DANGEROUS ?
                 except:
                     pass
             self.send_response(302)
@@ -110,17 +111,13 @@ class Handler(BaseHTTPRequestHandler):
         except:
             pass
 
-        file = open(server_parent.settings.GetIndexTemplate(), "r")
-        template = Template(file.read())
-        file.close()
-
         # Files
         midilist_html = ""
-        for key in server_mididict.keys():
+        for key in self.midifiles_dict.keys():
             midilist_html += (
                 f"<button class='accordion'>{key}</button><div class='panel'>"
             )
-            list = server_mididict[key]
+            list = self.midifiles_dict[key]
             for midifile in sorted(list, key=lambda s: s.lower()):
                 midiname = pathlib.Path(midifile).stem
                 midiname = midiname.replace("_", " ")
@@ -132,8 +129,13 @@ class Handler(BaseHTTPRequestHandler):
 
         # QRcodes
         images = ""
-        for code in svgqrcode_list:
+        for code in self.qrcodes_list:
             images += code.replace("<?xml version='1.0' encoding='UTF-8'?>", "")
+
+        # Fill template
+        file = open(self.pParent.settings.GetIndexTemplate(), "r")
+        template = Template(file.read())
+        file.close()
 
         index_html = template.substitute(
             name=self.midisong.GetCleanName(),
@@ -142,6 +144,7 @@ class Handler(BaseHTTPRequestHandler):
             midifiles=midilist_html,
             qrcodes=images
         )
+
         try:
             self.wfile.write(bytes(index_html, "utf8"))
         except:  # web browser disconnected
@@ -156,20 +159,20 @@ class Handler(BaseHTTPRequestHandler):
 
 
 class ClassWebServer(QThread):
-    uuid = uuid.uuid4()
+    uuid = None
     server = None
     port = 8888
 
+    pParent = None
+    midifiles_dict = {}
+    interfaces = []
+    qrcodes_list = []
+
     def __init__(self, parent):
-
-        global server_parent
-        global server_interfaces
-        global server_mididict
-        global svgqrcode_list
-
         QThread.__init__(self)
-        server_parent = parent
-        self.port = server_parent.settings.GetServerPort()
+        self.uuid = uuid.uuid4()
+        self.pParent = parent
+        self.port = self.pParent.settings.GetServerPort()
         print(f"WebServer {self.uuid} created")
 
         for file in sorted(
@@ -181,20 +184,20 @@ class ClassWebServer(QThread):
             path = pathlib.PurePath(file)
 
             if not any(
-                path.parent.name in keys for keys in server_mididict
+                path.parent.name in keys for keys in self.midifiles_dict
             ):  # not in dictionnary
-                server_mididict[path.parent.name] = [file]
+                self.midifiles_dict[path.parent.name] = [file]
             else:  # in dictionnary
-                list = server_mididict[path.parent.name]
+                list = self.midifiles_dict[path.parent.name]
                 list.append(file)
 
-        interfaces = get_interfaces(True, False)
-        for interface in interfaces:
+        interfaces_list = get_interfaces(True, False)
+        for interface in interfaces_list:
             url = f"http://{interface['ip']}:{self.port}"
-            server_interfaces.append(url)
+            self.interfaces.append(url)
 
             print(
-                f"WebServer {self.uuid} {url} serve [{server_parent.settings.GetMidiPath()}]"
+                f"WebServer {self.uuid} {url} serve [{self.pParent.settings.GetMidiPath()}]"
             )
             if not "127.0.0.1" in url:
                 img = qrcode.make(
@@ -203,14 +206,15 @@ class ClassWebServer(QThread):
                 buffer = io.BytesIO()
                 img.save(buffer)
                 buffer.seek(0)
-                svgqrcode_list.append(buffer.getvalue().decode("utf-8"))
+                self.qrcodes_list.append(buffer.getvalue().decode("utf-8"))
 
     def __del__(self):
         print(f"WebServer {self.uuid} destroyed")
 
     def run(self):
         try:
-            self.server = ThreadingHTTPServer(("0.0.0.0", self.port), Handler)
+            handler = partial(RequestHandler, self.pParent, self.midifiles_dict, self.qrcodes_list)
+            self.server = ThreadingHTTPServer(("0.0.0.0", self.port), handler)
             self.server.allow_reuse_address = True
             self.server.serve_forever()
         except:
@@ -220,7 +224,7 @@ class ClassWebServer(QThread):
         return self.port
 
     def GetInterfaces(self):
-        return server_interfaces
+        return self.interfaces
 
     def stop(self):
         if self.server:
