@@ -133,7 +133,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             images += code.replace("<?xml version='1.0' encoding='UTF-8'?>", "")
 
         # Fill template
-        file = open(self.pParent.settings.GetIndexTemplate(), "r")
+        file = open(self.pParent.settings.GetIndexTemplate(), "r")  # DANGEROUS ?
         template = Template(file.read())
         file.close()
 
