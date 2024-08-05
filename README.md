@@ -38,6 +38,11 @@ With a Virtual Synth       |With Piano in Daw Mode     | With Rack Synth
 * netifaces2==0.0.22
 * qrcode==7.4.2
 
+# Utilities
+
+Create virtual loopback MIDI-ports to interconnect applications on Microsoft Windows, as the virtual keyboard [VMPK](https://vmpk.sourceforge.io/),
+with [Tobias Erichsen'loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html).
+
 # Thanks
 
 Thank you to [cyri11e](https://github.com/cyri11e) for carrying out the program tests on MacOS and for his great patience.
