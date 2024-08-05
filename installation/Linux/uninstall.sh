@@ -23,7 +23,7 @@ if  [ "$answer" = "Y" ] || [ "$answer" = "y" ] ; then
     rm ~/.config/i-like-chopin-history.json
 
     echo Done
-
-else
-    echo Aborted
+    exit
 fi
+
+echo Aborted
