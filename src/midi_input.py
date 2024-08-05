@@ -54,7 +54,7 @@ class ClassThreadInput(QThread):
             )
             return
         if self.settings.GetMode() == modes["playback"]:
-            self.statusbar_activity.emit(f"Waiting : {self.in_device} ...")
+            self.statusbar_activity.emit(f"Wait : {self.in_device} ...")
 
         while self.running:
             self.sleep(1)
