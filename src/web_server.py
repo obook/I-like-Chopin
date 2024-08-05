@@ -219,6 +219,7 @@ class ClassWebServer(QThread):
             self.server.serve_forever()
         except:
             print(f"|!| WebServer {self.uuid} CAN NOT SERVE ON PORT {self.port}")
+            self.pParent.midi.SendStatusBar(f"WEB SERVER PORT {self.port} BUSY !")
 
     def GetPort(self):
         return self.port
