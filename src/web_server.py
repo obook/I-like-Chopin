@@ -231,4 +231,3 @@ class ClassWebServer(QThread):
         if self.server:
             self.server.server_close()
             self.server.shutdown()
-            self.server = None
