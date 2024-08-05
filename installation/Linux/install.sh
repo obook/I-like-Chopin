@@ -26,3 +26,23 @@ if  [ "$answer" = "Y" ] || [ "$answer" = "y" ] ; then
 fi
 
 echo Aborted
+
+: <<'FUTUR_USE'
+printf 'Install I-Like-Chopin (y/n)? '
+read answer
+if  [ "$answer" = "Y" ] || [ "$answer" = "y" ] ; then
+    printf 'System or Poetry (s/p)? '
+    read answer
+    if  [ "$answer" = "S" ] || [ "$answer" = "s" ] ; then
+        echo Installation on system Done
+        exit 0
+    fi
+    if  [ "$answer" = "P" ] || [ "$answer" = "p" ] ; then
+        echo Installation with poetry Done
+        exit 0
+    fi
+
+fi
+
+echo Aborted
+FUTUR_USE
