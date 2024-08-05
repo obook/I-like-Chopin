@@ -28,6 +28,16 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         text += f"<p{style}>SYSTEM</p>"
         text += f"{platform.system()}"
 
+        text += f"<p{style}>WEB SERVER</p>"
+        for interface in self.pParent.server_interfaces:
+            text += f"<div>{interface}</div>"
+
+        text += f"<p{style}>CONFIG FILE</p>"
+        text += f"{self.settings.GetConfigPath()}"
+
+        text += f"<p{style}>MIDIFILES LIBRARY PATH</p>"
+        text += f"{self.settings.GetMidiPath()}"
+
         text += f"<p{style}>BACKEND USED</p>"
         text += f"{mido.backend.name}\n"
 
@@ -42,16 +52,6 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         backend.replace("<", "")
         backend.replace(">", "")
         text += f"{mido.backend.module.get_api_names()}\n"
-
-        text += f"<p{style}>WEB SERVER</p>"
-        for interface in self.pParent.server_interfaces:
-            text += f"<div>{interface}</div>"
-
-        text += f"<p{style}>CONFIG FILE</p>"
-        text += f"{self.settings.GetConfigPath()}"
-
-        text += f"<p{style}>MIDIFILES LIBRARY PATH</p>"
-        text += f"{self.settings.GetMidiPath()}"
 
         text += f"<p{style}>OUTPUTS</p>"
         for input in self.pParent.Inputs:
