@@ -17,3 +17,5 @@ sudo cp ../../src/icons/svg/i-like-chopin.svg /usr/share/icons/hicolor/scalable/
 
 # Desktop
 sudo cp desktop/org.obook.i-like-chopin.desktop /usr/share/applications
+
+echo Done
