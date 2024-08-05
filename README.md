@@ -41,7 +41,7 @@ With a Virtual Synth       |With Piano in Daw Mode     | With Rack Synth
 # Utilities
 
 Create virtual loopback MIDI-ports to interconnect applications on Microsoft Windows, as the virtual keyboard [VMPK](https://vmpk.sourceforge.io/),
-with [Tobias Erichsen'loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html).
+with Tobias Erichsen's [loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html).
 
 # Thanks
 
