@@ -56,10 +56,11 @@ class MainWindow(QMainWindow):
     midisong = None  # current midisong
     lastmidifile = None
     nextmidifile = None
-    history_index = 0
+    history_index = -1
 
     ConnectInputState = False
     ConnectOutputState = False
+    PlayingState = False
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -213,14 +214,22 @@ class MainWindow(QMainWindow):
         self.midisong = self.midi.GetMidiSong()
 
         if self.midisong:
-            if self.midisong.GetState() >= states["ready"]:
-                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
-
-            elif self.midisong.IsState(states["cueing"]):
+            if self.midisong.IsState(states["cueing"]):
+                self.PlayingState = False
                 self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_YELLOW_LED))
+                self.SetStatusBar("Cueing...")
 
-            else:
+            elif self.midisong.GetState() > states["cueing"] and not self.PlayingState:
+                self.PlayingState = True
+                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
+                # We lose 'waiting...' message
+                self.SetStatusBar("")
+
+            elif self.midisong.GetState() < states['cueing']:
+                self.PlayingState = False
                 self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+                if self.midisong.IsState(states["notracktoplay"]):
+                    self.SetStatusBar("! No notes in selected channels")
 
             self.ui.progressBar.setValue(self.midisong.GetPlayed())
 
@@ -246,10 +255,11 @@ class MainWindow(QMainWindow):
     def MidifileChange(
         self, filepath
     ):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
-        self.settings.SaveMidifile(filepath)
-        self.midisong = self.midi.SetMidiSong(filepath)
-        self.lastmidifile = filepath
-        self.history.AddHistory(filepath)
+        if filepath != self.lastmidifile:
+            self.settings.SaveMidifile(filepath)
+            self.midisong = self.midi.SetMidiSong(filepath)
+            self.lastmidifile = filepath
+            self.history.AddHistory(filepath)
 
     def MidifileReplay(self):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         if self.lastmidifile:
@@ -259,10 +269,30 @@ class MainWindow(QMainWindow):
         self,
     ):  # from web server ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         files = self.history.GetHistory()
-        if self.history_index > len(files) - 1:
-            self.history_index = 0
-        self.MidifileChange(files[self.history_index])
         self.history_index += 1
+        if self.history_index > len(files) - 1:
+            self.history_index = len(files)
+
+
+        print(f"---> NextMidifile index={self.history_index}/{len(files)}")
+
+        self.ui.pushButton_FileIndex.setText(
+            f"MidiFile {self.history_index+1}/{len(files)}"
+        )
+        self.MidifileChange(files[self.history_index])
+
+    def PreviousMidifile(self):
+        files = self.history.GetHistory()
+        self.history_index -= 1
+        if self.history_index<0:
+            self.history_index = 0
+
+        print(f" ---> PreviousMidifile index={self.history_index}/{len(files)}")
+
+        self.ui.pushButton_FileIndex.setText(
+            f"MidiFile {self.history_index+1}/{len(files)}"
+        )
+        self.MidifileChange(files[self.history_index])
 
     # Midi command
     def ChangeMidiFile(self, value):  # External Midi command
@@ -291,6 +321,13 @@ class MainWindow(QMainWindow):
             self.midi.Panic()
             self.lastmidifile = files[FilesIndex]
             self.MidifileChange(files[FilesIndex])
+
+    # Signal
+    '''
+    def StopPlayer(self): # not used, if for webserver
+        if self.midi:
+            self.midi.StopPlayer()
+    '''
 
     # Channels
     def ChannelsNone(self):

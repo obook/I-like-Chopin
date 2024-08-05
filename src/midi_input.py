@@ -21,9 +21,12 @@ class ClassThreadInput(QThread):
     pParent = None
     settings = None
     running = False
+    modulation_start_time = 0
 
     led_activity = Signal(int)
     statusbar_activity = Signal(str)
+    nextsong_activity = Signal()
+    previousong_activity = Signal()
 
     def __init__(self, in_device, keys, pParent):
         QThread.__init__(self)
@@ -35,6 +38,8 @@ class ClassThreadInput(QThread):
         self.running = True
         self.led_activity.connect(self.pParent.SetLedInput)
         self.statusbar_activity.connect(self.pParent.SetStatusBar)
+        self.nextsong_activity.connect(self.pParent.NextMidifile)
+        self.previousong_activity.connect(self.pParent.PreviousMidifile)
         print(f"MidiInput {self.uuid} created [{self.in_device}]")
 
     def __del__(self):
@@ -54,7 +59,7 @@ class ClassThreadInput(QThread):
             )
             return
         if self.settings.GetMode() == modes["playback"]:
-            self.statusbar_activity.emit(f"Wait : {self.in_device} ...")
+            self.statusbar_activity.emit(f"Waiting:{self.in_device} ...")
 
         while self.running:
             self.sleep(1)
@@ -70,14 +75,21 @@ class ClassThreadInput(QThread):
         if msg.type == "control_change":
             if msg.control == 71:
                 self.keys["humanize"] = msg.value  # 0 to 127
-                self.pParent.PrintHumanize(msg.value)
+                self.pParent.PrintHumanize(msg.value) # PLEASE USE SIGNAL
             elif msg.control == 76:
                 self.keys["speed"] = msg.value  # 0 to 127
-                self.pParent.PrintSpeed(msg.value)
-            elif msg.control == 77:
-                self.pParent.ChangeMidiFile(msg.value)
+                self.pParent.PrintSpeed(msg.value) # PLEASE USE SIGNAL
             elif msg.control == 51 and msg.value == 127:
-                self.pParent.ChangePlayerMode()
+                self.pParent.ChangePlayerMode() # PLEASE USE SIGNAL
+            elif msg.control == 1: # modulation
+                diff = time.time() - self.modulation_start_time
+                if diff > 3:
+                    if msg.value > 64:
+                        self.nextsong_activity.emit()
+                    else:
+                        self.previousong_activity.emit()
+                    self.modulation_start_time = time.time()
+                self.sleep(0.01) #  for QT
 
         # Keys pressed counter
         if msg.type == "note_on":
