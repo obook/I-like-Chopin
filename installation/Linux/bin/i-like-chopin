@@ -1,5 +1,6 @@
 #!/bin/sh
-
+# ONLY FOR NO-POETRY INSTALL
+# ALL MODULES MUST BE INSTALLED MANUALLY
 PYTHON=$(which python3 2>/dev/null)
 
 if [ ! -f ${PYTHON} ]; then
