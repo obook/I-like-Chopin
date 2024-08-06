@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "i-like-chopin"
-version = "1.0.8"
-description = "Funny ALSA MIDI playback player for play like Chopin"
+version = "2.0.3"
+description = "Funny MIDI playback player for play like Chopin"
 readme = "README.md"
 package-mode = false
 
