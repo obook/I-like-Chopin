@@ -46,8 +46,6 @@ class ClassSettings:
             midifiles_path_src = os.path.join(self.applicationpath, "midi")
             try:
                 shutil.copytree(midifiles_path_src, self.defaultmidipath)
-                self.SetSetting("MidiPath", self.defaultmidipath)
-                self.SaveConfig()
             except:
                 print(
                     f"Settings {self.uuid} unable de copy midifiles [{self.defaultmidipath}]"
