@@ -30,8 +30,6 @@ class ClassMidiSong:
     __played = 0  # percent
     __tracks = []
     __channels = {}
-    __active = False
-    __ready = False  # wait first key on keyboard
     __state = states["unknown"]
     __mode = modes["playback"]
     __uuid = uuid.uuid4()

@@ -14,19 +14,12 @@ class ClassSettings:
     """Class for recall and store preferences and settings"""
 
     uuid = None
-    applicationpath = os.path.dirname(os.path.realpath(__file__))
-
-    settingspath = os.path.join(os.path.expanduser("~"), ".config", "i-like-chopin")
-    settingsfile = os.path.join(settingspath, "i-like-chopin.json")
-
-    localpath = os.path.join(
-        os.path.expanduser("~"), ".local", "share", "i-like-chopin"
-    )
-    defaultmidipath = os.path.join(localpath, "midi")
-
-    serverindextemplate = os.path.join(
-        applicationpath, "template", "index-template.html"
-    )
+    applicationpath = None
+    configpath = None
+    settingsfile = None
+    localpath = None
+    defaultmidipath = None
+    serverindextemplate = None
 
     config = {
         "InputDevice": "(None)",
@@ -45,8 +38,17 @@ class ClassSettings:
     def __init__(self):
         self.uuid = uuid.uuid4()
         print(f"Settings {self.uuid} read [{self.settingsfile}]")
-        if not os.path.isdir(self.settingspath):
-            os.makedirs(self.settingspath, exist_ok=True)
+
+        self.applicationpath = os.path.dirname(os.path.realpath(__file__))
+        self.configpath = os.path.join(os.path.expanduser("~"), ".config", "i-like-chopin")
+        self.localpath = os.path.join(os.path.expanduser("~"), ".local", "share", "i-like-chopin")
+
+        self.settingsfile = os.path.join(self.configpath, "i-like-chopin.json")
+        self.defaultmidipath = os.path.join(self.localpath, "midi")
+        self.serverindextemplate = os.path.join(self.applicationpath, "template", "index-template.html")
+
+        if not os.path.isdir(self.configpath):
+            os.makedirs(self.configpath, exist_ok=True)
         if not os.path.isdir(self.defaultmidipath):
             midifiles_path_src = os.path.join(self.application_path, "midi")
             try:

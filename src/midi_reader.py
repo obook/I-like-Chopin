@@ -96,6 +96,7 @@ class ClassThreadMidiReader(QThread):
 
             if self.notes_on_channels:
                 self.midisong.SetState(states["cueing"])
+                self.led_activity.emit(0)
             else:
                 print(f"MidiReader {self.uuid} NO NOTE ON MIDI CHANNELS")
                 self.midisong.SetState(states["notracktoplay"])
@@ -142,12 +143,13 @@ class ClassThreadMidiReader(QThread):
                     self.sustain_pedal = msg.value
 
             # For fun
-            if msg.type == "note_on":
-                if self.channels[msg.channel]:
-                    self.led_activity.emit(1)
-            elif msg.type == "note_on":
-                if self.channels[msg.channel]:
-                    self.led_activity.emit(0)
+            if self.midisong.IsState(states["playing"]):
+                if msg.type == "note_on":
+                    if self.channels[msg.channel]:
+                        self.led_activity.emit(1)
+                elif msg.type == "note_off":
+                    if self.channels[msg.channel]:
+                        self.led_activity.emit(0)
 
             # Just a Midi player
             if self.midisong.IsMode(modes["player"]):
@@ -274,6 +276,7 @@ class ClassThreadMidiReader(QThread):
                             )
                             self.pParent.midi.SendOutput(msg)
                             self.sustain_pedal_off = True
+                            self.led_activity.emit(0)
 
                         self.sleep(0.001)  # for QT loop (give time)
 

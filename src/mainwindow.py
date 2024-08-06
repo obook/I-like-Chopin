@@ -209,9 +209,10 @@ class MainWindow(QMainWindow):
 
             elif self.midisong.GetState() > states["cueing"] and not self.PlayingState:
                 self.PlayingState = True
-                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
-                # We lose 'waiting...' message
-                self.SetStatusBar("")
+                # We lose Del animation
+                # self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
+                # We lose 'waiting...' message and other
+                # self.SetStatusBar("")
 
             elif self.midisong.GetState() < states['cueing']:
                 self.PlayingState = False
@@ -414,7 +415,7 @@ class MainWindow(QMainWindow):
         self.midi.ChangeMidiMode(self.settings.GetMode())
 
     # Signal receiver
-    def SetLedInput(self, value):  # value (0 or 1) is NOT used here
+    def SetLedInput(self, value):  # value (0 or 1)
         if self.midi:
             if self.midi.keys["key_on"] > 0:
                 self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LIGHT_LED))

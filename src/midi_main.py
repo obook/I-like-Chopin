@@ -32,7 +32,6 @@ class ClassMidiMain(QObject):
     channels = None
     uuid = uuid.uuid4()
     statusbar_activity = Signal(str)
-    led_file_activity = Signal(int)
     readerstop_activity = Signal()
 
     settings = None
@@ -43,7 +42,6 @@ class ClassMidiMain(QObject):
         self.settings = self.pParent.settings
         self.channels = channels
         self.statusbar_activity.connect(self.pParent.SetStatusBar)
-        self.led_file_activity.connect(self.pParent.SetLedFile)
         print(f"MidiMain {self.uuid} created")
 
     def __del__(self):
@@ -165,9 +163,6 @@ class ClassMidiMain(QObject):
     # Send signals
     def SendStatusBar(self, msg):
         self.statusbar_activity.emit(msg)
-
-    def SendLedFile(self, value):
-        self.led_file_activity.emit(value)
 
     def StopPlayer(self):
         if self.ThreadMidiReader:
