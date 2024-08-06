@@ -19,8 +19,7 @@ if  [ "$answer" = "Y" ] || [ "$answer" = "y" ] ; then
     sudo rm /usr/share/applications/org.obook.i-like-chopin.desktop
 
     # Config and history
-    rm ~/.config/i-like-chopin.json
-    rm ~/.config/i-like-chopin-history.json
+    rm -R ~/.config/i-like-chopin 2> /dev/null
 
     echo Done
     exit

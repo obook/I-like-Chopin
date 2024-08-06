@@ -72,7 +72,7 @@ class ClassHistory:
 
     def GetName(self, index):  # without extension, eg : toto
         if index > len(self.history):
-            return "<None>"
+            return ""
         return Path(self.history[index]).stem
 
     def GetCleanName(self, index):  # without extension, eg : toto
