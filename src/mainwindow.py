@@ -25,16 +25,6 @@ from history import ClassHistory
 #     pyside6-uic form.ui -o ui_form.py
 from ui_mainwindow import Ui_MainWindow
 
-application_path = os.path.dirname(os.path.realpath(__file__))
-ICON_APPLICATION = application_path + "/icons/svg/i-like-chopin.svg"
-# Define status icons
-ICON_RED_LED = application_path + "/icons/led/led-red-on.png"
-ICON_GREEN_LED = application_path + "/icons/led/green-led-on.png"
-ICON_GREEN_LIGHT_LED = application_path + "/icons/led/greenlight-led-on.png"
-ICON_YELLOW_LED = application_path + "/icons/led/yellow-led-on.png"
-ICON_BLUE_LED = application_path + "/icons/led/blue-led-on.png"
-ICON_LED_OFF = application_path + "/icons/led/led-off.png"
-
 class MainWindow(QMainWindow):
 
     settings = ClassSettings()
@@ -59,6 +49,17 @@ class MainWindow(QMainWindow):
     ConnectOutputState = False
     PlayingState = False
 
+    application_path = os.path.dirname(os.path.realpath(__file__))
+    ICON_APPLICATION = os.path.join(application_path,"icons","svg","i-like-chopin.svg")
+
+    # Define status icons
+    ICON_RED_LED = application_path + "/icons/led/led-red-on.png"
+    ICON_GREEN_LED = application_path + "/icons/led/green-led-on.png"
+    ICON_GREEN_LIGHT_LED = application_path + "/icons/led/greenlight-led-on.png"
+    ICON_YELLOW_LED = application_path + "/icons/led/yellow-led-on.png"
+    ICON_BLUE_LED = application_path + "/icons/led/blue-led-on.png"
+    ICON_LED_OFF = application_path + "/icons/led/led-off.png"
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
@@ -67,7 +68,7 @@ class MainWindow(QMainWindow):
 
         # Application icon X.org->correct - Wayland->not implemented
         my_icon = QIcon()
-        my_icon.addFile(ICON_APPLICATION)
+        my_icon.addFile(self.ICON_APPLICATION)
         self.setWindowIcon(my_icon)
 
         # StatusBar
@@ -120,13 +121,13 @@ class MainWindow(QMainWindow):
         )
 
         # Leds
-        self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_LED_OFF))
+        self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_LED_OFF))
         self.ui.labelStatusInput.setScaledContents(True)
 
-        self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_LED_OFF))
+        self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_LED_OFF))
         self.ui.labelStatusOuput.setScaledContents(True)
 
-        self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_LED_OFF))
+        self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_LED_OFF))
         self.ui.labelStatusMidifile.setScaledContents(True)
 
         # Midi Channels
@@ -185,17 +186,17 @@ class MainWindow(QMainWindow):
 
     def timer(self):
         if self.midi.GetInputPort() and not self.ConnectInputState:
-            self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
+            self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
             self.ConnectInputState = True
         elif not self.midi.GetInputPort():
-            self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+            self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
             self.ConnectInputState = False
 
         if self.midi.GetOuputPort() and not self.ConnectOutputState:
-            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
+            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
             self.ConnectOutputState = True
         elif not self.midi.GetOuputPort():
-            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
             self.ConnectOutputState = False
 
         self.midisong = self.midi.GetMidiSong()
@@ -203,18 +204,18 @@ class MainWindow(QMainWindow):
         if self.midisong:
             if self.midisong.IsState(states["cueing"]):
                 self.PlayingState = False
-                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_YELLOW_LED))
+                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_YELLOW_LED))
                 self.SetStatusBar("Cueing...")
 
             elif self.midisong.GetState() > states["cueing"] and not self.PlayingState:
                 self.PlayingState = True
-                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
+                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
                 # We lose 'waiting...' message
                 self.SetStatusBar("")
 
             elif self.midisong.GetState() < states['cueing']:
                 self.PlayingState = False
-                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
                 if self.midisong.IsState(states["notracktoplay"]):
                     self.SetStatusBar("! No notes in selected channels")
 
@@ -223,17 +224,17 @@ class MainWindow(QMainWindow):
             self.SetFileButtonText()
             self.ChannelsSetButtons()
             # just for led off
-            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
+            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
 
     def InputDeviceChanged(self):
-        self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+        self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
         self.ConnectInputState = False
         in_device = self.ui.InputDeviceCombo.currentText()
         self.settings.SaveInputDevice(in_device)
         self.midi.ConnectInput(in_device)
 
     def OuputDeviceChanged(self):
-        self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_RED_LED))
+        self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
         self.ConnectOutputState = False
         out_device = self.ui.OutputDeviceCombo.currentText()
         self.settings.SaveOutputDevice(out_device)
@@ -416,23 +417,23 @@ class MainWindow(QMainWindow):
     def SetLedInput(self, value):  # value (0 or 1) is NOT used here
         if self.midi:
             if self.midi.keys["key_on"] > 0:
-                self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LIGHT_LED))
+                self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LIGHT_LED))
             else:
-                self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
+                self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
 
     # Signal receiver
     def SetLedOutput(self, value):  # 0 or 1
         if value and self.midi.GetOuputPort():
-            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LIGHT_LED))
+            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LIGHT_LED))
         else:
-            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
+            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
 
     # Signal receiver
     def SetLedFile(self, value):  # 0 or 1
         if value:
-            self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LIGHT_LED))
+            self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LIGHT_LED))
         else:
-            self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
+            self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
 
     # Signal receiver
     def SetStatusBar(self, message):
