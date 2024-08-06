@@ -35,9 +35,6 @@ ICON_YELLOW_LED = application_path + "/icons/led/yellow-led-on.png"
 ICON_BLUE_LED = application_path + "/icons/led/blue-led-on.png"
 ICON_LED_OFF = application_path + "/icons/led/led-off.png"
 
-app = None
-
-
 class MainWindow(QMainWindow):
 
     settings = ClassSettings()
@@ -187,16 +184,6 @@ class MainWindow(QMainWindow):
         timer.start(2000)
 
     def timer(self):
-        """A revoir
-        if self.nextmidifile != self.lastmidifile:
-
-            print(f"TIMER se prépare à charger nextmidifile {self.nextmidifile}")
-
-            self.lastmidifile = self.nextmidifile
-            self.midi.Panic()
-            self.MidifileChange(self.nextmidifile)
-            return
-        """
         if self.midi.GetInputPort() and not self.ConnectInputState:
             self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(ICON_GREEN_LED))
             self.ConnectInputState = True
@@ -272,10 +259,6 @@ class MainWindow(QMainWindow):
         self.history_index += 1
         if self.history_index > len(files) - 1:
             self.history_index = len(files)
-
-
-        print(f"---> NextMidifile index={self.history_index}/{len(files)}")
-
         self.ui.pushButton_FileIndex.setText(
             f"MidiFile {self.history_index+1}/{len(files)}"
         )
@@ -324,7 +307,7 @@ class MainWindow(QMainWindow):
 
     # Signal
     '''
-    def StopPlayer(self): # not used, if for webserver
+    def StopPlayer(self): # not used, is for webserver
         if self.midi:
             self.midi.StopPlayer()
     '''
@@ -495,11 +478,9 @@ class MainWindow(QMainWindow):
             self.midi.quit()
         self.midi = None
 
-        app.quit()
-
+        qApp.quit();
 
 def start():
-    global app
     if not QApplication.instance():
         app = QApplication(sys.argv)
         app.setStyle("Fusion")  # Windows dark theme
