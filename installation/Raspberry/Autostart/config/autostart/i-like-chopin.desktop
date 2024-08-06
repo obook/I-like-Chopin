@@ -2,6 +2,8 @@
 Type=Application
 Name=i-like-chopin
 Comment=Funny ALSA MIDI playback player for play like Chopin
-# Change here your application path
-Path=~/I-like-Chopin
-Exec=./i-like-chopin.sh
+# Change here your ABSOLUTE application path
+Path=/home/<YourUserName>/Dev/GitHub/I-like-Chopin/
+# Change here your ABSOLUTE script path
+Exec=/home/<YourUserName>/Dev/GitHub/I-like-Chopin/i-like-chopin.sh
+Terminal=false

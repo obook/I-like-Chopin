@@ -40,5 +40,18 @@ sudo apt-get install -qq libglu1-mesa-dev libx11-xcb-dev '^libxcb*'
 
 7/ Autostart
 ------------
-
+cp /etc/xdg/lxsession/LXDE-pi/autostart /home/<YourUserName>/.config/lxsession/LXDE-pi/
 Make directory in home : .config/autostart
+Create a file 'i-like-chopin.desktop' with
+
+[Desktop Entry]
+Type=Application
+Name=i-like-chopin
+Comment=Funny ALSA MIDI playback player for play like Chopin
+# Change here your ABSOLUTE application path
+Path=/home/obooklage/Dev/GitHub/I-like-Chopin/
+# Change here your ABSOLUTE script path
+Exec=/home/obooklage/Dev/GitHub/I-like-Chopin/i-like-chopin.sh
+
+
+MAKE this file EXECUTABLE
