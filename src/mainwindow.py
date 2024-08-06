@@ -30,6 +30,9 @@ class MainWindow(QMainWindow):
     settings = ClassSettings()
     history = ClassHistory()
 
+    web_server = None
+    interfaces_rotation = 0
+
     ChannelsButtonsList = []
     ChannelsList = [False] * 16
 
@@ -184,6 +187,10 @@ class MainWindow(QMainWindow):
         timer.timeout.connect(self.timer)
         timer.start(2000)
 
+        timer_title = QTimer(self)
+        timer.timeout.connect(self.timer_title)
+        timer.start(10000)
+
     def timer(self):
         if self.midi.GetInputPort() and not self.ConnectInputState:
             self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
@@ -226,6 +233,17 @@ class MainWindow(QMainWindow):
             self.ChannelsSetButtons()
             # just for led off
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
+
+    def timer_title(self):
+
+        if self.web_server:
+            interfaces = self.web_server.GetInterfaces()
+            self.interfaces_rotation +=1
+            if self.interfaces_rotation >= len(interfaces):
+                self.interfaces_rotation = -1
+                self.setWindowTitle("I-LIKE-CHOPIN")
+            else :
+                self.setWindowTitle(interfaces[self.interfaces_rotation])
 
     def InputDeviceChanged(self):
         self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
