@@ -133,9 +133,6 @@ class ClassSettings:
         return self.SetSetting("MidiSong", value)
 
     def GetMidiPath(self):
-
-        print(f"----> self.defaultmidipath = {self.defaultmidipath}")
-
         return self.GetSetting("MidiPath", self.defaultmidipath)
 
     def GetForceIntrument(self):
