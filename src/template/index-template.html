@@ -142,7 +142,7 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
       <button class="playerbutton" onclick="location.href='?do=replay'" type="button">REPLAY</button>
       <button class="playerbutton" onclick="location.href='?do=next'" type="button">NEXT</button>
       <button class="playerbutton" onclick="location.href='/'" type="button">REFRESH</button>
-      <button class="playerbutton" onclick="location.href='?do=mode'" type="button"><span id="mode">MODE</span></button>
+      <button class="playerbutton" onclick="location.href='?do=mode'" type="button"><span id="mode">MODE...</span></button>
     </div>
 </nav>
 
@@ -218,7 +218,7 @@ async function getStats() {
     else if (data.mode == 3)
       document.getElementById('mode').textContent="Player";
     else
-      document.getElementById('mode').textContent="Mode";
+      document.getElementById('mode').textContent="Mode...";
 
   } catch (error) {
     console.error('---> NETWORK ERROR : ', error);
