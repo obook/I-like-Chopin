@@ -14,12 +14,13 @@ class ClassSettings:
     """Class for recall and store preferences and settings"""
 
     uuid = None
-    applicationpath = None
-    configpath = None
-    settingsfile = None
-    localpath = None
-    defaultmidipath = None
-    serverindextemplate = None
+    applicationpath = os.path.dirname(os.path.realpath(__file__))
+    configpath = os.path.join(os.path.expanduser("~"), ".config", "i-like-chopin")
+    localpath = os.path.join(os.path.expanduser("~"), ".local", "share", "i-like-chopin")
+
+    settingsfile = os.path.join(configpath, "i-like-chopin.json")
+    defaultmidipath = os.path.join(localpath, "midi")
+    serverindextemplate = os.path.join(applicationpath, "template", "index-template.html")
 
     config = {
         "InputDevice": "(None)",
@@ -39,14 +40,6 @@ class ClassSettings:
         self.uuid = uuid.uuid4()
         print(f"Settings {self.uuid} read [{self.settingsfile}]")
 
-        self.applicationpath = os.path.dirname(os.path.realpath(__file__))
-        self.configpath = os.path.join(os.path.expanduser("~"), ".config", "i-like-chopin")
-        self.localpath = os.path.join(os.path.expanduser("~"), ".local", "share", "i-like-chopin")
-
-        self.settingsfile = os.path.join(self.configpath, "i-like-chopin.json")
-        self.defaultmidipath = os.path.join(self.localpath, "midi")
-        self.serverindextemplate = os.path.join(self.applicationpath, "template", "index-template.html")
-
         if not os.path.isdir(self.configpath):
             os.makedirs(self.configpath, exist_ok=True)
         if not os.path.isdir(self.defaultmidipath):
@@ -54,11 +47,12 @@ class ClassSettings:
             try:
                 shutil.copytree(midifiles_path_src, self.defaultmidipath)
                 self.SetSetting("MidiPath", self.defaultmidipath)
+                self.SaveConfig()
             except:
                 print(
                     f"Settings {self.uuid} unable de copy midifiles [{self.defaultmidipath}]"
                 )
-                
+
         self.LoadConfig()
 
     def __del__(self):
@@ -141,9 +135,9 @@ class ClassSettings:
         return self.SetSetting("MidiSong", value)
 
     def GetMidiPath(self):
-    
+
         print(f"----> self.defaultmidipath = {self.defaultmidipath}")
-        
+
         return self.GetSetting("MidiPath", self.defaultmidipath)
 
     def GetForceIntrument(self):
