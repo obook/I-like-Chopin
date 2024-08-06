@@ -50,13 +50,15 @@ class ClassSettings:
         if not os.path.isdir(self.configpath):
             os.makedirs(self.configpath, exist_ok=True)
         if not os.path.isdir(self.defaultmidipath):
-            midifiles_path_src = os.path.join(self.application_path, "midi")
+            midifiles_path_src = os.path.join(self.applicationpath, "midi")
             try:
                 shutil.copytree(midifiles_path_src, self.defaultmidipath)
+                self.SetSetting("MidiPath", self.defaultmidipath)
             except:
                 print(
                     f"Settings {self.uuid} unable de copy midifiles [{self.defaultmidipath}]"
                 )
+                
         self.LoadConfig()
 
     def __del__(self):
@@ -139,6 +141,9 @@ class ClassSettings:
         return self.SetSetting("MidiSong", value)
 
     def GetMidiPath(self):
+    
+        print(f"----> self.defaultmidipath = {self.defaultmidipath}")
+        
         return self.GetSetting("MidiPath", self.defaultmidipath)
 
     def GetForceIntrument(self):
