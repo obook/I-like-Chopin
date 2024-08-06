@@ -63,7 +63,7 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
-        self.setFixedSize(504, 466)
+        self.setFixedSize(504, 426)
         self.ui.setupUi(self)
 
         # Application icon X.org->correct - Wayland->not implemented
