@@ -1,0 +1,2 @@
+curl -sSL https://install.python-poetry.org | python3
+Add `export PATH="/home/obooklage/.local/bin:$PATH"` to your shell configuration file.
