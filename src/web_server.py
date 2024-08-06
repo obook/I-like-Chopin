@@ -209,6 +209,8 @@ class ClassWebServer(QThread):
                 self.qrcodes_list.append(buffer.getvalue().decode("utf-8"))
 
     def __del__(self):
+        if self.server:
+            self.server.server_close()
         print(f"WebServer {self.uuid} destroyed")
 
     def run(self):
