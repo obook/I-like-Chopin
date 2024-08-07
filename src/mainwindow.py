@@ -194,11 +194,11 @@ class MainWindow(QMainWindow):
 
         timer = QTimer(self)
         timer.timeout.connect(self.timer_title)
-        timer.start(10000)
+        timer.start(4000)
 
         timer = QTimer(self)
         timer.timeout.connect(self.timer_random_song)
-        timer.start(30000)
+        timer.start(25000)
 
     def timer(self):
         if self.Midi.GetInputPort() and not self.ConnectInputState:
