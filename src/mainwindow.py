@@ -428,7 +428,6 @@ class MainWindow(QMainWindow):
             )
             self.ui.pushButton_Mode.setText("Random")
             self.ui.pushButton_Mode.setChecked(False)
-            self.timer_random_song()
 
     def ChangePlayerMode(self):  # button mode pressed or called by midi_inpout
 
@@ -440,6 +439,7 @@ class MainWindow(QMainWindow):
 
         elif self.Settings.GetMode() == modes["player"]:
             self.Settings.SaveMode(modes["random"])
+            self.timer_random_song()
 
         elif self.Settings.GetMode() == modes["random"]:
             self.Settings.SaveMode(modes["playback"])
