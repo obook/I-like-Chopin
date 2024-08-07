@@ -30,12 +30,11 @@ class MainWindow(QMainWindow):
 
     Settings = ClassSettings()
     History = ClassHistory()
-    # All files
     Midifiles = ClassMidiFiles()
     midifiles_dict = {}
 
     Web_server = None
-    interfaces_rotation = 0
+    title_rotation = 0
 
     ChannelsButtonsList = []
     ChannelsList = [False] * 16
@@ -43,10 +42,7 @@ class MainWindow(QMainWindow):
     Inputs = []
     Outputs = []
     InputsOutputs = []
-    '''
-    MidiFiles = []
-    MidifilesIndex = 0  # ?
-    '''
+
     Midi = None # Main midi class
     midisong = None  # current midisong
     lastmidifile = None
@@ -247,12 +243,12 @@ class MainWindow(QMainWindow):
 
         if self.Web_server:
             interfaces = self.Web_server.GetInterfaces()
-            self.interfaces_rotation +=1
-            if self.interfaces_rotation >= len(interfaces):
-                self.interfaces_rotation = -1
+            self.title_rotation +=1
+            if self.title_rotation >= len(interfaces):
+                self.title_rotation = -1
                 self.setWindowTitle("I LIKE CHOPIN")
             else :
-                self.setWindowTitle(interfaces[self.interfaces_rotation])
+                self.setWindowTitle(interfaces[self.title_rotation])
 
         self.midisong = self.Midi.GetMidiSong()
         if not self.midisong.IsState(states['playing']) and self.Settings.IsMode(modes["random"]):
@@ -337,13 +333,6 @@ class MainWindow(QMainWindow):
             self.Midi.Panic()
             self.lastmidifile = files[FilesIndex]
             self.MidifileChange(files[FilesIndex])
-
-    # Signal
-    '''
-    def StopPlayer(self): # not used, is for webserver
-        if self.Midi:
-            self.Midi.StopPlayer()
-    '''
 
     # Channels
     def ChannelsNone(self):
@@ -517,6 +506,7 @@ class MainWindow(QMainWindow):
 
         if self.Midi:
             self.Midi.quit()
+            self.Midi = None
 
         qApp.quit();
 
