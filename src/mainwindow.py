@@ -187,14 +187,18 @@ class MainWindow(QMainWindow):
         self.server_interfaces = self.Web_server.GetInterfaces()
         self.Web_server.start()
 
-        # Timer
+        # Timers
         timer = QTimer(self)
         timer.timeout.connect(self.timer)
         timer.start(2000)
 
-        timer_title = QTimer(self)
+        timer = QTimer(self)
         timer.timeout.connect(self.timer_title)
         timer.start(10000)
+
+        timer = QTimer(self)
+        timer.timeout.connect(self.timer_random_song)
+        timer.start(30000)
 
     def timer(self):
         if self.Midi.GetInputPort() and not self.ConnectInputState:
@@ -240,7 +244,6 @@ class MainWindow(QMainWindow):
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
 
     def timer_title(self):
-
         if self.Web_server:
             interfaces = self.Web_server.GetInterfaces()
             self.title_rotation +=1
@@ -250,6 +253,7 @@ class MainWindow(QMainWindow):
             else :
                 self.setWindowTitle(interfaces[self.title_rotation])
 
+    def timer_random_song(self):
         self.midisong = self.Midi.GetMidiSong()
         if not self.midisong.IsState(states['playing']) and self.Settings.IsMode(modes["random"]):
             self.MidifileChange(self.Midifiles.GetRandomSong())
@@ -424,6 +428,7 @@ class MainWindow(QMainWindow):
             )
             self.ui.pushButton_Mode.setText("Random")
             self.ui.pushButton_Mode.setChecked(False)
+            self.timer_random_song()
 
     def ChangePlayerMode(self):  # button mode pressed or called by midi_inpout
 
