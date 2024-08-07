@@ -34,12 +34,12 @@ class ClassMidiMain(QObject):
     statusbar_activity = Signal(str)
     readerstop_activity = Signal()
 
-    settings = None
+    Settings = None
 
     def __init__(self, pParent, channels):
         QObject.__init__(self)
         self.pParent = pParent
-        self.settings = self.pParent.settings
+        self.Settings = self.pParent.Settings
         self.channels = channels
         self.statusbar_activity.connect(self.pParent.SetStatusBar)
         print(f"MidiMain {self.uuid} created")
@@ -96,7 +96,7 @@ class ClassMidiMain(QObject):
 
     def SendOutput(self, msg):
         if self.ThreadOutput:
-            if self.settings.IsMode(modes["passthrough"]):
+            if self.Settings.IsMode(modes["passthrough"]):
                 return self.ThreadOutput.send(msg)
             elif msg.type == "note_on" or msg.type == "note_off":
                 if self.pParent.ChannelsList[msg.channel]:
@@ -105,15 +105,16 @@ class ClassMidiMain(QObject):
                 return self.ThreadOutput.send(msg)
         return None
 
+    '''
     # List of midifiles from folder midi (see json file created)
     def GetMidiFiles(self):
         midifiles = []
         for file in sorted(
-            glob.glob(os.path.join(self.settings.GetMidiPath(), "*.mid"))
+            glob.glob(os.path.join(self.Settings.GetMidiPath(), "*.mid"))
         ):
             midifiles.append(os.path.basename(file))
         return midifiles
-
+    '''
     def SetMidiSong(self, midifile):
 
         if self.ThreadMidiReader:
@@ -127,7 +128,7 @@ class ClassMidiMain(QObject):
         )
 
         # 3 modes = player (just midi player) , chopin (wait keyboard) and passthrough
-        self.midisong = self.ThreadMidiReader.LoadMidiSong(self.settings.GetMode())
+        self.midisong = self.ThreadMidiReader.LoadMidiSong(self.Settings.GetMode())
 
         if self.ThreadOutput:
             port = self.ThreadOutput.getport()
@@ -167,6 +168,7 @@ class ClassMidiMain(QObject):
     def StopPlayer(self):
         if self.ThreadMidiReader:
             self.ThreadMidiReader.stop()  # test
+            # self.ThreadMidiReader = None
         self.readerstop_activity.emit()
 
     def Stop(self):

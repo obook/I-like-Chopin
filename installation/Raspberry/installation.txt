@@ -40,9 +40,9 @@ sudo apt-get install -qq libglu1-mesa-dev libx11-xcb-dev '^libxcb*'
 
 7/ Autostart
 ------------
-cp /etc/xdg/lxsession/LXDE-pi/autostart /home/<YourUserName>/.config/lxsession/LXDE-pi/
-Make directory in home : .config/autostart
-Create a file 'i-like-chopin.desktop' with
+
+Make directory in home : ~/.config/autostart
+Create inside a file 'i-like-chopin.desktop' with
 
 [Desktop Entry]
 Type=Application

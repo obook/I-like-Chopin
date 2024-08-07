@@ -33,7 +33,7 @@ class RequestHandler(BaseHTTPRequestHandler):
     def __init__(self, parent, midifiles_dict, qrcodes_list, *args, **kwargs):
         self.uuid = uuid.uuid4()
         self.pParent = parent
-        self.midisong = parent.midi.GetMidiSong()
+        self.midisong = parent.Midi.GetMidiSong()
         self.midifiles_dict = midifiles_dict
         self.qrcodes_list = qrcodes_list
         super().__init__(*args, **kwargs)
@@ -80,7 +80,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             action = query_components["do"][0]
             if self.pParent and action == "stop":
                 try:
-                    self.pParent.midi.StopPlayer()  # DANGEROUS ?
+                    self.pParent.Midi.StopPlayer()  # DANGEROUS ?
                 except:
                     pass
             elif self.pParent and action == "next":
@@ -113,11 +113,11 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         # Files
         midilist_html = ""
-        for key in self.midifiles_dict.keys():
+        for key in self.pParent.midifiles_dict.keys(): #self.midifiles_dict.keys():
             midilist_html += (
                 f"<button class='accordion'>{key}</button><div class='panel'>"
             )
-            list = self.midifiles_dict[key]
+            list = self.pParent.midifiles_dict[key]
             for midifile in sorted(list, key=lambda s: s.lower()):
                 midiname = pathlib.Path(midifile).stem
                 midiname = midiname.replace("_", " ")
@@ -133,7 +133,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             images += code.replace("<?xml version='1.0' encoding='UTF-8'?>", "")
 
         # Fill template
-        file = open(self.pParent.settings.GetIndexTemplate(), "r")  # DANGEROUS ?
+        file = open(self.pParent.Settings.GetIndexTemplate(), "r")  # DANGEROUS ?
         template = Template(file.read())
         file.close()
 
@@ -172,12 +172,12 @@ class ClassWebServer(QThread):
         QThread.__init__(self)
         self.uuid = uuid.uuid4()
         self.pParent = parent
-        self.port = self.pParent.settings.GetServerPort()
+        self.port = self.pParent.Settings.GetServerPort()
         print(f"WebServer {self.uuid} created")
-
+        '''
         for file in sorted(
             glob.glob(
-                os.path.join(parent.settings.GetMidiPath(), "**", "*.mid"),
+                os.path.join(parent.Settings.GetMidiPath(), "**", "*.mid"),
                 recursive=True,
             )
         ):
@@ -190,14 +190,14 @@ class ClassWebServer(QThread):
             else:  # in dictionnary
                 list = self.midifiles_dict[path.parent.name]
                 list.append(file)
-
+        '''
         interfaces_list = get_interfaces(True, False)
         for interface in interfaces_list:
             url = f"http://{interface['ip']}:{self.port}"
             self.interfaces.append(url)
 
             print(
-                f"WebServer {self.uuid} {url} serve [{self.pParent.settings.GetMidiPath()}]"
+                f"WebServer {self.uuid} {url} serve [{self.pParent.Settings.GetMidiPath()}]"
             )
             if not "127.0.0.1" in url:
                 img = qrcode.make(
@@ -221,7 +221,7 @@ class ClassWebServer(QThread):
             self.server.serve_forever()
         except:
             print(f"|!| WebServer {self.uuid} CAN NOT SERVE ON PORT {self.port}")
-            self.pParent.midi.SendStatusBar(f"WEB SERVER PORT {self.port} BUSY !")
+            self.pParent.Midi.SendStatusBar(f"WEB SERVER PORT {self.port} BUSY !")
 
     def GetPort(self):
         return self.port

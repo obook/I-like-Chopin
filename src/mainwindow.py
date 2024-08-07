@@ -15,6 +15,7 @@ from PySide6.QtGui import QIcon
 
 from midi_main import ClassMidiMain
 from midi_song import states, modes
+from midi_files import ClassMidiFiles
 from settings import ClassSettings
 from informations import ShowInformation
 from web_server import ClassWebServer
@@ -27,10 +28,13 @@ from ui_mainwindow import Ui_MainWindow
 
 class MainWindow(QMainWindow):
 
-    settings = ClassSettings()
-    history = ClassHistory()
+    Settings = ClassSettings()
+    History = ClassHistory()
+    # All files
+    Midifiles = ClassMidiFiles()
+    midifiles_dict = {}
 
-    web_server = None
+    Web_server = None
     interfaces_rotation = 0
 
     ChannelsButtonsList = []
@@ -39,10 +43,11 @@ class MainWindow(QMainWindow):
     Inputs = []
     Outputs = []
     InputsOutputs = []
-
+    '''
     MidiFiles = []
     MidifilesIndex = 0  # ?
-    midi = None
+    '''
+    Midi = None # Main midi class
     midisong = None  # current midisong
     lastmidifile = None
     nextmidifile = None
@@ -78,7 +83,7 @@ class MainWindow(QMainWindow):
         self.ui.statusbar.setSizeGripEnabled(False)
 
         # Midi class
-        self.midi = ClassMidiMain(self, self.ChannelsList)
+        self.Midi = ClassMidiMain(self, self.ChannelsList)
 
         # Push Buttons
         self.ui.pushButton_Panic.clicked.connect(self.Panic)
@@ -88,14 +93,14 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_Files.clicked.connect(self.OpenBrowser)
         self.ui.pushButton_Files.installEventFilter(self)  # drop files
 
-        # Force chopin mode
-        self.settings.SaveMode(modes["playback"])
+        # Force playback mode
+        self.Settings.SaveMode(modes["playback"])
         self.SetPlayerModeButtons()
 
         # ComboBoxes Inputs/Outputs
-        self.Inputs, self.Outputs, self.InputsOutputs = self.midi.GetDevices()
-        Input = self.settings.GetInputDevice()
-        Output = self.settings.GetOutputDevice()
+        self.Inputs, self.Outputs, self.InputsOutputs = self.Midi.GetDevices()
+        Input = self.Settings.GetInputDevice()
+        Output = self.Settings.GetOutputDevice()
 
         self.ui.InputDeviceCombo.addItem(Input)
         self.ui.InputDeviceCombo.addItems(self.Inputs)
@@ -164,23 +169,27 @@ class MainWindow(QMainWindow):
 
         # Datas
         self.ChannelsList[0] = True  # active first channel
-        self.MidiFiles = self.midi.GetMidiFiles()
+        '''
+        self.MidiFiles = self.Midi.GetMidiFiles()
+        '''
 
         # Connections
-        self.midi.ConnectInput(Input)
-        self.midi.ConnectOutput(Output)
-        self.MidifileChange(self.settings.GetMidifile())
-        self.lastmidifile = self.settings.GetMidifile()
+        self.Midi.ConnectInput(Input)
+        self.Midi.ConnectOutput(Output)
+        self.MidifileChange(self.Settings.GetMidifile())
+        self.lastmidifile = self.Settings.GetMidifile()
         self.nextmidifile = self.nextmidifile
 
         # Midifiles
         if self.midisong:
             self.ui.pushButton_Files.setText(self.midisong.GetCleanName())
 
+        self.midifiles_dict = self.Midifiles.ScanFiles(self.Settings.GetMidiPath())
+
         # Web server
-        self.web_server = ClassWebServer(self)
-        self.server_interfaces = self.web_server.GetInterfaces()
-        self.web_server.start()
+        self.Web_server = ClassWebServer(self)
+        self.server_interfaces = self.Web_server.GetInterfaces()
+        self.Web_server.start()
 
         # Timer
         timer = QTimer(self)
@@ -192,21 +201,21 @@ class MainWindow(QMainWindow):
         timer.start(10000)
 
     def timer(self):
-        if self.midi.GetInputPort() and not self.ConnectInputState:
+        if self.Midi.GetInputPort() and not self.ConnectInputState:
             self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
             self.ConnectInputState = True
-        elif not self.midi.GetInputPort():
+        elif not self.Midi.GetInputPort():
             self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
             self.ConnectInputState = False
 
-        if self.midi.GetOuputPort() and not self.ConnectOutputState:
+        if self.Midi.GetOuputPort() and not self.ConnectOutputState:
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
             self.ConnectOutputState = True
-        elif not self.midi.GetOuputPort():
+        elif not self.Midi.GetOuputPort():
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
             self.ConnectOutputState = False
 
-        self.midisong = self.midi.GetMidiSong()
+        self.midisong = self.Midi.GetMidiSong()
 
         if self.midisong:
             if self.midisong.IsState(states["cueing"]):
@@ -236,46 +245,50 @@ class MainWindow(QMainWindow):
 
     def timer_title(self):
 
-        if self.web_server:
-            interfaces = self.web_server.GetInterfaces()
+        if self.Web_server:
+            interfaces = self.Web_server.GetInterfaces()
             self.interfaces_rotation +=1
             if self.interfaces_rotation >= len(interfaces):
                 self.interfaces_rotation = -1
-                self.setWindowTitle("I-LIKE-CHOPIN")
+                self.setWindowTitle("I LIKE CHOPIN")
             else :
                 self.setWindowTitle(interfaces[self.interfaces_rotation])
+
+        self.midisong = self.Midi.GetMidiSong()
+        if not self.midisong.IsState(states['playing']) and self.Settings.IsMode(modes["random"]):
+            self.MidifileChange(self.Midifiles.GetRandomSong())
 
     def InputDeviceChanged(self):
         self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
         self.ConnectInputState = False
         in_device = self.ui.InputDeviceCombo.currentText()
-        self.settings.SaveInputDevice(in_device)
-        self.midi.ConnectInput(in_device)
+        self.Settings.SaveInputDevice(in_device)
+        self.Midi.ConnectInput(in_device)
 
     def OuputDeviceChanged(self):
         self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
         self.ConnectOutputState = False
         out_device = self.ui.OutputDeviceCombo.currentText()
-        self.settings.SaveOutputDevice(out_device)
-        self.midi.ConnectOutput(out_device)
+        self.Settings.SaveOutputDevice(out_device)
+        self.Midi.ConnectOutput(out_device)
 
     def MidifileChange(
         self, filepath
     ):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         if filepath != self.lastmidifile:
-            self.settings.SaveMidifile(filepath)
-            self.midisong = self.midi.SetMidiSong(filepath)
+            self.Settings.SaveMidifile(filepath)
+            self.midisong = self.Midi.SetMidiSong(filepath)
             self.lastmidifile = filepath
-            self.history.AddHistory(filepath)
+            self.History.AddHistory(filepath)
 
     def MidifileReplay(self):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         if self.lastmidifile:
-            self.midisong = self.midi.SetMidiSong(self.lastmidifile)
+            self.midisong = self.Midi.SetMidiSong(self.lastmidifile)
 
     def NextMidifile(
         self,
     ):  # from web server ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
-        files = self.history.GetHistory()
+        files = self.History.GetHistory()
         self.history_index += 1
         if self.history_index > len(files) - 1:
             self.history_index = len(files)
@@ -285,7 +298,7 @@ class MainWindow(QMainWindow):
         self.MidifileChange(files[self.history_index])
 
     def PreviousMidifile(self):
-        files = self.history.GetHistory()
+        files = self.History.GetHistory()
         self.history_index -= 1
         if self.history_index<0:
             self.history_index = 0
@@ -302,17 +315,17 @@ class MainWindow(QMainWindow):
         # print("--> ChangeMidiFile NOT ACTIVE FOR INSTANCE")
 
         # value 0-127
-        files = self.history.GetHistory()
+        files = self.History.GetHistory()
         step = int(128 / len(files))
         FilesIndex = min(int(value / step), len(files) - 1)
         if self.lastmidifile != files[FilesIndex]:
             self.ui.pushButton_FileIndex.setText(
                 f"MidiFile {FilesIndex+1}/{len(files)}"
             )
-            # clean_name = self.history.GetCleanName(FilesIndex)
+            # clean_name = self.History.GetCleanName(FilesIndex)
 
             self.ui.pushButton_Files.setText(
-                self.history.GetCleanName(FilesIndex)
+                self.History.GetCleanName(FilesIndex)
             )  # est écrasé, par timer ?
 
             # print(f"--> nextmidifile index {FilesIndex} file {files[FilesIndex]}")
@@ -321,15 +334,15 @@ class MainWindow(QMainWindow):
             # il faut afficher le titre, puis au bout d'une seconde s'il n'a pas changé, charger la chanson
             # parce qu'il charge et décharge pour rien le reader à chaque fois
 
-            self.midi.Panic()
+            self.Midi.Panic()
             self.lastmidifile = files[FilesIndex]
             self.MidifileChange(files[FilesIndex])
 
     # Signal
     '''
     def StopPlayer(self): # not used, is for webserver
-        if self.midi:
-            self.midi.StopPlayer()
+        if self.Midi:
+            self.Midi.StopPlayer()
     '''
 
     # Channels
@@ -396,53 +409,61 @@ class MainWindow(QMainWindow):
             self.ui.pushButton_Humanize.setText("Humanize")
 
     def SetPlayerModeButtons(self):
-        if self.settings.GetMode() == modes["playback"]:
+        if self.Settings.IsMode(modes["playback"]):
             self.ui.pushButton_Mode.setStyleSheet(
                 "QPushButton { background-color: rgb(30,80,30); }\n"
             )
             self.ui.pushButton_Mode.setText("Playback")
             self.ui.pushButton_Mode.setChecked(False)
 
-        elif self.settings.GetMode() == modes["passthrough"]:
+        elif self.Settings.IsMode(modes["passthrough"]):
             self.ui.pushButton_Mode.setStyleSheet(
                 "QPushButton { background-color: rgb(30,80,80); }\n"
             )
             self.ui.pushButton_Mode.setText("Passthrough")
             self.ui.pushButton_Mode.setChecked(False)
 
-        elif self.settings.GetMode() == modes["player"]:
+        elif self.Settings.IsMode(modes["player"]):
             self.ui.pushButton_Mode.setStyleSheet(
                 "QPushButton { background-color: rgb(46,82,168); }\n"
             )
             self.ui.pushButton_Mode.setText("Player")
             self.ui.pushButton_Mode.setChecked(False)
+        elif self.Settings.IsMode(modes["random"]):
+            self.ui.pushButton_Mode.setStyleSheet(
+                "QPushButton { background-color: rgb(0,0,0); }\n"
+            )
+            self.ui.pushButton_Mode.setText("Random")
+            self.ui.pushButton_Mode.setChecked(False)
 
     def ChangePlayerMode(self):  # button mode pressed or called by midi_inpout
 
-        if self.settings.GetMode() == modes["playback"]:
-            self.settings.SaveMode(modes["passthrough"])
+        if self.Settings.GetMode() == modes["playback"]:
+            self.Settings.SaveMode(modes["passthrough"])
 
-        elif self.settings.GetMode() == modes["passthrough"]:
-            self.settings.SaveMode(modes["player"])
+        elif self.Settings.GetMode() == modes["passthrough"]:
+            self.Settings.SaveMode(modes["player"])
 
-        elif self.settings.GetMode() == modes["player"]:
-            # stop Song here ?
-            self.settings.SaveMode(modes["playback"])
+        elif self.Settings.GetMode() == modes["player"]:
+            self.Settings.SaveMode(modes["random"])
+
+        elif self.Settings.GetMode() == modes["random"]:
+            self.Settings.SaveMode(modes["playback"])
 
         self.SetPlayerModeButtons()
-        self.midi.ChangeMidiMode(self.settings.GetMode())
+        self.Midi.ChangeMidiMode(self.Settings.GetMode())
 
     # Signal receiver
     def SetLedInput(self, value):  # value (0 or 1)
-        if self.midi:
-            if self.midi.keys["key_on"] > 0:
+        if self.Midi:
+            if self.Midi.keys["key_on"] > 0:
                 self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LIGHT_LED))
             else:
                 self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
 
     # Signal receiver
     def SetLedOutput(self, value):  # 0 or 1
-        if value and self.midi.GetOuputPort():
+        if value and self.Midi.GetOuputPort():
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LIGHT_LED))
         else:
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
@@ -459,10 +480,10 @@ class MainWindow(QMainWindow):
         self.ui.statusbar.showMessage(message)
 
     def OpenBrowser(self):
-        webbrowser.open(f"http://127.0.0.1:{self.web_server.GetPort()}")
+        webbrowser.open(f"http://127.0.0.1:{self.Web_server.GetPort()}")
 
     def Panic(self):
-        self.midi.Panic()
+        self.Midi.Panic()
 
     def SetFileButtonText(self):
         if self.midisong:
@@ -490,13 +511,12 @@ class MainWindow(QMainWindow):
 
     def Quit(self):
 
-        if self.web_server:
-            self.web_server.stop()
-        self.web_server = None
+        if self.Web_server:
+            self.Web_server.stop()
+        self.Web_server = None
 
-        if self.midi:
-            self.midi.quit()
-        self.midi = None
+        if self.Midi:
+            self.Midi.quit()
 
         qApp.quit();
 

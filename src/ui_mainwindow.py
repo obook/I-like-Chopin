@@ -128,7 +128,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"I-LIKE-CHOPIN", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"I LIKE CHOPIN", None))
         self.pushButton_Quit.setText(QCoreApplication.translate("MainWindow", u"Quit", None))
         self.groupBoxDevices.setTitle(QCoreApplication.translate("MainWindow", u"MIDI Devices", None))
         self.label_File.setText(QCoreApplication.translate("MainWindow", u"File", None))

@@ -23,7 +23,7 @@ class ClassThreadMidiReader(QThread):
     midisong = None
     keys = None
     port_out = None
-    settings = None
+    Settings = None
     ready = False
     running = False
 
@@ -47,8 +47,8 @@ class ClassThreadMidiReader(QThread):
             print(f"MidiReader {self.uuid} midifile=None")
             return
         self.pParent = pParent
-        self.midi = self.pParent.midi
-        self.settings = self.pParent.settings
+        self.midi = self.pParent.Midi
+        self.Settings = self.pParent.Settings
         self.keys = keys
         self.channels = channels
         self.statusbar_activity.connect(self.pParent.SetStatusBar)
@@ -126,7 +126,7 @@ class ClassThreadMidiReader(QThread):
         self.running = True
 
         # Before play, reset...
-        self.pParent.midi.ResetOutput()
+        self.pParent.Midi.ResetOutput()
 
         for msg in MidiFile(self.midisong.Getfilepath()):
 
@@ -139,7 +139,7 @@ class ClassThreadMidiReader(QThread):
 
             # Sustain pedal memory
             if msg.type == "control_change":
-                if msg.control == self.settings.GetSustainChannel():
+                if msg.control == self.Settings.GetSustainChannel():
                     self.sustain_pedal = msg.value
 
             # For fun
@@ -152,7 +152,7 @@ class ClassThreadMidiReader(QThread):
                         self.led_activity.emit(0)
 
             # Just a Midi player
-            if self.midisong.IsMode(modes["player"]):
+            if self.midisong.IsMode(modes["player"]) or self.Settings.IsMode(modes["random"]):
 
                 # For loop
                 self.sleep(0.001)  # Give time to QThread
@@ -188,11 +188,11 @@ class ClassThreadMidiReader(QThread):
                         self.current_notes_on += 1
 
                 # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
-                if msg.type == "program_change" and self.settings.GetForceIntrument():
+                if msg.type == "program_change" and self.Settings.GetForceIntrument():
                     if msg.channel != 9:  # not for drums
-                        msg.program = self.settings.GetPianoProgram()
+                        msg.program = self.Settings.GetPianoProgram()
 
-                self.pParent.midi.SendOutput(msg)
+                self.pParent.Midi.SendOutput(msg)
 
                 if msg.type == "note_on" and self.channels[msg.channel]:
                     note, octave = number_to_note(msg.note)
@@ -207,10 +207,10 @@ class ClassThreadMidiReader(QThread):
                 if self.sustain_pedal_off and self.sustain_pedal:
                     msg = Message(
                         "control_change",
-                        control=self.settings.GetSustainChannel(),
+                        control=self.Settings.GetSustainChannel(),
                         value=self.sustain_pedal,
                     )
-                    self.pParent.midi.SendOutput(msg)
+                    self.pParent.Midi.SendOutput(msg)
                     self.sustain_pedal_off = False
 
                 # Wait note time
@@ -271,10 +271,10 @@ class ClassThreadMidiReader(QThread):
                         if self.sustain_pedal and time.time() - start_time_loop > 1.5:
                             msg = Message(
                                 "control_change",
-                                control=self.settings.GetSustainChannel(),
+                                control=self.Settings.GetSustainChannel(),
                                 value=0,
                             )
-                            self.pParent.midi.SendOutput(msg)
+                            self.pParent.Midi.SendOutput(msg)
                             self.sustain_pedal_off = True
                             self.led_activity.emit(0)
 
@@ -284,12 +284,12 @@ class ClassThreadMidiReader(QThread):
                     self.wait_time = time.time() - start_time
 
                 # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
-                if msg.type == "program_change" and self.settings.GetForceIntrument():
+                if msg.type == "program_change" and self.Settings.GetForceIntrument():
                     if msg.channel != 9:  # not for drums
-                        msg.program = self.settings.GetPianoProgram()
+                        msg.program = self.Settings.GetPianoProgram()
 
                 # Play
-                self.pParent.midi.SendOutput(msg)
+                self.pParent.Midi.SendOutput(msg)
                 """
                 filter =[
                 'program_change',

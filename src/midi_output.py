@@ -17,7 +17,7 @@ class ClassThreadOutput(QThread):
     pParent = None
     out_device = None
     outport = None
-    settings = None
+    Settings = None
     please_wait = False
     running = False
 
@@ -26,7 +26,7 @@ class ClassThreadOutput(QThread):
     def __init__(self, out_device, pParent):
         QThread.__init__(self)
         self.pParent = pParent
-        self.settings = pParent.settings
+        self.Settings = pParent.Settings
         self.out_device = out_device
         self.led_activity.connect(self.pParent.SetLedOutput)
         print(f"MidiOutput {self.uuid} created [{self.out_device}]")
@@ -58,13 +58,13 @@ class ClassThreadOutput(QThread):
 
     def forcePiano(self):
         if self.outport:
-            if self.settings.GetForceIntrument():
+            if self.Settings.GetForceIntrument():
                 print(f"MidiOutput {self.uuid} forcePiano")
                 init_message = Message("program_change")
                 # TODO : select bank 0 by control_change
                 # See https://music.stackexchange.com/questions/95786/how-do-you-implement-control-change-messages-using-the-mido-library
                 init_message.program = (
-                    self.settings.GetPianoProgram()
+                    self.Settings.GetPianoProgram()
                 )  # Bank 0 Intrument 0
                 for i in range(16):
                     init_message.channel = i

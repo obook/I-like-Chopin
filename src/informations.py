@@ -12,12 +12,12 @@ from ui_informations import Ui_DialogInformation
 
 class InformationsDlg(Ui_DialogInformation, QDialog):
     pParent = None
-    settings = None
+    Settings = None
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.pParent = parent
-        self.settings = self.pParent.settings
+        self.Settings = self.pParent.Settings
         self.setupUi(self)
         self.setFixedSize(481, 361)
         self.setWindowTitle("Informations")
@@ -32,10 +32,10 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
             text += f"<div>{interface}</div>"
 
         text += f"<p{style}>CONFIG FILE</p>"
-        text += f"{self.settings.GetConfigPath()}"
+        text += f"{self.Settings.GetConfigPath()}"
 
         text += f"<p{style}>MIDIFILES LIBRARY PATH</p>"
-        text += f"{self.settings.GetMidiPath()}"
+        text += f"{self.Settings.GetMidiPath()}"
 
         text += f"<p{style}>BACKEND USED</p>"
         text += f"{mido.backend.name}\n"
@@ -84,15 +84,15 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         cursor.setPosition(0)
         self.textBrowser.setTextCursor(cursor)
 
-        self.checkBox_ForceIntrument0.setChecked(self.settings.GetForceIntrument())
+        self.checkBox_ForceIntrument0.setChecked(self.Settings.GetForceIntrument())
         self.checkBox_ForceIntrument0.setText(
-            f"Force piano (prog {self.settings.GetPianoProgram()})"
+            f"Force piano (prog {self.Settings.GetPianoProgram()})"
         )
 
         # WARNING HERE -> Send now force piano to device if set
 
     def quit(self):
-        self.settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
+        self.Settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
         self.close()
 
 

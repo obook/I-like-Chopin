@@ -19,7 +19,7 @@ class ClassThreadInput(QThread):
     in_port = None
     out_port = None
     pParent = None
-    settings = None
+    Settings = None
     running = False
     modulation_start_time = 0
 
@@ -32,7 +32,7 @@ class ClassThreadInput(QThread):
         QThread.__init__(self)
         self.uuid = uuid.uuid4()
         self.pParent = pParent
-        self.settings = self.pParent.settings
+        self.Settings = self.pParent.Settings
         self.in_device = in_device
         self.keys = keys
         self.running = True
@@ -58,8 +58,9 @@ class ClassThreadInput(QThread):
                 f"MidiInput {self.uuid} midi_input:Error connect from {self.in_device}"
             )
             return
-        if self.settings.GetMode() == modes["playback"]:
+        if self.Settings.GetMode() == modes["playback"]:
             self.statusbar_activity.emit(f"Waiting:{self.in_device} ...")
+            self.led_activity.emit(0)
 
         while self.running:
             self.sleep(1)
@@ -103,7 +104,7 @@ class ClassThreadInput(QThread):
         if self.keys["key_on"] < 0:
             self.keys["key_on"] = 0
 
-        if not self.settings.IsMode(modes["player"]):
+        if not self.Settings.IsMode(modes["player"]):
 
             if msg.type == "note_on":  # or message.type == 'note_off':
                 note, octave = number_to_note(msg.note)
@@ -111,10 +112,10 @@ class ClassThreadInput(QThread):
                 self.statusbar_activity.emit(text)
 
             # Playback/Passthrough mode
-            if self.settings.IsMode(modes["passthrough"]):
+            if self.Settings.IsMode(modes["passthrough"]):
                 self.keys["key_on"] = 0
                 # Play
-                self.pParent.midi.SendOutput(msg)
+                self.pParent.Midi.SendOutput(msg)
 
     def getport(self):
         if self.in_port:

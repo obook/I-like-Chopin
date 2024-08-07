@@ -14,6 +14,7 @@
         "midi_song.py",
         "web_server.py",
         "web_interfaces.py",
-        "history.py"
+        "history.py",
+        "midi_files.py"
     ]
 }

@@ -20,7 +20,7 @@ states = {
     "playing": 3,
 }
 
-modes = {"error": -1, "unknown": 0, "playback": 1, "passthrough": 2, "player": 3}
+modes = {"error": -1, "unknown": 0, "playback": 1, "passthrough": 2, "player": 3, "random": 4}
 
 class ClassMidiSong:
     """Class about midifile informations"""
