@@ -83,6 +83,9 @@ class ClassThreadInput(QThread):
                 self.pParent.PrintSpeed(msg.value)  # PLEASE USE SIGNAL
             elif msg.control == 51 and msg.value == 127:
                 self.pParent.ChangePlayerMode()  # PLEASE USE SIGNAL
+
+            # Sometime received? So inhibed
+            '''
             elif msg.control == 1:  # modulation
                 diff = time.time() - self.modulation_start_time
                 if diff > 3:
@@ -92,6 +95,7 @@ class ClassThreadInput(QThread):
                         self.previousong_activity.emit()
                     self.modulation_start_time = time.time()
                 self.sleep(0.01)  #  for QT
+            '''
 
         # Keys pressed counter
         if msg.type == "note_on":

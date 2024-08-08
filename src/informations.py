@@ -70,10 +70,11 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
 
         text += f"<p{style}>SPEED CONTROL</p>"
         text += "control_change:control 76  - set your midi-device"
-
+        '''
+        This control is unset in midi_input.py
         text += f"<p{style}>MIDIFILE SELECT</p>"
         text += "control_change:control 1 (modulation) - set your midi-device"
-
+        '''
         text += f"<p{style}>MODE TOGGLE PLAYBACK / PASSTHROUGH</p>"
         text += "control_change:control 51 (set your midi-device)"
 
