@@ -10,7 +10,7 @@ import webbrowser
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from PySide6 import QtGui
-from PySide6.QtCore import QTimer, QEvent
+from PySide6.QtCore import QTimer, QEvent, QCoreApplication
 from PySide6.QtGui import QIcon
 
 from settings import ClassSettings
@@ -307,18 +307,13 @@ class mainwindow(
         self.Quit()
 
     def Quit(self):
-
         self.Settings.SaveConfig()
-
+        self.StopTimers()
         if self.Web_server:
             self.Web_server.stop()
-        self.Web_server = None
-
         if self.Midi:
             self.Midi.quit()
-            self.Midi = None
-
-        qApp.quit() # not found under Windows !
+        QCoreApplication.quit()
 
 
 def start():
@@ -332,3 +327,4 @@ def start():
     app.setDesktopFileName("org.obook.i-like-chopin")
     widget.show()
     sys.exit(app.exec())
+    print("---> END")
