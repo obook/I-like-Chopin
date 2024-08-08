@@ -103,6 +103,7 @@ class mainwindow(
 
         self.midifiles_dict = self.Midifiles.ScanFiles(self.Settings.GetMidiPath())
 
+        self.web_start()
         self.SetTimer()
 
     def InputDeviceChanged(self):
