@@ -10,7 +10,7 @@ import webbrowser
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from PySide6 import QtGui
-from PySide6.QtCore import QTimer, QEvent, QCoreApplication
+from PySide6.QtCore import QTimer, QEvent
 from PySide6.QtGui import QIcon
 
 from settings import ClassSettings
