@@ -323,7 +323,7 @@ def start():
     else:
         app = QApplication.instance()
     widget = mainwindow()
-    # For Linux Wayland, must be .desktop filename = Set mainwindow icon
+    # For Linux/Wayland, must be .desktop filename (here org.obook.i-like-chopin.dektop) => Set mainwindow icon
     app.setDesktopFileName("org.obook.i-like-chopin")
     widget.show()
     sys.exit(app.exec())
