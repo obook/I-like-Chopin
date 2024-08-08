@@ -10,6 +10,7 @@ import time
 from mido import open_output, Message
 from PySide6.QtCore import QThread, Signal
 
+
 class ClassThreadOutput(QThread):
     """Class for output midi to device"""
 

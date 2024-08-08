@@ -10,17 +10,22 @@ import shutil
 import uuid
 from midi_song import modes
 
+
 class ClassSettings:
     """Class for recall and store preferences and settings"""
 
     uuid = None
     applicationpath = os.path.dirname(os.path.realpath(__file__))
     configpath = os.path.join(os.path.expanduser("~"), ".config", "i-like-chopin")
-    localpath = os.path.join(os.path.expanduser("~"), ".local", "share", "i-like-chopin")
+    localpath = os.path.join(
+        os.path.expanduser("~"), ".local", "share", "i-like-chopin"
+    )
 
     settingsfile = os.path.join(configpath, "i-like-chopin.json")
     defaultmidipath = os.path.join(localpath, "midi")
-    serverindextemplate = os.path.join(applicationpath, "template", "index-template.html")
+    serverindextemplate = os.path.join(
+        applicationpath, "template", "index-template.html"
+    )
 
     config = {
         "InputDevice": "(None)",

@@ -15,8 +15,10 @@ from midi_numbers import number_to_note
 
 from PySide6.QtCore import QThread, Signal
 
+
 class ClassThreadMidiReader(QThread):
     """Read midifile and send to output device"""
+
     uuid = None
     pParent = None
     midi = None
@@ -152,7 +154,9 @@ class ClassThreadMidiReader(QThread):
                         self.led_activity.emit(0)
 
             # Just a Midi player
-            if self.midisong.IsMode(modes["player"]) or self.Settings.IsMode(modes["random"]):
+            if self.midisong.IsMode(modes["player"]) or self.Settings.IsMode(
+                modes["random"]
+            ):
 
                 # For loop
                 self.sleep(0.001)  # Give time to QThread

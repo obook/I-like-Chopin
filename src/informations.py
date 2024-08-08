@@ -10,6 +10,7 @@ import mido
 from PySide6.QtWidgets import QDialog
 from ui_informations import Ui_DialogInformation
 
+
 class InformationsDlg(Ui_DialogInformation, QDialog):
     pParent = None
     Settings = None

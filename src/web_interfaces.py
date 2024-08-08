@@ -15,6 +15,7 @@
 
 import netifaces  # compatible with netifaces2
 
+
 # Sous fonction de remplissage de la liste des IP
 def __add_ip(family_addresses: list, liste: list, local: bool = False) -> bool:
     if not family_addresses:

@@ -9,6 +9,7 @@ import json
 import uuid
 from pathlib import Path
 
+
 class ClassHistory:
     uuid = None
     applicationpath = os.path.dirname(os.path.realpath(__file__))

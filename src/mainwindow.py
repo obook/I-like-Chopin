@@ -13,56 +13,50 @@ from PySide6 import QtGui
 from PySide6.QtCore import QTimer, QEvent
 from PySide6.QtGui import QIcon
 
-from midi_main import ClassMidiMain
-from midi_song import states, modes
-from midi_files import ClassMidiFiles
 from settings import ClassSettings
 from informations import ShowInformation
-from web_server import ClassWebServer
 from history import ClassHistory
+from midi_song import states, modes
 
-# Important:
+import _mainwindow_init
+import _mainwindow_signals
+import _mainwindow_timers
+import _mainwindow_webbrowser
+import _mainwindow_midi
+
+# Outside QTCreator = Important:
 # You need to run the following command to generate the ui_form.py file
 #     pyside6-uic form.ui -o ui_form.py
 from ui_mainwindow import Ui_MainWindow
 
-class MainWindow(QMainWindow):
 
+class mainwindow(
+    QMainWindow,
+    _mainwindow_init._initialize,
+    _mainwindow_midi._midi,
+    _mainwindow_signals.signals,
+    _mainwindow_webbrowser.browser,
+    _mainwindow_timers.timers,
+):
+
+    # Classes used
     Settings = ClassSettings()
     History = ClassHistory()
-    Midifiles = ClassMidiFiles()
-    midifiles_dict = {}
 
-    Web_server = None
     title_rotation = 0
 
+    # Channels buttons
     ChannelsButtonsList = []
     ChannelsList = [False] * 16
 
+    # Devices
     Inputs = []
     Outputs = []
     InputsOutputs = []
 
-    Midi = None # Main midi class
-    midisong = None  # current midisong
-    lastmidifile = None
-    nextmidifile = None
-    history_index = -1
-
     ConnectInputState = False
     ConnectOutputState = False
     PlayingState = False
-
-    application_path = os.path.dirname(os.path.realpath(__file__))
-    ICON_APPLICATION = os.path.join(application_path,"icons","svg","i-like-chopin.svg")
-
-    # Define status icons
-    ICON_RED_LED = application_path + "/icons/led/led-red-on.png"
-    ICON_GREEN_LED = application_path + "/icons/led/green-led-on.png"
-    ICON_GREEN_LIGHT_LED = application_path + "/icons/led/greenlight-led-on.png"
-    ICON_YELLOW_LED = application_path + "/icons/led/yellow-led-on.png"
-    ICON_BLUE_LED = application_path + "/icons/led/blue-led-on.png"
-    ICON_LED_OFF = application_path + "/icons/led/led-off.png"
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -70,24 +64,9 @@ class MainWindow(QMainWindow):
         self.setFixedSize(504, 413)
         self.ui.setupUi(self)
 
-        # Application icon X.org->correct - Wayland->not implemented
-        my_icon = QIcon()
-        my_icon.addFile(self.ICON_APPLICATION)
-        self.setWindowIcon(my_icon)
-
-        # StatusBar
-        self.ui.statusbar.setSizeGripEnabled(False)
-
-        # Midi class
-        self.Midi = ClassMidiMain(self, self.ChannelsList)
-
-        # Push Buttons
-        self.ui.pushButton_Panic.clicked.connect(self.Panic)
-        self.ui.pushButton_Quit.clicked.connect(self.Quit)
-        self.ui.pushButton_Info.clicked.connect(self.Informations)
-        self.ui.pushButton_Mode.clicked.connect(self.ChangePlayerMode)
-        self.ui.pushButton_Files.clicked.connect(self.OpenBrowser)
-        self.ui.pushButton_Files.installEventFilter(self)  # drop files
+        # Imported methods
+        self._SetInterface()
+        self._midi_init()
 
         # Force playback mode
         self.Settings.SaveMode(modes["playback"])
@@ -106,69 +85,11 @@ class MainWindow(QMainWindow):
         self.ui.OutputDeviceCombo.addItems(self.Outputs)
         self.ui.OutputDeviceCombo.currentIndexChanged.connect(self.OuputDeviceChanged)
 
-        # ProgressBar
-        self.ui.progressBar.setRange(0, 100)
-        self.ui.progressBar.setValue(0)
-        self.ui.progressBar.setStyleSheet(
-            "QProgressBar {"
-            "border: 2px;"
-            "border-radius: 30px;"
-            "}"
-            "QProgressBar::chunk {"
-            "margin: 4px;"
-            "background-color: qlineargradient("
-            "x0: 0, x2: 1, "
-            "stop: 0 green, stop: 0.6 green, "
-            "stop: 0.8 orange, "
-            "stop: 1 red);"
-            "}"
-        )
-
-        # Leds
-        self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_LED_OFF))
-        self.ui.labelStatusInput.setScaledContents(True)
-
-        self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_LED_OFF))
-        self.ui.labelStatusOuput.setScaledContents(True)
-
-        self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_LED_OFF))
-        self.ui.labelStatusMidifile.setScaledContents(True)
-
-        # Midi Channels
-        self.ui.pushButton_ChannelsNone.clicked.connect(self.ChannelsNone)
-        self.ui.pushButton_ChannelsAll.clicked.connect(self.ChannelsAll)
-        self.ui.pushButton_ChannelsFirst.clicked.connect(self.ChannelsFirst)
-
-        grid = self.ui.gridLayout
-        for n in range(8):
-            self.ChannelsButtonsList.append(QPushButton(str(n + 1)))
-            self.ChannelsButtonsList[n].setCheckable(True)
-            self.ChannelsButtonsList[n].clicked.connect(self.ReadChannels)
-            self.ChannelsButtonsList[n].setStyleSheet(
-                "QPushButton:checked { background-color: rgb(50,100,50); }\n"
-            )
-            grid.addWidget(self.ChannelsButtonsList[n], 1, n)
-        for n in range(8):
-            self.ChannelsButtonsList.append(QPushButton(str(n + 8 + 1)))
-            self.ChannelsButtonsList[n + 8].setCheckable(True)
-            self.ChannelsButtonsList[n + 8].clicked.connect(self.ReadChannels)
-            self.ChannelsButtonsList[n + 8].setStyleSheet(
-                "QPushButton:checked { background-color: rgb(50,100,50); }\n"
-            )
-            grid.addWidget(self.ChannelsButtonsList[n + 8], 2, n)
-
-        self.ChannelsFirst()
-        # Special color for drums channel
-        self.ChannelsButtonsList[9].setStyleSheet(
-            "QPushButton {background-color: rgb(100,50,50);}"
-        )
-
         # Datas
         self.ChannelsList[0] = True  # active first channel
-        '''
+        """
         self.MidiFiles = self.Midi.GetMidiFiles()
-        '''
-
+        """
         # Connections
         self.Midi.ConnectInput(Input)
         self.Midi.ConnectOutput(Output)
@@ -182,81 +103,7 @@ class MainWindow(QMainWindow):
 
         self.midifiles_dict = self.Midifiles.ScanFiles(self.Settings.GetMidiPath())
 
-        # Web server
-        self.Web_server = ClassWebServer(self)
-        self.server_interfaces = self.Web_server.GetInterfaces()
-        self.Web_server.start()
-
-        # Timers
-        timer = QTimer(self)
-        timer.timeout.connect(self.timer)
-        timer.start(2000)
-
-        timer = QTimer(self)
-        timer.timeout.connect(self.timer_title)
-        timer.start(4000)
-
-        timer = QTimer(self)
-        timer.timeout.connect(self.timer_random_song)
-        timer.start(25000)
-
-    def timer(self):
-        if self.Midi.GetInputPort() and not self.ConnectInputState:
-            self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
-            self.ConnectInputState = True
-        elif not self.Midi.GetInputPort():
-            self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
-            self.ConnectInputState = False
-
-        if self.Midi.GetOuputPort() and not self.ConnectOutputState:
-            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
-            self.ConnectOutputState = True
-        elif not self.Midi.GetOuputPort():
-            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
-            self.ConnectOutputState = False
-
-        self.midisong = self.Midi.GetMidiSong()
-
-        if self.midisong:
-            if self.midisong.IsState(states["cueing"]):
-                self.PlayingState = False
-                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_YELLOW_LED))
-                self.SetStatusBar("Cueing...")
-
-            elif self.midisong.GetState() > states["cueing"] and not self.PlayingState:
-                self.PlayingState = True
-                # We lose Del animation
-                # self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
-                # We lose 'waiting...' message and other
-                # self.SetStatusBar("")
-
-            elif self.midisong.GetState() < states['cueing']:
-                self.PlayingState = False
-                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
-                if self.midisong.IsState(states["notracktoplay"]):
-                    self.SetStatusBar("! No notes in selected channels")
-
-            self.ui.progressBar.setValue(self.midisong.GetPlayed())
-
-            self.SetFileButtonText()
-            self.ChannelsSetButtons()
-            # just for led off
-            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
-
-    def timer_title(self):
-        if self.Web_server:
-            interfaces = self.Web_server.GetInterfaces()
-            self.title_rotation +=1
-            if self.title_rotation >= len(interfaces):
-                self.title_rotation = -1
-                self.setWindowTitle("I LIKE CHOPIN")
-            else :
-                self.setWindowTitle(interfaces[self.title_rotation])
-
-    def timer_random_song(self):
-        self.midisong = self.Midi.GetMidiSong()
-        if not self.midisong.IsState(states['playing']) and self.Settings.IsMode(modes["random"]):
-            self.MidifileChange(self.Midifiles.GetRandomSong())
+        self.SetTimer()
 
     def InputDeviceChanged(self):
         self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
@@ -300,7 +147,7 @@ class MainWindow(QMainWindow):
     def PreviousMidifile(self):
         files = self.History.GetHistory()
         self.history_index -= 1
-        if self.history_index<0:
+        if self.history_index < 0:
             self.history_index = 0
 
         print(f" ---> PreviousMidifile index={self.history_index}/{len(files)}")
@@ -388,19 +235,6 @@ class MainWindow(QMainWindow):
             else:
                 self.ChannelsList[n] = False
 
-    # Midi control buttons
-    def PrintSpeed(self, speed):  # 0 to 126
-        if speed:
-            self.ui.pushButton_Speed.setText(f"Speed -{speed}")
-        else:
-            self.ui.pushButton_Speed.setText("Speed")
-
-    def PrintHumanize(self, value):
-        if value:
-            self.ui.pushButton_Humanize.setText(f"Humanize {value}")
-        else:
-            self.ui.pushButton_Humanize.setText("Humanize")
-
     def SetPlayerModeButtons(self):
         if self.Settings.IsMode(modes["playback"]):
             self.ui.pushButton_Mode.setStyleSheet(
@@ -447,38 +281,6 @@ class MainWindow(QMainWindow):
         self.SetPlayerModeButtons()
         self.Midi.ChangeMidiMode(self.Settings.GetMode())
 
-    # Signal receiver
-    def SetLedInput(self, value):  # value (0 or 1)
-        if self.Midi:
-            if self.Midi.keys["key_on"] > 0:
-                self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LIGHT_LED))
-            else:
-                self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
-
-    # Signal receiver
-    def SetLedOutput(self, value):  # 0 or 1
-        if value and self.Midi.GetOuputPort():
-            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LIGHT_LED))
-        else:
-            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
-
-    # Signal receiver
-    def SetLedFile(self, value):  # 0 or 1
-        if value:
-            self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LIGHT_LED))
-        else:
-            self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
-
-    # Signal receiver
-    def SetStatusBar(self, message):
-        self.ui.statusbar.showMessage(message)
-
-    def OpenBrowser(self):
-        webbrowser.open(f"http://127.0.0.1:{self.Web_server.GetPort()}")
-
-    def Panic(self):
-        self.Midi.Panic()
-
     def SetFileButtonText(self):
         if self.midisong:
             # self.setWindowTitle(f"I Like Chopin : {self.midisong.GetCleanName()}")
@@ -513,7 +315,8 @@ class MainWindow(QMainWindow):
             self.Midi.quit()
             self.Midi = None
 
-        qApp.quit();
+        qApp.quit()
+
 
 def start():
     if not QApplication.instance():
@@ -521,8 +324,8 @@ def start():
         app.setStyle("Fusion")  # Windows dark theme
     else:
         app = QApplication.instance()
-    widget = MainWindow()
-    # For Linux Wayland, must be .desktop filename = Set QMainWindow icon
+    widget = mainwindow()
+    # For Linux Wayland, must be .desktop filename = Set mainwindow icon
     app.setDesktopFileName("org.obook.i-like-chopin")
     widget.show()
     sys.exit(app.exec())

@@ -10,6 +10,7 @@ import glob
 import pathlib
 import random
 
+
 class ClassMidiFiles:
 
     uuid = None
@@ -43,9 +44,11 @@ class ClassMidiFiles:
                 list = self.midifiles_dict[path.parent.name]
                 list.append(file)
             self.midifiles_raw.append(file)
-            self.midifiles_count +=1
+            self.midifiles_count += 1
 
-        print(f"MidiFiles {self.uuid} {self.midifiles_count} files [{self.defaultmidipath}]")
+        print(
+            f"MidiFiles {self.uuid} {self.midifiles_count} files [{self.defaultmidipath}]"
+        )
         return self.midifiles_dict
 
     def GetRandomSong(self):

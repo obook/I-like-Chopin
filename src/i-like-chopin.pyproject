@@ -15,6 +15,11 @@
         "web_server.py",
         "web_interfaces.py",
         "history.py",
-        "midi_files.py"
+        "midi_files.py",
+        "_mainwindow_signals.py",
+        "_mainwindow_timers.py",
+        "_mainwindow_webbrowser.py",
+        "_mainwindow_midi.py",
+        "_mainwindow_init.py"
     ]
 }

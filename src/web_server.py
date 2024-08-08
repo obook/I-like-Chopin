@@ -22,6 +22,7 @@ from urllib.parse import urlparse, parse_qs, quote
 from web_interfaces import get_interfaces
 from string import Template
 
+
 class RequestHandler(BaseHTTPRequestHandler):
     uuid = None
     midisong = None
@@ -113,7 +114,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         # Files
         midilist_html = ""
-        for key in self.pParent.midifiles_dict.keys(): #self.midifiles_dict.keys():
+        for key in self.pParent.midifiles_dict.keys():  # self.midifiles_dict.keys():
             midilist_html += (
                 f"<button class='accordion'>{key}</button><div class='panel'>"
             )
@@ -142,7 +143,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             folder=self.midisong.GetParent(),
             duration="",
             midifiles=midilist_html,
-            qrcodes=images
+            qrcodes=images,
         )
 
         try:
@@ -174,7 +175,7 @@ class ClassWebServer(QThread):
         self.pParent = parent
         self.port = self.pParent.Settings.GetServerPort()
         print(f"WebServer {self.uuid} created")
-        '''
+        """
         for file in sorted(
             glob.glob(
                 os.path.join(parent.Settings.GetMidiPath(), "**", "*.mid"),
@@ -190,7 +191,7 @@ class ClassWebServer(QThread):
             else:  # in dictionnary
                 list = self.midifiles_dict[path.parent.name]
                 list.append(file)
-        '''
+        """
         interfaces_list = get_interfaces(True, False)
         for interface in interfaces_list:
             url = f"http://{interface['ip']}:{self.port}"
@@ -215,7 +216,9 @@ class ClassWebServer(QThread):
 
     def run(self):
         try:
-            handler = partial(RequestHandler, self.pParent, self.midifiles_dict, self.qrcodes_list)
+            handler = partial(
+                RequestHandler, self.pParent, self.midifiles_dict, self.qrcodes_list
+            )
             self.server = ThreadingHTTPServer(("0.0.0.0", self.port), handler)
             self.server.allow_reuse_address = True
             self.server.serve_forever()

@@ -12,6 +12,7 @@ from midi_numbers import number_to_note
 from midi_song import modes
 from PySide6.QtCore import QThread, Signal
 
+
 class ClassThreadInput(QThread):
 
     uuid = None
@@ -76,13 +77,13 @@ class ClassThreadInput(QThread):
         if msg.type == "control_change":
             if msg.control == 71:
                 self.keys["humanize"] = msg.value  # 0 to 127
-                self.pParent.PrintHumanize(msg.value) # PLEASE USE SIGNAL
+                self.pParent.PrintHumanize(msg.value)  # PLEASE USE SIGNAL
             elif msg.control == 76:
                 self.keys["speed"] = msg.value  # 0 to 127
-                self.pParent.PrintSpeed(msg.value) # PLEASE USE SIGNAL
+                self.pParent.PrintSpeed(msg.value)  # PLEASE USE SIGNAL
             elif msg.control == 51 and msg.value == 127:
-                self.pParent.ChangePlayerMode() # PLEASE USE SIGNAL
-            elif msg.control == 1: # modulation
+                self.pParent.ChangePlayerMode()  # PLEASE USE SIGNAL
+            elif msg.control == 1:  # modulation
                 diff = time.time() - self.modulation_start_time
                 if diff > 3:
                     if msg.value > 64:
@@ -90,7 +91,7 @@ class ClassThreadInput(QThread):
                     else:
                         self.previousong_activity.emit()
                     self.modulation_start_time = time.time()
-                self.sleep(0.01) #  for QT
+                self.sleep(0.01)  #  for QT
 
         # Keys pressed counter
         if msg.type == "note_on":

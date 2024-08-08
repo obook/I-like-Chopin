@@ -18,6 +18,7 @@ from midi_song import modes
 
 from PySide6.QtCore import QObject, Signal
 
+
 class ClassMidiMain(QObject):
     """Main Midi Class"""
 
@@ -105,7 +106,7 @@ class ClassMidiMain(QObject):
                 return self.ThreadOutput.send(msg)
         return None
 
-    '''
+    """
     # List of midifiles from folder midi (see json file created)
     def GetMidiFiles(self):
         midifiles = []
@@ -114,7 +115,8 @@ class ClassMidiMain(QObject):
         ):
             midifiles.append(os.path.basename(file))
         return midifiles
-    '''
+    """
+
     def SetMidiSong(self, midifile):
 
         if self.ThreadMidiReader:
