@@ -10,17 +10,17 @@ class timers:
 
     def SetTimer(self):
 
-        timer = QTimer(self)
-        timer.timeout.connect(self.timer)
-        timer.start(2000)
+        self.timer1 = QTimer(self)
+        self.timer1.timeout.connect(self.timer)
+        self.timer1.start(2000)
 
-        timer = QTimer(self)
-        timer.timeout.connect(self.timer_title)
-        timer.start(4000)
+        self.timer2 = QTimer(self)
+        self.timer2.timeout.connect(self.timer_title)
+        self.timer2.start(4000)
 
-        timer = QTimer(self)
-        timer.timeout.connect(self.timer_random_song)
-        timer.start(25000)
+        self.timer3 = QTimer(self)
+        self.timer3.timeout.connect(self.timer_random_song)
+        self.timer3.start(25000)
 
     def timer(self):
         if self.Midi.GetInputPort() and not self.ConnectInputState:
@@ -83,3 +83,8 @@ class timers:
             modes["random"]
         ):
             self.MidifileChange(self.Midifiles.GetRandomSong())
+
+    def StopTimers(self):
+        self.timer1.stop()
+        self.timer2.stop()
+        self.timer3.stop()
