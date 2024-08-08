@@ -308,6 +308,8 @@ class mainwindow(
 
     def Quit(self):
 
+        self.Settings.SaveConfig()
+
         if self.Web_server:
             self.Web_server.stop()
         self.Web_server = None
@@ -316,7 +318,7 @@ class mainwindow(
             self.Midi.quit()
             self.Midi = None
 
-        qApp.quit()
+        qApp.quit() # not found under Windows !
 
 
 def start():
