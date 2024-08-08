@@ -329,10 +329,11 @@ class ClassThreadMidiReader(QThread):
         self.midisong.SetPlayed(100)
 
     def stop(self):
-        if self.midisong:
-            print(f"MidiReader {self.uuid} stop [{self.midisong.GetFilename()}] !")
-            self.midisong.SetState(states["ended"])
-            self.midisong.SetPlayed(100)
-        else:
-            print("MidiReader {self.uuid} stop")
-        self.running = False
+        if self.running:
+            if self.midisong:
+                print(f"MidiReader {self.uuid} stop [{self.midisong.GetFilename()}] !")
+                self.midisong.SetState(states["ended"])
+                self.midisong.SetPlayed(100)
+            else:
+                print("MidiReader {self.uuid} stop")
+            self.running = False
