@@ -5,18 +5,15 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 import sys
-import os
-import webbrowser
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
+from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6 import QtGui
-from PySide6.QtCore import QTimer, QEvent, QCoreApplication
-from PySide6.QtGui import QIcon
+from PySide6.QtCore import QEvent
 
 from settings import ClassSettings
 from informations import ShowInformation
 from history import ClassHistory
-from midi_song import states, modes
+from midi_song import modes
 
 import _mainwindow_init
 import _mainwindow_signals
@@ -313,7 +310,7 @@ class mainwindow(
             self.Web_server.stop()
         if self.Midi:
             self.Midi.quit()
-        QCoreApplication.quit()
+        QApplication.quit()
 
 
 def start():

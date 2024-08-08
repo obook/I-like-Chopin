@@ -73,27 +73,31 @@ class ClassMidiMain(QObject):
     def ConnectInput(self, in_device):
         if self.ThreadInput:
             self.ThreadInput.stop()
-
+            while self.ThreadInput.isRunning():
+                time.sleep(0.5)
+            self.ThreadInput = None
         self.ThreadInput = ClassThreadInput(in_device, self.keys, self.pParent)
         self.ThreadInput.start()
 
     def GetInputPort(self):
         if self.ThreadInput:
             return self.ThreadInput.getport()
-        return None
+        return False
 
     def ConnectOutput(self, out_device):
-
-        if self.ThreadMidiReader:
-            self.ThreadMidiReader.SetMidiPort(None)
-
+        if self.ThreadOutput:
+            self.ThreadOutput.reset()
+            self.ThreadOutput.stop()
+            while self.ThreadOutput.isRunning():
+                time.sleep(0.5)
+            self.ThreadOutput = None
         self.ThreadOutput = ClassThreadOutput(out_device, self.pParent)
         self.ThreadOutput.start()
 
     def GetOuputPort(self):
         if self.ThreadOutput:
             return self.ThreadOutput.getport()
-        return None
+        return False
 
     def SendOutput(self, msg):
         if self.ThreadOutput:
@@ -106,22 +110,11 @@ class ClassMidiMain(QObject):
                 return self.ThreadOutput.send(msg)
         return None
 
-    """
-    # List of midifiles from folder midi (see json file created)
-    def GetMidiFiles(self):
-        midifiles = []
-        for file in sorted(
-            glob.glob(os.path.join(self.Settings.GetMidiPath(), "*.mid"))
-        ):
-            midifiles.append(os.path.basename(file))
-        return midifiles
-    """
-
     def SetMidiSong(self, midifile):
 
         if self.ThreadMidiReader:
             self.readerstop_activity.emit()
-            self.ThreadMidiReader.stop()  # test
+            self.ThreadMidiReader.stop()
             while self.ThreadMidiReader.isRunning():
                 time.sleep(0.01)
 
