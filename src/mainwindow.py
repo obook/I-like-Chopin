@@ -113,7 +113,7 @@ class Mainwindow(
     def MidifileReplay(self):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         if self.lastmidifile:
             self.midisong = self.Midi.SetMidiSong(self.lastmidifile)
-
+    """
     def NextMidifile(
         self,
     ):  # from web server ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
@@ -138,11 +138,15 @@ class Mainwindow(
             f"MidiFile {self.history_index+1}/{len(files)}"
         )
         self.MidifileChange(files[self.history_index])
+    """
+
+    def ShuffleMidifile(self):
+        newfile = self.Midifiles.GetRandomSong()
+        self.MidifileChange(newfile)
 
     # Midi command
     def ChangeMidiFile(self, value):  # External Midi command
         # print("--> ChangeMidiFile NOT ACTIVE FOR INSTANCE")
-
         # value 0-127
         files = self.History.GetHistory()
         step = int(128 / len(files))
