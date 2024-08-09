@@ -1,10 +1,14 @@
-# This Python file uses the following encoding: utf-8
-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun  5 18:19:14 2024
+@author: obooklage
+"""
 import webbrowser
 from web_server import ClassWebServer
 
 
-class browser:
+class web:
     Web_server = None
 
     def web_start(self):

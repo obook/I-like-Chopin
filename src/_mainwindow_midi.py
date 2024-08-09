@@ -1,11 +1,14 @@
-# This Python file uses the following encoding: utf-8
-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun  5 18:19:14 2024
+@author: obooklage
+"""
 from midi_main import ClassMidiMain
-from midi_song import states, modes
 from midi_files import ClassMidiFiles
 
 
-class _midi:
+class midi:
 
     Midi = None  # Main engine
     midisong = None  # current midisong
@@ -15,22 +18,17 @@ class _midi:
     midifiles_dict = {}
     Midifiles = ClassMidiFiles()
 
+    ChannelsList = [False] * 16
+
+    # Devices
+    Inputs = []
+    Outputs = []
+    InputsOutputs = []
+
     def _midi_init(self):
         # Midi class
         self.Midi = ClassMidiMain(self, self.ChannelsList)
-
-    # Midi control buttons
-    def PrintSpeed(self, speed):  # 0 to 126
-        if speed:
-            self.ui.pushButton_Speed.setText(f"Speed -{speed}")
-        else:
-            self.ui.pushButton_Speed.setText("Speed")
-
-    def PrintHumanize(self, value):
-        if value:
-            self.ui.pushButton_Humanize.setText(f"Humanize {value}")
-        else:
-            self.ui.pushButton_Humanize.setText("Humanize")
+        self.Inputs, self.Outputs, self.InputsOutputs = self.Midi.GetDevices()
 
     def Panic(self):
         self.Midi.Panic()

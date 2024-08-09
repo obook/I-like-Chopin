@@ -10,15 +10,13 @@ from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6 import QtGui
 from PySide6.QtCore import QEvent
 
-from settings import ClassSettings
 from informations import ShowInformation
-from history import ClassHistory
 from midi_song import modes
 
 import _mainwindow_init
 import _mainwindow_signals
 import _mainwindow_timers
-import _mainwindow_webbrowser
+import _mainwindow_web
 import _mainwindow_midi
 
 # Outside QTCreator = Important:
@@ -27,29 +25,16 @@ import _mainwindow_midi
 from ui_mainwindow import Ui_MainWindow
 
 
-class mainwindow(
+class Mainwindow(
     QMainWindow,
-    _mainwindow_init._initialize,
-    _mainwindow_midi._midi,
+    _mainwindow_init._init,
+    _mainwindow_midi.midi,
     _mainwindow_signals.signals,
-    _mainwindow_webbrowser.browser,
+    _mainwindow_web.web,
     _mainwindow_timers.timers,
 ):
 
-    # Classes used
-    Settings = ClassSettings()
-    History = ClassHistory()
-
     title_rotation = 0
-
-    # Channels buttons
-    ChannelsButtonsList = []
-    ChannelsList = [False] * 16
-
-    # Devices
-    Inputs = []
-    Outputs = []
-    InputsOutputs = []
 
     ConnectInputState = False
     ConnectOutputState = False
@@ -70,7 +55,6 @@ class mainwindow(
         self.SetPlayerModeButtons()
 
         # ComboBoxes Inputs/Outputs
-        self.Inputs, self.Outputs, self.InputsOutputs = self.Midi.GetDevices()
         Input = self.Settings.GetInputDevice()
         Output = self.Settings.GetOutputDevice()
 
@@ -304,12 +288,17 @@ class mainwindow(
         self.Quit()
 
     def Quit(self):
-        self.Settings.SaveConfig()
+
         self.StopTimers()
+
         if self.Web_server:
             self.Web_server.stop()
+        self.Web_server = None
+
         if self.Midi:
             self.Midi.quit()
+            self.Midi = None
+
         QApplication.quit()
 
 
@@ -319,9 +308,8 @@ def start():
         app.setStyle("Fusion")  # Windows dark theme
     else:
         app = QApplication.instance()
-    widget = mainwindow()
+    widget = Mainwindow()
     # For Linux/Wayland, must be .desktop filename (here org.obook.i-like-chopin.dektop) => Set mainwindow icon
     app.setDesktopFileName("org.obook.i-like-chopin")
     widget.show()
     sys.exit(app.exec())
-    print("---> END")

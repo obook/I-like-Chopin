@@ -1,11 +1,20 @@
-# This Python file uses the following encoding: utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun  5 18:19:14 2024
+@author: obooklage
+"""
 import os
 from PySide6.QtGui import QIcon
 from PySide6 import QtGui
 from PySide6.QtWidgets import QPushButton
 
+from settings import ClassSettings
+from history import ClassHistory
 
-class _initialize:
+
+class _init:
+    """Interface initialization"""
 
     application_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -17,8 +26,16 @@ class _initialize:
     ICON_BLUE_LED = application_path + "/icons/led/blue-led-on.png"
     ICON_LED_OFF = application_path + "/icons/led/led-off.png"
 
+    # Classes used
+    Settings = ClassSettings()
+    History = ClassHistory()
+
+    # Channels buttons
+    ChannelsButtonsList = []
+
     def __init__(self):  # as is the first subclass in list, it's called
-        # OK print("---> _initialize __init__")
+        # OK
+        # print("---> _initialize __init__")
         pass
 
     def _SetInterface(self):
@@ -100,15 +117,15 @@ class _initialize:
             "QPushButton {background-color: rgb(100,50,50);}"
         )
 
-    """
-        # Web server
-        self.Web_server = ClassWebServer(self)
-        self.server_interfaces = self.Web_server.GetInterfaces()
-        self.Web_server.start()
+    # Midi control buttons
+    def PrintSpeed(self, speed):  # 0 to 126
+        if speed:
+            self.ui.pushButton_Speed.setText(f"Speed -{speed}")
+        else:
+            self.ui.pushButton_Speed.setText("Speed")
 
-    # Channels
-    def _mainwindow____ChannelsNone(self):
-        for n in range(len(self.ChannelsButtonsList)):
-            self.ChannelsButtonsList[n].setChecked(False)
-        self.ReadChannels()
-    """
+    def PrintHumanize(self, value):
+        if value:
+            self.ui.pushButton_Humanize.setText(f"Humanize {value}")
+        else:
+            self.ui.pushButton_Humanize.setText("Humanize")

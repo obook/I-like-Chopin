@@ -74,47 +74,59 @@ class ClassMidiMain(QObject):
         if self.ThreadInput:
             self.ThreadInput.stop()
             while self.ThreadInput.isRunning():
-                time.sleep(0.5)
-            self.ThreadInput = None
+                time.sleep(0.01)
         self.ThreadInput = ClassThreadInput(in_device, self.keys, self.pParent)
         self.ThreadInput.start()
 
     def GetInputPort(self):
         if self.ThreadInput:
             return self.ThreadInput.getport()
-        return False
+        return None
 
     def ConnectOutput(self, out_device):
         if self.ThreadOutput:
             self.ThreadOutput.reset()
             self.ThreadOutput.stop()
             while self.ThreadOutput.isRunning():
-                time.sleep(0.5)
-            self.ThreadOutput = None
+                time.sleep(0.01)
         self.ThreadOutput = ClassThreadOutput(out_device, self.pParent)
         self.ThreadOutput.start()
 
     def GetOuputPort(self):
         if self.ThreadOutput:
             return self.ThreadOutput.getport()
-        return False
+        return None
 
     def SendOutput(self, msg):
         if self.ThreadOutput:
-            if self.Settings.IsMode(modes["passthrough"]):
-                return self.ThreadOutput.send(msg)
-            elif msg.type == "note_on" or msg.type == "note_off":
-                if self.pParent.ChannelsList[msg.channel]:
+            try:  # ThreadOutput ready ? Exists ?
+                if self.Settings.IsMode(modes["passthrough"]):
                     return self.ThreadOutput.send(msg)
-            else:
-                return self.ThreadOutput.send(msg)
+                elif msg.type == "note_on" or msg.type == "note_off":
+                    if self.pParent.ChannelsList[msg.channel]:
+                        return self.ThreadOutput.send(msg)
+                else:
+                    return self.ThreadOutput.send(msg)
+            except:
+                print(f"ERROR MidiMain {self.uuid} can not SendOutput")
         return None
+
+    """
+    # List of midifiles from folder midi (see json file created)
+    def GetMidiFiles(self):
+        midifiles = []
+        for file in sorted(
+            glob.glob(os.path.join(self.Settings.GetMidiPath(), "*.mid"))
+        ):
+            midifiles.append(os.path.basename(file))
+        return midifiles
+    """
 
     def SetMidiSong(self, midifile):
 
         if self.ThreadMidiReader:
             self.readerstop_activity.emit()
-            self.ThreadMidiReader.stop()
+            self.ThreadMidiReader.stop()  # test
             while self.ThreadMidiReader.isRunning():
                 time.sleep(0.01)
 
