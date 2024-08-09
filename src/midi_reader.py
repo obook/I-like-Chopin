@@ -159,7 +159,7 @@ class ClassThreadMidiReader(QThread):
             ):
 
                 # For loop
-                self.sleep(0.001)  # Give time to QThread
+                # self.sleep(0.001)  # Give time to QThread
 
                 # Delay : Humanize controlled by knob, see midi_input
                 human = 0
