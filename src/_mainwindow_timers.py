@@ -20,7 +20,7 @@ class timers:
 
         self.timer2 = QTimer(self)
         self.timer2.timeout.connect(self.timer_title)
-        self.timer2.start(4000)
+        self.timer2.start(6000)
 
         self.timer3 = QTimer(self)
         self.timer3.timeout.connect(self.timer_random_song)
@@ -78,7 +78,7 @@ class timers:
             if self.title_rotation >= len(interfaces):
                 self.title_rotation = -1
                 self.setWindowTitle("I LIKE CHOPIN")
-            else:
+            elif not "127.0.0.1" in interfaces[self.title_rotation]:
                 self.setWindowTitle(interfaces[self.title_rotation])
 
     def timer_random_song(self):
