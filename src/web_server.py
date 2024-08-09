@@ -84,9 +84,9 @@ class RequestHandler(BaseHTTPRequestHandler):
                     self.pParent.Midi.StopPlayer()  # DANGEROUS ?
                 except:
                     pass
-            elif self.pParent and action == "next":
+            elif self.pParent and action == "shuffle": # ex "next"
                 try:
-                    self.pParent.NextMidifile()  # DANGEROUS ?
+                    self.pParent.ShuffleMidifile()  # DANGEROUS ?
                 except:
                     pass
             elif self.pParent and action == "replay":
