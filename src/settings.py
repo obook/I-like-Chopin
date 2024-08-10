@@ -171,4 +171,4 @@ class ClassSettings:
         return self.GetSetting("ServerPort", 8888)
 
     def GetSustainChannel(self):
-        return self.GetSetting("SustainChannel", 61)
+        return self.GetSetting("SustainChannel", 64) # The sustain pedal sends CC 64 127 and CC 64 0 messages on channel 1
