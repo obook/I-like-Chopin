@@ -251,21 +251,31 @@ class Mainwindow(
 
     def ChangePlayerMode(self):  # button mode pressed or called by midi_inpout
 
-        if self.Settings.GetMode() == modes["playback"]:
+        if self.Settings.IsMode(modes["playback"]):
             self.Settings.SaveMode(modes["passthrough"])
 
-        elif self.Settings.GetMode() == modes["passthrough"]:
+        elif self.Settings.IsMode(modes["passthrough"]):
             self.Settings.SaveMode(modes["player"])
 
-        elif self.Settings.GetMode() == modes["player"]:
+        elif self.Settings.IsMode(modes["player"]):
             self.Settings.SaveMode(modes["random"])
             self.timer_random_song()
 
-        elif self.Settings.GetMode() == modes["random"]:
+        elif self.Settings.IsMode(modes["random"]):
             self.Settings.SaveMode(modes["playback"])
 
         self.SetPlayerModeButtons()
         self.Midi.ChangeMidiMode(self.Settings.GetMode())
+
+    def TooglePlayerMode(self): # Just player/passthrough
+
+        print(f"self.Settings.GetMode={self.Settings.GetMode()}")
+
+        if self.Settings.IsMode(modes["passthrough"]):
+            self.Settings.SaveMode(modes["random"])
+        else:
+            self.Settings.SaveMode(modes["playback"])
+        self.ChangePlayerMode()
 
     def SetFileButtonText(self):
         if self.midisong:

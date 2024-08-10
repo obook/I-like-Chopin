@@ -82,7 +82,7 @@ class ClassThreadInput(QThread):
                 self.keys["speed"] = msg.value  # 0 to 127
                 self.pParent.PrintSpeed(msg.value)  # PLEASE USE SIGNAL
             elif msg.control == 51 and msg.value == 127:
-                self.pParent.ChangePlayerMode()  # PLEASE USE SIGNAL
+                self.pParent.TooglePlayerMode()  # PLEASE USE SIGNAL
             """
             elif msg.control == 1:  # modulation
                 diff = time.time() - self.modulation_start_time
