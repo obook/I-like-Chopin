@@ -111,17 +111,6 @@ class ClassMidiMain(QObject):
                 print(f"ERROR MidiMain {self.uuid} can not SendOutput")
         return None
 
-    """
-    # List of midifiles from folder midi (see json file created)
-    def GetMidiFiles(self):
-        midifiles = []
-        for file in sorted(
-            glob.glob(os.path.join(self.Settings.GetMidiPath(), "*.mid"))
-        ):
-            midifiles.append(os.path.basename(file))
-        return midifiles
-    """
-
     def SetMidiSong(self, midifile):
 
         if self.ThreadMidiReader:

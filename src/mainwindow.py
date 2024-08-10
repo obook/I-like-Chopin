@@ -34,8 +34,6 @@ class Mainwindow(
     _mainwindow_timers.timers,
 ):
 
-    title_rotation = 0
-
     ConnectInputState = False
     ConnectOutputState = False
     PlayingState = False
@@ -107,6 +105,9 @@ class Mainwindow(
         if filepath != self.lastmidifile:
             self.Settings.SaveMidifile(filepath)
             self.midisong = self.Midi.SetMidiSong(filepath)
+
+            print(f"--->MidifileChange {self.midisong.Getfilepath()}")
+
             self.lastmidifile = filepath
             self.History.AddHistory(filepath)
 

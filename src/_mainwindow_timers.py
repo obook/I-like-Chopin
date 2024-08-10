@@ -12,6 +12,9 @@ from midi_song import states, modes
 
 class timers:
 
+    window_title = []
+    title_rotation = 0
+
     def SetTimer(self):
 
         self.timer1 = QTimer(self)
@@ -20,7 +23,7 @@ class timers:
 
         self.timer2 = QTimer(self)
         self.timer2.timeout.connect(self.timer_title)
-        self.timer2.start(6000)
+        self.timer2.start(8000)
 
         self.timer3 = QTimer(self)
         self.timer3.timeout.connect(self.timer_random_song)
@@ -72,14 +75,18 @@ class timers:
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
 
     def timer_title(self):
+        #if not window_title:
+        self.window_title = ["I LIKE CHOPIN"]
         if self.Web_server:
-            interfaces = self.Web_server.GetInterfaces()
-            self.title_rotation += 1
-            if self.title_rotation >= len(interfaces):
-                self.title_rotation = -1
-                self.setWindowTitle("I LIKE CHOPIN")
-            elif not "127.0.0.1" in interfaces[self.title_rotation]:
-                self.setWindowTitle(interfaces[self.title_rotation])
+            for interface in self.Web_server.GetInterfaces():
+                if not "127.0.0.1" in interface:
+                    self.window_title.append(interface)
+        if self.midisong:
+            self.window_title.append(self.midisong.GetParent())
+        self.setWindowTitle(self.window_title[self.title_rotation])
+        self.title_rotation +=1
+        if self.title_rotation >= len(self.window_title):
+            self.title_rotation = 0
 
     def timer_random_song(self):
         self.midisong = self.Midi.GetMidiSong()
