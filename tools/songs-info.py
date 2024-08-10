@@ -12,8 +12,8 @@ import pathlib
 from mido import MidiFile
 from collections import namedtuple
 
-indexes = {"tracks": 0, "duration": 1, "notes_on_channels": 2}
-Song = namedtuple("Song", ["tracks", "duration", "notes_on_channels"])
+indexes = {"tracks": 0, "duration": 1, "notes_on_channels": 2, "sustain":3}
+Song = namedtuple("Song", ["tracks", "duration", "notes_on_channels","sustain"])
 
 
 def MidiSongInfo(file):
@@ -21,6 +21,7 @@ def MidiSongInfo(file):
     duration = 0
     total_notes_on = 0
     channels_notes_on = {}
+    sustain = 0
 
     # Tracks Informations
 
@@ -41,11 +42,14 @@ def MidiSongInfo(file):
             if not key in channels_notes_on.keys():
                 channels_notes_on[int(key)] = 0
             channels_notes_on[int(key)] += 1
+        if msg.type == "control_change":
+            if msg.value == 64: # The sustain pedal sends CC 64 127 and CC 64 0 messages on channel 1
+                sustain +=1
 
     channels_notes_on = dict(
         sorted(channels_notes_on.items())
     )
-    S = Song(tracks, duration, channels_notes_on)
+    S = Song(tracks, duration, channels_notes_on, sustain)
 
     return S
 
@@ -101,6 +105,9 @@ for artist in songs.keys():
 
             else:
                 print(f"WARNING no note channel 0 [{midifile}]")
+
+            if not Info[indexes["sustain"]]:
+                print(f"NO SUSTAIN [{midiname}] {save}")
         else:
             print(f"ERROR reading [{midifile}] bad file?")
 
