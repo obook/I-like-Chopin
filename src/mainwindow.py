@@ -249,7 +249,7 @@ class Mainwindow(
             self.ui.pushButton_Mode.setText("Random")
             self.ui.pushButton_Mode.setChecked(False)
 
-    def ChangePlayerMode(self):  # button mode pressed or called by midi_inpout
+    def ChangePlayerMode(self):  # button mode pressed
 
         if self.Settings.IsMode(modes["playback"]):
             self.Settings.SaveMode(modes["passthrough"])
@@ -267,7 +267,7 @@ class Mainwindow(
         self.SetPlayerModeButtons()
         self.Midi.ChangeMidiMode(self.Settings.GetMode())
 
-    def TooglePlayerMode(self): # Just player/passthrough
+    def TooglePlayerMode(self): # Just player/passthrough, only called by midi_input
 
         print(f"self.Settings.GetMode={self.Settings.GetMode()}")
 
