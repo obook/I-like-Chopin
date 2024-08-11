@@ -41,8 +41,8 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
             svgWidget = QSvgWidget()
             svgWidget.setStyleSheet("QSvgWidget {background-color:white;}")
             svgWidget.load(QByteArray(qrcode.encode())) # sys.argv[1])
-            svgWidget.setFixedWidth(120)
-            svgWidget.setFixedHeight(120)
+            svgWidget.setFixedWidth(134)
+            svgWidget.setFixedHeight(134)
 
             self.formLayout.addRow(svgWidget)
             self.formLayout.addRow(QLabel(""))
