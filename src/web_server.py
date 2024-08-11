@@ -183,20 +183,15 @@ class ClassWebServer(QThread):
             print(
                 f"WebServer {self.uuid} {url} serve [{self.pParent.Settings.GetMidiPath()}]"
             )
-            '''
             if not "127.0.0.1" in url:
                 img = qrcode.make(
                     url, image_factory=qrcode.image.svg.SvgPathImage, box_size=10
                 )
-            '''
-            img = qrcode.make(
-                url, image_factory=qrcode.image.svg.SvgPathImage, box_size=10
-            )
-            buffer = io.BytesIO()
-            img.save(buffer)
-            buffer.seek(0)
-            buffer_img = buffer.getvalue().decode("utf-8")
-            self.qrcodes_list.append(buffer_img)
+                buffer = io.BytesIO()
+                img.save(buffer)
+                buffer.seek(0)
+                buffer_img = buffer.getvalue().decode("utf-8")
+                self.qrcodes_list.append(buffer_img)
 
     def __del__(self):
         if self.server:
