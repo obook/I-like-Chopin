@@ -78,9 +78,9 @@ class timers:
         #if not window_title:
         self.window_title = ["I LIKE CHOPIN"]
         if self.Web_server:
-            for interface in self.Web_server.GetInterfaces():
-                if not "127.0.0.1" in interface:
-                    self.window_title.append(interface)
+            for url in self.Web_server.GetServerURLs():
+                if not "127.0.0.1" in url:
+                    self.window_title.append(url)
         if self.midisong:
             self.window_title.append(self.midisong.GetParent())
         self.setWindowTitle(self.window_title[self.title_rotation])

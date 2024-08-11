@@ -7,7 +7,12 @@ Created on Wed Jun  5 18:19:14 2024
 
 import platform
 import mido
-from PySide6.QtWidgets import QDialog
+
+from PySide6.QtCore import QByteArray, QSize
+from PySide6.QtWidgets import QDialog, QLabel
+from PySide6.QtGui import QImage
+from PySide6.QtSvgWidgets import QSvgWidget
+
 from ui_informations import Ui_DialogInformation
 
 
@@ -29,8 +34,18 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         text += f"{platform.system()}"
 
         text += f"<p{style}>WEB SERVER</p>"
-        for interface in self.pParent.server_interfaces:
+        for interface in self.pParent.server_urls: # UGLY
             text += f"<div>{interface}</div>"
+
+        for qrcode in self.pParent.server_qrcode:
+            svgWidget = QSvgWidget()
+            svgWidget.setStyleSheet("QSvgWidget {background-color:white;}")
+            svgWidget.load(QByteArray(qrcode.encode())) # sys.argv[1])
+            svgWidget.setFixedWidth(120)
+            svgWidget.setFixedHeight(120)
+
+            self.formLayout.addRow(svgWidget)
+            self.formLayout.addRow(QLabel(""))
 
         text += f"<p{style}>CONFIG FILE</p>"
         text += f"{self.Settings.GetConfigPath()}"
@@ -81,6 +96,12 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.textBrowser.setAcceptRichText(True)
         self.textBrowser.setOpenLinks(False)
         self.textBrowser.insertHtml(text)
+
+
+        #layout = QGridLayout(self)
+        #label = QLabel(self)
+        #self.addWidget(label)
+
         cursor = self.textBrowser.textCursor()
         cursor.setPosition(0)
         self.textBrowser.setTextCursor(cursor)

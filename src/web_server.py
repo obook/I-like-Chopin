@@ -15,7 +15,7 @@ import qrcode.image.svg
 import io
 from functools import partial
 
-from PySide6.QtCore import QThread, Signal  # Essai
+from PySide6.QtCore import QThread, Signal
 
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, quote
@@ -166,7 +166,7 @@ class ClassWebServer(QThread):
 
     pParent = None
     midifiles_dict = {}
-    interfaces = []
+    serverURLs = []
     qrcodes_list = []
 
     def __init__(self, parent):
@@ -175,39 +175,28 @@ class ClassWebServer(QThread):
         self.pParent = parent
         self.port = self.pParent.Settings.GetServerPort()
         print(f"WebServer {self.uuid} created")
-        """
-        for file in sorted(
-            glob.glob(
-                os.path.join(parent.Settings.GetMidiPath(), "**", "*.mid"),
-                recursive=True,
-            )
-        ):
-            path = pathlib.PurePath(file)
-
-            if not any(
-                path.parent.name in keys for keys in self.midifiles_dict
-            ):  # not in dictionnary
-                self.midifiles_dict[path.parent.name] = [file]
-            else:  # in dictionnary
-                list = self.midifiles_dict[path.parent.name]
-                list.append(file)
-        """
         interfaces_list = get_interfaces(True, False)
         for interface in interfaces_list:
             url = f"http://{interface['ip']}:{self.port}"
-            self.interfaces.append(url)
+            self.serverURLs.append(url)
 
             print(
                 f"WebServer {self.uuid} {url} serve [{self.pParent.Settings.GetMidiPath()}]"
             )
+            '''
             if not "127.0.0.1" in url:
                 img = qrcode.make(
                     url, image_factory=qrcode.image.svg.SvgPathImage, box_size=10
                 )
-                buffer = io.BytesIO()
-                img.save(buffer)
-                buffer.seek(0)
-                self.qrcodes_list.append(buffer.getvalue().decode("utf-8"))
+            '''
+            img = qrcode.make(
+                url, image_factory=qrcode.image.svg.SvgPathImage, box_size=10
+            )
+            buffer = io.BytesIO()
+            img.save(buffer)
+            buffer.seek(0)
+            buffer_img = buffer.getvalue().decode("utf-8")
+            self.qrcodes_list.append(buffer_img)
 
     def __del__(self):
         if self.server:
@@ -229,8 +218,11 @@ class ClassWebServer(QThread):
     def GetPort(self):
         return self.port
 
-    def GetInterfaces(self):
-        return self.interfaces
+    def GetServerURLs(self):
+        return self.serverURLs
+
+    def GetQRCodeSVG(self):
+        return self.qrcodes_list
 
     def stop(self):
         if self.server:

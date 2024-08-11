@@ -9,7 +9,6 @@ import sys
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6 import QtGui
 from PySide6.QtCore import QEvent
-
 from informations import ShowInformation
 from midi_song import modes
 

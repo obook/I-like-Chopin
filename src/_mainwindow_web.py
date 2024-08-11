@@ -7,14 +7,16 @@ Created on Wed Jun  5 18:19:14 2024
 import webbrowser
 from web_server import ClassWebServer
 
-
 class web:
     Web_server = None
+    server_urls = None
+    server_qrcode = None
 
     def web_start(self):
         # Web server
         self.Web_server = ClassWebServer(self)
-        self.server_interfaces = self.Web_server.GetInterfaces()
+        self.server_urls = self.Web_server.GetServerURLs()
+        self.server_qrcode = self.Web_server.GetQRCodeSVG()
         self.Web_server.start()
 
     def OpenBrowser(self):
