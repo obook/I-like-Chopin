@@ -40,7 +40,7 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         for qrcode in self.pParent.server_qrcode:
             svgWidget = QSvgWidget()
             svgWidget.setStyleSheet("QSvgWidget {background-color:white;}")
-            svgWidget.load(QByteArray(qrcode.encode()))  # sys.argv[1])
+            svgWidget.load(QByteArray(qrcode.encode()))
             svgWidget.setFixedWidth(134)
             svgWidget.setFixedHeight(134)
 
