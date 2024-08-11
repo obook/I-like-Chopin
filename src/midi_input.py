@@ -26,8 +26,8 @@ class ClassThreadInput(QThread):
 
     led_activity = Signal(int)
     statusbar_activity = Signal(str)
-    #nextsong_activity = Signal()
-    #previousong_activity = Signal()
+    # nextsong_activity = Signal()
+    # previousong_activity = Signal()
 
     def __init__(self, in_device, keys, pParent):
         QThread.__init__(self)
@@ -39,8 +39,8 @@ class ClassThreadInput(QThread):
         self.running = True
         self.led_activity.connect(self.pParent.SetLedInput)
         self.statusbar_activity.connect(self.pParent.SetStatusBar)
-        #self.nextsong_activity.connect(self.pParent.NextMidifile)
-        #self.previousong_activity.connect(self.pParent.PreviousMidifile)
+        # self.nextsong_activity.connect(self.pParent.NextMidifile)
+        # self.previousong_activity.connect(self.pParent.PreviousMidifile)
         print(f"MidiInput {self.uuid} created [{self.in_device}]")
 
     def __del__(self):

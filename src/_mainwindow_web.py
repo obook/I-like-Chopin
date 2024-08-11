@@ -7,6 +7,7 @@ Created on Wed Jun  5 18:19:14 2024
 import webbrowser
 from web_server import ClassWebServer
 
+
 class web:
     Web_server = None
     server_urls = None

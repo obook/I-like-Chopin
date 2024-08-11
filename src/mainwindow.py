@@ -113,6 +113,7 @@ class Mainwindow(
     def MidifileReplay(self):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         if self.lastmidifile:
             self.midisong = self.Midi.SetMidiSong(self.lastmidifile)
+
     """
     def NextMidifile(
         self,
@@ -267,7 +268,7 @@ class Mainwindow(
         self.SetPlayerModeButtons()
         self.Midi.ChangeMidiMode(self.Settings.GetMode())
 
-    def TooglePlayerMode(self): # Just player/passthrough, only called by midi_input
+    def TooglePlayerMode(self):  # Just player/passthrough, only called by midi_input
 
         print(f"self.Settings.GetMode={self.Settings.GetMode()}")
 

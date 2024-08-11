@@ -272,7 +272,11 @@ class ClassThreadMidiReader(QThread):
                         # Si trop long, enlever la pédale
                         # le problème c'est qu'il faut la remettre avant de reprendre !
                         # controller 64->0
-                        if self.sustain_pedal and time.time() - start_time_loop > 1.5 and not self.sustain_pedal_off:
+                        if (
+                            self.sustain_pedal
+                            and time.time() - start_time_loop > 1.5
+                            and not self.sustain_pedal_off
+                        ):
                             msg = Message(
                                 "control_change",
                                 control=self.Settings.GetSustainChannel(),

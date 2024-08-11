@@ -34,13 +34,13 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         text += f"{platform.system()}"
 
         text += f"<p{style}>WEB SERVER</p>"
-        for interface in self.pParent.server_urls: # UGLY
+        for interface in self.pParent.server_urls:  # UGLY
             text += f"<div>{interface}</div>"
 
         for qrcode in self.pParent.server_qrcode:
             svgWidget = QSvgWidget()
             svgWidget.setStyleSheet("QSvgWidget {background-color:white;}")
-            svgWidget.load(QByteArray(qrcode.encode())) # sys.argv[1])
+            svgWidget.load(QByteArray(qrcode.encode()))  # sys.argv[1])
             svgWidget.setFixedWidth(134)
             svgWidget.setFixedHeight(134)
 
@@ -97,10 +97,9 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.textBrowser.setOpenLinks(False)
         self.textBrowser.insertHtml(text)
 
-
-        #layout = QGridLayout(self)
-        #label = QLabel(self)
-        #self.addWidget(label)
+        # layout = QGridLayout(self)
+        # label = QLabel(self)
+        # self.addWidget(label)
 
         cursor = self.textBrowser.textCursor()
         cursor.setPosition(0)

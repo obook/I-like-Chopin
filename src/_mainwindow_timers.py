@@ -75,7 +75,7 @@ class timers:
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
 
     def timer_title(self):
-        #if not window_title:
+        # if not window_title:
         self.window_title = ["I LIKE CHOPIN"]
         if self.Web_server:
             for url in self.Web_server.GetServerURLs():
@@ -84,7 +84,7 @@ class timers:
         if self.midisong:
             self.window_title.append(self.midisong.GetParent())
         self.setWindowTitle(self.window_title[self.title_rotation])
-        self.title_rotation +=1
+        self.title_rotation += 1
         if self.title_rotation >= len(self.window_title):
             self.title_rotation = 0
 
