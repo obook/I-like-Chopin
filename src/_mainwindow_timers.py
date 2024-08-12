@@ -72,7 +72,8 @@ class timers:
             self.SetFileButtonText()
             self.ChannelsSetButtons()
             # just for led off
-            self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
+            if self.Midi.GetOuputPort():
+                self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
 
     def timer_title(self):
         # if not window_title:

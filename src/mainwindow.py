@@ -104,9 +104,6 @@ class Mainwindow(
         if filepath != self.lastmidifile:
             self.Settings.SaveMidifile(filepath)
             self.midisong = self.Midi.SetMidiSong(filepath)
-
-            print(f"--->MidifileChange {self.midisong.Getfilepath()}")
-
             self.lastmidifile = filepath
             self.History.AddHistory(filepath)
 

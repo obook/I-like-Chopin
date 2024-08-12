@@ -20,7 +20,7 @@ class ClassThreadOutput(QThread):
     outport = None
     Settings = None
     please_wait = False
-    ready = False
+    running = False
 
     led_activity = Signal(int)
 
@@ -44,12 +44,13 @@ class ClassThreadOutput(QThread):
             print(
                 f"|!| MidiOutput {self.uuid} midi_output open [{self.out_device}] ERROR"
             )
-
+            return
         # Set all channels to Piano ('Acoustic Grand Piano') if set
         self.forcePiano()
         self.please_wait = False
-        self.ready = True
-        while self.ready:
+        self.running = True
+
+        while self.running:
             self.sleep(1)  # or self
 
         if self.outport:
@@ -57,7 +58,7 @@ class ClassThreadOutput(QThread):
                 self.outport.close()
 
     def IsReady(self):
-        return self.ready
+        return self.running
 
     def forcePiano(self):
         if self.outport:
@@ -78,7 +79,7 @@ class ClassThreadOutput(QThread):
                             print(f"MidiOutput {self.uuid} self.outport.send ERROR")
 
     def send(self, message):
-        if self.ready:
+        if self.running:
             if message.type == "note_on":
                 self.led_activity.emit(1)
             else:
@@ -90,9 +91,11 @@ class ClassThreadOutput(QThread):
                     pass
 
     def getport(self):
-        while self.please_wait == True:
-            time.sleep(0.01)
-        return self.outport
+        if self.running:
+            while self.please_wait == True:
+                time.sleep(0.01)
+            return self.outport
+        return None
 
     def panic(self):
         if self.outport:
@@ -105,4 +108,4 @@ class ClassThreadOutput(QThread):
             self.outport.panic()
 
     def stop(self):
-        self.ready = False
+        self.running = False
