@@ -78,11 +78,6 @@ class ClassThreadInput(QThread):
     def callback(self, msg):
 
         # Control change - Midi commands
-
-        print(f"--> input receive msg.type [{msg.type}]")
-        if msg.type == "note_on":
-            print(f"--> input receive msg={msg}")
-
         if msg.type == "control_change":
             if msg.control == 71:
                 self.keys["humanize"] = msg.value  # 0 to 127
@@ -106,7 +101,7 @@ class ClassThreadInput(QThread):
 
         # Keys pressed counter
         if msg.type == "note_on":
-            if msg.velocity == 0:
+            if msg.velocity == 0: # A MIDI Note On with a velocity of 0 is regarded as a Note Off. That is part of the MIDI Standard
                 self.led_activity.emit(0)
                 self.keys["key_on"] -= 1
             else:
