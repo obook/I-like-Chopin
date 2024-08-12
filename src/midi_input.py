@@ -62,7 +62,9 @@ class ClassThreadInput(QThread):
             )
             return
         if self.Settings.GetMode() == modes["playback"]:
-            self.statusbar_activity.emit(f"Waiting : {CleanDeviceName(self.in_device)} ...")
+            self.statusbar_activity.emit(
+                f"Waiting : {CleanDeviceName(self.in_device)} ..."
+            )
             self.led_activity.emit(0)
 
         while self.running:

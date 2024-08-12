@@ -40,7 +40,7 @@ class Mainwindow(
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
-        self.setFixedSize(504, 394)
+        self.setFixedSize(504, 400)
         self.ui.setupUi(self)
 
         # Imported methods
@@ -54,8 +54,8 @@ class Mainwindow(
         # ComboBoxes Inputs/Outputs
         Input = self.Settings.GetInputDevice()
         Output = self.Settings.GetOutputDevice()
-        #self.ui.labelInput.setText(CleanDeviceName(Input))
-        #self.ui.labelOutput.setText(CleanDeviceName(Output))
+        # self.ui.labelInput.setText(CleanDeviceName(Input))
+        # self.ui.labelOutput.setText(CleanDeviceName(Output))
 
         # Datas
         self.ChannelsList[0] = True  # active first channel
