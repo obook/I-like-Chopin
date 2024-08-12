@@ -102,16 +102,16 @@ class ClassThreadInput(QThread):
         # Keys pressed counter
         if msg.type == "note_on":
             if msg.velocity:
-                self.led_activity.emit(1)
                 self.keys["key_on"] += 1
+                self.led_activity.emit(1)
             else:
                 # A MIDI Note On with a velocity of 0 is regarded as a Note Off.
                 # That is part of the MIDI Standard
-                self.led_activity.emit(0)
                 self.keys["key_on"] -= 1
+                self.led_activity.emit(0)
         elif msg.type == "note_off":
-            self.led_activity.emit(0)
             self.keys["key_on"] -= 1
+            self.led_activity.emit(0)
 
         # Rares cases
         if self.keys["key_on"] < 0:
