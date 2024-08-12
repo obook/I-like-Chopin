@@ -78,6 +78,11 @@ class ClassThreadInput(QThread):
     def callback(self, msg):
 
         # Control change - Midi commands
+
+        print(f"--> input receive msg.type [{msg.type}]")
+        if msg.type == "note_on":
+            print(f"--> input receive msg={msg}")
+
         if msg.type == "control_change":
             if msg.control == 71:
                 self.keys["humanize"] = msg.value  # 0 to 127
@@ -101,11 +106,16 @@ class ClassThreadInput(QThread):
 
         # Keys pressed counter
         if msg.type == "note_on":
-            self.led_activity.emit(1)
-            self.keys["key_on"] += 1
+            if msg.velocity == 0:
+                self.led_activity.emit(0)
+                self.keys["key_on"] -= 1
+            else:
+                self.led_activity.emit(1)
+                self.keys["key_on"] += 1
         elif msg.type == "note_off":
             self.led_activity.emit(0)
             self.keys["key_on"] -= 1
+
 
         # Rares cases
         if self.keys["key_on"] < 0:
