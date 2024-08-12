@@ -123,8 +123,16 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
   border-radius: 5px;
 }
 
+.modebutton{
+  /* background-color:lawngreen; */
+  /* color:#333333; */
+  font-size: calc(.5em + 1vw);
+  text-transform: uppercase;
+  border-radius: 5px;
+}
+
 .playerbutton:active{
-    background:olive;
+    /* background:olive; */
 }
 
 </style>
@@ -141,8 +149,8 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
       <button class="playerbutton" onclick="location.href='?do=stop'" type="button">STOP</button>
       <button class="playerbutton" onclick="location.href='?do=replay'" type="button">REPLAY</button>
       <button class="playerbutton" onclick="location.href='?do=shuffle'" type="button">SHUFFLE</button>
-      <button class="playerbutton" onclick="location.href='/'" type="button">REFRESH</button>
-      <button class="playerbutton" onclick="location.href='?do=mode'" type="button"><span id="mode">MODE...</span></button>
+      <!-- <button class="playerbutton" onclick="location.href='/'" type="button">REFRESH</button> -->
+      <button class="modebutton" onclick="location.href='?do=mode'" type="button"><span id="mode">MODE...</span></button>
     </div>
 </nav>
 
@@ -213,14 +221,26 @@ async function getStats() {
           document.getElementById('name').style.color = '#00ff00';
     }
 
-    if (data.mode == 1)
-      document.getElementById('mode').textContent="Playback";
-    else if (data.mode == 2)
-      document.getElementById('mode').textContent="Passthrough";
-    else if (data.mode == 3)
-      document.getElementById('mode').textContent="Player";
-      else if (data.mode == 4)
-      document.getElementById('mode').textContent="Random";
+    if (data.mode == 1) {
+      document.getElementById('mode').innerHTML="&nbsp;Mode Playback&nbsp;";
+      document.getElementById("mode").style.backgroundColor="black";
+      document.getElementById("mode").style.color="lawngreen";
+    }
+    else if (data.mode == 2) {
+      document.getElementById('mode').innerHTML="&nbsp;Mode Passthrough&nbsp;";
+      document.getElementById("mode").style.backgroundColor="white";
+      document.getElementById("mode").style.color="#703070";
+    }
+    else if (data.mode == 3) {
+      document.getElementById('mode').innerHTML="&nbsp;Mode Player&nbsp;";
+      document.getElementById("mode").style.backgroundColor="#8498fa";
+      document.getElementById("mode").style.color="black";
+    }
+    else if (data.mode == 4) {
+      document.getElementById('mode').innerHTML="&nbsp;Mode Random&nbsp;";
+      document.getElementById("mode").style.backgroundColor="white";
+      document.getElementById("mode").style.color="black";
+    }
     else
       document.getElementById('mode').textContent="Mode...";
 
