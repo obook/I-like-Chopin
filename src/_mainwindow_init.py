@@ -27,8 +27,8 @@ class _init:
     ICON_LED_OFF = application_path + "/icons/led/led-off.png"
 
     # Classes used
-    Settings = ClassSettings()
-    History = ClassHistory()
+    Settings = None
+    History = None
 
     # Channels buttons
     ChannelsButtonsList = []
@@ -36,7 +36,8 @@ class _init:
     def __init__(self):  # as is the first subclass in list, it's called
         # OK
         # print("---> _initialize __init__")
-        pass
+        self.Settings = ClassSettings()
+        self.History = ClassHistory()
 
     def _SetInterface(self):
 
@@ -58,6 +59,7 @@ class _init:
         self.ui.pushButton_Info.clicked.connect(self.Informations)
         self.ui.pushButton_Mode.clicked.connect(self.ChangePlayerMode)
         self.ui.pushButton_Files.clicked.connect(self.OpenBrowser)
+        self.ui.pushButton_Settings.clicked.connect(self.SettingsDlg)
         self.ui.pushButton_Files.installEventFilter(self)  # drop files
 
         # Leds

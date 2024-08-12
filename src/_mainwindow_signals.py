@@ -31,8 +31,10 @@ class signals:
             self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
 
     # Signal receiver
-    def SetLedFile(self, value):  # 0 or 1
-        if value:
+    def SetLedFile(self, value):  # -1, 0 or 1
+        if value < 0:
+            self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
+        elif value:
             self.ui.labelStatusMidifile.setPixmap(
                 QtGui.QPixmap(self.ICON_GREEN_LIGHT_LED)
             )

@@ -12,6 +12,9 @@ from midi_song import states, modes
 
 class timers:
 
+    ConnectInputState = False
+    ConnectOutputState = False
+
     window_title = []
     title_rotation = 0
 

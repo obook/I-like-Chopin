@@ -40,7 +40,7 @@ class ClassThreadMidiReader(QThread):
     sustain_pedal_off = False
 
     statusbar_activity = Signal(str)
-    led_activity = Signal(int)
+    led_file_activity = Signal(int)
 
     def __init__(self, midifile, keys, channels, pParent):
         QThread.__init__(self)
@@ -54,7 +54,7 @@ class ClassThreadMidiReader(QThread):
         self.keys = keys
         self.channels = channels
         self.statusbar_activity.connect(self.pParent.SetStatusBar)
-        self.led_activity.connect(self.pParent.SetLedFile)
+        self.led_file_activity.connect(self.pParent.SetLedFile)
         print(f"MidiReader {self.uuid} created [{os.path.basename(midifile)}]")
         self.midisong = ClassMidiSong(midifile)
 
@@ -98,7 +98,7 @@ class ClassThreadMidiReader(QThread):
 
             if self.notes_on_channels:
                 self.midisong.SetState(states["cueing"])
-                self.led_activity.emit(0)
+                self.led_file_activity.emit(0)
             else:
                 print(f"MidiReader {self.uuid} NO NOTE ON MIDI CHANNELS")
                 self.midisong.SetState(states["notracktoplay"])
@@ -148,10 +148,10 @@ class ClassThreadMidiReader(QThread):
             if self.midisong.IsState(states["playing"]):
                 if msg.type == "note_on":
                     if self.channels[msg.channel]:
-                        self.led_activity.emit(1)
+                        self.led_file_activity.emit(1)
                 elif msg.type == "note_off":
                     if self.channels[msg.channel]:
-                        self.led_activity.emit(0)
+                        self.led_file_activity.emit(0)
 
             # Just a Midi player
             if self.midisong.IsMode(modes["player"]) or self.Settings.IsMode(
@@ -284,7 +284,7 @@ class ClassThreadMidiReader(QThread):
                             )
                             self.pParent.Midi.SendOutput(msg)
                             self.sustain_pedal_off = True
-                            self.led_activity.emit(0)
+                            self.led_file_activity.emit(0)
 
                         self.sleep(0.001)  # for QT loop (give time)
 

@@ -12,6 +12,8 @@ from midi_numbers import number_to_note
 from midi_song import modes
 from PySide6.QtCore import QThread, Signal
 
+from settings_dialog import CleanDeviceName
+
 
 class ClassThreadInput(QThread):
 
@@ -60,7 +62,7 @@ class ClassThreadInput(QThread):
             )
             return
         if self.Settings.GetMode() == modes["playback"]:
-            self.statusbar_activity.emit(f"Waiting:{self.in_device} ...")
+            self.statusbar_activity.emit(f"Waiting : {CleanDeviceName(self.in_device)} ...")
             self.led_activity.emit(0)
 
         while self.running:

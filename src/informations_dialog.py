@@ -117,6 +117,6 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.close()
 
 
-def ShowInformation(pParent):
+def ShowInformationDlg(pParent):
     dlg = InformationsDlg(pParent)
     dlg.show()

@@ -9,7 +9,7 @@
         "midi_reader.py",
         "midi_numbers.py",
         "informations.ui",
-        "informations.py",
+        "informations_dialog.py",
         "i-like-chopin.py",
         "midi_song.py",
         "web_server.py",
@@ -20,6 +20,8 @@
         "_mainwindow_timers.py",
         "_mainwindow_web.py",
         "_mainwindow_midi.py",
-        "_mainwindow_init.py"
+        "_mainwindow_init.py",
+        "settings_dialog.ui",
+        "settings_dialog.py"
     ]
 }

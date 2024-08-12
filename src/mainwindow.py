@@ -9,8 +9,10 @@ import sys
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6 import QtGui
 from PySide6.QtCore import QEvent
-from informations import ShowInformation
 from midi_song import modes
+
+from informations_dialog import ShowInformationDlg
+from settings_dialog import ShowSettingsDlg
 
 import _mainwindow_init
 import _mainwindow_signals
@@ -33,14 +35,12 @@ class Mainwindow(
     _mainwindow_timers.timers,
 ):
 
-    ConnectInputState = False
-    ConnectOutputState = False
     PlayingState = False
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
-        self.setFixedSize(504, 413)
+        self.setFixedSize(504, 394)
         self.ui.setupUi(self)
 
         # Imported methods
@@ -54,14 +54,8 @@ class Mainwindow(
         # ComboBoxes Inputs/Outputs
         Input = self.Settings.GetInputDevice()
         Output = self.Settings.GetOutputDevice()
-
-        self.ui.InputDeviceCombo.addItem(Input)
-        self.ui.InputDeviceCombo.addItems(self.Inputs)
-        self.ui.InputDeviceCombo.currentIndexChanged.connect(self.InputDeviceChanged)
-
-        self.ui.OutputDeviceCombo.addItem(Output)
-        self.ui.OutputDeviceCombo.addItems(self.Outputs)
-        self.ui.OutputDeviceCombo.currentIndexChanged.connect(self.OuputDeviceChanged)
+        #self.ui.labelInput.setText(CleanDeviceName(Input))
+        #self.ui.labelOutput.setText(CleanDeviceName(Output))
 
         # Datas
         self.ChannelsList[0] = True  # active first channel
@@ -83,20 +77,6 @@ class Mainwindow(
 
         self.web_start()
         self.SetTimer()
-
-    def InputDeviceChanged(self):
-        self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
-        self.ConnectInputState = False
-        in_device = self.ui.InputDeviceCombo.currentText()
-        self.Settings.SaveInputDevice(in_device)
-        self.Midi.ConnectInput(in_device)
-
-    def OuputDeviceChanged(self):
-        self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
-        self.ConnectOutputState = False
-        out_device = self.ui.OutputDeviceCombo.currentText()
-        self.Settings.SaveOutputDevice(out_device)
-        self.Midi.ConnectOutput(out_device)
 
     def MidifileChange(
         self, filepath
@@ -280,8 +260,11 @@ class Mainwindow(
             # self.setWindowTitle(f"I Like Chopin : {self.midisong.GetCleanName()}")
             self.ui.pushButton_Files.setText(self.midisong.GetCleanName())
 
+    def SettingsDlg(self):
+        ShowSettingsDlg(self)
+
     def Informations(self):
-        ShowInformation(self)
+        ShowInformationDlg(self)
 
     def eventFilter(self, o, e):  # drop files
         if e.type() == QEvent.DragEnter:  # remember to accept the enter event
