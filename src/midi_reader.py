@@ -84,7 +84,7 @@ class ClassThreadMidiReader(QThread):
             self.channels_notes = {}
 
             for msg in MidiFile(self.midisong.Getfilepath()):  # PUT IN MIDI_SONG
-                if msg.type == "note_on":
+                if msg.type == "note_on":  # with velocity or not
                     self.total_notes_on += 1
                     if self.channels[msg.channel]:
                         self.notes_on_channels += 1
@@ -147,11 +147,12 @@ class ClassThreadMidiReader(QThread):
             # For fun
             if self.midisong.IsState(states["playing"]):
                 if msg.type == "note_on":
-                    if self.channels[msg.channel]:
+                    if msg.velocity:
                         self.led_file_activity.emit(1)
-                elif msg.type == "note_off":
-                    if self.channels[msg.channel]:
+                    else:
                         self.led_file_activity.emit(0)
+                elif msg.type == "note_off":
+                    self.led_file_activity.emit(0)
 
             # Just a Midi player
             if self.midisong.IsMode(modes["player"]) or self.Settings.IsMode(
@@ -233,7 +234,7 @@ class ClassThreadMidiReader(QThread):
                     # Time for the note
                     time.sleep(msg.time + human + self.keys["speed"] / 2000)
 
-                if msg.type == "note_on":
+                if msg.type == "note_on":  # with velocity or not
                     if self.channels[msg.channel] and not self.midisong.IsState(
                         states["playing"]
                     ):  # First note on channels selected

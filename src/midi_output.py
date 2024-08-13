@@ -79,16 +79,20 @@ class ClassThreadOutput(QThread):
                             print(f"MidiOutput {self.uuid} self.outport.send ERROR")
 
     def send(self, message):
-        if self.running:
+        if self.running and self.outport:
+
+            try:
+                self.outport.send(message)
+            except:
+                pass
+
             if message.type == "note_on":
-                self.led_activity.emit(1)
+                if message.velocity:
+                    self.led_activity.emit(1)
+                else:
+                    self.led_activity.emit(0)
             else:
                 self.led_activity.emit(0)
-            if self.outport:
-                try:
-                    self.outport.send(message)
-                except:
-                    pass
 
     def getport(self):
         if self.running:

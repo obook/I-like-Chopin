@@ -48,9 +48,9 @@
     <widget class="QLabel" name="label_File">
      <property name="geometry">
       <rect>
-       <x>23</x>
-       <y>35</y>
-       <width>71</width>
+       <x>20</x>
+       <y>36</y>
+       <width>81</width>
        <height>22</height>
       </rect>
      </property>
@@ -58,7 +58,7 @@
       <string>File</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_Ouput">

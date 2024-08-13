@@ -60,6 +60,12 @@ class ClassMidiSong:
     def GetParent(self):  # A/B/C/D.mid return C
         return PurePath(self.__filepath).parent.name
 
+    def GetParentShort(self):  # A/B/C/D.mid return C
+        parent = PurePath(self.__filepath).parent.name
+        if parent:
+            return parent.split(" ")[0]
+        return "None"
+
     def GetFilename(self):  # with extension, eg : toto.mid
         return os.path.basename(self.__filepath)
 

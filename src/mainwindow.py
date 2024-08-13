@@ -9,7 +9,7 @@ import sys
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6 import QtGui
 from PySide6.QtCore import QEvent
-from midi_song import modes
+from midi_song import modes, ClassMidiSong
 
 from informations_dialog import ShowInformationDlg
 from settings_dialog import ShowSettingsDlg
@@ -71,7 +71,7 @@ class Mainwindow(
 
         # Midifiles
         if self.midisong:
-            self.ui.pushButton_Files.setText(self.midisong.GetCleanName())
+            self.SetFileButtonText()
 
         self.midifiles_dict = self.Midifiles.ScanFiles(self.Settings.GetMidiPath())
 
@@ -257,8 +257,8 @@ class Mainwindow(
 
     def SetFileButtonText(self):
         if self.midisong:
-            # self.setWindowTitle(f"I Like Chopin : {self.midisong.GetCleanName()}")
             self.ui.pushButton_Files.setText(self.midisong.GetCleanName())
+            self.ui.label_File.setText(self.midisong.GetParentShort())
 
     def SettingsDlg(self):
         ShowSettingsDlg(self)

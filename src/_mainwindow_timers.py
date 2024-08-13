@@ -23,11 +23,11 @@ class timers:
         self.timer1 = QTimer(self)
         self.timer1.timeout.connect(self.timer)
         self.timer1.start(2000)
-
+        """
         self.timer2 = QTimer(self)
         self.timer2.timeout.connect(self.timer_title)
         self.timer2.start(8000)
-
+        """
         self.timer3 = QTimer(self)
         self.timer3.timeout.connect(self.timer_random_song)
         self.timer3.start(25000)
@@ -78,6 +78,7 @@ class timers:
             if self.Midi.GetOuputPort():
                 self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
 
+    """
     def timer_title(self):
         # if not window_title:
         self.window_title = ["I LIKE CHOPIN"]
@@ -91,6 +92,7 @@ class timers:
         self.title_rotation += 1
         if self.title_rotation >= len(self.window_title):
             self.title_rotation = 0
+    """
 
     def timer_random_song(self):
         self.midisong = self.Midi.GetMidiSong()
@@ -101,5 +103,5 @@ class timers:
 
     def StopTimers(self):
         self.timer1.stop()
-        self.timer2.stop()
+        # self.timer2.stop()
         self.timer3.stop()

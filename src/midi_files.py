@@ -35,7 +35,6 @@ class ClassMidiFiles:
             )
         ):
             path = pathlib.PurePath(file)
-
             if not any(
                 path.parent.name in keys for keys in self.midifiles_dict
             ):  # not in dictionnary
