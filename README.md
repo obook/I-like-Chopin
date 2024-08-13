@@ -32,11 +32,12 @@ With a Virtual Synth       |With Piano in Daw Mode     | With Rack Synth
 # Programs and libraries used
 
 * Python 3.10.12
-* mido==1.2.10
-* python-rtmidi==1.4.7
-* PySide6==6.7.1
-* netifaces2==0.0.22
-* qrcode==7.4.2
+* mido 1.2.10
+* python-rtmidi 1.4.7
+* PySide6 6.7.1
+* netifaces 2 0.0.22
+* qrcode 7.4.2
+* pillow =10.4.0
 
 # Utilities
 
@@ -44,6 +45,16 @@ No native virtual MIDI driver is provided with Windows, but there are a number o
 
 * [RTP loopMIDI](https://www.tobias-erichsen.de/) developed by Tobias Erichsen, who also programmed a version of the Network MIDI driver for Windows.
 * [MIDI Yoke](https://www.midiox.com/) which is part of the MIDI OX utility (32 bits only).
+
+# Tested with...
+* Raspberry Pi 4 Model B - OS Debian version: 12 (bookworm)
+* Ubuntu 24.04 LTS
+* Windows 10
+* MacOS 14.6.1
+* USB to Midi CME U2MIDI Pro
+* Keyboard Arturia Keystep 37
+* Piano Yamaha Clavinova CLP-123
+
 
 # Thanks
 
