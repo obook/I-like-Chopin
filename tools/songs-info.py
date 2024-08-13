@@ -37,11 +37,12 @@ def MidiSongInfo(file):
     # Notes in selected channels (0-15)
     for msg in MidiFile(file):
         if msg.type == "note_on":
-            total_notes_on += 1
-            key = int(msg.channel)
-            if not key in channels_notes_on.keys():
-                channels_notes_on[int(key)] = 0
-            channels_notes_on[int(key)] += 1
+            if msg.velocity:
+                total_notes_on += 1
+                key = int(msg.channel)
+                if not key in channels_notes_on.keys():
+                    channels_notes_on[int(key)] = 0
+                channels_notes_on[int(key)] += 1
         if msg.type == "control_change":
             if msg.value == 64: # The sustain pedal sends CC 64 127 and CC 64 0 messages on channel 1
                 sustain +=1
