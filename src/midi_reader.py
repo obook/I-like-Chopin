@@ -202,7 +202,6 @@ class ClassThreadMidiReader(QThread):
                 if msg.type == "note_on" and self.channels[msg.channel]:
                     note, octave = number_to_note(msg.note)
                     text = f"[{msg.note}]\t\t{note}{octave}"
-                    # self.midi.SendStatusBar(text)
                     self.statusbar_activity.emit(text)
 
             # Playback : wait keyboard
@@ -270,9 +269,6 @@ class ClassThreadMidiReader(QThread):
                             self.stop()
                             return
 
-                        # Si trop long, enlever la pédale
-                        # le problème c'est qu'il faut la remettre avant de reprendre !
-                        # controller 64->0
                         if (
                             self.sustain_pedal
                             and time.time() - start_time_loop > 1.5
