@@ -100,11 +100,11 @@ class ClassThreadMidiReader(QThread):
                 self.midisong.SetState(states["cueing"])
                 self.led_file_activity.emit(0)
             else:
-                print(f"MidiReader {self.uuid} NO NOTE ON MIDI CHANNELS")
+                print(f"|!| MidiReader {self.uuid} NO NOTE ON MIDI CHANNELS")
                 self.midisong.SetState(states["notracktoplay"])
         except Exception as error:
             self.midisong.SetState(states["bad"])
-            print(f"MidiReader {self.uuid} ERROR READING {self.midisong.Getfilepath()} {error}")
+            print(f"|!| MidiReader {self.uuid} ERROR [{self.midisong.GetFilename()}] {error}")
 
         return self.midisong
 

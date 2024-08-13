@@ -42,7 +42,7 @@ class ClassThreadOutput(QThread):
         except Exception as error:
             self.outport = None
             print(
-                f"|!| MidiOutput {self.uuid} midi_output open [{self.out_device}] ERROR {error}"
+                f"|!| MidiOutput {self.uuid} {error}"
             )
             return
         # Set all channels to Piano ('Acoustic Grand Piano') if set
@@ -76,7 +76,7 @@ class ClassThreadOutput(QThread):
                         try:
                             self.outport.send(init_message)
                         except Exception as error:
-                            print(f"MidiOutput {self.uuid} self.outport.send ERROR {error}")
+                            print(f"|!| MidiOutput {self.uuid} self.outport.send ERROR {error}")
 
     def send(self, message):
         if self.running and self.outport:
