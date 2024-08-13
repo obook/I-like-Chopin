@@ -78,7 +78,7 @@ class Ui_MainWindow(object):
         )
         self.label_Ouput = QLabel(self.groupBoxDevices)
         self.label_Ouput.setObjectName("label_Ouput")
-        self.label_Ouput.setGeometry(QRect(322, 80, 91, 22))
+        self.label_Ouput.setGeometry(QRect(321, 80, 90, 22))
         self.label_Ouput.setAlignment(
             Qt.AlignmentFlag.AlignRight
             | Qt.AlignmentFlag.AlignTrailing
@@ -94,13 +94,13 @@ class Ui_MainWindow(object):
         )
         self.labelStatusInput = QLabel(self.groupBoxDevices)
         self.labelStatusInput.setObjectName("labelStatusInput")
-        self.labelStatusInput.setGeometry(QRect(100, 82, 20, 20))
+        self.labelStatusInput.setGeometry(QRect(100, 81, 20, 20))
         self.labelStatusOuput = QLabel(self.groupBoxDevices)
         self.labelStatusOuput.setObjectName("labelStatusOuput")
         self.labelStatusOuput.setGeometry(QRect(420, 81, 20, 20))
         self.labelStatusMidifile = QLabel(self.groupBoxDevices)
         self.labelStatusMidifile.setObjectName("labelStatusMidifile")
-        self.labelStatusMidifile.setGeometry(QRect(255, 80, 20, 20))
+        self.labelStatusMidifile.setGeometry(QRect(255, 81, 20, 20))
         self.pushButton_Files = QPushButton(self.groupBoxDevices)
         self.pushButton_Files.setObjectName("pushButton_Files")
         self.pushButton_Files.setGeometry(QRect(110, 30, 331, 31))
@@ -113,7 +113,7 @@ class Ui_MainWindow(object):
         self.progressBar.setTextVisible(False)
         self.label_Ouput_2 = QLabel(self.groupBoxDevices)
         self.label_Ouput_2.setObjectName("label_Ouput_2")
-        self.label_Ouput_2.setGeometry(QRect(155, 80, 91, 22))
+        self.label_Ouput_2.setGeometry(QRect(155, 80, 90, 22))
         self.label_Ouput_2.setAlignment(
             Qt.AlignmentFlag.AlignRight
             | Qt.AlignmentFlag.AlignTrailing
