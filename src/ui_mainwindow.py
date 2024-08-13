@@ -94,7 +94,7 @@ class Ui_MainWindow(object):
         )
         self.labelStatusInput = QLabel(self.groupBoxDevices)
         self.labelStatusInput.setObjectName("labelStatusInput")
-        self.labelStatusInput.setGeometry(QRect(100, 81, 20, 20))
+        self.labelStatusInput.setGeometry(QRect(100, 82, 20, 20))
         self.labelStatusOuput = QLabel(self.groupBoxDevices)
         self.labelStatusOuput.setObjectName("labelStatusOuput")
         self.labelStatusOuput.setGeometry(QRect(420, 81, 20, 20))
@@ -113,7 +113,7 @@ class Ui_MainWindow(object):
         self.progressBar.setTextVisible(False)
         self.label_Ouput_2 = QLabel(self.groupBoxDevices)
         self.label_Ouput_2.setObjectName("label_Ouput_2")
-        self.label_Ouput_2.setGeometry(QRect(155, 78, 91, 22))
+        self.label_Ouput_2.setGeometry(QRect(155, 80, 91, 22))
         self.label_Ouput_2.setAlignment(
             Qt.AlignmentFlag.AlignRight
             | Qt.AlignmentFlag.AlignTrailing
@@ -213,7 +213,7 @@ class Ui_MainWindow(object):
             QCoreApplication.translate("MainWindow", "PushButton", None)
         )
         self.label_Ouput_2.setText(
-            QCoreApplication.translate("MainWindow", "Engine", None)
+            QCoreApplication.translate("MainWindow", "MIDI File", None)
         )
         self.groupBox_2.setTitle(
             QCoreApplication.translate("MainWindow", "MIDI Channels", None)
