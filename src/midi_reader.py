@@ -102,9 +102,9 @@ class ClassThreadMidiReader(QThread):
             else:
                 print(f"MidiReader {self.uuid} NO NOTE ON MIDI CHANNELS")
                 self.midisong.SetState(states["notracktoplay"])
-        except:
+        except Exception as error:
             self.midisong.SetState(states["bad"])
-            print(f"MidiReader {self.uuid} ERROR READING {self.midisong.Getfilepath()}")
+            print(f"MidiReader {self.uuid} ERROR READING {self.midisong.Getfilepath()} {error}")
 
         return self.midisong
 
@@ -181,7 +181,7 @@ class ClassThreadMidiReader(QThread):
                         states["playing"]
                     ):  # First note on channels selected
                         print(
-                            f"MidiReader {self.uuid} player ready [{self.midisong.GetFilename()}]"
+                            f"MidiReader {self.uuid} player [{self.midisong.GetFilename()}] READY"
                         )
                         self.midisong.SetState(states["playing"])
 
@@ -238,7 +238,7 @@ class ClassThreadMidiReader(QThread):
                         states["playing"]
                     ):  # First note on channels selected
                         print(
-                            f"MidiReader {self.uuid} playback ready [{self.midisong.GetFilename()}]"
+                            f"MidiReader {self.uuid} playback [{self.midisong.GetFilename()}] READY"
                         )
                         self.midisong.SetState(states["playing"])
 

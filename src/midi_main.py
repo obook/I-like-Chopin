@@ -107,8 +107,8 @@ class ClassMidiMain(QObject):
                         return self.ThreadOutput.send(msg)
                 else:
                     return self.ThreadOutput.send(msg)
-            except:
-                print(f"ERROR MidiMain {self.uuid} can not SendOutput")
+            except Exception as error:
+                print(f"ERROR MidiMain {self.uuid} can not SendOutput {error}")
         return None
 
     def SetMidiSong(self, midifile):

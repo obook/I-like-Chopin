@@ -46,7 +46,7 @@ class ClassMidiFiles:
             self.midifiles_count += 1
 
         print(
-            f"MidiFiles {self.uuid} {self.midifiles_count} files [{self.defaultmidipath}]"
+            f"MidiFiles {self.uuid} {self.midifiles_count} files in [{self.defaultmidipath}]"
         )
         return self.midifiles_dict
 

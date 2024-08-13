@@ -32,9 +32,8 @@ class ClassHistory:
             with open(self.historyfile, "r") as f:
                 self.history = json.load(f)
                 f.close
-        except Exception as kerreur:  # not yet exists
-            print(f"History {self.uuid} exception {kerreur}")
-            pass
+        except Exception as error:  # not yet exists
+            print(f"History {self.uuid} exception {error}")
 
         # cleanup
         new_history = []

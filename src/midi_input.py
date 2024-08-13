@@ -56,9 +56,9 @@ class ClassThreadInput(QThread):
         try:
             self.in_port = open_input(self.in_device, callback=self.callback)
             self.running = True
-        except:
+        except Exception as error:
             print(
-                f"MidiInput {self.uuid} midi_input:Error connect from {self.in_device}"
+                f"MidiInput {self.uuid} midi_input:Error connect from {self.in_device} {error}"
             )
             return
         if self.Settings.GetMode() == modes["playback"]:
