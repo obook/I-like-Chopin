@@ -210,7 +210,9 @@ class ClassWebServer(QThread):
             self.server.allow_reuse_address = True
             self.server.serve_forever()
         except Exception as error:
-            print(f"|!| WebServer {self.uuid} CAN NOT SERVE ON PORT {self.port} {error}")
+            print(
+                f"|!| WebServer {self.uuid} CAN NOT SERVE ON PORT {self.port} {error}"
+            )
             self.pParent.Midi.SendStatusBar(f"WEB SERVER PORT {self.port} BUSY !")
 
     def GetPort(self):

@@ -104,7 +104,9 @@ class ClassThreadMidiReader(QThread):
                 self.midisong.SetState(states["notracktoplay"])
         except Exception as error:
             self.midisong.SetState(states["bad"])
-            print(f"|!| MidiReader {self.uuid} ERROR [{self.midisong.GetFilename()}] {error}")
+            print(
+                f"|!| MidiReader {self.uuid} ERROR [{self.midisong.GetFilename()}] {error}"
+            )
 
         return self.midisong
 

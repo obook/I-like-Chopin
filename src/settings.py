@@ -81,7 +81,9 @@ class ClassSettings:
                 json.dump(self.config, f, indent=4, sort_keys=True, ensure_ascii=False)
                 f.close
         except Exception as error:
-            print(f"Settings {self.uuid} SaveConfig [{self.settingsfile}] ERROR {error}")
+            print(
+                f"Settings {self.uuid} SaveConfig [{self.settingsfile}] ERROR {error}"
+            )
             return False
         return True
 

@@ -71,7 +71,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Synthesizer</string>
+      <string>Midi Out</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -87,7 +87,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Keyboard</string>
+      <string>MIDI In</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>

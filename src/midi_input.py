@@ -57,9 +57,7 @@ class ClassThreadInput(QThread):
             self.in_port = open_input(self.in_device, callback=self.callback)
             self.running = True
         except Exception as error:
-            print(
-                f"|!| MidiInput {self.uuid} {error}"
-            )
+            print(f"|!| MidiInput {self.uuid} {error}")
             return
         if self.Settings.GetMode() == modes["playback"]:
             self.statusbar_activity.emit(

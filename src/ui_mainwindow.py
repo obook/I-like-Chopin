@@ -195,10 +195,10 @@ class Ui_MainWindow(object):
         )
         self.label_File.setText(QCoreApplication.translate("MainWindow", "File", None))
         self.label_Ouput.setText(
-            QCoreApplication.translate("MainWindow", "Synthesizer", None)
+            QCoreApplication.translate("MainWindow", "Midi Out", None)
         )
         self.label_Input.setText(
-            QCoreApplication.translate("MainWindow", "Keyboard", None)
+            QCoreApplication.translate("MainWindow", "MIDI In", None)
         )
         self.labelStatusInput.setText(
             QCoreApplication.translate("MainWindow", "LED", None)
