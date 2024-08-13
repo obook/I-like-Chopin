@@ -47,11 +47,13 @@ No native virtual MIDI driver is provided with Windows, but there are a number o
 * [MIDI Yoke](https://www.midiox.com/) which is part of the MIDI OX utility (32 bits only).
 
 # Tested with...
-* Raspberry Pi 4 Model B - OS Debian version: 12 (bookworm)
-* Ubuntu 24.04 LTS
-* Windows 10
+* Raspberry Pi 4 Model B / Debian 12 (bookworm)
+* Ubuntu 24.04 LTS ALSA/JACK
+* Windows 10 / RTP loopMIDI / OmniMIDI / VirtualMIDISynth
 * MacOS 14.6.1
 * USB to Midi CME U2MIDI Pro
+* Steinberg UR22mkII
+* Modartt Pianoteq Stage
 * Keyboard Arturia Keystep 37
 * Piano Yamaha Clavinova CLP-123
 
