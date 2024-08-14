@@ -257,8 +257,8 @@ class Mainwindow(
 
     def SetFileButtonText(self):
         if self.midisong:
-            self.ui.pushButton_Files.setText(self.midisong.GetCleanName())
-            self.ui.label_File.setText(self.midisong.GetParentShort())
+            self.ui.pushButton_Files.setText(self.midisong.GetCleanNameShort(32))
+            self.ui.label_File.setText(self.midisong.GetParentShort(8))
 
     def SettingsDlg(self):
         ShowSettingsDlg(self)
