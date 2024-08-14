@@ -202,9 +202,10 @@ class ClassThreadMidiReader(QThread):
                 self.pParent.Midi.SendOutput(msg)
 
                 if msg.type == "note_on" and self.channels[msg.channel]:
-                    note, octave = number_to_note(msg.note)
-                    text = f"[{msg.note}]\t\t{note}{octave}"
-                    self.statusbar_activity.emit(text)
+                    if msg.velocity:
+                        note, octave = number_to_note(msg.note)
+                        text = f"[{msg.note}]\t\t{note}{octave}"
+                        self.statusbar_activity.emit(text)
 
             # Playback : wait keyboard
             elif self.midisong.IsMode(modes["playback"]):
