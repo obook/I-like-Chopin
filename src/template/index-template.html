@@ -193,12 +193,20 @@ async function getStats() {
   try {
     const response = await fetch('status.json');
     const data = await response.json();
+    channels = " ";
+    for (const [key, value] of Object.entries(data.channels)) {
+      channel =  parseInt(key) + 1;
+      channels = channels + channel + " ";
+    }
+
+    console.log("Channels string=["+channels+"]");
+
     document.getElementById('progressbar').value=data.played;
     document.getElementById('name').textContent=data.nameclean;
     document.getElementById('folder').textContent=data.folder
     const minutes = Math.floor(data.duration);
     const seconds = Math.floor((data.duration - minutes)*60);
-    document.getElementById('duration').textContent=" (" + minutes+"'"+String(seconds).padStart(2, '0')+")";
+    document.getElementById('duration').textContent = minutes+"'"+String(seconds).padStart(2, '0')+" ["+channels+"]";
 
     if (data.state <0) {
         document.getElementById('name').style.color = '#ff0000';

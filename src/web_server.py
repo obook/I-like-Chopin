@@ -58,6 +58,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                         "folder": self.midisong.GetParent(),
                         "state": self.midisong.GetState(),
                         "mode": self.midisong.GetMode(),
+                        "tracks":self.midisong.GetTracks(),
+                        "channels":self.midisong.GetChannels(),
                     }
                 )
 
