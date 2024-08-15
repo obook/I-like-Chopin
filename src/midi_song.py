@@ -63,12 +63,12 @@ class ClassMidiSong:
     def GetParentShort(self, lenght=None):  # A/B/C/D.mid return C
         parent = PurePath(self.__filepath).parent.name
         if lenght:
-            parent = (parent[:lenght] + '..') if len(parent) > lenght else parent
-        '''
+            parent = (parent[:lenght] + "..") if len(parent) > lenght else parent
+        """
         if parent:
             return parent.split(" ")[0]
         return "None"
-        '''
+        """
         return parent
 
     def GetFilename(self):  # with extension, eg : toto.mid
@@ -86,7 +86,7 @@ class ClassMidiSong:
     def GetCleanNameShort(self, lenght=None):
         name = self.GetCleanName()
         if lenght:
-            name = (name[:lenght] + '..') if len(name) > lenght else name
+            name = (name[:lenght] + "..") if len(name) > lenght else name
         return name
 
     def SetDuration(self, duration):

@@ -149,8 +149,12 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
       <button class="playerbutton" onclick="location.href='?do=stop'" type="button">STOP</button>
       <button class="playerbutton" onclick="location.href='?do=replay'" type="button">REPLAY</button>
       <button class="playerbutton" onclick="location.href='?do=shuffle'" type="button">SHUFFLE</button>
-      <!-- <button class="playerbutton" onclick="location.href='/'" type="button">REFRESH</button> -->
-      <button class="modebutton" onclick="location.href='?do=mode'" type="button"><span id="mode">MODE...</span></button>
+      <select class="playerbutton" name="modes" id="mode-select" onchange="ChangeMode();">
+        <option value="playback" selected>Playback Mode</option>
+        <option value="passthrough">Passthrough Mode</option>
+        <option value="player">Player Mode</option>
+        <option value="random">Random Mode</option>
+      </select>
     </div>
 </nav>
 
@@ -189,24 +193,41 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 </main>
 
 <script>
+
+/* API (see status.json sample file) */
+
 async function getStats() {
   try {
     const response = await fetch('status.json');
     const data = await response.json();
+
+    /* Actives MIDI channels of MIDIfile */
+
     channels = " ";
     for (const [key, value] of Object.entries(data.channels)) {
       channel =  parseInt(key) + 1;
       channels = channels + channel + " ";
     }
 
-    console.log("Channels string=["+channels+"]");
+    /* Progress bar */
 
     document.getElementById('progressbar').value=data.played;
+
+    /* Name (short) of MIDIfile */  
+
     document.getElementById('name').textContent=data.nameclean;
+
+    /* Parent folder of MIDIfile */
+
     document.getElementById('folder').textContent=data.folder
+
+    /* Duration */
+
     const minutes = Math.floor(data.duration);
     const seconds = Math.floor((data.duration - minutes)*60);
     document.getElementById('duration').textContent = minutes+"'"+String(seconds).padStart(2, '0')+" ["+channels+"]";
+
+    /* Handle MIDIfile errors */
 
     if (data.state <0) {
         document.getElementById('name').style.color = '#ff0000';
@@ -223,31 +244,33 @@ async function getStats() {
           document.getElementById('name').style.color = '#ff00ff';
         else if (data.mode == 3)
           document.getElementById('name').style.color = '#8498fa';
-          else if (data.mode == 4)
+        else if (data.mode == 4)
           document.getElementById('name').style.color = '#ffffff';
         else
           document.getElementById('name').style.color = '#00ff00';
     }
 
+    /* Modes */
+
     if (data.mode == 1) {
-      document.getElementById('mode').innerHTML="&nbsp;Mode Playback&nbsp;";
-      document.getElementById("mode").style.backgroundColor="black";
-      document.getElementById("mode").style.color="lawngreen";
+      document.getElementById("mode-select").selectedIndex = 0;
+  /*  document.getElementById("mode-select").style.backgroundColor="black";
+      document.getElementById("mode-select").style.color="lawngreen"; */
     }
     else if (data.mode == 2) {
-      document.getElementById('mode').innerHTML="&nbsp;Mode Passthrough&nbsp;";
-      document.getElementById("mode").style.backgroundColor="white";
-      document.getElementById("mode").style.color="#703070";
+      document.getElementById("mode-select").selectedIndex = 1;
+  /*  document.getElementById("mode-select").style.backgroundColor="white";
+      document.getElementById("mode-select").style.color="#703070"; */
     }
     else if (data.mode == 3) {
-      document.getElementById('mode').innerHTML="&nbsp;Mode Player&nbsp;";
-      document.getElementById("mode").style.backgroundColor="#8498fa";
-      document.getElementById("mode").style.color="black";
+      document.getElementById("mode-select").selectedIndex = 2;
+  /*  document.getElementById("mode-select").style.backgroundColor="#8498fa";
+      document.getElementById("mode-select").style.color="black"; */
     }
     else if (data.mode == 4) {
-      document.getElementById('mode').innerHTML="&nbsp;Mode Random&nbsp;";
-      document.getElementById("mode").style.backgroundColor="white";
-      document.getElementById("mode").style.color="black";
+      document.getElementById("mode-select").selectedIndex = 3;
+  /*  document.getElementById("mode-select").style.backgroundColor="white";
+      document.getElementById("mode-select").style.color="black"; */
     }
     else
       document.getElementById('mode').textContent="Mode...";
@@ -263,8 +286,15 @@ async function getStats() {
   }
 }
 
-getStats();
-setInterval(getStats, 2000);
+/* Dropdown mode list */
+
+function ChangeMode() {
+  var dropdown = document.getElementById("mode-select"); 
+  var selectedValue = dropdown.value;
+  document.location.href = '/?mode='+selectedValue;
+}
+
+/* Accordion */
 
 var acc = document.getElementsByClassName("accordion");
 var i;
@@ -280,6 +310,11 @@ for (i = 0; i < acc.length; i++) {
     }
   });
 }
+
+/* Main script */
+
+getStats();
+setInterval(getStats, 2000);
 
 </script>
 </body></html>

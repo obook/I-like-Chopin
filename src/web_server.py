@@ -58,8 +58,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                         "folder": self.midisong.GetParent(),
                         "state": self.midisong.GetState(),
                         "mode": self.midisong.GetMode(),
-                        "tracks":self.midisong.GetTracks(),
-                        "channels":self.midisong.GetChannels(),
+                        "tracks": self.midisong.GetTracks(),
+                        "channels": self.midisong.GetChannels(),
                     }
                 )
 
@@ -96,11 +96,13 @@ class RequestHandler(BaseHTTPRequestHandler):
                     self.pParent.MidifileReplay()  # DANGEROUS ?
                 except:
                     pass
+            """
             elif self.pParent and action == "mode":
                 try:
                     self.pParent.ChangePlayerMode()  # DANGEROUS ?
                 except:
                     pass
+            """
             self.send_response(302)
             self.send_header("Location", "/")
             try:
@@ -108,7 +110,19 @@ class RequestHandler(BaseHTTPRequestHandler):
             except:
                 pass
             return
-
+        elif "mode" in query_components:
+            mode = query_components["mode"][0]
+            try:
+                self.pParent.ChangePlayerMode(mode)  # DANGEROUS ?
+            except:
+                pass
+            self.send_response(302)
+            self.send_header("Location", "/")
+            try:
+                self.end_headers()
+            except:
+                pass
+            return
         # send index.html
         self.send_response(200)
         self.send_header("Content-type", "text/html")

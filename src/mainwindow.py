@@ -227,9 +227,15 @@ class Mainwindow(
             self.ui.pushButton_Mode.setText("Random")
             self.ui.pushButton_Mode.setChecked(False)
 
-    def ChangePlayerMode(self):  # button mode pressed
+    def ChangePlayerMode(self, playmode=None):  # button mode pressed or from webserver
 
-        if self.Settings.IsMode(modes["playback"]):
+        if isinstance(
+            playmode, str
+        ):  # from weserver, can be "playback", "passthrough", "player", "random"
+            if not self.Settings.IsMode(modes[playmode]):
+                self.Settings.SaveMode(modes[playmode])
+
+        elif self.Settings.IsMode(modes["playback"]):
             self.Settings.SaveMode(modes["passthrough"])
 
         elif self.Settings.IsMode(modes["passthrough"]):
