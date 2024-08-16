@@ -291,7 +291,7 @@
     <property name="title">
      <string>MIDI Controller</string>
     </property>
-    <widget class="QPushButton" name="pushButton_FileIndex">
+    <widget class="QPushButton" name="pushButton_Replay">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -304,7 +304,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Midifile</string>
+      <string>Replay</string>
      </property>
      <property name="checkable">
       <bool>false</bool>

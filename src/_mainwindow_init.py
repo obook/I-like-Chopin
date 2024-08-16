@@ -63,6 +63,7 @@ class _init:
         self.ui.pushButton_Panic.clicked.connect(self.Panic)
         self.ui.pushButton_Quit.clicked.connect(self.Quit)
         self.ui.pushButton_Info.clicked.connect(self.Informations)
+        self.ui.pushButton_Replay.clicked.connect(self.MidifileReplay)
         self.ui.pushButton_Mode.clicked.connect(self.ChangePlayerMode)
         self.ui.pushButton_Settings.clicked.connect(self.SettingsDlg)
         self.ui.pushButton_Files.clicked.connect(self.OpenBrowser)

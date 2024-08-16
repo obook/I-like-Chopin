@@ -226,7 +226,7 @@ class ClassThreadMidiReader(QThread):
                 if msg.type == "note_on" and self.channels[msg.channel]:
                     if msg.velocity:
                         note, octave = number_to_note(msg.note)
-                        text = f"[{msg.note}]\t\t{note} {octave+1}"
+                        text = f"[{msg.note}]\t\t{note} {octave-1}"
                         self.statusbar_activity.emit(text)
 
             # Playback : wait keyboard ############################################################
@@ -279,7 +279,7 @@ class ClassThreadMidiReader(QThread):
                 if msg.type == "note_on" and self.channels[msg.channel]:
                     if msg.velocity:
                         note, octave = number_to_note(msg.note)
-                        text = f"[{msg.note}]\t\t{note} {octave+1}"
+                        text = f"[{msg.note}]\t\t{note} {octave-1}"
                         self.statusbar_activity.emit(text)
                 '''
 
