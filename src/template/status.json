@@ -6,5 +6,6 @@
     "state":2,
     "mode":1,
     "tracks":["track1","track2"],
-    "channels":{"0":256}
+    "channels":{"0":256},
+    "sustain":0
 }

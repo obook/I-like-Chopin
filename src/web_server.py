@@ -60,6 +60,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                         "mode": self.midisong.GetMode(),
                         "tracks": self.midisong.GetTracks(),
                         "channels": self.midisong.GetChannels(),
+                        "sustain":self.midisong.GetSustain(),
                     }
                 )
 

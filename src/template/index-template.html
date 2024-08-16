@@ -225,7 +225,13 @@ async function getStats() {
 
     const minutes = Math.floor(data.duration);
     const seconds = Math.floor((data.duration - minutes)*60);
-    document.getElementById('duration').textContent = minutes+"'"+String(seconds).padStart(2, '0')+" ["+channels+"]";
+    line = minutes+"'"+String(seconds).padStart(2, '0');
+    line = line + " ["+channels+"] ";
+    if(data.sustain > 0)
+      line = line + "🎹"
+    else
+      line = line + "💻"
+    document.getElementById('duration').textContent = line;
 
     /* Handle MIDIfile errors */
 

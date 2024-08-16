@@ -38,6 +38,7 @@ class ClassMidiSong:
     __played = 0  # percent
     __tracks = []
     __channels = {}
+    __sustain = 0
     __state = states["unknown"]
     __mode = modes["playback"]
     __uuid = uuid.uuid4()
@@ -114,6 +115,12 @@ class ClassMidiSong:
 
     def GetChannels(self):
         return self.__channels
+
+    def SetSustain(self, value):
+        self.__sustain = value
+
+    def GetSustain(self):
+        return self.__sustain
 
     def SetState(self, value):  # EG : SetState(states['cueing'])
         self.__state = value

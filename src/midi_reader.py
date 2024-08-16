@@ -108,6 +108,7 @@ class ClassThreadMidiReader(QThread):
                 self.star_file_activity.emit(-1)
 
             self.midisong.SetChannels(self.channels_notes)
+            self.midisong.SetSustain(self.total_sustain)
             # self.pParent.ChannelsSetButtons()
 
             if self.notes_on_channels:
