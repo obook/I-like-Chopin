@@ -105,17 +105,10 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         cursor.setPosition(0)
         self.textBrowser.setTextCursor(cursor)
 
-        self.checkBox_ForceIntrument0.setChecked(self.Settings.GetForceIntrument())
-        self.checkBox_ForceIntrument0.setText(
-            f"Force piano (prog {self.Settings.GetPianoProgram()})"
-        )
-
         # WARNING HERE -> Send now force piano to device if set
 
     def quit(self):
-        self.Settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
         self.close()
-
 
 def ShowInformationDlg(pParent):
     dlg = InformationsDlg(pParent)

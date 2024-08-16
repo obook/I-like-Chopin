@@ -24,7 +24,7 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         self.Midi = parent.Midi
         self.Settings = self.pParent.Settings
         self.setupUi(self)
-        self.setFixedSize(501, 192)
+        self.setFixedSize(501, 240)
         self.setWindowTitle("Settings")
 
         self.pushButton_Close.clicked.connect(self.Quit)
@@ -43,6 +43,11 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         self.InputDeviceCombo.currentIndexChanged.connect(self.InputDeviceChanged)
         self.OutputDeviceCombo.currentIndexChanged.connect(self.OuputDeviceChanged)
 
+        self.checkBox_ForceIntrument0.setChecked(self.Settings.GetForceIntrument())
+        self.checkBox_ForceIntrument0.setText(
+            f"Force piano (prog {self.Settings.GetPianoProgram()})"
+        )
+
     def InputDeviceChanged(self):
         # self.pParent.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
         self.ConnectInputState = False
@@ -60,6 +65,7 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         # self.pParent.ui.labelOutput.setText(CleanDeviceName(out_device))
 
     def Quit(self):
+        self.Settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
         self.close()
 
 

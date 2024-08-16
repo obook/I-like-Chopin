@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>501</width>
-    <height>192</height>
+    <height>240</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>10</x>
      <y>10</y>
      <width>481</width>
-     <height>131</height>
+     <height>101</height>
     </rect>
    </property>
    <property name="title">
@@ -82,7 +82,7 @@
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>150</y>
+     <y>200</y>
      <width>81</width>
      <height>25</height>
     </rect>
@@ -90,6 +90,32 @@
    <property name="text">
     <string>Close</string>
    </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>120</y>
+     <width>481</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Options</string>
+   </property>
+   <widget class="QCheckBox" name="checkBox_ForceIntrument0">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>30</y>
+      <width>191</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Force Piano (Prog 0)</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
