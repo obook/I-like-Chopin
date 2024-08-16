@@ -120,11 +120,11 @@ class ClassThreadInput(QThread):
 
             self.keys["key_on"] = 0
 
-        if msg.type == "note_on":  # or message.type == 'note_off':
-            if msg.velocity:
-                note, octave = number_to_note(msg.note)
-                text = f"[{msg.note}]\t\t{note} {octave-1}"
-                self.statusbar_activity.emit(text)
+            if msg.type == "note_on":  # or message.type == 'note_off':
+                if msg.velocity:
+                    note, octave = number_to_note(msg.note)
+                    text = f"[{msg.note}]\t\t{note} {octave-1}"
+                    self.statusbar_activity.emit(text)
 
             # Play
             self.pParent.Midi.SendOutput(msg)

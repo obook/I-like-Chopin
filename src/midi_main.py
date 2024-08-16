@@ -98,17 +98,10 @@ class ClassMidiMain(QObject):
         return None
 
     def SendOutput(self, msg):
-        if self.ThreadOutput:
-            try:  # ThreadOutput ready ? Exists ?
-                if self.Settings.IsMode(modes["passthrough"]):
-                    return self.ThreadOutput.send(msg)
-                elif msg.type == "note_on" or msg.type == "note_off":
-                    if self.pParent.ChannelsList[msg.channel]:
-                        return self.ThreadOutput.send(msg)
-                else:
-                    return self.ThreadOutput.send(msg)
-            except Exception as error:
-                print(f"ERROR MidiMain {self.uuid} can not SendOutput {error}")
+        try:  # ThreadOutput ready ? Exists ?
+            return self.ThreadOutput.send(msg)
+        except Exception as error:
+            print(f"ERROR MidiMain {self.uuid} can not SendOutput {error}")
         return None
 
     def SetMidiSong(self, midifile):

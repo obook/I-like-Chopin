@@ -179,12 +179,7 @@ class ClassThreadMidiReader(QThread):
                     self.led_file_activity.emit(0)
 
             # Just a Midi player ############################################################
-            if self.midisong.IsMode(modes["player"]) or self.Settings.IsMode(
-                modes["random"]
-            ):
-
-                # For loop
-                # self.sleep(0.001)  # Give time to QThread
+            if self.midisong.IsMode(modes["player"]) or self.Settings.IsMode(modes["random"]):
 
                 # Delay : Humanize controlled by knob, see midi_input
                 human = 0
@@ -199,35 +194,31 @@ class ClassThreadMidiReader(QThread):
                 # Time for the note
                 time.sleep(msg.time + human + self.keys["speed"] / 2000)
 
-                if msg.type == "note_on":
-
-                    if self.channels[msg.channel] and not self.midisong.IsState(
-                        states["playing"]
-                    ):  # First note on channels selected
-                        print(
-                            f"MidiReader {self.uuid} player [{self.midisong.GetFilename()}] READY"
-                        )
-                        self.midisong.SetState(states["playing"])
-
-                    # Stats
-                    if msg.type == "note_on":
-                        self.midisong.SetPlayed(
-                            int(100 * self.current_notes_on / self.total_notes_on)
-                        )
-                        self.current_notes_on += 1
-
                 # Program change : force Prog 0 on all channels (Acoustic Grand Piano) except for drums
                 if msg.type == "program_change" and self.Settings.GetForceIntrument():
                     if msg.channel != 9:  # not for drums
                         msg.program = self.Settings.GetPianoProgram()
 
-                self.pParent.Midi.SendOutput(msg)
+                #  Send or not ?
+                if msg.type == "note_on":
 
-                if msg.type == "note_on" and self.channels[msg.channel]:
-                    if msg.velocity:
-                        note, octave = number_to_note(msg.note)
-                        text = f"[{msg.note}]\t\t{note} {octave-1}"
-                        self.statusbar_activity.emit(text)
+                    self.midisong.SetPlayed(int(100 * self.current_notes_on / self.total_notes_on))
+                    self.current_notes_on += 1
+
+                    if not self.midisong.IsState(states["playing"]): # First note on channels selected
+                        print(f"MidiReader {self.uuid} player [{self.midisong.GetFilename()}] READY") # Utile ?
+                        self.midisong.SetState(states["playing"])
+
+                    if self.channels[msg.channel]:
+                        self.pParent.Midi.SendOutput(msg)
+
+                        if msg.velocity:
+                            note, octave = number_to_note(msg.note)
+                            text = f"[{msg.note}]\t\t{note} {octave-1}"
+                            self.statusbar_activity.emit(text)
+
+                else:
+                    self.pParent.Midi.SendOutput(msg)
 
             # Playback : wait keyboard ############################################################
             elif self.midisong.IsMode(modes["playback"]):
@@ -261,7 +252,7 @@ class ClassThreadMidiReader(QThread):
                 if msg.type == "note_on":  # with velocity or not
                     if self.channels[msg.channel] and not self.midisong.IsState(
                         states["playing"]
-                    ):  # First note on channels selected
+                    ):  # First note on channels selected !!
                         print(
                             f"MidiReader {self.uuid} playback [{self.midisong.GetFilename()}] READY"
                         )
@@ -282,7 +273,6 @@ class ClassThreadMidiReader(QThread):
                         text = f"[{msg.note}]\t\t{note} {octave-1}"
                         self.statusbar_activity.emit(text)
                 '''
-
                 # Pause ?
                 if msg.type == "note_on" and self.midisong.IsState(states["playing"]):
                     start_time = time.time()
@@ -324,7 +314,15 @@ class ClassThreadMidiReader(QThread):
                         msg.program = self.Settings.GetPianoProgram()
 
                 # Play
-                self.pParent.Midi.SendOutput(msg)
+                if msg.type == "note_on":
+                    if self.channels[msg.channel]:
+                        self.pParent.Midi.SendOutput(msg)
+                        if msg.velocity:
+                            note, octave = number_to_note(msg.note)
+                            text = f"[{msg.note}]\t\t{note} {octave-1}"
+                            self.statusbar_activity.emit(text)
+                else:
+                    self.pParent.Midi.SendOutput(msg)
                 """
                 filter =[
                 'program_change',
