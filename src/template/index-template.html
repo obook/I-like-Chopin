@@ -213,7 +213,7 @@ async function getStats() {
 
     document.getElementById('progressbar').value=data.played;
 
-    /* Name (short) of MIDIfile */  
+    /* Name (short) of MIDIfile */
 
     document.getElementById('name').textContent=data.nameclean;
 
@@ -231,7 +231,6 @@ async function getStats() {
 
     if (data.state <0) {
         document.getElementById('name').style.color = '#ff0000';
-        document.getElementById('folder').textContent="";
         if  (data.state ==-4)  {/* no track to play */
            document.getElementById('duration').textContent="! NO ACTIVE TRACK TO PLAY";
         }
@@ -289,7 +288,7 @@ async function getStats() {
 /* Dropdown mode list */
 
 function ChangeMode() {
-  var dropdown = document.getElementById("mode-select"); 
+  var dropdown = document.getElementById("mode-select");
   var selectedValue = dropdown.value;
   document.location.href = '/?mode='+selectedValue;
 }
