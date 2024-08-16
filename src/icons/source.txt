@@ -1,2 +1,3 @@
 LED from https://github.com/akej74/grid-control
 NOTE from https://fr.m.wikipedia.org/wiki/Fichier:Musical_note_nicu_bucule_01.svg
+CHECK from https://fr.m.wikipedia.org/wiki/Fichier:Symbol_OK.svg

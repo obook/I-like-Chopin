@@ -70,7 +70,7 @@ class Ui_MainWindow(object):
         self.label_Ouput_2.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.labelLedQuality = QLabel(self.groupBoxDevices)
         self.labelLedQuality.setObjectName(u"labelLedQuality")
-        self.labelLedQuality.setGeometry(QRect(450, 37, 20, 20))
+        self.labelLedQuality.setGeometry(QRect(455, 37, 16, 16))
         self.groupBox_2 = QGroupBox(self.centralwidget)
         self.groupBox_2.setObjectName(u"groupBox_2")
         self.groupBox_2.setGeometry(QRect(10, 118, 481, 141))
