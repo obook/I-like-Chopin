@@ -185,14 +185,13 @@ class ClassMidiMain(QObject):
     def quit(self):
 
         if self.ThreadMidiReader:
-            self.readerstop_activity.emit()
+            self.readerstop_activity.emit() # ????
             self.ThreadMidiReader.stop()
             while self.ThreadMidiReader.isRunning():
                 time.sleep(0.01)
             self.ThreadMidiReader = None
 
         if self.ThreadInput:
-            self.ThreadInput.in_port.callback = None # test
             self.ThreadInput.stop()
             while self.ThreadInput.isRunning():
                 time.sleep(0.01)
