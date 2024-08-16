@@ -140,7 +140,8 @@ INSTRUMENTS = [
     "Applause",
     "Gunshot",
 ]
-NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+#NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+NOTES = ["DO", "DO#", "RE", "RE#", "MI", "FA", "FA#", "SOL", "SOL#", "LA", "LA#", "SI"]
 OCTAVES = list(range(11))
 NOTES_IN_OCTAVE = len(NOTES)
 

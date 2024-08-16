@@ -34,6 +34,7 @@ class ClassThreadMidiReader(QThread):
     current_notes_on = 0
     channels = None
     channels_notes = {}
+    total_sustain = 0
     wait_time = 0
 
     sustain_pedal = 0
@@ -41,6 +42,7 @@ class ClassThreadMidiReader(QThread):
 
     statusbar_activity = Signal(str)
     led_file_activity = Signal(int)
+    star_file_activity = Signal(int)
 
     def __init__(self, midifile, keys, channels, pParent):
         QThread.__init__(self)
@@ -55,6 +57,7 @@ class ClassThreadMidiReader(QThread):
         self.channels = channels
         self.statusbar_activity.connect(self.pParent.SetStatusBar)
         self.led_file_activity.connect(self.pParent.SetLedFile)
+        self.star_file_activity.connect(self.pParent.SetStarFile)
         print(f"MidiReader {self.uuid} created [{os.path.basename(midifile)}]")
         self.midisong = ClassMidiSong(midifile)
 
@@ -82,6 +85,7 @@ class ClassThreadMidiReader(QThread):
 
             self.total_notes_on = 0
             self.channels_notes = {}
+            self.star_file_activity.emit(0)
 
             for msg in MidiFile(self.midisong.Getfilepath()):  # PUT IN MIDI_SONG
                 if msg.type == "note_on":  # with velocity or not
@@ -92,6 +96,16 @@ class ClassThreadMidiReader(QThread):
                     if not key in self.channels_notes.keys():
                         self.channels_notes[key] = 0
                     self.channels_notes[key] += 1
+
+                # Quality : Sustain pedal detected
+                if msg.type == "control_change":
+                    if msg.control == self.Settings.GetSustainChannel():
+                        self.total_sustain += 1
+
+            if self.total_sustain:
+                self.star_file_activity.emit(2)
+            else:
+                self.star_file_activity.emit(-1)
 
             self.midisong.SetChannels(self.channels_notes)
             # self.pParent.ChannelsSetButtons()
@@ -204,7 +218,7 @@ class ClassThreadMidiReader(QThread):
                 if msg.type == "note_on" and self.channels[msg.channel]:
                     if msg.velocity:
                         note, octave = number_to_note(msg.note)
-                        text = f"[{msg.note}]\t\t{note}{octave}"
+                        text = f"[{msg.note}]\t\t{note} {octave}"
                         self.statusbar_activity.emit(text)
 
             # Playback : wait keyboard

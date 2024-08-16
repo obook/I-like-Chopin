@@ -19,12 +19,18 @@ class _init:
     application_path = os.path.dirname(os.path.realpath(__file__))
 
     # Define status icons
-    ICON_RED_LED = application_path + "/icons/led/led-red-on.png"
-    ICON_GREEN_LED = application_path + "/icons/led/green-led-on.png"
-    ICON_GREEN_LIGHT_LED = application_path + "/icons/led/greenlight-led-on.png"
-    ICON_YELLOW_LED = application_path + "/icons/led/yellow-led-on.png"
-    ICON_BLUE_LED = application_path + "/icons/led/blue-led-on.png"
-    ICON_LED_OFF = application_path + "/icons/led/led-off.png"
+    ICON_PATH = os.path.join(application_path,"icons","led")
+
+    ICON_RED_LED = os.path.join(ICON_PATH,"led-red-on.png")
+    ICON_GREEN_LED = os.path.join(ICON_PATH,"green-led-on.png")
+    ICON_GREEN_LIGHT_LED = os.path.join(ICON_PATH,"greenlight-led-on.png")
+    ICON_YELLOW_LED = os.path.join(ICON_PATH,"yellow-led-on.png")
+    ICON_BLUE_LED = os.path.join(ICON_PATH,"blue-led-on.png")
+    ICON_LED_OFF = os.path.join(ICON_PATH,"led-off.png")
+    ICON_STAR_OFF = os.path.join(ICON_PATH,"star-off.png")
+    ICON_STAR_GREEN = os.path.join(ICON_PATH,"star-green.png")
+    ICON_STAR_YELLOW= os.path.join(ICON_PATH,"star-yellow.png")
+    ICON_STAR_RED = os.path.join(ICON_PATH,"star-red.png")
 
     # Classes used
     Settings = None
@@ -73,6 +79,18 @@ class _init:
         self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_LED_OFF))
         self.ui.labelStatusMidifile.setScaledContents(True)
 
+        self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_OFF))
+        self.ui.labelLedQuality.setScaledContents(True)
+        '''
+        self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_GREEN))
+        self.ui.labelLedQuality.setScaledContents(True)
+
+        self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_GREEN))
+        self.ui.labelLedQuality.setScaledContents(True)
+
+        self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_GREEN))
+        self.ui.labelLedQuality.setScaledContents(True)
+        '''
         # ProgressBar
         self.ui.progressBar.setRange(0, 100)
         self.ui.progressBar.setValue(0)

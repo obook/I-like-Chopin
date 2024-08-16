@@ -40,3 +40,15 @@ class signals:
             )
         else:
             self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
+
+    # Signal receiver
+    def SetStarFile(self, value=0):  # -1=red 0=off 2=yellow, 3=green
+        if value == 0:
+            self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_OFF))
+        elif value == 1:
+            self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_YELLOW))
+        elif value == 2:
+            self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_GREEN))
+        else:
+            self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_RED))
+
