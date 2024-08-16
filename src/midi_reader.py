@@ -148,6 +148,14 @@ class ClassThreadMidiReader(QThread):
 
         for msg in MidiFile(self.midisong.Getfilepath()):
 
+            # Is passthrough mode ?
+            while self.midisong.IsMode(modes["passthrough"]):
+                if not self.running:
+                    return
+
+                print("----> passthrough!")
+                self.sleep(1)
+
             # Stop while running ?
             if not self.running:
                 return
@@ -170,7 +178,7 @@ class ClassThreadMidiReader(QThread):
                 elif msg.type == "note_off":
                     self.led_file_activity.emit(0)
 
-            # Just a Midi player
+            # Just a Midi player ############################################################
             if self.midisong.IsMode(modes["player"]) or self.Settings.IsMode(
                 modes["random"]
             ):
@@ -218,10 +226,10 @@ class ClassThreadMidiReader(QThread):
                 if msg.type == "note_on" and self.channels[msg.channel]:
                     if msg.velocity:
                         note, octave = number_to_note(msg.note)
-                        text = f"[{msg.note}]\t\t{note} {octave}"
+                        text = f"[{msg.note}]\t\t{note} {octave+1}"
                         self.statusbar_activity.emit(text)
 
-            # Playback : wait keyboard
+            # Playback : wait keyboard ############################################################
             elif self.midisong.IsMode(modes["playback"]):
 
                 # restore sustain pedal value (after pause)
@@ -268,6 +276,12 @@ class ClassThreadMidiReader(QThread):
                 if self.midisong.IsState(states["cueing"]):
                     msg.time = 0
 
+                if msg.type == "note_on" and self.channels[msg.channel]:
+                    if msg.velocity:
+                        note, octave = number_to_note(msg.note)
+                        text = f"[{msg.note}]\t\t{note} {octave+1}"
+                        self.statusbar_activity.emit(text)
+
                 # Pause ?
                 if msg.type == "note_on" and self.midisong.IsState(states["playing"]):
                     start_time = time.time()
@@ -275,16 +289,14 @@ class ClassThreadMidiReader(QThread):
                     self.pedal_off = False
                     while not self.keys["key_on"]:  # Loop waiting keyboard
 
+                        # finished ?
+
+                        if not self.running or not self.midisong or not self.midisong.IsState(states["playing"]):
+                            self.stop()
+                            return
+
                         if not self.channels[msg.channel]:
                             break
-
-                        if not self.midisong:
-                            self.stop()
-                            return
-
-                        if not self.midisong.IsState(states["playing"]):
-                            self.stop()
-                            return
 
                         if (
                             self.sustain_pedal
@@ -300,7 +312,7 @@ class ClassThreadMidiReader(QThread):
                             self.sustain_pedal_off = True
                             self.led_file_activity.emit(0)
 
-                        self.sleep(0.001)  # for QT loop (give time)
+                        time.sleep(0.01)  # NOT SELF !!
 
                     # Wait a key how much time ?
                     self.wait_time = time.time() - start_time

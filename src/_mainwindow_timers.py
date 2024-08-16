@@ -60,7 +60,7 @@ class timers:
             elif self.midisong.GetState() > states["cueing"] and not self.PlayingState:
                 self.PlayingState = True
                 # We lose Del animation
-                # self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
+                self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
                 # We lose 'waiting...' message and other
                 # self.SetStatusBar("")
 

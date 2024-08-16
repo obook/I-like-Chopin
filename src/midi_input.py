@@ -75,6 +75,9 @@ class ClassThreadInput(QThread):
 
     def callback(self, msg):
 
+        if not self.running:
+            print("---- > CALLBACK FINISHED !!!!!") # ON NE PASS PAS LA...
+
         # Control change - Midi commands
         if msg.type == "control_change":
             if msg.control == 71:
@@ -115,18 +118,19 @@ class ClassThreadInput(QThread):
         if self.keys["key_on"] < 0:
             self.keys["key_on"] = 0
 
-        if not self.Settings.IsMode(modes["player"]):
+        # Passthrough mode
+        if self.Settings.IsMode(modes["passthrough"]):
+
+            self.keys["key_on"] = 0
 
             if msg.type == "note_on":  # or message.type == 'note_off':
-                note, octave = number_to_note(msg.note)
-                text = f"[{msg.note}]\t\t{note}{octave}"
-                self.statusbar_activity.emit(text)
+                if msg.velocity:
+                    note, octave = number_to_note(msg.note)
+                    text = f"[{msg.note}]\t\t{note} {octave-1}"
+                    self.statusbar_activity.emit(text)
 
-            # Playback/Passthrough mode
-            if self.Settings.IsMode(modes["passthrough"]):
-                self.keys["key_on"] = 0
-                # Play
-                self.pParent.Midi.SendOutput(msg)
+            # Play
+            self.pParent.Midi.SendOutput(msg)
 
     def getport(self):
         if self.in_port:
