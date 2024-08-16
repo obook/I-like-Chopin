@@ -44,11 +44,11 @@ class signals:
     # Signal receiver
     def SetStarFile(self, value=0):  # -1=red 0=off 2=yellow, 3=green
         if value == 0:
-            self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_OFF))
+            self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_CHECK_OFF))
         elif value == 1:
-            self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_YELLOW))
+            self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_CHECK_YELLOW))
         elif value == 2:
-            self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_GREEN))
+            self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_CHECK_GREEN))
         else:
-            self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_RED))
+            self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_CHECK_RED))
 

@@ -54,7 +54,6 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         in_device = self.InputDeviceCombo.currentText()
         self.Settings.SaveInputDevice(in_device)
         self.Midi.ConnectInput(in_device)
-        # self.pParent.ui.labelInput.setText(CleanDeviceName(in_device))
 
     def OuputDeviceChanged(self):
         # self.pParent.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
@@ -62,9 +61,11 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         out_device = self.OutputDeviceCombo.currentText()
         self.Settings.SaveOutputDevice(out_device)
         self.Midi.ConnectOutput(out_device)
-        # self.pParent.ui.labelOutput.setText(CleanDeviceName(out_device))
 
     def Quit(self):
+
+        # WARNING HERE -> Send now force piano to device if set ?
+
         self.Settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
         self.close()
 

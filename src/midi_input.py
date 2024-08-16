@@ -75,9 +75,6 @@ class ClassThreadInput(QThread):
 
     def callback(self, msg):
 
-        if not self.running:
-            print("---- > CALLBACK FINISHED !!!!!") # ON NE PASS PAS LA...
-
         # Control change - Midi commands
         if msg.type == "control_change":
             if msg.control == 71:
@@ -123,11 +120,11 @@ class ClassThreadInput(QThread):
 
             self.keys["key_on"] = 0
 
-            if msg.type == "note_on":  # or message.type == 'note_off':
-                if msg.velocity:
-                    note, octave = number_to_note(msg.note)
-                    text = f"[{msg.note}]\t\t{note} {octave-1}"
-                    self.statusbar_activity.emit(text)
+        if msg.type == "note_on":  # or message.type == 'note_off':
+            if msg.velocity:
+                note, octave = number_to_note(msg.note)
+                text = f"[{msg.note}]\t\t{note} {octave-1}"
+                self.statusbar_activity.emit(text)
 
             # Play
             self.pParent.Midi.SendOutput(msg)

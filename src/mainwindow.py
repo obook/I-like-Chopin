@@ -54,8 +54,6 @@ class Mainwindow(
         # ComboBoxes Inputs/Outputs
         Input = self.Settings.GetInputDevice()
         Output = self.Settings.GetOutputDevice()
-        # self.ui.labelInput.setText(CleanDeviceName(Input))
-        # self.ui.labelOutput.setText(CleanDeviceName(Output))
 
         # Datas
         self.ChannelsList[0] = True  # active first channel

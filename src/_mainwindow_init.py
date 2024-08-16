@@ -27,10 +27,10 @@ class _init:
     ICON_YELLOW_LED = os.path.join(ICON_PATH,"yellow-led-on.png")
     ICON_BLUE_LED = os.path.join(ICON_PATH,"blue-led-on.png")
     ICON_LED_OFF = os.path.join(ICON_PATH,"led-off.png")
-    ICON_STAR_OFF = os.path.join(ICON_PATH,"star-off.png")
-    ICON_STAR_GREEN = os.path.join(ICON_PATH,"star-green.png")
-    ICON_STAR_YELLOW= os.path.join(ICON_PATH,"star-yellow.png")
-    ICON_STAR_RED = os.path.join(ICON_PATH,"star-red.png")
+    ICON_CHECK_OFF = os.path.join(ICON_PATH,"check-off.png")
+    ICON_CHECK_GREEN = os.path.join(ICON_PATH,"check-green.png")
+    ICON_CHECK_YELLOW= os.path.join(ICON_PATH,"check-yellow.png")
+    ICON_CHECK_RED = os.path.join(ICON_PATH,"check-red.png")
 
     # Classes used
     Settings = None
@@ -79,16 +79,16 @@ class _init:
         self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_LED_OFF))
         self.ui.labelStatusMidifile.setScaledContents(True)
 
-        self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_OFF))
+        self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_CHECK_OFF))
         self.ui.labelLedQuality.setScaledContents(True)
         '''
-        self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_GREEN))
+        self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_CHECK_GREEN))
         self.ui.labelLedQuality.setScaledContents(True)
 
-        self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_GREEN))
+        self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_CHECK_GREEN))
         self.ui.labelLedQuality.setScaledContents(True)
 
-        self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_STAR_GREEN))
+        self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_CHECK_GREEN))
         self.ui.labelLedQuality.setScaledContents(True)
         '''
         # ProgressBar

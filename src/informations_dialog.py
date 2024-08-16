@@ -97,15 +97,9 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.textBrowser.setOpenLinks(False)
         self.textBrowser.insertHtml(text)
 
-        # layout = QGridLayout(self)
-        # label = QLabel(self)
-        # self.addWidget(label)
-
         cursor = self.textBrowser.textCursor()
         cursor.setPosition(0)
         self.textBrowser.setTextCursor(cursor)
-
-        # WARNING HERE -> Send now force piano to device if set
 
     def quit(self):
         self.close()
