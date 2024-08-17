@@ -4,12 +4,15 @@
 Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
+
+import uuid
 from PySide6.QtWidgets import QDialog, QLabel
 from PySide6 import QtGui
 from ui_settings_dialog import Ui_DialogSettings
 
 
 class SettingsDlg(Ui_DialogSettings, QDialog):
+    __uuid = None
     pParent = None
     Midi = None
     Settings = None
@@ -20,6 +23,8 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.__uuid = uuid.uuid4()
+        print(f"SettingsDlg {self.__uuid} created")
         self.pParent = parent
         self.Midi = parent.Midi
         self.Settings = self.pParent.Settings
@@ -48,6 +53,12 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
             f"Force piano (prog {self.Settings.GetPianoProgram()})"
         )
 
+    def __del__(self):
+        self.InputDeviceChanged()
+        self.OuputDeviceChanged()
+        self.Settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
+        print(f"SettingsDlg {self.__uuid} destroyed")
+
     def InputDeviceChanged(self):
         # self.pParent.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
         self.ConnectInputState = False
@@ -62,13 +73,13 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         self.Settings.SaveOutputDevice(out_device)
         self.Midi.ConnectOutput(out_device)
 
-    def Quit(self):
-
-        # WARNING HERE -> Send now force piano to device if set ?
-
+    def SaveForceIntrument(self):
         self.Settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
-        self.close()
 
+    def Quit(self):
+        # WARNING HERE -> Send now force piano to device if set ?
+        self.close()
+        self.deleteLater()
 
 def CleanDeviceName(device):
     if ":" in device:
@@ -80,3 +91,4 @@ def CleanDeviceName(device):
 def ShowSettingsDlg(pParent):
     dlg = SettingsDlg(pParent)
     dlg.show()
+    # dlg.deleteLater()

@@ -5,6 +5,7 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 
+import uuid
 import platform
 import mido
 
@@ -17,11 +18,14 @@ from ui_informations import Ui_DialogInformation
 
 
 class InformationsDlg(Ui_DialogInformation, QDialog):
+    __uuid = None
     pParent = None
     Settings = None
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.__uuid = uuid.uuid4()
+        print(f"InformationsDlg {self.__uuid} created")
         self.pParent = parent
         self.Settings = self.pParent.Settings
         self.setupUi(self)
@@ -101,8 +105,12 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         cursor.setPosition(0)
         self.textBrowser.setTextCursor(cursor)
 
+    def __del__(self):
+        print(f"InformationsDlg {self.__uuid} destroyed")
+
     def quit(self):
         self.close()
+        self.deleteLater()
 
 def ShowInformationDlg(pParent):
     dlg = InformationsDlg(pParent)
