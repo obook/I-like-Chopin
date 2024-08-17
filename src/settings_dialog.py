@@ -45,8 +45,8 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         self.OutputDeviceCombo.addItem(Output)
         self.OutputDeviceCombo.addItems(self.Outputs)
 
-        self.InputDeviceCombo.currentIndexChanged.connect(self.InputDeviceChanged)
-        self.OutputDeviceCombo.currentIndexChanged.connect(self.OuputDeviceChanged)
+        #self.InputDeviceCombo.currentIndexChanged.connect(self.InputDeviceChanged)
+        #self.OutputDeviceCombo.currentIndexChanged.connect(self.OuputDeviceChanged)
 
         self.checkBox_ForceIntrument0.setChecked(self.Settings.GetForceIntrument())
         self.checkBox_ForceIntrument0.setText(
