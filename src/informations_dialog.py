@@ -15,7 +15,7 @@ from PySide6.QtGui import QImage
 from PySide6.QtSvgWidgets import QSvgWidget
 
 from ui_informations import Ui_DialogInformation
-
+from web_network import ClassWebNetwork
 
 class InformationsDlg(Ui_DialogInformation, QDialog):
     __uuid = None
@@ -37,11 +37,15 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         text += f"<p{style}>SYSTEM</p>"
         text += f"{platform.system()}"
 
+        Network = ClassWebNetwork(self.pParent)
+        server_urls = Network.GetWebUrls()
+        qrcodes_list = Network.GetWebQRCodes()
+
         text += f"<p{style}>WEB SERVER</p>"
-        for interface in self.pParent.server_urls:  # UGLY
+        for interface in server_urls:  # UGLY
             text += f"<div>{interface}</div>"
 
-        for qrcode in self.pParent.server_qrcode:
+        for qrcode in qrcodes_list:
             svgWidget = QSvgWidget()
             svgWidget.setStyleSheet("QSvgWidget {background-color:white;}")
             svgWidget.load(QByteArray(qrcode.encode()))

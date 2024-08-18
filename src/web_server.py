@@ -19,7 +19,7 @@ from PySide6.QtCore import QThread, Signal
 
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, quote
-from web_interfaces import get_interfaces
+from web_network import ClassWebNetwork
 from string import Template
 
 
@@ -29,14 +29,12 @@ class RequestHandler(BaseHTTPRequestHandler):
     # get from init
     pParent = None
     midifiles_dict = {}
-    qrcodes_list = []
 
-    def __init__(self, parent, midifiles_dict, qrcodes_list, *args, **kwargs):
+    def __init__(self, parent, midifiles_dict, *args, **kwargs):
         self.uuid = uuid.uuid4()
         self.pParent = parent
         self.midisong = parent.Midi.GetMidiSong()
         self.midifiles_dict = midifiles_dict
-        self.qrcodes_list = qrcodes_list
         super().__init__(*args, **kwargs)
 
     def do_GET(self):
@@ -150,7 +148,9 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         # QRcodes
         images = ""
-        for code in self.qrcodes_list:
+        Network = ClassWebNetwork(self.pParent)
+        qrcodes_list = Network.GetWebQRCodes()
+        for code in qrcodes_list:
             images += code.replace("<?xml version='1.0' encoding='UTF-8'?>", "")
 
         # Fill template
@@ -181,10 +181,12 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 class ClassWebServer(QThread):
     uuid = None
+    pParent = None
+    Settings = None
+
     server = None
     port = 8888
 
-    pParent = None
     midifiles_dict = {}
     serverURLs = []
     qrcodes_list = []
@@ -193,26 +195,14 @@ class ClassWebServer(QThread):
         QThread.__init__(self)
         self.uuid = uuid.uuid4()
         self.pParent = parent
-        self.port = self.pParent.Settings.GetServerPort()
-        print(f"WebServer {self.uuid} created")
-        interfaces_list = get_interfaces(True, False)
-        for interface in interfaces_list:
-            url = f"http://{interface['ip']}:{self.port}"
-            self.serverURLs.append(url)
-
+        self.Settings = parent.Settings
+        self.port = self.Settings.GetServerPort()
+        Network = ClassWebNetwork(self.pParent)
+        serverURLs_list = Network.GetWebUrls()
+        for serverURL in serverURLs_list:
             print(
-                f"WebServer {self.uuid} {url} serve [{self.pParent.Settings.GetMidiPath()}]"
+                f"WebServer {self.uuid} serve [{self.pParent.Settings.GetMidiPath()}] on {serverURL}"
             )
-            if not "127.0.0.1" in url:
-                img = qrcode.make(
-                    url, image_factory=qrcode.image.svg.SvgPathImage, box_size=10
-                )
-                buffer = io.BytesIO()
-                img.save(buffer)
-                buffer.seek(0)
-                buffer_img = buffer.getvalue().decode("utf-8")
-                self.qrcodes_list.append(buffer_img)
-
     def __del__(self):
         if self.server:
             self.server.server_close()
@@ -221,7 +211,7 @@ class ClassWebServer(QThread):
     def run(self):
         try:
             handler = partial(
-                RequestHandler, self.pParent, self.midifiles_dict, self.qrcodes_list
+                RequestHandler, self.pParent, self.midifiles_dict
             )
             self.server = ThreadingHTTPServer(("0.0.0.0", self.port), handler)
             self.server.allow_reuse_address = True
@@ -231,15 +221,6 @@ class ClassWebServer(QThread):
                 f"|!| WebServer {self.uuid} CAN NOT SERVE ON PORT {self.port} {error}"
             )
             self.pParent.Midi.SendStatusBar(f"WEB SERVER PORT {self.port} BUSY !")
-
-    def GetPort(self):
-        return self.port
-
-    def GetServerURLs(self):
-        return self.serverURLs
-
-    def GetQRCodeSVG(self):
-        return self.qrcodes_list
 
     def stop(self):
         if self.server:

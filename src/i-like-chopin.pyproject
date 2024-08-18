@@ -22,6 +22,7 @@
         "_mainwindow_midi.py",
         "_mainwindow_init.py",
         "settings_dialog.ui",
-        "settings_dialog.py"
+        "settings_dialog.py",
+        "web_network.py"
     ]
 }
