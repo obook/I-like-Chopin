@@ -147,14 +147,15 @@ class ClassMidiSong:
         return False
 
     def HumanizeDuration(
-        self, duration, key
-    ):  # key=0-127 duration=original note duration
-        delay = random.random() * key / 1024
-        if random.random() < 0.6:  # 60% fastest
-            delay = -1 * delay
-        if duration + delay < 0:
-            delay = -1 * delay
-            # A revoir ..
-        if duration + delay < 0:
-            return 0
+        self, duration, value
+    ):
+        if duration:
+            original_duration = duration
+        else:
+            original_duration = random.uniform(0,value/127)
+
+        new_duration = random.uniform(-1*duration*value, duration*value)/127
+
+        delta = duration-new_duration
+        print(f"HumanizeDuration delta={original_duration-new_duration} midi value={value}")
         return 0  # buggy delay # for calculate new_time = msg.time+delay
