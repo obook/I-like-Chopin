@@ -1,6 +1,3 @@
-Get MidiLib
------------
-/usr/bin/git clone https://github.com/obook/midi.git /home/<username>/.local/share/i-like-chopin/midi
 
 Auto update
 +++++++++++
