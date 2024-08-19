@@ -60,7 +60,7 @@ No native virtual MIDI driver is provided with Windows, but there are a number o
 * Steinberg UR22mkII
 * Modartt Pianoteq Stage
 * Keyboard Arturia Keystep 37
-* Piano Yamaha Clavinova CLP-123
+* Piano Yamaha Clavinova CLP-123 -> LOCAL OFF = press MIDI/TRANSPOSE then PIANO1 (must lite)
 
 
 # Thanks
