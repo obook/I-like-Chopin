@@ -15,11 +15,16 @@ Funny program for play like Chopin.
 Bring your piano back to life and impress your friends with this musical magic trick!
 
 # Recommanded usage
-
+## Install poetry and libraries
 ```bash
 pip install poetry
 cd src
 poetry install
+```
+
+## Run
+
+```bash
 poetry run python i-like-chopin.py
 ```
 
