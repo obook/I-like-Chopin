@@ -232,7 +232,7 @@ class Mainwindow(
             self.ui.pushButton_Mode.setChecked(False)
         elif self.Settings.IsMode(modes["random"]):
             self.ui.pushButton_Mode.setStyleSheet(
-                "QPushButton { background-color: rgb(0,0,0); }\n"
+                "QPushButton { background-color: rgb(80,80,80); }\n"
             )
             self.ui.pushButton_Mode.setText("Random")
             self.ui.pushButton_Mode.setChecked(False)
