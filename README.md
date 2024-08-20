@@ -37,7 +37,7 @@ With a Virtual Synth       |With Piano in Daw Mode     | With Rack Synth
 # Programs and libraries used
 
 * Python 3.10.12
-* mido 1.2.10
+* mido 1.2.10 ( and pip install packaging importlib_metadata)
 * python-rtmidi 1.4.7
 * PySide6 6.7.1
 * netifaces 2 0.0.22
