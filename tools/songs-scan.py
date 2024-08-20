@@ -34,9 +34,9 @@ def SystainPedalCheck(file):
 
 print("** START")
 
-root_dir = "/home/obooklage/obooklage@gmail.com/ownCloud.CAP/MUSIQUE/"
+root_dir = "~/MUSIQUE/"
 
-f = open("/home/obooklage/obooklage@gmail.com/ownCloud.CAP/DEV/Python/WEB-SERVER/LOG.txt","w")
+f = open("~/MUSIQUE/LOG.txt","w")
 
 for filename in glob.iglob(root_dir + '**/*.mid', recursive=True):
     tracks, sustain = SystainPedalCheck(filename)
