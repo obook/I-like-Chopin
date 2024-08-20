@@ -155,7 +155,7 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
         <option value="player">Player Mode</option>
         <option value="random">Random Mode</option>
       </select>
-      <button class="playerbutton" onclick="toggleFullScreen();" type="button">FullScreen</button>
+      <button class="playerbutton" id ="fullscreenbutton" onclick="toggleFullScreen();" type="button">FullScreen</button>
     </div>
 </nav>
 
@@ -322,8 +322,10 @@ for (i = 0; i < acc.length; i++) {
 function toggleFullScreen() {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen();
+    localStorage.setItem('fullscreen',true);
   } else if (document.exitFullscreen) {
     document.exitFullscreen();
+    localStorage.setItem('fullscreen',false);
   }
 }
 
