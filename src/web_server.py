@@ -134,7 +134,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         midilist_html = ""
         for key in self.pParent.midifiles_dict.keys():  # self.midifiles_dict.keys():
             midilist_html += (
-                f"<button class='accordion'>{key}</button><div class='panel'>"
+                f"<button class='accordion'>{key}</button><div class='panel'>\n"
             )
             list = self.pParent.midifiles_dict[key]
             for midifile in sorted(list, key=lambda s: s.lower()):
@@ -142,8 +142,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                 midiname = midiname.replace("_", " ")
                 midiname = midiname.replace("-", " ")
                 midiname.upper()
-                midilist_html += f"<p><a href='?play={quote(midifile)}'> &nbsp; {midiname} &nbsp; </a></p>\n"
-
+                #midilist_html += f"<p><a href='?play={quote(midifile)}'> &nbsp; {midiname} &nbsp; </a></p>\n"
+                midilist_html += f"<p onclick='SendSong(this);' data-value='{quote(midifile)}'>&nbsp; {midiname} &nbsp; </p>\n"
             midilist_html += "</div>"
 
         # QRcodes

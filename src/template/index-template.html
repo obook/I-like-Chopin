@@ -108,6 +108,7 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
   overflow: hidden;
   transition: max-height 0.2s ease-out;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 /* Player buttons */
@@ -160,11 +161,20 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 </nav>
 
 <main>
+
+<!-- Original
+
+<p><a href='?play=/home/obooklage/.local/share/i-like-chopin/midi/ABBA/Thank_You_for_the_Music.mid'> &nbsp; Thank You for the Music &nbsp; </a></p>
+
+    Modified :
+<p onclick='SendSong(this);' data-value='/home/obooklage/.local/share/i-like-chopin/midi/ABBA/Thank_You_for_the_Music.mid'>&nbsp; TEST Thank You for the Music &nbsp; </p>
+
+
+-->
 <!-- just for tests
 <button class="accordion">Section 1</button>
 <div class="panel">
-  <button class="song" onclick="location.href='/'" type="button">www.example.com</button>
-  <p><a href="">Lorem ipsum...</a></p>
+  <p onclick='SendSong(this);' style="cursor: pointer; color:blue !important;" data-value='/home/obooklage/.local/share/i-like-chopin/midi/ABBA/Thank_You_for_the_Music.mid'>&nbsp; TEST Thank You for the Music &nbsp; </p>
 </div>
 
 <button class="accordion">Section 1</button>
@@ -196,6 +206,14 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 <script>
 
 /* API (see status.json sample file) */
+
+/* Ckick on song */
+function SendSong(obj) {
+  song = obj.getAttribute("data-value");
+  console.log("SendSong="+song);
+  fetch('?play='+song);
+  getStats();
+}
 
 async function getStats() {
   try {
