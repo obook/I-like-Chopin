@@ -162,16 +162,16 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
   </div>
   <div class="block"><progress id='progressbar' value="0" max="100"></progress></div>
     <div class="playercontainer">
-      <button class="playerbutton" onclick="location.href='?do=stop'" type="button">STOP</button>
-      <button class="playerbutton" onclick="location.href='?do=replay'" type="button">REPLAY</button>
-      <button class="playerbutton" onclick="location.href='?do=shuffle'" type="button">SHUFFLE</button>
+      <button class="playerbutton" data-do='stop' onclick="Do(this);" type="button">STOP</button>
+      <button class="playerbutton" data-do='replay' onclick="Do(this);" type="button">REPLAY</button>
+      <button class="playerbutton" data-do='shuffle' onclick="Do(this);" type="button">SHUFFLE</button>
+      <button class="playerbutton" id ="fullscreenbutton" onclick="toggleFullScreen();" type="button">FullScreen</button>
       <select class="playerbutton" name="modes" id="mode-select" onchange="ChangeMode();">
         <option value="playback" selected>Playback Mode</option>
         <option value="passthrough">Passthrough Mode</option>
         <option value="player">Player Mode</option>
         <option value="random">Random Mode</option>
       </select>
-      <button class="playerbutton" id ="fullscreenbutton" onclick="toggleFullScreen();" type="button">FullScreen</button>
     </div>
 </nav>
 
@@ -232,6 +232,26 @@ function SendSong(obj) {
   getStats();
 }
 
+/* Click on button */
+function Do(obj) {
+  order = obj.getAttribute("data-do");
+  console.log("Do="+order);
+  fetch('?do='+order);
+  getStats();
+}
+
+/* Click on FullScreen */
+function toggleFullScreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+    localStorage.setItem('fullscreen',true);
+  } else if (document.exitFullscreen) {
+    document.exitFullscreen();
+    localStorage.setItem('fullscreen',false);
+  }
+}
+
+/* Timer */
 async function getStats() {
   try {
     const response = await fetch('status.json');
@@ -328,15 +348,13 @@ async function getStats() {
 }
 
 /* Dropdown mode list */
-
 function ChangeMode() {
   var dropdown = document.getElementById("mode-select");
   var selectedValue = dropdown.value;
-  document.location.href = '/?mode='+selectedValue;
+  fetch('?mode='+selectedValue);
 }
 
 /* Accordion */
-
 var acc = document.getElementsByClassName("accordion");
 var i;
 
@@ -352,20 +370,7 @@ for (i = 0; i < acc.length; i++) {
   });
 }
 
-/* Full Screen */
-
-function toggleFullScreen() {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen();
-    localStorage.setItem('fullscreen',true);
-  } else if (document.exitFullscreen) {
-    document.exitFullscreen();
-    localStorage.setItem('fullscreen',false);
-  }
-}
-
 /* Main script */
-
 getStats();
 setInterval(getStats, 2000);
 
