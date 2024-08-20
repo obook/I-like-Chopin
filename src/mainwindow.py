@@ -5,8 +5,10 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 import sys
+import os
 
 from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtGui import QIcon
 from PySide6 import QtGui
 from PySide6.QtCore import QEvent
 from midi_song import modes, ClassMidiSong
@@ -45,6 +47,16 @@ class Mainwindow(
 
         # Imported methods
         self._SetInterface()
+
+        ICON_APPLICATION = os.path.join(
+            self.application_path, "icons", "svg", "i-like-chopin.svg"
+        )
+
+        # Application icon X.org->correct - Wayland->not implemented
+        my_icon = QIcon()
+        my_icon.addFile(ICON_APPLICATION)
+        self.setWindowIcon(my_icon)
+
         self._midi_init()
 
         # Force playback mode

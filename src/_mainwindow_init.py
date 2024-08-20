@@ -47,15 +47,6 @@ class _init:
 
     def _SetInterface(self):
 
-        ICON_APPLICATION = os.path.join(
-            self.application_path, "icons", "svg", "i-like-chopin.svg"
-        )
-
-        # Application icon X.org->correct - Wayland->not implemented
-        my_icon = QIcon()
-        my_icon.addFile(ICON_APPLICATION)
-        self.setWindowIcon(my_icon)
-
         # StatusBar
         self.ui.statusbar.setSizeGripEnabled(False)
 
