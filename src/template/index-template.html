@@ -189,11 +189,11 @@ From https://blog.hubspot.com/website/css-loading-animation
 
 .loader {
   margin: auto;
-  border: 5px solid #EAF0F6;
+  border: 20px solid #EAF0F6;
   border-radius: 50%;
-  border-top: 5px solid #0ce23b;
-  width: 15px;
-  height: 15px;
+  border-top: 20px solid #2bb119;
+  width: 25px;
+  height: 25px;
   animation: spinner 1s linear infinite;
 }
 
@@ -280,7 +280,7 @@ document.getElementById("loader").style.visibility = "hidden";
 
 /* Click on song */
 function SendSong(obj) {
-  document.getElementById('name').textContent="...";
+  document.getElementById('name').textContent="";
   document.getElementById('folder').textContent="";
   document.getElementById('duration').textContent="";
   document.getElementById("loader").style.visibility = "visible";
