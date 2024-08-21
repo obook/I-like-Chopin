@@ -5,73 +5,179 @@
       <!--Import Google Icon Font-->
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <!--Import materialize.css-->
-      <link type="text/css" rel="stylesheet" href="vendor/materialize/css/materialize.min.css"  media="screen,projection"/>
+      <link type="text/css" rel="stylesheet" href="vendor/materialize/css/materialize.css" media="screen,projection"/>
 
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <style>
+
+        body {
+            font-size: calc(.5em + 2vw);
+            color:#ffffff;
+            background-color:#554455;
+            overflow-wrap: break-word;
+            text-transform: uppercase;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        .collapsible-body{
+          cursor: pointer;
+        }
+
+        .collapsible-header {
+
+        }
+
+/* Progress bar */
+.block {
+  line-height: 100px;
+  font-size: 12px;
+  white-space: nowrap;
+  margin: 10px 0;
+  border-radius: 10px;
+  opacity: 1;
+}
+
+.block progress {
+  display: block;
+  width: 100%;
+  height: 0.8rem;
+  color: white;
+  background-image: orange !important; /* Ok with Chrome, not with Firefox see bellow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Mozilla */
+::-moz-progress-bar {
+  background-color: orange;
+}
+
+/* Webkit */
+progress {
+  -webkit-appearance: none;
+}
+::-webkit-progress-bar {
+  background-color: orange;
+}
+
+/* Song */
+.song {
+  background-color:#000 !important;
+  border-radius: 10px;
+  text-indent: 20px;
+}
+
+      </style>
     </head>
 
     <body>
 
       <!-- Header -->
-      <nav>
-        <div class="nav-wrapper">
-          <a href="#" class="brand-logo">I like Chopin</a>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="sass.html">Sass</a></li>
-            <li><a href="badges.html">Components</a></li>
-            <li><a href="collapsible.html">JavaScript</a></li>
-          </ul>
-        </div>
-      </nav>
+
+      <div class="navbar-fixed">
+        <nav>
+          <div class="nav-wrapper">
+            <a tabindex="0" class="btn elevated">Stop</a>
+            <a tabindex="0" class="btn elevated">Replay</a>
+            <a tabindex="0" class="btn elevated">Shuffle</a>
+            <a tabindex="0" class="btn elevated" onclick="toggleFullScreen();">FullScreen</a>
+          </div>
+          <div class="input-field col s12">
+            <select id="form-select-1">
+              <option value="" disabled selected>Mode</option>
+              <option value="1">Playback</option>
+              <option value="2">Passthrough</option>
+              <option value="3">Player</option>
+              <option value="3">Random</option>
+            </select>
+            <label for="form-select-1">Materialize Select</label>
+          </div>
+        </nav>
+      </div>
+
+      <div class="navbar-fixed">
+        <nav>
+          <div class="nav-wrapper">
+            <a href="#" class="brand-logo">Mazurka Opus 7 1</a>
+            <div class="block"><progress id='progressbar' value="0" max="100"></progress></div>
+          </div>
+        </nav>
+      </div>
 
       <!-- Content -->
 
-      <div class="collection">
-        <a href="#!" class="collection-item"><span class="badge">1</span>Alan</a>
-        <a href="#!" class="collection-item"><span class="new badge">4</span>Alan</a>
-        <a href="#!" class="collection-item">Alan</a>
-        <a href="#!" class="collection-item"><span class="badge">14</span>Alan</a>
-      </div>
-
-      <ul id="dropdown2" class="dropdown-content">
-        <li><a href="#!">one<span class="badge">1</span></a></li>
-        <li><a href="#!">two<span class="new badge">1</span></a></li>
-        <li><a href="#!">three</a></li>
+      <ul class="collapsible">
+        <li>
+          <div class="collapsible-header">Maurane</div>
+          <div class="collapsible-body">
+            <p class="song" data-midifile="/home/obooklage/obooklage@gmail.com/ownCloud.CAP/MUSIQUE/midiperso/MAURANE/Sur un prelude de Bach.mid" onclick="LoadFile(this);">SONG 1</span></p>
+            <p class="song" data-midifile="fichier2" onclick="LoadFile(this);">SONG 2</span></p>
+            <p class="song" data-midifile="fichier3" onclick="LoadFile(this);">SONG 3</span></p>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Chopin</div>
+          <div class="collapsible-body">
+            <p class="song" data-midifile="fichier1" onclick="LoadFile(this);">SONG 1</span></p>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Clerc Julien</div>
+          <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+        </li>
       </ul>
-      <a class="btn dropdown-trigger" href="#!" data-target="dropdown2">Dropdown<i class="material-icons right">arrow_drop_down</i></a>
-
-      <a class="waves-effect waves-light btn">button</a>
 
       <!-- Footer -->
 
       <footer class="page-footer">
-        <div class="container">
-          <div class="row">
-            <div class="col l6 s12">
-              <h5 class="white-text">Footer Content</h5>
-              <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
-            </div>
-            <div class="col l4 offset-l2 s12">
-              <h5 class="white-text">Links</h5>
-              <ul>
-                <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-                <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-                <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-                <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
         <div class="footer-copyright">
           <div class="container">
           © 2014 Copyright Text
-          <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
           </div>
         </div>
       </footer>
 
       <!--JavaScript at end of body for optimized loading-->
-      <script type="text/javascript" src="vendor/materialize/js/materialize.min.js"></script>
+      <script type="text/javascript" src="vendor/materialize/js/materialize.js"></script>
+      <script>
+
+        function LoadFile(obj) {
+          song = obj.getAttribute("data-midifile");
+          console.log("song="+song);
+        }
+
+        /* Click on FullScreen */
+        function toggleFullScreen() {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+            localStorage.setItem('fullscreen',true);
+          } else if (document.exitFullscreen) {
+            document.exitFullscreen();
+            localStorage.setItem('fullscreen',false);
+          }
+        }
+
+        /* Accordion
+
+        options = "accordion:false";
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var elems = document.querySelectorAll('.collapsible');
+          var instances = M.Collapsible.init(elems, options);
+        }); */
+
+        options = "accordion:true";
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var elems = document.querySelectorAll('.collapsible');
+          var instances = M.Collapsible.init(elems, {
+            // specify options here
+            options
+          });
+        });
+
+      </script>
     </body>
   </html>
