@@ -276,7 +276,7 @@ From https://blog.hubspot.com/website/css-loading-animation
 
 /* API (see status.json sample file) */
 
-document.getElementById("loader").style.visibility = "hidden";
+document.getElementById("loader").style.display = 'none';
 
 /* Click on song */
 function SendSong(obj) {
@@ -314,7 +314,7 @@ async function getStats() {
     const response = await fetch('status.json');
     const data = await response.json();
 
-    document.getElementById("loader").style.visibility = "hidden";
+    document.getElementById("loader").style.display = 'none';
 
     /* Actives MIDI channels of MIDIfile */
 
