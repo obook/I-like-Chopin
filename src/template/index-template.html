@@ -183,13 +183,33 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
     /* background:olive; */
 }
 
+/* Loader
+From https://blog.hubspot.com/website/css-loading-animation
+*/
+
+.loader {
+  margin: auto;
+  border: 5px solid #EAF0F6;
+  border-radius: 50%;
+  border-top: 5px solid #0ce23b;
+  width: 15px;
+  height: 15px;
+  animation: spinner 1s linear infinite;
+}
+
+@keyframes spinner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 </style>
 </head>
 <body>
 
 <nav class="navbar">
   <div class='header'>
-    <div class="filename" id="name">${name}</div>
+
+    <div class="filename" id="name">${name}</div><div class="loader" id="loader"></div>
     <div class="duration"><span id='folder'>${folder}</span>&nbsp;<span id='duration'>${duration}</span></div>
   </div>
   <div class="block"><progress id='progressbar' value="0" max="100"></progress></div>
@@ -256,11 +276,14 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 
 /* API (see status.json sample file) */
 
+document.getElementById("loader").style.visibility = "hidden";
+
 /* Click on song */
 function SendSong(obj) {
   document.getElementById('name').textContent="...";
   document.getElementById('folder').textContent="";
   document.getElementById('duration').textContent="";
+  document.getElementById("loader").style.visibility = "visible";
   song = obj.getAttribute("data-value");
   console.log("SendSong="+song);
   fetch('?play='+song);
@@ -290,6 +313,8 @@ async function getStats() {
   try {
     const response = await fetch('status.json');
     const data = await response.json();
+
+    document.getElementById("loader").style.visibility = "hidden";
 
     /* Actives MIDI channels of MIDIfile */
 
