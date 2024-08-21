@@ -247,10 +247,12 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 
 /* Click on song */
 function SendSong(obj) {
+  document.getElementById('name').textContent="...";
+  document.getElementById('folder').textContent="";
+  document.getElementById('duration').textContent="";
   song = obj.getAttribute("data-value");
   console.log("SendSong="+song);
   fetch('?play='+song);
-  getStats();
 }
 
 /* Click on button */
