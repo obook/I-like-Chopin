@@ -283,7 +283,7 @@ function SendSong(obj) {
   document.getElementById('name').textContent="";
   document.getElementById('folder').textContent="";
   document.getElementById('duration').textContent="";
-  document.getElementById("loader").style.visibility = "visible";
+  document.getElementById("loader").style.display = 'block';
   song = obj.getAttribute("data-value");
   console.log("SendSong="+song);
   fetch('?play='+song);
