@@ -8,7 +8,7 @@
 
 :root {
   --bar_background: rgb(85, 10, 10);
-  --bar_value: rgb(250, 95, 95);
+  --bar_value: rgb(255, 154, 154);
 }
 
 body {
@@ -88,7 +88,7 @@ progress {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  border-radius: 7px;
+  border-radius: 7px; /* ok maozilla, no for webkit */
    /* accent-color:blue; no effect */
   background-color:var(--bar_background);/* background mozilla */
 }
@@ -207,7 +207,7 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
 
 
 -->
-<!-- just for tests -->
+<!-- just for tests
 <button class="accordion">Section 1</button>
 <div class="panel">
   <p onclick='SendSong(this);' data-value='/home/obooklage/.local/share/i-like-chopin/midi/ABBA/Thank_You_for_the_Music.mid'>&nbsp; TEST 1 Thank You for the Music &nbsp; </p>
@@ -230,7 +230,7 @@ From : https://www.w3schools.com/howto/howto_js_accordion.asp
   <p><a href="">Lorem ipsum...</a></p>
 </div>
 
-
+ -->
 <div class="midifiles">
   ${midifiles}
 </div>
