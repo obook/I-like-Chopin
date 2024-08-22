@@ -83,8 +83,8 @@
       /* ShowLoader();
       fetch('?do='+order); */
       console.log("Do="+order);
-      /*
-      getStats(); */
+      fetch('http://127.0.0.1:8888/?do='+order);
+      getStats();
       $(".ui-btn-active").removeClass('ui-btn-active');
       /* $(obj).removeClass('ui-btn-active'); */
     }
