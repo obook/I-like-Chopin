@@ -331,6 +331,7 @@ async function getStats() {
     /* Name (short) of MIDIfile */
 
     document.getElementById('name').textContent=data.nameclean;
+    document.title = data.nameclean;
 
     /* Parent folder of MIDIfile */
 
@@ -400,9 +401,9 @@ async function getStats() {
     document.getElementById('name').style.color = '#ff0000';
     document.getElementById('name').textContent="OFFLINE";
     document.getElementById('folder').textContent="";
-    document.getElementById('duration').textContent="";
+    document.getElementById('duration').textContent="🛜";
     document.getElementById('progressbar').value=0;
-    throw error;
+    /* throw error; */
   }
 }
 
