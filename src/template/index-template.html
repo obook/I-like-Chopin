@@ -333,18 +333,23 @@ From https://blog.hubspot.com/website/css-loading-animation
 
 document.getElementById("loader").style.display = 'none';
 
-/* Click on song */
-function SendSong(obj) {
+function ShowLoader() {
   document.getElementById('name').textContent="";
   document.getElementById('folder').textContent="";
   document.getElementById('duration').textContent="";
   document.getElementById("loader").style.display = 'block';
+}
+
+/* Click on song */
+function SendSong(obj) {
+  ShowLoader();
   song = obj.getAttribute("data-value");
   fetch('?play='+song);
 }
 
 /* Click on button */
 function Do(obj) {
+  ShowLoader();
   order = obj.getAttribute("data-do");
   fetch('?do='+order);
   getStats();
