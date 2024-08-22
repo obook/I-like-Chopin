@@ -7,7 +7,7 @@
 <style>
 
 :root {
-  --bar_background: rgb(88, 17, 38);
+  --bar_background: grey;
   --bar_value: rgb(6, 250, 47);
 }
 
@@ -202,6 +202,81 @@ From https://blog.hubspot.com/website/css-loading-animation
   100% { transform: rotate(360deg); }
 }
 
+/* New progress */
+
+/**
+ * Cross-browser/Non specific selector
+ */
+
+ .custom-progress {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 40px;
+
+    /* Outer bar */
+    border: none;
+    border-radius: 18px;
+    background-color:var(--bar_background);
+}
+
+/**
+ * Webkit
+ */
+
+/* Outer bar */
+.custom-progress::-webkit-progress-bar {
+    border-radius: 18px;
+    background-color:var(--bar_background);
+}
+
+/* Inner bar */
+.custom-progress::-webkit-progress-value {
+    border-radius: 18px;
+    background: repeating-linear-gradient(
+        135deg,
+        #606dbc,
+        #606dbc 10px,
+        #465298 10px,
+        #465298 20px
+    );
+}
+
+/**
+ * Mozilla
+ */
+
+/* Inner bar */
+
+.custom-progress::-moz-progress-bar {
+    border-radius: 18px;
+    background: repeating-linear-gradient(
+        135deg,
+        #606dbc,
+        #606dbc 10px,
+        #465298 10px,
+        #465298 20px
+    );
+}
+
+/**
+ * IE/Edge
+ */
+
+ /* Inner bar */
+
+.custom-progress::-ms-fill {
+    border-radius: 18px;
+    background: repeating-linear-gradient(
+        135deg,
+        #606dbc,
+        #606dbc 10px,
+        #465298 10px,
+        #465298 20px
+    );
+}
+
 </style>
 </head>
 <body>
@@ -212,7 +287,7 @@ From https://blog.hubspot.com/website/css-loading-animation
     <div class="filename" id="name">${name}</div><div class="loader" id="loader"></div>
     <div class="duration"><span id='folder'>${folder}</span>&nbsp;<span id='duration'>${duration}</span></div>
   </div>
-  <div class="block"><progress id='progressbar' value="0" max="100"></progress></div>
+  <div class="block"><progress id='progressbar' class="custom-progress" value="0" max="100"></progress></div>
     <div class="playercontainer">
       <button class="playerbutton" data-do='stop' onclick="Do(this);" type="button">STOP</button>
       <button class="playerbutton" data-do='replay' onclick="Do(this);" type="button">REPLAY</button>
