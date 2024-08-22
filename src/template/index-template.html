@@ -292,7 +292,6 @@ function SendSong(obj) {
 /* Click on button */
 function Do(obj) {
   order = obj.getAttribute("data-do");
-  console.log("Do="+order);
   fetch('?do='+order);
   getStats();
 }
