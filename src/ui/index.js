@@ -39,6 +39,9 @@ function CleanSongName() {
 async function getStats() {
 
 try {
+
+    $(".ui-btn-active").removeClass('ui-btn-active');
+
     /* const response = await fetch('status.json'); */
     const response = await fetch('http://127.0.0.1:8888/status.json');
     const data = await response.json();
