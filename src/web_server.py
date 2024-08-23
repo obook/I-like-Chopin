@@ -77,7 +77,6 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             file_dic = self.pParent.Midifiles.GetFiles()
             data = json.dumps(file_dic)
-            print(file_dic);
             self.wfile.write(data.encode(encoding="utf_8"))
 
             if not self.wfile.closed:

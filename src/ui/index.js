@@ -74,8 +74,6 @@ try {
 
     /* Handle MIDIfile states and errors */
 
-    /* console.log("data.state="+data.state+ " data.mode="+data.mode); */
-
     CleanSongName();
 
     if (data.state <0) {
@@ -104,7 +102,7 @@ try {
 
 async function getSgetFiles() {
 
-    try {
+    /* try { */
         const response = await fetch('http://127.0.0.1:8888/files.json');
         const data = await response.json();
 
@@ -120,7 +118,8 @@ async function getSgetFiles() {
                 fileNameShort = fileNameShort.replaceAll("_"," ");
                 fileNameShort = fileNameShort.replaceAll("-"," ");
                 fileNameShort = fileNameShort.replaceAll(",","");
-                html = html + " <li data-theme='a'><a href='#' onclick='PlaySong("+JSON.stringify(filePath)+");'>"+fileNameShort+"</a></li>";
+                /*fileNameShort = fileNameShort.replaceAll("'",""); */
+                html = html + " <li data-theme='a' data-icon='false'><a href='#' onclick='PlaySong(\""+escape(filePath)+"\");'>"+fileNameShort+"</a></li>"; /* !! escape is obsolete */
             }
 
             html = html +"</ul></div>";
@@ -130,9 +129,9 @@ async function getSgetFiles() {
 
         $("#files_list").append(html).trigger( "create" );
 
-    } catch (error) {
+   /* } catch (error) {
             console.error('---> NETWORK ERROR : ', error);
-    }
+    }*/
 }
 
 /* Main script */

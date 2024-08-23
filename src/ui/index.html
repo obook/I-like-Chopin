@@ -35,13 +35,23 @@
         <!-- Mode -->
         <a href="#popupMenu" data-rel="popup" data-transition="slideup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-gear">Mode</a> <!-- ui-icon-gear  -->
         <div data-role="popup" id="popupMenu" data-theme="b">
+          <!--
           <ul data-role="listview" data-inset="true" style="min-width:210px;">
             <li data-role="list-divider">Mode</li>
             <li><a href="#">Mode Playback</a></li>
             <li><a href="#">Mode Passthrough</a></li>
             <li><a href="#">Mode Player</a></li>
             <li><a href="#">Mode Random</a></li>
-          </ul>
+          </ul>-->
+
+          <label for="id_question_type" data-i18n="index.type">Correct anwsers</label>
+          <select name="select-h-1a" id="id_question_type" class="nav">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+          </select>
+
         </div>
 
         <h1 class="filename"><span id="songname" class="class_songname_0">I like Chopin</span></h1>
@@ -54,27 +64,8 @@
       <!-- Content -->
       <div role="main" class="ui-content">
 
-        <!-- /files list-->
-        <span id="files_list">
-          <!--
-          <div data-role="collapsible" data-collapsed="true">
-              <h4>Abba</h4>
-              <ul data-role="listview">
-                  <li><a href="#">Thank you for the music</a></li>
-                  <li><a href="#">The winner takes it all</a></li>
-              </ul>
-          </div>
-
-          <div data-role="collapsible" data-collapsed="true">
-              <h4>BACH JOHANN SEBASTIAN</h4>
-              <ul data-role="listview">
-                  <li><a href="#">Praeludium und Fuge 2 in c Moll BWV 847</a></li>
-                  <li><a href="#">Prelude and Fugue in C major BWV 846</a></li>
-                  <li><a href="#">Präludium und Fuge in D Dur, BWV 850</a></li>
-              </ul>
-          </div>
-        -->
-        </span><!-- /files list-->
+        <!-- files list-->
+        <span id="files_list"></span>
 
       </div><!-- /Content -->
 
@@ -92,12 +83,7 @@
 
         </div><!-- /Footer-->
 
-
     </div> <!-- /Page -->
-
-    <script>
-
-    </script>
 
     <script src="index.js"></script>
 
