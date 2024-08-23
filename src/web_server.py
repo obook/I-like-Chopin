@@ -104,6 +104,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                     pass
             """
             self.send_response(302)
+            self.send_header('Access-Control-Allow-Origin', '*')
             self.send_header("Location", "/")
             try:
                 self.end_headers()
@@ -117,6 +118,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             except:
                 pass
             self.send_response(302)
+            self.send_header('Access-Control-Allow-Origin', '*')
             self.send_header("Location", "/")
             try:
                 self.end_headers()
@@ -125,6 +127,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             return
         # send index.html
         self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header("Content-type", "text/html")
         try:
             self.end_headers()

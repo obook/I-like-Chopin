@@ -8,5 +8,33 @@ body {
 }
 
 .class_stop_button {
-    color: rgb(255, 117, 117) !important;
+    color: rgb(255, 0, 0) !important;
+}
+
+.class_songname_0 {
+    color: white !important;
+}
+
+.class_songname_1 { /* Ready+Playing */
+    color: green !important;
+}
+
+.class_songname_2 { /* Passthrough */
+    color: #ff00ff !important;
+}
+
+.class_songname_3 { /* Player Playing*/
+    color: #8498fa !important;
+}
+
+.class_songname_4 { /* Random */
+    color: #8498fa !important;
+}
+
+.class_songname_unknown {
+    color: #ffff00 !important;
+}
+
+.class_songname_error {
+    color: red !important;
 }
