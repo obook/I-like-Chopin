@@ -19,13 +19,24 @@
       <!-- Header -->
       <div data-role="header" data-position="fixed" data-tap-toggle="false">
 
+        <a href="#popupMenu" data-rel="popup" data-transition="slideup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b">Mode</a> <!-- ui-icon-gear  -->
+        <div data-role="popup" id="popupMenu" data-theme="b">
+          <ul data-role="listview" data-inset="true" style="min-width:210px;">
+            <li data-role="list-divider">Mode</li>
+            <li><a href="#">Mode Playback</a></li>
+            <li><a href="#">Mode Passthrough</a></li>
+            <li><a href="#">Mode Player</a></li>
+            <li><a href="#">Mode Random</a></li>
+          </ul>
+        </div>
+
         <h1 id="songname">I like Chopin</h1>
         <progress id="progressbar" style="width: 100%;" max="100"></progress>
         <a href="#" data-icon="grid" class="ui-btn-right" onclick="toggleFullScreen();">Fullscreen</a>
 
         <div data-role="navbar"> <!-- Buttons -->
           <ul>
-            <li><a href="#" class="class_top_button" onclick="Do('stop');">Stop</a></li>
+            <li><a href="#" class="class_stop_button" onclick="Do('stop');">Stop</a></li>
             <li><a href="#" class="class_top_button" onclick="Do('replay');">Replay</a></li>
             <li><a href="#" class="class_top_button" onclick="Do('shuffle');">Shuffle</a></li>
           </ul>
@@ -59,13 +70,18 @@
       <div data-role="footer" data-position="fixed" data-tap-toggle="false">
         <form class="ui-grid-a">
           <div class="ui-block-a">
-            <label for="grid-select-1" class="ui-hidden-accessible">Select</label>
-            <select id="grid-select-1" name="grid-select-1" data-shadow="false">
-            <option value="1">Mode Playback</option>
-            <option value="2">Mode Passthrough</option>
-            <option value="3">Mode Player</option>
-            <option value="4">Mode Random</option>
-            </select>
+
+            <a href="#popupMenu" data-rel="popup" data-transition="slideup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-gear ui-btn-icon-left ui-btn-b">Mode</a>
+            <div data-role="popup" id="popupMenu" data-theme="b">
+              <ul data-role="listview" data-inset="true" style="min-width:210px;">
+                <li data-role="list-divider">Mode</li>
+                <li><a href="#">Mode Playback</a></li>
+                <li><a href="#">Mode Passthrough</a></li>
+                <li><a href="#">Mode Player</a></li>
+                <li><a href="#">Mode Random</a></li>
+              </ul>
+            </div>
+
           </div>
           <div class="ui-block-b">
             <input type="button" value="QrCode">
