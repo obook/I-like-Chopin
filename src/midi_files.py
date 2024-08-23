@@ -52,3 +52,6 @@ class ClassMidiFiles:
 
     def GetRandomSong(self):
         return self.midifiles_raw[random.randrange(len(self.midifiles_raw))]
+
+    def GetFiles(self):
+        return self.midifiles_dict

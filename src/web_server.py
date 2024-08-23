@@ -70,6 +70,20 @@ class RequestHandler(BaseHTTPRequestHandler):
 
             return
 
+        elif self.path == "/files.json":
+            self.send_response(200)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            file_dic = self.pParent.Midifiles.GetFiles()
+            data = json.dumps(file_dic)
+            print(file_dic);
+            self.wfile.write(data.encode(encoding="utf_8"))
+
+            if not self.wfile.closed:
+                self.wfile.flush()
+            return
+
         if "play" in query_components:
             midifile = query_components["play"][0]
             print(f"WebServer {self.uuid} request [{midifile}]")
