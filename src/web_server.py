@@ -83,26 +83,6 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self.wfile.flush()
             return
 
-        elif self.path == "/qrcodes.json":
-            self.send_response(200)
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.send_header("Content-Type", "application/json")
-            self.end_headers()
-            Network = ClassWebNetwork(self.pParent)
-            qrcodes_list = Network.GetWebQRCodes()
-            qrcode_pure = []
-            for qrcode in qrcodes_list:
-                qrcode_pure.append(qrcode.replace("<?xml version='1.0' encoding='UTF-8'?>", ""))
-            data = json.dumps(qrcode_pure)
-
-            print("QRCodes =", data)
-
-            self.wfile.write(data.encode(encoding="utf_8"))
-
-            if not self.wfile.closed:
-                self.wfile.flush()
-            return
-
         elif self.path == "/interfaces.json":
             self.send_response(200)
             self.send_header('Access-Control-Allow-Origin', '*')
@@ -111,9 +91,6 @@ class RequestHandler(BaseHTTPRequestHandler):
             Network = ClassWebNetwork(self.pParent)
             url_list = Network.GetWebUrls()
             data = json.dumps(url_list)
-
-            print("url_list =", data)
-
             self.wfile.write(data.encode(encoding="utf_8"))
 
             if not self.wfile.closed:
