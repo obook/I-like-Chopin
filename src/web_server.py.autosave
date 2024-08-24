@@ -141,13 +141,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                     self.pParent.MidifileReplay()  # DANGEROUS ?
                 except:
                     pass
-            """
-            elif self.pParent and action == "mode":
-                try:
-                    self.pParent.ChangePlayerMode()  # DANGEROUS ?
-                except:
-                    pass
-            """
+
             self.send_response(302)
             self.send_header('Access-Control-Allow-Origin', '*')
             self.send_header("Location", "/")
@@ -156,6 +150,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             except:
                 pass
             return
+
         elif "mode" in query_components:
             mode = query_components["mode"][0]
             try:

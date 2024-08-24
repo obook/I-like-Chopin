@@ -1,20 +1,6 @@
 
 first_run = false;
 
-/* Click on file */
-function PlaySong(song) {
-    ShowLoader();
-    fetch('http://127.0.0.1:8888?play='+song);
-}
-
-/* Click on button */
-function Do(order) {
-    ShowLoader();
-    // fetch('?do='+order);
-    fetch('http://127.0.0.1:8888/?do='+order);
-    getStats();
-}
-
 /* Click on FullScreen */
 function toggleFullScreen() {
     if (!document.fullscreenElement) {
@@ -26,11 +12,25 @@ function toggleFullScreen() {
     }
 }
 
+/* Click on file */
+function PlaySong(song) {
+    ShowLoader();
+    fetch('/?play='+song);
+}
+
+/* Click on button */
+function OrderDo(order) {
+    ShowLoader();
+    // fetch('?do='+order);
+    fetch('/?do='+order);
+    getStats();
+}
+
 /* Mode changed */
 $('#select-mode').change(function () {
     const mode = $(this).val();
     ShowLoader();
-    fetch('http://127.0.0.1:8888/?mode='+mode);
+    fetch('/?mode='+mode);
 });
 
 /* Clean songname style */
@@ -68,7 +68,7 @@ async function getStats() {
         $(".ui-btn-active").removeClass('ui-btn-active');
 
         /* const response = await fetch('status.json'); */
-        const response = await fetch('http://127.0.0.1:8888/status.json');
+        const response = await fetch('/status.json');
         const data = await response.json();
 
         /* Song Name */
@@ -154,7 +154,7 @@ async function getStats() {
 
 async function getFiles() {
     try {
-        const response = await fetch('http://127.0.0.1:8888/files.json');
+        const response = await fetch('/files.json');
         const data = await response.json();
 
         html = "<div data-role='collapsibleset' data-theme='b' data-inset='false'>";
@@ -191,7 +191,7 @@ async function SetQRCode(){
     // console.log("SetQRCode")
 
     try {
-        const response = await fetch('http://127.0.0.1:8888/interfaces.json');
+        const response = await fetch('/interfaces.json');
         const data = await response.json();
 
         for(var interface in data) {
