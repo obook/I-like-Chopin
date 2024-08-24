@@ -3,21 +3,14 @@ first_run = false;
 
 /* Click on file */
 function PlaySong(song) {
-    $.mobile.loading( "show", {
-        text: "Loading...",
-        textonly: false,
-        textVisible: true,
-        theme: "a",
-        html: ""
-      });
+    ShowLoader();
     fetch('http://127.0.0.1:8888?play='+song);
 }
 
 /* Click on button */
 function Do(order) {
-    /* ShowLoader();
-    fetch('?do='+order); */
-    console.log("Do="+order);
+    ShowLoader();
+    // fetch('?do='+order);
     fetch('http://127.0.0.1:8888/?do='+order);
     getStats();
 }
@@ -33,6 +26,13 @@ function toggleFullScreen() {
     }
 }
 
+/* Mode changed */
+$('#select-mode').change(function () {
+    const mode = $(this).val();
+    ShowLoader();
+    fetch('http://127.0.0.1:8888/?mode='+mode);
+});
+
 /* Clean songname style */
 function CleanSongName() {
     $("#songname").removeClass("class_songname_0");
@@ -41,13 +41,27 @@ function CleanSongName() {
     $("#songname").removeClass("class_songname_3");
     $("#songname").removeClass("class_songname_unknown");
     $("#songname").removeClass("class_songname_error");
-    /* $("#songname").addClass("class_songname_0");  */
+}
+
+function ShowLoader() {
+    $.mobile.loading( "show", {
+        text: "Loading...",
+        textonly: false,
+        textVisible: true,
+        theme: "a",
+        html: ""
+      });
 }
 
 /* API */
 async function getStats() {
 
     $.mobile.loading( "hide" );
+
+    /* test */
+
+    $('#select-mode').val("player"); //.selectmenu('refresh');
+
 
     try {
 
@@ -75,11 +89,11 @@ async function getStats() {
         const minutes = Math.floor(data.duration);
         const seconds = Math.floor((data.duration - minutes)*60);
         line = minutes+"'"+String(seconds).padStart(2, '0');
-        line = line + " ["+channels+"] ";
         if(data.sustain > 0)
-        line = line + "🎹"
+            line = line + " 🎹"
         else
-        line = line + "💻"
+            line = line + " 💻"
+        line = line + " ["+channels+"] ";
         $('#duration').text(line);
 
         /* Progress bar */
@@ -108,6 +122,19 @@ async function getStats() {
             $("#songname").addClass("class_songname_1");/* Ready/Playing */
         }
 
+        /* Mode */
+
+        if (data.mode == 1)
+            $('#select-mode').val("playback").selectmenu('refresh');
+        else if (data.mode == 2)
+            $('#select-mode').val("passthrough").selectmenu('refresh');
+        else if (data.mode == 3)
+            $('#select-mode').val("player").selectmenu('refresh');
+        else if (data.mode == 4)
+            $('#select-mode').val("random").selectmenu('refresh');
+        else
+            $('#select-mode').val("playback").selectmenu('refresh');
+
         if(first_run != true) {
             first_run = true;
             getFiles();
@@ -135,20 +162,15 @@ async function getFiles() {
 
             html = html + "<div data-role='collapsible'><h2>"+artist+"</h2><ul data-role='listview'>";
             for (var midifiles in data[artist]) {
-                filePath = data[artist][midifiles];
-
-
-                console.log("Get file = ["+filePath+"]");
-
-
-
+                const filePath = data[artist][midifiles];
+                const filePath_URI = encodeURIComponent(filePath).replace(/'/g, "%27");
                 const pathStrSplit = filePath.split('/'); /* NOT WINDOWS COMPATIBLE ? */
                 const fileName = pathStrSplit.pop();
                 var fileNameShort=fileName.substring(0,fileName.lastIndexOf("."));
                 fileNameShort = fileNameShort.replaceAll("_"," ");
                 fileNameShort = fileNameShort.replaceAll("-"," ");
                 fileNameShort = fileNameShort.replaceAll(",","");
-                html = html + " <li data-theme='a' data-icon='false'><a href='#' onclick='PlaySong(\""+escape(filePath)+"\");'>"+fileNameShort+"</a></li>"; /* !! escape is obsolete */
+                html = html + " <li data-theme='a' data-icon='false'><a href='#' onclick='PlaySong( \""+filePath_URI+"\" );'>"+fileNameShort+"</a></li>";
             }
 
             html = html +"</ul></div>";
@@ -166,7 +188,7 @@ async function getFiles() {
 
 async function SetQRCode(){
 
-    console.log("SetQRCode")
+    // console.log("SetQRCode")
 
     try {
         const response = await fetch('http://127.0.0.1:8888/interfaces.json');

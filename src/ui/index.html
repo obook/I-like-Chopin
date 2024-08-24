@@ -36,32 +36,30 @@
       <!-- Header -->
       <div data-role="header" data-position="fixed" data-tap-toggle="false">
 
-        <!-- Mode -->
-        <a href="#popupMenu" data-rel="popup" data-transition="slideup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-gear">Mode</a> <!-- ui-icon-gear  -->
-        <div data-role="popup" id="popupMenu" data-theme="b">
-
-          <ul data-role="listview" data-inset="true" style="min-width:210px;">
-            <li data-role="list-divider">Mode</li>
-            <li data-icon='false'><a href="#">Mode Playback</a></li>
-            <li data-icon='false'><a href="#">Mode Passthrough</a></li>
-            <li data-icon='false'><a href="#">Mode Player</a></li>
-            <li data-icon='false'><a href="#">Mode Random</a></li>
-          </ul>
-
-           <!--<label for="id_question_type" data-i18n="index.type">Correct anwsers</label>
-          <select name="select-h-1a" id="id_question_type" class="nav">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-          </select>-->
-
-        </div>
+        <form class="ui-btn-left">
+          <div class="ui-field-contain">
+            <select name="select-mode" id="select-mode">
+              <option value="playback">Mode Playback</option>
+              <option value="passthrough">Mode Passsthrough</option>
+              <option value="player">Mode Player</option>
+              <option value="random">Mode Random</option>
+            </select>
+          </div>
+        </form>
 
         <h1 class="filename"><span id="songname" class="class_songname_0">I like Chopin</span></h1>
         <h2><div class="duration"><span id='folder'>${folder}</span>&nbsp;<span id='duration'>${duration}</span></div></h2>
         <progress id="progressbar" class="custom-progress" max="100"></progress>
         <a href="#" data-icon="grid" class="ui-btn-right" onclick="toggleFullScreen();">Fullscreen</a>
+
+        <div data-role="navbar"> <!-- Buttons -->
+          <ul data-theme="a">
+            <li><a href="#" class="class_stop_button" onclick="Do('stop');">Stop</a></li>
+            <li><a href="#" class="class_top_button" onclick="Do('replay');">Replay</a></li>
+            <li><a href="#" class="class_top_button" onclick="Do('shuffle');">Shuffle</a></li>
+            <li><a href="#popupDialog" data-rel="popup" data-position-to="window" data-transition="pop">Share</a></li>
+          </ul>
+        </div><!-- /navbar -->
 
       </div><!-- /Header -->
 
@@ -76,14 +74,7 @@
       <!-- Footer-->
       <div data-role="footer" data-position="fixed" data-tap-toggle="false">
 
-            <div data-role="navbar"> <!-- Buttons -->
-              <ul data-theme="a">
-                <li><a href="#" class="class_stop_button" onclick="Do('stop');">Stop</a></li>
-                <li><a href="#" class="class_top_button" onclick="Do('replay');">Replay</a></li>
-                <li><a href="#" class="class_top_button" onclick="Do('shuffle');">Shuffle</a></li>
-                <li><a href="#popupDialog" data-rel="popup" data-position-to="window" data-transition="pop">Share</a></li>
-              </ul>
-            </div><!-- /navbar -->
+
 
         </div><!-- /Footer-->
 
