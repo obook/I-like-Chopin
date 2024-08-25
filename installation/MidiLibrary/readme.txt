@@ -1,5 +1,9 @@
 Get MidiLib
 -----------
-Remove your /home/<username>/.local/share/i-like-chopin/midi folder, then :
+Remove your ~/.local/share/i-like-chopin/midi folder
 
-/usr/bin/git clone https://github.com/obook/midi.git /home/<username>/.local/share/i-like-chopin/midi
+rm -R ~/.local/share/i-like-chopin/midi
+
+, then :
+
+git clone https://github.com/obook/midi.git ~/.local/share/i-like-chopin/midi

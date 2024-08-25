@@ -1,6 +1,10 @@
 Installation on "Raspberry Pi OS with desktop" Debian version: 12 (bookworm) 64bits
 -----------------------------------------------------------------------------------
 
+cd ~/
+git clone https://github.com/obook/I-like-Chopin.git
+
+
 1/ Install poetry
 -----------------
 curl -sSL https://install.python-poetry.org | python3 -
@@ -51,3 +55,5 @@ Name=i-like-chopin
 Exec=/home/.............../I-like-Chopin/i-like-chopin.sh
 
 /!\ i-like-chopin.sh MUST have absolute path also.
+
+Copy and modify i-like-chopin.sh.sample to I-like-Chopin/i-like-chopin.sh
