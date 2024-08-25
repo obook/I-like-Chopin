@@ -3,6 +3,11 @@ body {
     font-family: Helvetica, Arial, sans-serif;
 }
 
+/* Change title clipping */
+.ui-header .ui-title {
+    margin-left: 1em; margin-right: 1em;
+}
+
 /* Duration */
 .duration{
     color:#9b9a9a;

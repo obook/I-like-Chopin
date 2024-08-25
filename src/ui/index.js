@@ -18,7 +18,7 @@ function PlaySong(song) {
     fetch('/?play='+song);
 }
 
-/* Click on button */
+/* Click on navbar button */
 function OrderDo(order) {
     ShowLoader();
     // fetch('?do='+order);
@@ -26,7 +26,7 @@ function OrderDo(order) {
     getStats();
 }
 
-/* Mode changed */
+/* Select mode changed */
 $('#select-mode').change(function () {
     const mode = $(this).val();
     ShowLoader();
