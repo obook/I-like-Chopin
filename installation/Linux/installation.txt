@@ -1,5 +1,6 @@
-Installation on "Raspberry Pi OS with desktop" Debian version: 12 (bookworm) 64bits
------------------------------------------------------------------------------------
+Linux installation
+------------------
+Tested on "Raspberry Pi OS with desktop" Debian version: 12 (bookworm) 64bits
 
 1/ Install poetry
 -----------------
@@ -48,6 +49,6 @@ Create inside a file 'i-like-chopin.desktop' with
 Type=Application
 Name=i-like-chopin
 # Change here your ABSOLUTE script path
-Exec=/home/.............../I-like-Chopin/i-like-chopin.sh
+Exec=/home/<YourUserName>/.............../I-like-Chopin/i-like-chopin.sh
 
 /!\ i-like-chopin.sh MUST have absolute path also.
