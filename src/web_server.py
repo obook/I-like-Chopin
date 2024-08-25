@@ -28,6 +28,7 @@ class RequestHandler(BaseHTTPRequestHandler):
     midisong = None
     # get from init
     pParent = None
+    midisong = None
     midifiles_dict = {}
 
     def __init__(self, parent, midifiles_dict, *args, **kwargs):
@@ -49,9 +50,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         print("--> do_POST")
 
     def do_GET(self):
-        print(f"--> do_GET [{self.path}]")
-
-        # Extract query param
+        # print(f"--> do_GET [{self.path}]")
 
         # json files
 
@@ -110,6 +109,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self.wfile.flush()
             return
 
+        # Extract query param
         query_components = parse_qs(urlparse(self.path).query)
 
         # with parameters (?)

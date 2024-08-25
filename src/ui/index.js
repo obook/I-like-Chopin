@@ -157,10 +157,14 @@ async function getFiles() {
         const response = await fetch('/files.json');
         const data = await response.json();
 
-        html = "<div data-role='collapsibleset' data-theme='b' data-inset='false'>";
+        html = "<div data-role='collapsibleset' data-theme='b' data-inset='false' data-collapsed-icon='false'>";
+
         for(var artist in data) {
 
-            html = html + "<div data-role='collapsible'><h2>"+artist+"</h2><ul data-role='listview'>";
+            html = html + "<div data-role='collapsible'>\n";
+            html = html + "<h2>"+artist+"</h2>\n";
+            html = html + "<ul data-role='listview' data-autodividers='true'>\n";
+
             for (var midifiles in data[artist]) {
                 const filePath = data[artist][midifiles];
                 const filePath_URI = encodeURIComponent(filePath).replace(/'/g, "%27");
@@ -170,13 +174,13 @@ async function getFiles() {
                 fileNameShort = fileNameShort.replaceAll("_"," ");
                 fileNameShort = fileNameShort.replaceAll("-"," ");
                 fileNameShort = fileNameShort.replaceAll(",","");
-                html = html + " <li data-theme='a' data-icon='false'><a href='#' onclick='PlaySong( \""+filePath_URI+"\" );'>"+fileNameShort+"</a></li>";
+                html = html + " <li data-theme='a' data-icon='audio'><a href='#' onclick='PlaySong( \""+filePath_URI+"\" );'>"+fileNameShort+"</a></li>\n";
             }
 
-            html = html +"</ul></div>";
+            html = html +"</ul>\n</div>\n";
         }
 
-        html = html + "</div>";
+        html = html + "</div>\n";
 
         $("#files_list").append(html).trigger( "create" );
 

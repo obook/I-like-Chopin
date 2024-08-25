@@ -3,17 +3,7 @@ body {
     font-family: Helvetica, Arial, sans-serif;
 }
 
-/* Filename */
-
-.filename{
-    /*font-size: calc(.5em + 2.5vw);
-    color:#ffff00;
-    border-radius: 10px;
-    text-indent:10px; */
-}
-
 /* Duration */
-
 .duration{
     color:#9b9a9a;
     /*font-size: calc(.5em + 1.5vw);
