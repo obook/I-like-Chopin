@@ -70,7 +70,7 @@ class Ui_MainWindow(object):
         self.label_Ouput_2.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.labelLedQuality = QLabel(self.groupBoxDevices)
         self.labelLedQuality.setObjectName(u"labelLedQuality")
-        self.labelLedQuality.setGeometry(QRect(455, 37, 16, 16))
+        self.labelLedQuality.setGeometry(QRect(445, 33, 28, 28))
         self.groupBox_2 = QGroupBox(self.centralwidget)
         self.groupBox_2.setObjectName(u"groupBox_2")
         self.groupBox_2.setGeometry(QRect(10, 118, 481, 141))
@@ -161,4 +161,3 @@ class Ui_MainWindow(object):
         self.pushButton_Info.setText(QCoreApplication.translate("MainWindow", u"More", None))
         self.pushButton_Settings.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
     # retranslateUi
-
