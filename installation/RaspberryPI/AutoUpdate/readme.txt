@@ -1,4 +1,6 @@
 
+! Be sure to read MidiLibrary/readme.txt for first pull.
+
 Auto update
 +++++++++++
 
