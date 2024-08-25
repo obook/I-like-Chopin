@@ -14,6 +14,7 @@ function toggleFullScreen() {
 
 /* Click on file */
 function PlaySong(song) {
+    CleanSongName();
     ShowLoader();
     fetch('/?play='+song);
 }
@@ -21,7 +22,6 @@ function PlaySong(song) {
 /* Click on navbar button */
 function OrderDo(order) {
     ShowLoader();
-    // fetch('?do='+order);
     fetch('/?do='+order);
     getStats();
 }
