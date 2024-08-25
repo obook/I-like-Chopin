@@ -147,7 +147,7 @@ async function getStats() {
         $("#songname").addClass("class_songname_error");
         $('#songname').text("OFFLINE");;
         $('#folder').text("");
-        $('#duration').text("🛜");
+        $('#duration').text("");
         $('#progressbar').val(0);
     }
 }
