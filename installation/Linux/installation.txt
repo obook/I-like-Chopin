@@ -28,9 +28,11 @@ Poetry (version 1.8.3)
 $ cd I-like-Chopin/src/
 $ poetry install
 
+
 5/ Run i-like-chopin
 --------------------
 $ poetry run python i-like-chopin.py
+
 
 6/ Video xcb driver problem ?
 ----------------------------
@@ -38,6 +40,7 @@ ERROR : "This application failed to start because no Qt platform plugin could be
 
 Then:
 sudo apt-get install -qq libglu1-mesa-dev libx11-xcb-dev '^libxcb*'
+
 
 7/ Autostart
 ------------
