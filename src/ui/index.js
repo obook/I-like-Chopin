@@ -15,6 +15,10 @@ function toggleFullScreen() {
 /* Click on file */
 function PlaySong(song) {
     CleanSongName();
+    $('#songname').text("...");;
+    $('#folder').text("");
+    $('#duration').text("");
+    $('#progressbar').val(0);
     ShowLoader();
     fetch('/?play='+song);
 }
