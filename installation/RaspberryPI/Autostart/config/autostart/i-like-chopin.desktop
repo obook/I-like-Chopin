@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=i-like-chopin
+Comment=Funny ALSA MIDI playback player for play like Chopin
+# Change here your ABSOLUTE script path
+Exec=/home/<YourUserName>/....../I-like-Chopin/i-like-chopin.sh

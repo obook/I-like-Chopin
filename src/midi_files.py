@@ -15,8 +15,8 @@ class ClassMidiFiles:
 
     uuid = None
     defaultmidipath = None
-    midifiles_dict = {}
-    midifiles_raw = []
+    midifiles_dict = {} # files by artist key
+    midifiles_raw = [] # All files list
     midifiles_count = 0
 
     def __init__(self):
@@ -52,3 +52,6 @@ class ClassMidiFiles:
 
     def GetRandomSong(self):
         return self.midifiles_raw[random.randrange(len(self.midifiles_raw))]
+
+    def GetFiles(self):
+        return self.midifiles_dict

@@ -9,6 +9,7 @@
     <script src="vendor/jquery-1.11.2.min.js"></script>
     <link rel="stylesheet" href="index.css" />
     <script src="vendor/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="vendor/qrcodejs/qrcode.min.js"></script>
   </head>
 
   <body>
@@ -16,119 +17,66 @@
     <!-- Page -->
     <div data-role="page" id="main" data-theme="b">
 
+      <!-- Popup QRcode -->
+      <div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+        <div data-role="header" data-theme="a">
+          <h1>Share</h1>
+        </div>
+        <div role="main" class="ui-content">
+          <h3 class="ui-title">Scan this</h3>
+          <div class='class_qrcode' id="qrcode"></div>
+          <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow">Close</a>
+        </div>
+      </div>
+
       <!-- Header -->
       <div data-role="header" data-position="fixed" data-tap-toggle="false">
 
-        <h1 id="songname">I like Chopin</h1>
-        <progress id="progressbar" style="width: 100%;" max="100"></progress>
-        <a href="#" data-icon="grid" class="ui-btn-right" onclick="toggleFullScreen();">Fullscreen</a>
+        <h1 class="filename"><span id="songname" class="class_songname_0">I like Chopin</span></h1>
+        <h2><div class="duration"><span id='folder'>${folder}</span>&nbsp;<span id='duration'>${duration}</span></div></h2>
+        <a href="#" class="ui-btn ui-btn-right ui-icon-grid ui-btn-icon-notext ui-corner-all" onclick="toggleFullScreen();">No text</a>
+
 
         <div data-role="navbar"> <!-- Buttons -->
-          <ul>
-            <li><a href="#" class="class_top_button" onclick="Do('stop');">Stop</a></li>
-            <li><a href="#" class="class_top_button" onclick="Do('replay');">Replay</a></li>
-            <li><a href="#" class="class_top_button" onclick="Do('shuffle');">Shuffle</a></li>
+          <ul data-theme="a">
+            <li><a href="#" class="class_stop_button" onclick="OrderDo('stop');">Stop</a></li>
+            <li><a href="#" class="class_top_button" onclick="OrderDo('replay');">Replay</a></li>
+            <li><a href="#" class="class_top_button" onclick="OrderDo('shuffle');">Shuffle</a></li>
+            <li><a href="#popupDialog" data-rel="popup" data-position-to="window" data-transition="pop">Share</a></li>
           </ul>
         </div><!-- /navbar -->
-
+        <progress id="progressbar" class="custom-progress" max="100"></progress>
       </div><!-- /Header -->
 
       <!-- Content -->
       <div role="main" class="ui-content">
 
-        <div data-role="collapsible" data-collapsed="true">
-            <h4>Abba</h4>
-            <ul data-role="listview">
-                <li><a href="#">Thank you for the music</a></li>
-                <li><a href="#">The winner takes it all</a></li>
-            </ul>
-        </div>
-
-        <div data-role="collapsible" data-collapsed="true">
-            <h4>BACH JOHANN SEBASTIAN</h4>
-            <ul data-role="listview">
-                <li><a href="#">Praeludium und Fuge 2 in c Moll BWV 847</a></li>
-                <li><a href="#">Prelude and Fugue in C major BWV 846</a></li>
-                <li><a href="#">Präludium und Fuge in D Dur, BWV 850</a></li>
-            </ul>
-        </div>
+        <!-- files list-->
+        <span id="files_list"></span>
 
       </div><!-- /Content -->
 
       <!-- Footer-->
       <div data-role="footer" data-position="fixed" data-tap-toggle="false">
-        <form class="ui-grid-a">
-          <div class="ui-block-a">
-            <label for="grid-select-1" class="ui-hidden-accessible">Select</label>
-            <select id="grid-select-1" name="grid-select-1" data-shadow="false">
-            <option value="1">Mode Playback</option>
-            <option value="2">Mode Passthrough</option>
-            <option value="3">Mode Player</option>
-            <option value="4">Mode Random</option>
-            </select>
-          </div>
-          <div class="ui-block-b">
-            <input type="button" value="QrCode">
-          </div>
-        </form>
-        </div><!-- /Footer-->
 
+        <div data-role="navbar"> <!-- Buttons -->
+          <ul data-theme="a">
+            <li>
+                  <select name="select-mode" id="select-mode">
+                    <option value="playback">Mode Playback</option>
+                    <option value="passthrough">Mode Passsthrough</option>
+                    <option value="player">Mode Player</option>
+                    <option value="random">Mode Random</option>
+                  </select>
+            </li>
+          </ul>
+        </div><!-- /navbar -->
+
+        </div><!-- /Footer-->
 
     </div> <!-- /Page -->
 
-    <script>
-
-    /* Click on button */
-    function Do(order) {
-      /* ShowLoader();
-      fetch('?do='+order); */
-      console.log("Do="+order);
-      fetch('http://127.0.0.1:8888/?do='+order);
-      getStats();
-      $(".ui-btn-active").removeClass('ui-btn-active');
-      /* $(obj).removeClass('ui-btn-active'); */
-    }
-
-    /* Click on FullScreen */
-    function toggleFullScreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-        localStorage.setItem('fullscreen',true);
-      } else if (document.exitFullscreen) {
-        document.exitFullscreen();
-        localStorage.setItem('fullscreen',false);
-      }
-    }
-
-    /* API */
-    async function getStats() {
-
-      try {
-        /* const response = await fetch('status.json'); */
-        const response = await fetch('http://127.0.0.1:8888/status.json');
-        const data = await response.json();
-
-        console.log("GET="+data.nameclean);
-
-      /* Song Name */
-        $('#songname').text(data.nameclean);
-        document.title = data.nameclean;
-
-      /* Progress bar */
-      $('#progressbar').val(data.played);
-
-      } catch (error) {
-        console.error('---> NETWORK ERROR : ', error);
-      }
-
-      $(".ui-btn-active").removeClass('ui-btn-active');
-    }
-
-    /* Main script */
-    getStats();
-    setInterval(getStats, 2000);
-
-    </script>
+    <script src="index.js"></script>
 
   </body>
   </html>

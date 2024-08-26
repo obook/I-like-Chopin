@@ -1,0 +1,59 @@
+Installation on "Raspberry Pi OS with desktop" Debian version: 12 (bookworm) 64bits
+-----------------------------------------------------------------------------------
+
+cd ~/
+git clone https://github.com/obook/I-like-Chopin.git
+
+
+1/ Install poetry
+-----------------
+curl -sSL https://install.python-poetry.org | python3 -
+
+
+2/ add poetry to PATH
+---------------------
+Add in ~/.profile :
+
+# Python poetry
+export PATH="/home/<YourUserName>/.local/bin:$PATH"
+
+
+3/ Check poetry in PATH
+-----------------------
+Type 'source ~/.profile' (or reboot) and
+
+$ poetry --version
+Poetry (version 1.8.3)
+
+
+4/ Install i-like-chopin modules
+--------------------------------
+$ cd I-like-Chopin/src/
+$ poetry install
+
+5/ Run i-like-chopin
+--------------------
+$ poetry run python i-like-chopin.py
+
+6/ Video xcb driver problem ?
+----------------------------
+ERROR : "This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem. Available platform plugins are: wayland, vkkhrdisplay, wayland-egl, linuxfb, vnc, minimalegl, eglfs, offscreen, xcb, minimal."
+
+Then:
+sudo apt-get install -qq libglu1-mesa-dev libx11-xcb-dev '^libxcb*'
+
+7/ Autostart
+------------
+
+Make directory in home : ~/.config/autostart
+Create inside a file 'i-like-chopin.desktop' with
+
+[Desktop Entry]
+Type=Application
+Name=i-like-chopin
+# Change here your ABSOLUTE script path
+Exec=/home/.............../I-like-Chopin/i-like-chopin.sh
+
+/!\ i-like-chopin.sh MUST have absolute path also.
+
+Copy and modify i-like-chopin.sh.sample to I-like-Chopin/i-like-chopin.sh

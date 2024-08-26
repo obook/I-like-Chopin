@@ -23,9 +23,9 @@ class ClassSettings:
 
     settingsfile = os.path.join(configpath, "i-like-chopin.json")
     defaultmidipath = os.path.join(localpath, "midi")
-    serverindextemplate = os.path.join(
-        applicationpath, "template", "index-template.html"
-    )
+    serverindextemplate = os.path.join(applicationpath, "template", "index-template.html")
+
+    uipath = os.path.join(applicationpath, "ui")
 
     config = {
         "InputDevice": "(None)",
@@ -177,3 +177,9 @@ class ClassSettings:
         return self.GetSetting(
             "SustainChannel", 64
         )  # The sustain pedal sends CC 64 127 and CC 64 0 messages on channel 1
+
+    """
+    Not ditable
+    """
+    def GetUIPath(self):
+        return self.uipath
