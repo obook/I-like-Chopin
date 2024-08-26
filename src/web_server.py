@@ -171,13 +171,17 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         # index.html
         if self.path == "/" or self.path == "/index.html":
+            index = os.path.join(uipath,'index.html')
+            index_stats = os.stat(index)
+
             self.send_response(200)
             self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header("Content-type", "text/html")
+            self.send_header("Content-Length", str(index_stats.st_size))
             self.end_headers()
 
-            with open(os.path.join(uipath,'index.html'), 'rb') as file:
-                index = file.read()
-                self.wfile.write(index) # Read the file and send the contents
+            with open(index, 'rb') as file:
+                self.wfile.write(file.read()) # Read the file and send the contents
 
         else:
             path = self.path
@@ -187,32 +191,35 @@ class RequestHandler(BaseHTTPRequestHandler):
             file = os.path.join(uipath,path)
             if os.path.isfile(file):
 
-                print(f"SENDING = [{file}]")
-
                 self.send_response(200)
                 self.send_header('Access-Control-Allow-Origin', '*')
 
                 if(self.path.find(".js") != -1):
                     self.send_header("Content-type", "text/javascript")
+                elif(self.path.find(".html") != -1):
+                    self.send_header("Content-type", "text/html")
                 elif(self.path.find(".css") != -1):
                     self.send_header("Content-type", "text/css")
-                elif(self.path.find(".css") != -1):
-                    self.send_header("Content-type", "text/css")
+                elif(self.path.find(".png") != -1):
+                    self.send_header("Content-type", "image/png")
                 elif(self.path.find(".gif") != -1):
                     self.send_header("Content-type", "image/gif")
                 else:
                     print(f"missing content-type for [{self.path}]")
 
+                file_stats = os.stat(file)
+                self.send_header("Content-Length", str(file_stats.st_size))
                 self.end_headers()
 
                 with open(file, 'rb') as file: # BUG with os.path.join ??
                     self.wfile.write(file.read()) # Read the file and send the contents
 
             else: # 404
-                print(f"WARNING : file [{file}] DO NOT EXISTS")
+                print(f"|!| WARNING : web file [{file}] DO NOT EXISTS")
                 self.send_response(404)
                 self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
+                return
 
         if not self.wfile.closed:
             self.wfile.flush()
