@@ -58,7 +58,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         # json files
         if self.path == "/status.json":
 
-
             if self.midisong:
                 data = json.dumps(
                     {
@@ -133,6 +132,9 @@ class RequestHandler(BaseHTTPRequestHandler):
             return
 
         elif "do" in query_components:
+
+            print(f"--> do_GET [{self.path}]")
+
             action = query_components["do"][0]
             if self.pParent and action == "stop":
                 try:
