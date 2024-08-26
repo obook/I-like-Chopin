@@ -141,8 +141,10 @@ async function getStats() {
 
         if(first_run != true) {
             first_run = true;
+            /*
             getFiles();
             SetQRCode();
+            */
         }
 
     } catch (error) {
@@ -216,5 +218,7 @@ async function SetQRCode(){
 }
 
 /* Main script */
+SetQRCode();
+getFiles();
 getStats();
 setInterval(getStats, 2000);
