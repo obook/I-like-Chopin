@@ -187,7 +187,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             file = os.path.join(uipath,path)
             if os.path.isfile(file):
 
-                # print(f"SENDING = [{file}]")
+                print(f"SENDING = [{file}]")
 
                 self.send_response(200)
                 self.send_header('Access-Control-Allow-Origin', '*')
