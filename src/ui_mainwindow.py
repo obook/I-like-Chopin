@@ -140,7 +140,7 @@ class Ui_MainWindow(object):
         self.pushButton_Quit.setText(QCoreApplication.translate("MainWindow", u"Quit", None))
         self.groupBoxDevices.setTitle(QCoreApplication.translate("MainWindow", u"MIDI Devices", None))
         self.label_File.setText(QCoreApplication.translate("MainWindow", u"File", None))
-        self.label_Ouput.setText(QCoreApplication.translate("MainWindow", u"Midi Out", None))
+        self.label_Ouput.setText(QCoreApplication.translate("MainWindow", u"MIDI Out", None))
         self.label_Input.setText(QCoreApplication.translate("MainWindow", u"MIDI In", None))
         self.labelStatusInput.setText(QCoreApplication.translate("MainWindow", u"LED", None))
         self.labelStatusOuput.setText(QCoreApplication.translate("MainWindow", u"LED", None))

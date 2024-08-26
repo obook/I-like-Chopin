@@ -71,7 +71,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Midi Out</string>
+      <string>MIDI Out</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
