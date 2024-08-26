@@ -9,4 +9,11 @@ Created on Wed Jun  5 18:19:14 2024
 
 from mainwindow import start
 
-start()
+
+while True:
+    try:
+        start()
+        break
+    except Exception as e:
+        print(f"Program errored out! [{e}]")
+        print("Retrying ... ")

@@ -17,5 +17,4 @@ class web:
         self.Web_server.start()
 
     def OpenBrowser(self):
-        # webbrowser.get('firefox').open(f"http://127.0.0.1:{self.Settings.GetServerPort()}", new=0)
         webbrowser.open(f"http://127.0.0.1:{self.Settings.GetServerPort()}", new=0)

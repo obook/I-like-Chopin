@@ -28,6 +28,7 @@ class RequestHandler(BaseHTTPRequestHandler):
     midisong = None
     # get from init
     pParent = None
+    midisong = None
     midifiles_dict = {}
 
     def __init__(self, parent, midifiles_dict, *args, **kwargs):
@@ -37,16 +38,26 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.midifiles_dict = midifiles_dict
         super().__init__(*args, **kwargs)
 
-    def do_GET(self):
-        # if midisong ?
-        # Extract query param
-        query_components = parse_qs(urlparse(self.path).query)
+    def do_OPTIONS(self):
+        pass
+        '''
+        self.send_response(200, "ok")
+        self.send_header('Access-Control-Allow-Credentials', 'true')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header("Access-Control-Allow-Headers", "X-Requested-With, Content-type")
+        self.end_headers()
+        '''
 
+    def do_POST(self, *args, **kwargs):
+        print("--> do_POST")
+
+    def do_GET(self):
+        # print(f"--> do_GET [{self.path}]")
+
+        # json files
         if self.path == "/status.json":
-            self.send_response(200)
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.send_header("Content-Type", "application/json")
-            self.end_headers()
+
 
             if self.midisong:
                 data = json.dumps(
@@ -62,13 +73,52 @@ class RequestHandler(BaseHTTPRequestHandler):
                         "sustain":self.midisong.GetSustain(),
                     }
                 )
-
+                self.send_response(200)
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header("Content-Type", "application/json")
+                # print('Content-Length: %d' % len(response))
+                self.end_headers()
                 self.wfile.write(data.encode(encoding="utf_8"))
 
                 if not self.wfile.closed:
                     self.wfile.flush()
 
             return
+
+        elif self.path == "/files.json":
+            self.send_response(200)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+
+            file_dic = self.pParent.Midifiles.GetFiles()
+            data = json.dumps(file_dic)
+            self.wfile.write(data.encode(encoding="utf_8"))
+
+            if not self.wfile.closed:
+                self.wfile.flush()
+            return
+
+        elif self.path == "/interfaces.json":
+            self.send_response(200)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+
+            Network = ClassWebNetwork(self.pParent)
+            url_list = Network.GetWebUrls()
+            data = json.dumps(url_list)
+            self.wfile.write(data.encode(encoding="utf_8"))
+
+            if not self.wfile.closed:
+                self.wfile.flush()
+            return
+
+
+        # Extract query param
+        query_components = parse_qs(urlparse(self.path).query)
+
+        # with parameters (?)
 
         if "play" in query_components:
             midifile = query_components["play"][0]
@@ -78,6 +128,9 @@ class RequestHandler(BaseHTTPRequestHandler):
                     self.pParent.MidifileChange(midifile)  # DANGEROUS ?
                 except:
                     pass
+            self.send_response(200)
+            self.end_headers()
+            return
 
         elif "do" in query_components:
             action = query_components["do"][0]
@@ -96,82 +149,70 @@ class RequestHandler(BaseHTTPRequestHandler):
                     self.pParent.MidifileReplay()  # DANGEROUS ?
                 except:
                     pass
-            """
-            elif self.pParent and action == "mode":
-                try:
-                    self.pParent.ChangePlayerMode()  # DANGEROUS ?
-                except:
-                    pass
-            """
-            self.send_response(302)
-            self.send_header("Location", "/")
-            try:
-                self.end_headers()
-            except:
-                pass
+
+            self.send_response(200)
+            self.end_headers()
+
             return
+
         elif "mode" in query_components:
             mode = query_components["mode"][0]
             try:
                 self.pParent.ChangePlayerMode(mode)  # DANGEROUS ?
             except:
                 pass
-            self.send_response(302)
-            self.send_header("Location", "/")
-            try:
-                self.end_headers()
-            except:
-                pass
-            return
-        # send index.html
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
-        try:
+            self.send_response(200)
             self.end_headers()
-        except:
-            pass
+            return
 
-        # Files
-        midilist_html = ""
-        for key in self.pParent.midifiles_dict.keys():  # self.midifiles_dict.keys():
-            midilist_html += (
-                f"<button class='accordion'>{key}</button><div class='panel'>\n"
-            )
-            list = self.pParent.midifiles_dict[key]
-            for midifile in sorted(list, key=lambda s: s.lower()):
-                midiname = pathlib.Path(midifile).stem
-                midiname = midiname.replace("_", " ")
-                midiname = midiname.replace("-", " ")
-                midiname.upper()
-                #midilist_html += f"<p><a href='?play={quote(midifile)}'> &nbsp; {midiname} &nbsp; </a></p>\n"
-                midilist_html += f"<p onclick='SendSong(this);' data-value='{quote(midifile)}'>&nbsp; {midiname} &nbsp; </p>\n"
-            midilist_html += "</div>"
+        # Other files from web interface
 
-        # QRcodes
-        images = ""
-        Network = ClassWebNetwork(self.pParent)
-        qrcodes_list = Network.GetWebQRCodes()
-        for code in qrcodes_list:
-            images += code.replace("<?xml version='1.0' encoding='UTF-8'?>", "")
+        uipath = self.pParent.Settings.GetUIPath()
 
-        # Fill template
-        file = open(self.pParent.Settings.GetIndexTemplate(), "r")  # DANGEROUS ?
-        template = Template(file.read())
-        file.close()
+        # index.html
+        if self.path == "/" or self.path == "/index.html":
+            self.send_response(200)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
 
-        index_html = template.substitute(
-            name=self.midisong.GetCleanName(),
-            folder=self.midisong.GetParent(),
-            duration="",
-            midifiles=midilist_html,
-            qrcodes=images,
-        )
+            with open(os.path.join(uipath,'index.html'), 'rb') as file:
+                index = file.read()
+                self.wfile.write(index) # Read the file and send the contents
 
-        try:
-            self.wfile.write(bytes(index_html, "utf8"))
-        except:  # web browser disconnected
-            pass
-        return
+        else:
+            path = self.path
+            if len(path): # remove first "/" in self.path
+                path = path[1:]
+
+            file = os.path.join(uipath,path)
+            if os.path.isfile(file):
+
+                # print(f"SENDING = [{file}]")
+
+                self.send_response(200)
+                self.send_header('Access-Control-Allow-Origin', '*')
+
+                if(self.path.find(".js") != -1):
+                    self.send_header("Content-type", "text/javascript")
+                elif(self.path.find(".css") != -1):
+                    self.send_header("Content-type", "text/css")
+                elif(self.path.find(".css") != -1):
+                    self.send_header("Content-type", "text/css")
+                elif(self.path.find(".gif") != -1):
+                    self.send_header("Content-type", "image/gif")
+                else:
+                    print(f"missing content-type for [{self.path}]")
+
+                self.end_headers()
+
+                with open(file, 'rb') as file: # BUG with os.path.join ??
+                    self.wfile.write(file.read()) # Read the file and send the contents
+
+            else: # 404
+                print(f"WARNING : file [{file}] DO NOT EXISTS")
+                self.send_response(404)
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
 
         if not self.wfile.closed:
             self.wfile.flush()
