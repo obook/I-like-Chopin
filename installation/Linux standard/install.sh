@@ -8,7 +8,7 @@ if  [ "$answer" = "Y" ] || [ "$answer" = "y" ] ; then
     sudo mkdir -p /usr/share/i-like-chopin/icons
     sudo cp ../../src/*.py /usr/share/i-like-chopin
     sudo cp -r ../../src/icons /usr/share/i-like-chopin
-    sudo cp -r ../../src/template /usr/share/i-like-chopin
+    sudo cp -r ../../src/ui /usr/share/i-like-chopin
     sudo cp bin/i-like-chopin /usr/bin
 
     # Midifile
