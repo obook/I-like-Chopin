@@ -14,19 +14,19 @@ function toggleFullScreen() {
 
 /* Click on file */
 async function PlaySong(song) {
+    ShowLoader();
     CleanSongName();
     $('#songname').text("...");;
     $('#folder').text("");
     $('#duration').text("");
     $('#progressbar').val(0);
-    ShowLoader();
-    const response = fetch('/?play='+song);
+    const response = await fetch('/?play='+song);
 }
 
 /* Click on navbar button */
 async function OrderDo(order) {
     ShowLoader();
-    const response = fetch('/?do='+order);
+    const response = await fetch('/?do='+order);
     GetStats();
 }
 
