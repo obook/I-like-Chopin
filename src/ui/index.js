@@ -1,5 +1,5 @@
 
-uuid = "";
+song_uuid = "";
 
 /* Click on FullScreen */
 function toggleFullScreen() {
@@ -58,7 +58,7 @@ function ShowLoader() {
 }
 
 /* API */
-async function getStats() {
+async function GetStats() {
 
     $.mobile.loading( "hide" );
 
@@ -77,7 +77,7 @@ async function getStats() {
 
         /* uuid */
 
-        uuid = data.uuid;
+        song_uuid = data.uuid;
 
         /* Song Name */
         $('#songname').text(data.nameclean);
@@ -153,7 +153,7 @@ async function getStats() {
     }
 }
 
-async function getFiles() {
+async function GetFiles() {
     try {
         const response = await fetch('/files.json');
         const data = await response.json();
@@ -214,6 +214,6 @@ async function SetQRCode(){
 
 /* Main script */
 SetQRCode();
-getFiles();
-getStats();
-setInterval(getStats, 2000);
+GetFiles();
+GetStats();
+setInterval(GetStats, 2000);
