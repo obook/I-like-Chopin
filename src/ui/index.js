@@ -27,7 +27,7 @@ async function PlaySong(song) {
 async function OrderDo(order) {
     ShowLoader();
     const response = fetch('/?do='+order);
-    getStats();
+    GetStats();
 }
 
 /* Select mode changed */
