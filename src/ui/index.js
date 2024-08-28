@@ -1,5 +1,5 @@
 
-first_run = false;
+uuid = "";
 
 /* Click on FullScreen */
 function toggleFullScreen() {
@@ -75,6 +75,10 @@ async function getStats() {
         const response = await fetch('/status.json');
         const data = await response.json();
 
+        /* uuid */
+
+        uuid = data.uuid;
+
         /* Song Name */
         $('#songname').text(data.nameclean);
         document.title = data.nameclean;
@@ -139,16 +143,7 @@ async function getStats() {
         else
             $('#select-mode').val("playback").selectmenu('refresh');
 
-        if(first_run != true) {
-            first_run = true;
-            /*
-            getFiles();
-            SetQRCode();
-            */
-        }
-
     } catch (error) {
-        first_run = false;
         console.error('---> NETWORK ERROR : ', error);
         $("#songname").addClass("class_songname_error");
         $('#songname').text("OFFLINE");;

@@ -53,7 +53,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         print("--> do_POST")
 
     def do_GET(self):
-        # print(f"--> do_GET [{self.path}]")
 
         # json files
         if self.path == "/status.json":
@@ -61,14 +60,15 @@ class RequestHandler(BaseHTTPRequestHandler):
             if self.midisong:
                 data = json.dumps(
                     {
-                        "played": self.midisong.GetPlayed(),
-                        "duration": round(self.midisong.GetDuration(), 2),
-                        "nameclean": self.midisong.GetCleanName(),
-                        "folder": self.midisong.GetParent(),
-                        "state": self.midisong.GetState(),
-                        "mode": self.midisong.GetMode(),
-                        "tracks": self.midisong.GetTracks(),
-                        "channels": self.midisong.GetChannels(),
+                        "uuid":str(self.midisong.Getuuid()),
+                        "played":self.midisong.GetPlayed(),
+                        "duration":round(self.midisong.GetDuration(), 2),
+                        "nameclean":self.midisong.GetCleanName(),
+                        "folder":self.midisong.GetParent(),
+                        "state":self.midisong.GetState(),
+                        "mode":self.midisong.GetMode(),
+                        "tracks":self.midisong.GetTracks(),
+                        "channels":self.midisong.GetChannels(),
                         "sustain":self.midisong.GetSustain(),
                     }
                 )

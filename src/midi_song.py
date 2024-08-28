@@ -55,6 +55,9 @@ class ClassMidiSong:
     def __del__(self):
         print(f"MidiSong {self.__uuid} destroyed [{self.GetFilename()}]")
 
+    def Getuuid(self):
+        return self.__uuid;
+
     def Getfilepath(self):  # complete path and filename
         return self.__filepath
 
