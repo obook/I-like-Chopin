@@ -13,20 +13,20 @@ function toggleFullScreen() {
 }
 
 /* Click on file */
-function PlaySong(song) {
+async function PlaySong(song) {
     CleanSongName();
     $('#songname').text("...");;
     $('#folder').text("");
     $('#duration').text("");
     $('#progressbar').val(0);
     ShowLoader();
-    fetch('/?play='+song);
+    const response = fetch('/?play='+song);
 }
 
 /* Click on navbar button */
-function OrderDo(order) {
+async function OrderDo(order) {
     ShowLoader();
-    fetch('/?do='+order);
+    const response = fetch('/?do='+order);
     getStats();
 }
 

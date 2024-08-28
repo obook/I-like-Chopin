@@ -40,10 +40,10 @@
 
         <div data-role="navbar"> <!-- Buttons -->
           <ul data-theme="a">
-            <li><a href="#" class="class_stop_button" onclick="OrderDo('stop');">Stop</a></li>
-            <li><a href="#" class="class_top_button" onclick="OrderDo('replay');">Replay</a></li>
-            <li><a href="#" class="class_top_button" onclick="OrderDo('shuffle');">Shuffle</a></li>
-            <li><a href="#popupDialog" data-rel="popup" data-position-to="window" data-transition="pop">Share</a></li>
+            <li><a href="#" class="class_top_button ui-btn ui-icon-delete ui-btn-icon-left" onclick="OrderDo('stop');">Stop</a></li>
+            <li><a href="#" class="class_top_button ui-btn ui-icon-refresh ui-btn-icon-left" onclick="OrderDo('replay');">Replay</a></li>
+            <li><a href="#" class="class_top_button ui-btn ui-icon-recycle ui-btn-icon-left" onclick="OrderDo('shuffle');">Shuffle</a></li>
+            <li><a href="#popupDialog" class="class_top_button ui-btn ui-icon-action ui-btn-icon-left" data-rel="popup" data-position-to="window" data-transition="pop">Share</a></li>
           </ul>
         </div><!-- /navbar -->
         <progress id="progressbar" class="custom-progress" max="100"></progress>
