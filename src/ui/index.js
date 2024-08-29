@@ -1,5 +1,5 @@
 
-song_uuid = "";
+last_song_uuid = "";
 
 /* Click on FullScreen */
 function toggleFullScreen() {
@@ -41,7 +41,7 @@ function CleanSongName(empty_strings=false) {
     $("#songname").removeClass("class_songname_3");
     $("#songname").removeClass("class_songname_unknown");
     $("#songname").removeClass("class_songname_error");
-    if(empty_strings) {
+    if(empty_strings==true) {
         $('#songname').text("...");;
         $('#folder').text("");
         $('#duration').text("");
@@ -64,7 +64,7 @@ async function GetStats() {
 
     $.mobile.loading( "hide" );
 
-    CleanSongName();
+
 
     try {
 
@@ -77,6 +77,13 @@ async function GetStats() {
 
         /* uuid */
         song_uuid = data.uuid;
+
+        if(song_uuid != last_song_uuid)  {
+            CleanSongName(true);
+        }
+        else {
+            last_song_uuid =song_uuid;
+        }
 
         /* Song Name */
         $('#songname').text(data.nameclean);
