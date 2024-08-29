@@ -181,7 +181,7 @@ async function GetFiles() {
                 fileNameShort = fileNameShort.replaceAll("_"," ");
                 fileNameShort = fileNameShort.replaceAll("-"," ");
                 fileNameShort = fileNameShort.replaceAll(",","");
-                html = html + " <li data-theme='a' data-icon='audio'><a href='#' onclick='PlaySong( \""+filePath_URI+"\" );'>"+fileNameShort+"</a></li>\n";
+                html = html + " <li class='class_filename' data-theme='a' data-icon='audio'><a href='#' onclick='PlaySong( \""+filePath_URI+"\" );'>"+fileNameShort+"</a></li>\n";
             }
 
             html = html +"</ul>\n</div>\n";

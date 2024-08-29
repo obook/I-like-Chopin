@@ -10,9 +10,16 @@ body {
 
 /* Duration */
 .duration{
-    color:#9b9a9a;
+    color:#eee;
     /*font-size: calc(.5em + 1.5vw);
     text-indent:10px;*/
+}
+
+.class_filename a {
+    /*
+    color: rgb(255, 255, 255) !important; */
+    background-color: rgb(189, 189, 189) !important;
+    text-shadow:0 0px 0 !important;
 }
 
 .class_top_button {
