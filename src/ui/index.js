@@ -181,7 +181,7 @@ async function GetFiles() {
                 fileNameShort = fileNameShort.replaceAll("_"," ");
                 fileNameShort = fileNameShort.replaceAll("-"," ");
                 fileNameShort = fileNameShort.replaceAll(",","");
-                html = html + " <li class='class_filename' data-theme='a' data-icon='audio'><a href='#' onclick='PlaySong( \""+filePath_URI+"\" );'>"+fileNameShort+"</a></li>\n";
+                html = html + " <li class='class_filename' data-theme='a' data-icon='plus'><a href='#' onclick='PlaySong( \""+filePath_URI+"\" );'>"+fileNameShort+"</a><a href='#playlist_add' data-rel='popup' data-position-to='window' data-transition='pop'>Purchase album</a></li>\n";
             }
 
             html = html +"</ul>\n</div>\n";

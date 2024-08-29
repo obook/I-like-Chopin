@@ -40,7 +40,7 @@
       <div data-role="header" data-position="fixed" data-tap-toggle="false">
 
         <h1 class="filename"><span id="songname" class="class_songname_0">I like Chopin</span></h1>
-        <h2><div class="duration"><span id='folder'>${folder}</span>&nbsp;<span id='duration'>${duration}</span></div></h2>
+        <h2><div class="duration"><span id='folder'></span>&nbsp;<span id='duration'></span></div></h2>
 
         <a href="#panel_left" data-icon="carat-r" data-iconpos="notext" data-shadow="false" data-iconshadow="false" class="ui-nodisc-icon">Open left panel</a>
         <a href="#" class="ui-btn ui-btn-right ui-icon-grid ui-btn-icon-notext ui-corner-all" onclick="toggleFullScreen();">No text</a>
@@ -59,8 +59,25 @@
       <!-- Content -->
       <div role="main" class="ui-content">
 
+        <ul data-role="listview" data-split-icon="gear" data-split-theme="a" data-inset="true">
+          <li><a href="#">
+          <!-- <img src="../_assets/img/album-bb.jpg"> -->
+          <h2>Broken Bells</h2>
+          <!-- <p>Broken Bells</p></a> -->
+          <a href="#playlist_add" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a>
+          </li>
+        </ul>
+
         <!-- files list-->
         <span id="files_list"></span>
+
+        <!-- Song popup -->
+        <div data-role="popup" id="playlist_add" data-theme="b" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;">
+          <h3>Add to playlist?</h3>
+          <p>Not wet functionnal for instance...</p>
+          <a href="index.html" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini">Yes</a>
+          <a href="index.html" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini">Cancel</a>
+        </div>
 
       </div><!-- /Content -->
 
