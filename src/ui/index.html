@@ -30,13 +30,20 @@
         </div>
       </div>
 
+      <!-- Left panel -->
+      <div data-role="panel" id="panel_left" data-display="overlay" data-position="left" data-theme="b">
+        <p>Futurs options here</p>
+      <a href="#" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-mini ui-btn-inline ui-icon-delete ui-btn-icon-right">Close</a>
+      </div><!-- /panel -->
+
       <!-- Header -->
       <div data-role="header" data-position="fixed" data-tap-toggle="false">
 
         <h1 class="filename"><span id="songname" class="class_songname_0">I like Chopin</span></h1>
         <h2><div class="duration"><span id='folder'>${folder}</span>&nbsp;<span id='duration'>${duration}</span></div></h2>
-        <a href="#" class="ui-btn ui-btn-right ui-icon-grid ui-btn-icon-notext ui-corner-all" onclick="toggleFullScreen();">No text</a>
 
+        <a href="#panel_left" data-icon="carat-r" data-iconpos="notext" data-shadow="false" data-iconshadow="false" class="ui-nodisc-icon">Open left panel</a>
+        <a href="#" class="ui-btn ui-btn-right ui-icon-grid ui-btn-icon-notext ui-corner-all" onclick="toggleFullScreen();">No text</a>
 
         <div data-role="navbar"> <!-- Buttons -->
           <ul data-theme="a">

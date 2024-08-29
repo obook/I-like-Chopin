@@ -15,11 +15,7 @@ function toggleFullScreen() {
 /* Click on file */
 async function PlaySong(song) {
     ShowLoader();
-    CleanSongName();
-    $('#songname').text("...");;
-    $('#folder').text("");
-    $('#duration').text("");
-    $('#progressbar').val(0);
+    CleanSongName(true);
     const response = await fetch('/?play='+song);
 }
 
@@ -32,19 +28,25 @@ async function OrderDo(order) {
 
 /* Select mode changed */
 $('#select-mode').change(function () {
-    const mode = $(this).val();
     ShowLoader();
-    fetch('/?mode='+mode);
+    const mode = $(this).val();
+    const response = fetch('/?mode='+mode);
 });
 
 /* Clean songname style */
-function CleanSongName() {
+function CleanSongName(empty_strings=false) {
     $("#songname").removeClass("class_songname_0");
     $("#songname").removeClass("class_songname_1");
     $("#songname").removeClass("class_songname_2");
     $("#songname").removeClass("class_songname_3");
     $("#songname").removeClass("class_songname_unknown");
     $("#songname").removeClass("class_songname_error");
+    if(empty_strings) {
+        $('#songname').text("...");;
+        $('#folder').text("");
+        $('#duration').text("");
+        $('#progressbar').val(0);
+    }
 }
 
 function ShowLoader() {
@@ -62,21 +64,18 @@ async function GetStats() {
 
     $.mobile.loading( "hide" );
 
-    /* test */
-
-    $('#select-mode').val("player"); //.selectmenu('refresh');
-
+    CleanSongName();
 
     try {
 
         $(".ui-btn-active").removeClass('ui-btn-active');
 
-        /* const response = await fetch('status.json'); */
         const response = await fetch('/status.json');
         const data = await response.json();
 
-        /* uuid */
+        console.log(data);
 
+        /* uuid */
         song_uuid = data.uuid;
 
         /* Song Name */
@@ -108,8 +107,6 @@ async function GetStats() {
         $('#progressbar').val(data.played);
 
         /* Handle MIDIfile states and errors */
-
-        CleanSongName();
 
         if (data.state <0) {
             $("#songname").addClass("class_songname_error"); /* Error */
@@ -157,6 +154,8 @@ async function GetFiles() {
     try {
         const response = await fetch('/files.json');
         const data = await response.json();
+
+        /* console.log(data); */
 
         html = "<div data-role='collapsibleset' data-theme='b' data-inset='false' data-collapsed-icon='false'>";
 

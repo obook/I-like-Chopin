@@ -3,7 +3,7 @@
     "played":67,
     "duration":1.32,
     "nameclean":"My test midi File",
-    "folder":"Myfolder",
+    "folder":"MyMidifolder",
     "state":2,
     "mode":1,
     "tracks":["track1","track2"],
