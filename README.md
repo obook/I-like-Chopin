@@ -16,8 +16,9 @@ Bring your piano back to life and impress your friends with this musical magic t
 
 # Recommanded usage
 ## Install poetry and libraries
+
 ```bash
-pip install poetry
+curl -sSL https://install.python-poetry.org | python3 -
 cd src
 poetry install
 ```
