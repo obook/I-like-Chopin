@@ -66,7 +66,19 @@
         <div data-role="popup" id="playlist_add" data-theme="b" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;">
           <h3>Add to playlist?</h3>
           <p>Not wet functionnal for instance...</p>
-          <a href="index.html" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini">Yes</a>
+
+          <ul data-theme="a">
+            <li>
+                  <select name="select-stars" id="select-stars">
+                    <option value="star1">⭐</option>
+                    <option value="star2">⭐⭐</option>
+                    <option value="star3">⭐⭐⭐</option>
+                    <option value="star4">⭐⭐⭐⭐</option>
+                  </select>
+            </li>
+          </ul>
+
+          <a href="index.html" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini">Apply</a>
           <a href="index.html" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini">Cancel</a>
         </div>
 
