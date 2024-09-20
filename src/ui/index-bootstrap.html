@@ -7,6 +7,7 @@
     <link rel="icon" href="vendorb/bootstrap-5.3.3/favicon.ico">
     <link href="vendorb/bootstrap-5.3.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="vendorb/bootstrap-5.3.3/sticky-footer-navbar.css" rel="stylesheet">
+    <script src="vendorb/bootstrap-5.3.3/js/bootstrap.min.js"></script>
   </head>
   <body>
 
@@ -39,42 +40,57 @@
 
     <!-- Begin page content -->
     <main role="main" class="container">
-      <h1 class="mt-5">Sticky footer with fixed navbar</h1>
+      <h1 class="mt-5">Work in progress...</h1>
       <p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body &gt; .container</code>.</p>
-      <p>Back to <a href="../sticky-footer/">the default sticky footer</a> minus the navbar.</p>
 
-
-      <!-- Accordeon -->
+          <!-- Accordeon -->
 
       <div class="accordion" id="accordionExample">
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              Accordion Item #1
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Chopin Frederik
             </button>
           </h2>
-          <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
             <div class="accordion-body">
-              <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+              <ul class="list-group">
+                <li class="list-group-item active">Cras justo odio</li>
+                <li class="list-group-item">Dapibus ac facilisis in</li>
+                <li class="list-group-item">Morbi leo risus</li>
+                <li class="list-group-item">Porta ac consectetur ac</li>
+                <li class="list-group-item">Vestibulum at eros</li>
+              </ul>
             </div>
           </div>
         </div>
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingTwo">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-              Accordion Item #2
+              Mozart Amadeus
             </button>
           </h2>
           <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
             <div class="accordion-body">
-              <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+              <div class="list-group">
+                <button type="button" 
+                class="list-group-item 
+                list-group-item-action active">Active button</button>
+                <button type="button" 
+                class="list-group-item 
+                list-group-item-action">GeeksforGeeks</button>
+                <button type="button" 
+                class="list-group-item 
+                list-group-item-action" disabled>
+                Disabled Button</button>
+              </div>
             </div>
           </div>
         </div>
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingThree">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-              Accordion Item #3
+              Satie Erik
             </button>
           </h2>
           <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
@@ -96,7 +112,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="vendorb/jquery-3.2.1.slim.min.js"></script>
-    <script>window.jQuery || document.write('<script src="vendor/bootstrap-5.3.3/jquery-slim.min.js"><\/script>')</script>
+    <script>window.jQuery || document.write('<script src="vendorb/bootstrap-5.3.3/jquery-slim.min.js"><\/script>')</script>
     <script src="vendorb/bootstrap-5.3.3/popper.min.js"></script>
   </body>
 </html>
