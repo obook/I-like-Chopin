@@ -94,6 +94,11 @@ class RequestHandler(BaseHTTPRequestHandler):
             data = json.dumps(file_dic)
             self.wfile.write(data.encode(encoding="utf_8"))
 
+            ''' NOTICE :
+            file_dic is a dicrionnary as key:[list of complete filepath]
+            {'ABBA': ['C:\...','C:\...'], 'BACH JOHANN SEBASTIAN': [C:\...,C:\...] }
+            '''
+
             if not self.wfile.closed:
                 self.wfile.flush()
             return
