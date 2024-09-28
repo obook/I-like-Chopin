@@ -64,8 +64,6 @@ async function GetStats() {
 
     $.mobile.loading( "hide" );
 
-
-
     try {
 
         $(".ui-btn-active").removeClass('ui-btn-active');
@@ -175,7 +173,13 @@ async function GetFiles() {
             for (var midifiles in data[artist]) {
                 const filePath = data[artist][midifiles];
                 const filePath_URI = encodeURIComponent(filePath).replace(/'/g, "%27");
-                const pathStrSplit = filePath.split('/'); /* NOT WINDOWS COMPATIBLE ? */
+
+                /* POSIX Compatible */
+                // const pathStrSplit = filePath.split('/'); /* NOT WINDOWS COMPATIBLE ? */
+
+                /* Windows compatible */
+                const pathStrSplit= filePath.split('\\').pop().split('/'); // .pop();
+                
                 const fileName = pathStrSplit.pop();
                 var fileNameShort=fileName.substring(0,fileName.lastIndexOf("."));
                 fileNameShort = fileNameShort.replaceAll("_"," ");
