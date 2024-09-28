@@ -71,7 +71,7 @@ async function GetStats() {
         const response = await fetch('/status.json');
         const data = await response.json();
 
-        console.log(data);
+        /* debug console.log(data); */
 
         /* uuid */
         song_uuid = data.uuid;
@@ -179,7 +179,7 @@ async function GetFiles() {
 
                 /* Windows compatible */
                 const pathStrSplit= filePath.split('\\').pop().split('/'); // .pop();
-                
+
                 const fileName = pathStrSplit.pop();
                 var fileNameShort=fileName.substring(0,fileName.lastIndexOf("."));
                 fileNameShort = fileNameShort.replaceAll("_"," ");
