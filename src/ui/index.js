@@ -1,6 +1,16 @@
 
 last_song_uuid = "";
 
+/* Detect Windows */
+function IsWindowsPath(filePath) {
+    if (filePath.length>1) {
+        if (filePath[1]==':') { /* Windows */
+            return (true);
+        }
+    }
+return (false);
+}
+
 /* Click on FullScreen */
 function toggleFullScreen() {
     if (!document.fullscreenElement) {
@@ -174,11 +184,12 @@ async function GetFiles() {
                 const filePath = data[artist][midifiles];
                 const filePath_URI = encodeURIComponent(filePath).replace(/'/g, "%27");
 
-                /* POSIX Compatible */
-                // const pathStrSplit = filePath.split('/'); /* NOT WINDOWS COMPATIBLE ? */
-
-                /* Windows compatible */
-                const pathStrSplit= filePath.split('\\').pop().split('/'); // .pop();
+                if ( IsWindowsPath(filePath) == true) {
+                    var pathStrSplit= filePath.split('\\').pop().split('/'); // Windows
+                }
+                else {
+                    var pathStrSplit = filePath.split('/'); // POSIX
+                }
 
                 const fileName = pathStrSplit.pop();
                 var fileNameShort=fileName.substring(0,fileName.lastIndexOf("."));
