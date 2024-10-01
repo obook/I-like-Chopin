@@ -19,6 +19,7 @@ Bring your piano back to life and impress your friends with this musical magic t
 
 ```bash
 curl -sSL https://install.python-poetry.org | python3 -
+# You must add i your profile export PATH="/home/USERNAME/.local/bin:$PATH"
 cd src
 poetry install
 ```
