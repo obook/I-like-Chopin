@@ -26,21 +26,33 @@ def on_release(key):
     if key == Key.esc:
         next_song = True
         # Stop listener
-        return False
+        # return False
 
 
-def PlayRandom(files):
-    error_counter = 1
-    index = random.randint(0, len(files))
-    file = files[index]
-    print(file)
+def GetRamdom(files):
+    global next_song
+    while len(files):
+        index = random.randint(0, len(files))
+        file = files[index]
+        tracks, sustain = SystainPedalCheck(file)
+        if sustain > 0 and tracks <= 2:
+            print(f"midi file={file}")
+            print(f"tracks={tracks}")
+            print(f"sustain={sustain}")
+            Play(file)
+            next_song = False
+            files.pop(index)
+
+
+def Play(file):
+    error_counter = 0
     # Player
     for msg in MidiFile(file):
         time.sleep(msg.time)
         try:
             device.send(msg)
         except Exception as error:
-            print(f"Player error {error_counter}: {error}")
+            # print(f"Player error {error_counter}: {error}", end="")
             error_counter += 1
         if next_song:
             break
@@ -83,7 +95,7 @@ listener = Listener(on_release=on_release)
 listener.start()
 
 # Play
-PlayRandom(files)
+GetRamdom(files)
 
 print("stop")
 device.close()
