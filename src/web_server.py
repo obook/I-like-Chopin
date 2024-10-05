@@ -22,6 +22,30 @@ from urllib.parse import urlparse, parse_qs, quote
 from web_network import ClassWebNetwork
 from string import Template
 
+'''
+Please debug : (04/10/2024)
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 41446)
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.10/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "~/Dev/GitHub/I-like-Chopin/src/web_server.py", line 39, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.10/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/usr/lib/python3.10/http/server.py", line 433, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.10/http/server.py", line 421, in handle_one_request
+    method()
+  File "~/Dev/GitHub/I-like-Chopin/src/web_server.py", line 222, in do_GET
+    self.wfile.write(file.read()) # Read the file and send the contents
+  File "/usr/lib/python3.10/socketserver.py", line 826, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Relais brisé (pipe)
+----------------------------------------
+'''
 
 class RequestHandler(BaseHTTPRequestHandler):
     uuid = None
