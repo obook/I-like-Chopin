@@ -152,6 +152,9 @@ class ClassMidiSong:
     def HumanizeDuration(
         self, duration, value
     ):
+        # do not work for instance
+        return 0  # buggy delay # for calculate new_time = msg.time+delay
+
         if duration:
             original_duration = duration
         else:
