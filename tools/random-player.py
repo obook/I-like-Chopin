@@ -46,6 +46,31 @@ def PlayRandom(files):
             break
 
 
+def SystainPedalCheck(file):
+    sustain = 0
+    tracks = 0
+
+    try:
+        # Tracks
+        midi = MidiFile(file)
+        for i, track in enumerate(midi.tracks):
+            tracks += 1
+
+        for msg in MidiFile(file):
+            if msg.type == "control_change":
+                # The sustain pedal sends CC 64 127
+                # and CC 64 0 messages on channel 1
+                if msg.value == 64:
+                    sustain += 1
+    except Exception as error:
+        print(f"|!| CAN NOT READ {file} {error}")
+        sustain = 0
+        tracks = 0
+        pass
+
+    return tracks, sustain
+
+
 my_path = os.path.expanduser("~/MUSIQUE/MIDI-02")
 files = glob.glob(my_path + '/**/*.mid', recursive=True)
 index = random.randint(0, len(files))
@@ -56,5 +81,9 @@ device = open_output("Midi Through:Midi Through Port-0", autoreset=True)
 # Keyboard
 listener = Listener(on_release=on_release)
 listener.start()
+
+# Play
 PlayRandom(files)
+
 print("stop")
+device.close()
