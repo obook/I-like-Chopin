@@ -29,22 +29,28 @@ def on_release(key):
         # return False
 
 
-def GetRamdom(files):
+def GetRamdom(files, device):
     global next_song
+    animation = ["-","/","-","\\"]
+    animation_index=0
     while len(files):
-        index = random.randint(0, len(files))
+        print(f"Searching {animation[animation_index]}\r", end="")
+        animation_index += 1
+        if animation_index > len(animation)-1 :
+            animation_index = 0
+        index = random.randint(0, len(files)-1)
         file = files[index]
         tracks, sustain = SystainPedalCheck(file)
         if sustain > 0 and tracks <= 2:
-            print(f"midi file={file}")
+            print(f"midi file={file}, press Esc for next song...")
             print(f"tracks={tracks}")
             print(f"sustain={sustain}")
-            Play(file)
+            Play(file, device)
             next_song = False
             files.pop(index)
 
 
-def Play(file):
+def Play(file, device):
     error_counter = 0
     # Player
     for msg in MidiFile(file):
@@ -55,6 +61,8 @@ def Play(file):
             # print(f"Player error {error_counter}: {error}", end="")
             error_counter += 1
         if next_song:
+            device.panic()
+            device.reset()
             break
 
 
@@ -83,7 +91,7 @@ def SystainPedalCheck(file):
     return tracks, sustain
 
 
-my_path = os.path.expanduser("~/MUSIQUE/MIDI-02")
+my_path = os.path.expanduser("~/MUSIQUE")
 files = glob.glob(my_path + '/**/*.mid', recursive=True)
 index = random.randint(0, len(files))
 
@@ -95,7 +103,7 @@ listener = Listener(on_release=on_release)
 listener.start()
 
 # Play
-GetRamdom(files)
+GetRamdom(files, device)
 
 print("stop")
 device.close()
