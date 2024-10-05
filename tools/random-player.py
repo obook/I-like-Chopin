@@ -50,19 +50,19 @@ def GetRamdom(files, device):
 
 
 def Play(file, device):
-    print("Playing...")
+    print("Playing...\r", end="")
     error_counter = 0
     # Player
     for msg in MidiFile(file):
-        if msg.type == "note_on" or msg.type == "note_off":
-            time.sleep(msg.time)
+        #if msg.type == "note_on" or msg.type == "note_off":
+        time.sleep(msg.time)
         try:
             device.send(msg)
         except Exception as error:
             # print(f"Player error {error_counter}: {error}", end="")
             error_counter += 1
         if next_song:
-            print("Stop !")
+            print("Stop !    ")
             device.panic()
             device.reset()
             break
