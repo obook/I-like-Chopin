@@ -14,38 +14,47 @@ pip install mido pynput
 import os
 import glob
 import time
+import random
 from pynput.keyboard import Key, Listener
 from mido import MidiFile, open_output
 
-end = False
+next_song = False
+
 
 def on_release(key):
-    global end
+    global next_song
     if key == Key.esc:
-        end = True
+        next_song = True
         # Stop listener
         return False
 
+
+def PlayRandom(files):
+    error_counter = 1
+    index = random.randint(0, len(files))
+    file = files[index]
+    print(file)
+    # Player
+    for msg in MidiFile(file):
+        time.sleep(msg.time)
+        try:
+            device.send(msg)
+        except Exception as error:
+            print(f"Player error {error_counter}: {error}")
+            error_counter += 1
+        if next_song:
+            break
+
+
 my_path = os.path.expanduser("~/MUSIQUE/MIDI-02")
 files = glob.glob(my_path + '/**/*.mid', recursive=True)
-file = files[0] # Just first for tests
+index = random.randint(0, len(files))
 
 # Connect to synth
 device = open_output("Midi Through:Midi Through Port-0", autoreset=True)
 
+# Keyboard
 listener = Listener(on_release=on_release)
 listener.start()
-error_counter = 1
-print("play, press Esc for quit")
-# Player
-for msg in MidiFile(file):
-    time.sleep(msg.time)
-    try:
-        device.send(msg)
-    except Exception as error:
-        print(f"Player error {error_counter}: {error}")
-        error_counter += 1
-    if end:
-        break
-
+PlayRandom(files)
 print("stop")
