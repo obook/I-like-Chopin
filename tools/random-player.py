@@ -9,6 +9,8 @@ Spyder : pip install spyder-kernels==3.0.*
 Spyder run : bash -c '~/.local/spyder-6/envs/spyder-runtime/bin/spyder'
 Spyder Set Python : ~/midoplayer/bin/python
 pip install mido pynput
+
+Todo : sustain is not good count
 """
 
 import os
@@ -71,7 +73,6 @@ def Play(file, device):
 def SystainPedalCheck(file):
     sustain = 0
     tracks = 0
-
     try:
         # Tracks
         midi = MidiFile(file)
@@ -88,7 +89,6 @@ def SystainPedalCheck(file):
         print(f"|!| CAN NOT READ {file} {error}")
         sustain = 0
         tracks = 0
-        pass
 
     return tracks, sustain
 
