@@ -15,12 +15,21 @@ Funny program for play like Chopin.
 Bring your piano back to life and impress your friends with this musical magic trick!
 
 # Recommanded usage
+<!--
 ## Install poetry and libraries
 
 ```bash
 curl -sSL https://install.python-poetry.org | python3 -
 # You must add in your ~/.profile export PATH="/home/USERNAME/.local/bin:$PATH"
 cd src
+poetry install
+```
+-->
+## Install libraries
+The Python tool <b>poetry</b> is assumed to be already installed on your machine.
+
+```bash
+cd src/
 poetry install
 ```
 
