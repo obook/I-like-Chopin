@@ -43,8 +43,7 @@ def GetRamdom(files, device):
         tracks, sustain = SystainPedalCheck(file)
         if sustain > 0 and tracks <= 2:
             print(f"midi file={file}, press Esc for next song...")
-            print(f"tracks={tracks}")
-            print(f"sustain={sustain}")
+            print(f"tracks={tracks} sustain={sustain}")
             Play(file, device)
             next_song = False
             files.pop(index)
@@ -55,13 +54,15 @@ def Play(file, device):
     error_counter = 0
     # Player
     for msg in MidiFile(file):
-        time.sleep(msg.time)
+        if msg.type == "note_on" or msg.type == "note_off":
+            time.sleep(msg.time)
         try:
             device.send(msg)
         except Exception as error:
             # print(f"Player error {error_counter}: {error}", end="")
             error_counter += 1
         if next_song:
+            print("Stop !")
             device.panic()
             device.reset()
             break
