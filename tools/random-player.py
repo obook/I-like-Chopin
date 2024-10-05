@@ -42,7 +42,7 @@ def GetRamdom(files, device):
         file = files[index]
         tracks, sustain = SystainPedalCheck(file)
         if sustain > 0 and tracks <= 2:
-            print(f"midi file={file}, press Esc for next song...")
+            print(f"midifile={file}, press Esc for next song...")
             print(f"tracks={tracks} sustain={sustain}")
             Play(file, device)
             next_song = False
