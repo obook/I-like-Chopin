@@ -44,13 +44,13 @@ def GetRamdom(files, device):
         file = files[index]
         tracks, sustain = SystainPedalCheck(file)
         if sustain > 20 and tracks <= 3:
-            print(f"FOUND={file}, press Esc for next song...")
+            print(f"FOUND {file}, press Esc for next song...")
             print(f"tracks={tracks} sustain={sustain}")
             Play(file, device)
             next_song = False
             files.pop(index)
         else:
-            print(f"REJECTED={file} tracks={tracks} sustain={sustain}")
+            print(f"REJECTED {file} tracks={tracks} sustain={sustain}")
 
 
 def Play(file, device):
