@@ -6,6 +6,7 @@ Created on Wed Aug  7 14:17:57 2024
 Tool for search nice midifiles regarding tracks and sustain pedal
 """
 
+import os
 import glob
 from mido import MidiFile
 
@@ -24,8 +25,8 @@ def SystainPedalCheck(file):
             if msg.type == "control_change":
                 # The sustain pedal sends CC 64 127
                 # and CC 64 0 messages on channel 1
-                if msg.value == 64:
-                    sustain += 1
+                # if msg.value == 64:
+                sustain += 1
     except Exception as error:
         print(f"|!| CAN NOT READ {file} {error}")
         sustain = 0
@@ -37,16 +38,19 @@ def SystainPedalCheck(file):
 
 print("** START")
 
-root_dir = "~/MUSIQUE/"
+root_dir = os.path.expanduser("~/Musique/MIDIALL")
+files = glob.glob(root_dir + '/**/*.mid', recursive=True)
+print(f"Scan for {len(files)} files in {root_dir}")
 
-f = open("~/MUSIQUE/LOG.txt", "w")
-
-for filename in glob.iglob(root_dir + '**/*.mid', recursive=True):
+f = open(os.path.expanduser("~/Musique/MIDI/LOG.txt"), "w")
+index = 1
+for filename in files:
     tracks, sustain = SystainPedalCheck(filename)
-    if tracks < 4 and sustain > 10:
-        print(f"tracks={tracks} sustain={sustain} {filename}")
-        f.writelines(filename+"\n")
-        f.flush()
+    # if tracks <= 4 and sustain > 10:
+    print(f"tracks={tracks} sustain={sustain} {filename}")
+    f.writelines(f"{index};{filename};{tracks};{sustain}"+"\n")
+    index += 1
+    f.flush()
 
 f.close()
 
