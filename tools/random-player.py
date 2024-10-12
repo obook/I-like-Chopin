@@ -54,7 +54,7 @@ def GetRamdom(files, device):
 
 
 def Play(file, device):
-    print("Playing...\r", end="")
+    print("Playing... Press q for next song\r", end="")
     error_counter = 0
     start_song = False
     # Player
@@ -98,8 +98,9 @@ def SystainPedalCheck(file):
     return tracks, sustain
 
 
-my_path = os.path.expanduser("~/MUSIQUE")
+my_path = os.path.expanduser("~/Musique/MIDIALL")
 files = glob.glob(my_path + '/**/*.mid', recursive=True)
+print(f"Scan for {len(files)} files in {my_path}")
 
 # Connect to synth
 device = open_output("Midi Through:Midi Through Port-0", autoreset=True)

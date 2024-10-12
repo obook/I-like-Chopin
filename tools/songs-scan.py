@@ -6,6 +6,7 @@ Created on Wed Aug  7 14:17:57 2024
 Tool for search nice midifiles regarding tracks and sustain pedal
 """
 
+import os
 import glob
 import os
 from mido import MidiFile
@@ -43,12 +44,20 @@ logfile = os.path.join(root_dir, "LOG.txt")
 
 f = open(logfile, "w")
 
-for filename in glob.iglob(root_dir + '**/*.mid', recursive=True):
+#for filename in glob.iglob(root_dir + '**/*.mid', recursive=True):
+#root_dir = os.path.expanduser("~/Musique/MIDIALL")
+files = glob.glob(root_dir + '/**/*.mid', recursive=True)
+print(f"Scan for {len(files)} files in {root_dir}")
+
+f = open(os.path.expanduser("~/Musique/MIDI/LOG.txt"), "w")
+index = 1
+for filename in files:
     tracks, sustain = SystainPedalCheck(filename)
-    if tracks < 4 and sustain > 10:
-        print(f"tracks={tracks} sustain={sustain} {filename}")
-        f.writelines(filename+"\n")
-        f.flush()
+    # if tracks <= 4 and sustain > 10:
+    print(f"tracks={tracks} sustain={sustain} {filename}")
+    f.writelines(f"{index};{filename};{tracks};{sustain}"+"\n")
+    index += 1
+    f.flush()
 
 f.close()
 
