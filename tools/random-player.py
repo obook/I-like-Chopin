@@ -36,7 +36,8 @@ def GetRamdom(files, device):
     animation = ["-", "/", "-", "\\"]
     animation_index = 0
     while len(files):
-        print(f"Searching {animation[animation_index]} ({len(files)-1})\r", end="")
+        print(f"Searching {animation[animation_index]} "
+              "({len(files)-1})\r", end="")
         animation_index += 1
         if animation_index > len(animation)-1:
             animation_index = 0
@@ -54,7 +55,7 @@ def GetRamdom(files, device):
 
 
 def Play(file, device):
-    print("Playing... Press q for next song\r", end="")
+    print("Playing... Press Esc for next song\r", end="")
     error_counter = 0
     start_song = False
     # Player
@@ -98,8 +99,9 @@ def SystainPedalCheck(file):
     return tracks, sustain
 
 
-my_path = os.path.expanduser("~/Musique/MIDIALL")
-files = glob.glob(my_path + '/**/*.mid', recursive=True)
+my_path = os.path.expanduser("~/MUSIQUE")  # Put your midi path here
+files = sorted(glob.glob(os.path.join(my_path, "**", "*.mid"), recursive=True))
+
 print(f"Scan for {len(files)} files in {my_path}")
 
 # Connect to synth

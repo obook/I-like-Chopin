@@ -28,6 +28,7 @@ class ClassMidiFiles:
 
     def ScanFiles(self, defaultmidipath):
         self.defaultmidipath = defaultmidipath
+        '''
         for file in sorted(
             glob.glob(
                 os.path.join(self.defaultmidipath, "**", "*.mid"),
@@ -44,6 +45,7 @@ class ClassMidiFiles:
                 list.append(file)
             self.midifiles_raw.append(file)
             self.midifiles_count += 1
+            '''
 
         print(
             f"MidiFiles {self.uuid} {self.midifiles_count} files in [{self.defaultmidipath}]"
