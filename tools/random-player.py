@@ -28,6 +28,7 @@ def on_press(key):
     if key == Key.space:
         if paused:
             paused = False
+            print("Unpaused...")
         else:
             paused = True
             print("Paused...")
