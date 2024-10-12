@@ -30,6 +30,7 @@ def on_press(key):
             paused = False
         else:
             paused = True
+            print("Paused...")
 
 
 def on_release(key):
