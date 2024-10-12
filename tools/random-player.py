@@ -20,6 +20,16 @@ from pynput.keyboard import Key, Listener
 from mido import MidiFile, open_output
 
 next_song = False
+paused = False
+
+
+def on_press(key):
+    global paused
+    if key == Key.space:
+        if paused:
+            paused = False
+        else:
+            paused = True
 
 
 def on_release(key):
@@ -55,11 +65,15 @@ def GetRamdom(files, device):
 
 
 def Play(file, device):
-    print("Playing... Press Esc for next song\r", end="")
+    print("Playing... Press Esc for next song or space for pause\r", end="")
     error_counter = 0
     start_song = False
     # Player
     for msg in MidiFile(file):
+
+        while paused:
+            time.sleep(0.1)
+
         if not start_song and msg.type == "note_on":
             start_song = True
         if start_song:
@@ -108,7 +122,7 @@ print(f"Scan for {len(files)} files in {my_path}")
 device = open_output("Midi Through:Midi Through Port-0", autoreset=True)
 
 # Keyboard
-listener = Listener(on_release=on_release)
+listener = Listener(on_press=on_press, on_release=on_release)
 listener.start()
 
 # Play
