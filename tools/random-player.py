@@ -49,7 +49,7 @@ def GetRamdom(files, device):
     animation_index = 0
     while len(files):
         print(f"Searching {animation[animation_index]} "
-              "({len(files)-1})\r", end="")
+              f"({len(files)-1})\r", end="")
         animation_index += 1
         if animation_index > len(animation)-1:
             animation_index = 0
