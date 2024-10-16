@@ -1,0 +1,27 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=I-Like-Chopin
+Version=1.0
+GenericName=I-Like-Chopin
+GenericName[de]=I-Like-Chopin
+GenericName[fr]=I-Like-Chopin
+GenericName[it]=I-Like-Chopin
+GenericName[ru]=I-Like-Chopin
+GenericName[uk]=I-Like-Chopin
+Comment=Funny ALSA MIDI playback player for play like Chopin
+Comment[de]=Lustiger ALSA-MIDI-Player zum Spielen wie Chopin
+Comment[fr]=Lecteur MIDI ALSA amusant pour jouer comme Chopin
+Comment[it]=Divertente lettore MIDI ALSA per suonare come Chopin
+Comment[ru]=Забавный ALSA MIDI-плеер для игры, как у Шопена
+Comment[sk]=Zábavný prehrávač MIDI ALSA na hranie ako Chopin
+Comment[uk]=Смішний MIDI-програвач ALSA для гри, як у Шопена
+Exec=i-like-chopin
+Icon=i-like-chopin
+Categories=Audio;AudioVideo;Midi;X-Alsa;X-Jack;Qt;
+Keywords=Audio;MIDI;ALSA;JACK;LV2;Qt;
+Keywords[uk]=Audio;MIDI;ALSA;JACK;LV2;Qt;Звук;міді;алса;джек;
+Terminal=false
+Type=Application
+StartupWMClass=i-like-chopin
+X-Window-Icon=i-like-chopin
+X-SuSE-translate=true

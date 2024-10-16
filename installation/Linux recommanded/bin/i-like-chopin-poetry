@@ -1,0 +1,15 @@
+#!/bin/sh
+
+PYTHON=$(which python3 2>/dev/null)
+
+if [ ! -f ${PYTHON} ]; then
+  PYTHON=poetry run python
+fi
+
+if [ "$1" = "--gdb" ]; then
+  PYTHON="gdb --args $PYTHON"
+fi
+
+INSTALL_PREFIX="/usr"
+export PATH="$INSTALL_PREFIX"/lib/i-like-chopin:$PATH
+exec poetry run $PYTHON "$INSTALL_PREFIX"/share/i-like-chopin/i-like-chopin.py --with-appname="$0" --with-libprefix="$INSTALL_PREFIX" "$@"
