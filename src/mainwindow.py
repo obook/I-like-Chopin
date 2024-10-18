@@ -93,6 +93,7 @@ class Mainwindow(
     ):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         if filepath != self.lastmidifile:
             self.Settings.SaveMidifile(filepath)
+            self.Midi.Panic()
             self.midisong = self.Midi.SetMidiSong(filepath)
             self.lastmidifile = filepath
             self.History.AddHistory(filepath)
@@ -311,6 +312,7 @@ class Mainwindow(
         self.Web_server = None
 
         if self.Midi:
+            self.Midi.Panic()
             self.Midi.quit()
             self.Midi = None
 
