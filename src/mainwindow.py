@@ -289,8 +289,12 @@ class Mainwindow(
         if e.type() == QEvent.Drop:
             data = e.mimeData()
             urls = data.urls()
+            '''
+            Under Windows : "file:///G:/Mon Drive/etc"
+            '''
             if urls and urls[0].scheme() == "file":
-                self.MidifileChange(urls[0].path())
+                # self.MidifileChange(urls[0].path())  # Bug under Windows
+                self.MidifileChange(urls[0].toLocalFile())  # Ok Windows
             return True
         return False  # remember to return false for other event types
 
