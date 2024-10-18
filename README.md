@@ -65,7 +65,7 @@ No native virtual MIDI driver is provided with Windows, but there are a number o
 # Tested with...
 * Raspberry Pi 4 Model B / Debian 12 (bookworm)
 * Ubuntu 24.04 LTS ALSA/JACK
-* Windows 10 / RTP loopMIDI / OmniMIDI / VirtualMIDISynth
+* Windows 10 / RTP loopMIDI / [OmniMIDI](https://github.com/KeppySoftware/OmniMIDI) (load and play soundfonts) / VirtualMIDISynth
 * MacOS 14.6.1
 * USB to Midi CME U2MIDI Pro
 * Steinberg UR22mkII
