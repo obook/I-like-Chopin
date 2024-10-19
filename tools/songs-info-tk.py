@@ -63,7 +63,7 @@ def open_midifile():
     """Open a file for informations."""
     filepath = askopenfilename(
         filetypes=[("Text Files", "*.mid"), ("All Files", "*.*")],
-    initialdir="/home/obooklage/MUSIQUE/DU NET/midi/Games")
+    initialdir=os.path.expanduser("~/MIDI"))
     if not filepath:
         return
     txt_edit.delete("1.0", tk.END)
