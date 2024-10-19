@@ -26,8 +26,8 @@ def SystainPedalCheck(file):
             if msg.type == "control_change":
                 # The sustain pedal sends CC 64 127
                 # and CC 64 0 messages on channel 1
-                # if msg.value == 64:
-                sustain += 1
+                if msg.control == 64:
+                    sustain += 1
     except Exception as error:
         print(f"|!| CAN NOT READ {file} {error}")
         sustain = 0

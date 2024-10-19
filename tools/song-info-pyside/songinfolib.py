@@ -48,7 +48,7 @@ class MidiSong:
             if msg.type == "control_change":
                 # The sustain pedal sends CC 64 127
                 # and CC 64 0 messages on channel 1
-                if msg.value == 64:
+                if msg.control == 64: # bug, is not value, but control
                     self.sustain += 1
 
         self.channels_notes_on = dict(

@@ -104,7 +104,8 @@ def SystainPedalCheck(file):
 
         for msg in MidiFile(file):
             if msg.type == "control_change":
-                sustain += 1
+                if msg.control == 64:
+                    sustain += 1
     except Exception as error:
         print(f"|!| CAN NOT READ {file} {error}")
         sustain = 0

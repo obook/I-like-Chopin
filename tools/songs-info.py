@@ -44,7 +44,7 @@ def MidiSongInfo(file):
                     channels_notes_on[int(key)] = 0
                 channels_notes_on[int(key)] += 1
         if msg.type == "control_change":
-            if msg.value == 64: # The sustain pedal sends CC 64 127 and CC 64 0 messages on channel 1
+            if msg.control == 64: # The sustain pedal sends CC 64 127 and CC 64 0 messages on channel 1
                 sustain +=1
 
     channels_notes_on = dict(
