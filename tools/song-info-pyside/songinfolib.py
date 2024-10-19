@@ -16,6 +16,11 @@ class MidiSong:
 
     def __init__(self, file):
         self.file = file
+        self.tracks = []
+        self.duration = 0
+        self.total_notes_on = 0
+        self.channels_notes_on = {}
+        self.sustain = 0
         self.GetInfo()
 
     def GetInfo(self):

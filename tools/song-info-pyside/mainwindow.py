@@ -55,7 +55,6 @@ class MainWindow(QWidget):
             e.acceptProposedAction()
             return True
         if e.type() == QEvent.Drop:
-            print("DROP")
             data = e.mimeData()
             urls = data.urls()
             if urls and urls[0].scheme() == "file":
