@@ -21,7 +21,7 @@ class MainWindow(QWidget):
         self.ui.pushButton_Load.clicked.connect(self.Load)
         self.ui.pushButton_Quit.clicked.connect(self.Quit)
         self.setAcceptDrops(True)
-        self.installEventFilter(self)  # drop files
+        self.installEventFilter(self)  # drop files on readonly PlainTextEdit
 
     def Load(self):
         fname = QFileDialog.getOpenFileName(

@@ -31,6 +31,7 @@ class Ui_MainWindow(object):
         self.plainTextEdit = QPlainTextEdit(MainWindow)
         self.plainTextEdit.setObjectName(u"plainTextEdit")
         self.plainTextEdit.setAcceptDrops(True)
+        self.plainTextEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.plainTextEdit, 0, 0, 1, 2)
 

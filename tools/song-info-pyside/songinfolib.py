@@ -3,13 +3,9 @@
 """
 Created on Wed Aug  7 14:17:57 2024
 @author: obooklage
-Tool for checking midifiles : only channel 1, readeable
 ! Channels are from 0 to 15
 """
-import os
 from mido import MidiFile
-from collections import namedtuple
-
 
 class MidiSong:
     tracks = []
