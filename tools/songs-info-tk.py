@@ -7,18 +7,15 @@ Tool for checking midifiles : only channel 1, readeable
 ! Channels are from 0 to 15
 """
 import os
-import glob
-import pathlib
-from pathlib import Path, PurePath
 from mido import MidiFile
 from collections import namedtuple
-
 
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 
-indexes = {"tracks": 0, "duration": 1, "notes_on_channels": 2, "sustain":3}
-Song = namedtuple("Song", ["tracks", "duration", "notes_on_channels","sustain"])
+indexes = {"tracks" : 0, "duration" : 1, "notes_on_channels" : 2, "sustain" : 3}
+Song = namedtuple("Song", ["tracks", "duration", "notes_on_channels", "sustain"])
+
 
 def MidiSongInfo(file):
     tracks = []
@@ -44,12 +41,14 @@ def MidiSongInfo(file):
             if msg.velocity:
                 total_notes_on += 1
                 key = int(msg.channel)
-                if not key in channels_notes_on.keys():
+                if key not in channels_notes_on.keys():
                     channels_notes_on[int(key)] = 0
                 channels_notes_on[int(key)] += 1
         if msg.type == "control_change":
-            if msg.value == 64: # The sustain pedal sends CC 64 127 and CC 64 0 messages on channel 1
-                sustain +=1
+            # The sustain pedal sends CC 64 127
+            # and CC 64 0 messages on channel 1
+            if msg.value == 64:
+                sustain += 1
 
     channels_notes_on = dict(
         sorted(channels_notes_on.items())
@@ -63,7 +62,7 @@ def open_midifile():
     """Open a file for informations."""
     filepath = askopenfilename(
         filetypes=[("Text Files", "*.mid"), ("All Files", "*.*")],
-    initialdir=os.path.expanduser("~/MIDI"))
+        initialdir=os.path.expanduser("~/MIDI"))
     if not filepath:
         return
     txt_edit.delete("1.0", tk.END)
@@ -77,13 +76,18 @@ def open_midifile():
 
     song = MidiSongInfo(filepath)
 
-    txt_edit.insert(tk.END, "** TRACKS **\n")
+    if not song:
+        return
+
+    duration = round(song[indexes["duration"]], 2)
     tracks = song[indexes["tracks"]]
+
+    txt_edit.insert(tk.END, f"** Duration : {duration} min.\n")
+    txt_edit.insert(tk.END, "** TRACKS **\n")
     for index in range(len(tracks)):
         track = tracks[index]
         print(track)
         txt_edit.insert(tk.END, f"{index} {track}\n")
-
 
 
 def save_file():

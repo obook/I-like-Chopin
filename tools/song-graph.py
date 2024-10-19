@@ -42,6 +42,6 @@ if __name__ == "__main__":
     times, notes = ScanNotes(midifile)
     plt.figure().set_figwidth(30)
     plt.plot(times, notes, 'k.', antialiased=False)
-    plt.legend([composer+" " +name])
+    plt.legend([composer+" " + name])
     plt.grid(visible=True)
     plt.show()
