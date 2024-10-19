@@ -10,6 +10,7 @@ import os
 from mido import MidiFile
 from collections import namedtuple
 
+import tkinter_dndr
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 
@@ -62,7 +63,7 @@ def open_midifile():
     """Open a file for informations."""
     filepath = askopenfilename(
         filetypes=[("Text Files", "*.mid"), ("All Files", "*.*")],
-        initialdir=os.path.expanduser("~/MIDI"))
+        initialdir=os.path.expanduser("~/MUSIQUE"))
     if not filepath:
         return
     txt_edit.delete("1.0", tk.END)
@@ -111,6 +112,13 @@ window.rowconfigure(0, minsize=800, weight=1)
 window.columnconfigure(1, minsize=800, weight=1)
 
 txt_edit = tk.Text(window)
+'''
+dndr_button = tkinter_dndr.DragDropResizeWidget(txt_edit)
+dndr_button.make_draggable()  # if you want the widget to only have drag and drop support
+dndr_button.make_resizable()  # if you want the widget to only be resizable
+dndr_button.make_draggable_and_resizable()  # if you want the widget to be both draggable and resizable
+txt_edit.pack()
+'''
 frm_buttons = tk.Frame(window, relief=tk.RAISED, bd=2)
 btn_open = tk.Button(frm_buttons, text="Open Midifile", command=open_midifile)
 btn_save = tk.Button(frm_buttons, text="Save infos As...", command=save_file)
