@@ -40,10 +40,12 @@ class MainWindow(QWidget):
             song = MidiSong(file)
             duration = round(song.duration, 2)
             tracks = song.tracks
+            sustain = song.sustain
 
             self.ui.plainTextEdit.clear()
 
             self.ui.plainTextEdit.appendPlainText(f"** File : {name}")
+            self.ui.plainTextEdit.appendPlainText(f"** Sustain : {sustain}")
             self.ui.plainTextEdit.appendPlainText(f"** Duration : {duration} min.")
             self.ui.plainTextEdit.appendPlainText("** TRACKS **")
             for index in range(len(tracks)):
