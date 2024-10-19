@@ -9,6 +9,7 @@ Tool for checking midifiles : only channel 1, readeable
 import os
 import glob
 import pathlib
+from pathlib import Path, PurePath
 from mido import MidiFile
 from collections import namedtuple
 
@@ -16,12 +17,53 @@ from collections import namedtuple
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 
+indexes = {"tracks": 0, "duration": 1, "notes_on_channels": 2, "sustain":3}
+Song = namedtuple("Song", ["tracks", "duration", "notes_on_channels","sustain"])
+
+def MidiSongInfo(file):
+    tracks = []
+    duration = 0
+    total_notes_on = 0
+    channels_notes_on = {}
+    sustain = 0
+
+    # Tracks Informations
+
+    try:
+        midi = MidiFile(file)  # , debug=True  # PUT IN MIDI_SONG
+    except:
+        return False  # Bad Midifile (value > 127 ?)
+
+    duration = midi.length / 60
+    for i, track in enumerate(midi.tracks):
+        tracks.append(track.name)
+
+    # Notes in selected channels (0-15)
+    for msg in MidiFile(file):
+        if msg.type == "note_on":
+            if msg.velocity:
+                total_notes_on += 1
+                key = int(msg.channel)
+                if not key in channels_notes_on.keys():
+                    channels_notes_on[int(key)] = 0
+                channels_notes_on[int(key)] += 1
+        if msg.type == "control_change":
+            if msg.value == 64: # The sustain pedal sends CC 64 127 and CC 64 0 messages on channel 1
+                sustain +=1
+
+    channels_notes_on = dict(
+        sorted(channels_notes_on.items())
+    )
+    S = Song(tracks, duration, channels_notes_on, sustain)
+
+    return S
+
 
 def open_midifile():
     """Open a file for informations."""
     filepath = askopenfilename(
-        filetypes=[("Text Files", "*.mid"), ("All Files", "*.*")]
-    )
+        filetypes=[("Text Files", "*.mid"), ("All Files", "*.*")],
+    initialdir="/home/obooklage/MUSIQUE/DU NET/midi/Games")
     if not filepath:
         return
     txt_edit.delete("1.0", tk.END)
@@ -30,7 +72,18 @@ def open_midifile():
         text = input_file.read()
         txt_edit.insert(tk.END, text)
     '''
-    window.title(f"Mdifile Informations - {filepath}")
+    window.title(f"Mdifile Informations - {os.path.basename(filepath)}")
+    txt_edit.insert(tk.END, os.path.basename(filepath)+"\n")
+
+    song = MidiSongInfo(filepath)
+
+    txt_edit.insert(tk.END, "** TRACKS **\n")
+    tracks = song[indexes["tracks"]]
+    for index in range(len(tracks)):
+        track = tracks[index]
+        print(track)
+        txt_edit.insert(tk.END, f"{index} {track}\n")
+
 
 
 def save_file():
