@@ -1,6 +1,7 @@
 # This Python file uses the following encoding: utf-8
 import sys
 import os
+from pathlib import Path, PurePath
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog
 from PySide6.QtCore import QEvent
 # Important:
@@ -12,7 +13,7 @@ from song_info import MidiSong
 from song_graph import graph_notes
 
 
-class MainWindow(QWidget):
+class MainWindow(Ui_MainWindow, QWidget):
     ''' QT main window '''
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -57,7 +58,8 @@ class MainWindow(QWidget):
             track = tracks[index]
             self.ui.plainTextEdit.appendPlainText(f"{index} {track}")
 
-        graph_notes(file, "None")
+        parent = PurePath(file).parent.name
+        graph_notes(file, parent)
 
     def eventFilter(self, o, e):  # drop files
         if e.type() == QEvent.DragEnter:  # remember to accept the enter event
@@ -72,14 +74,18 @@ class MainWindow(QWidget):
         return False  # remember to return false for other event types
 
     def closeEvent(self, event):  # overwritten
-        self.Quit()
+        print("closeEvent")
+        self.quit_application()
 
     def quit_application(self):
+        print("quit_application")
+        self.deleteLater()
         QApplication.quit()
 
-
 if __name__ == "__main__":
+    ''' A REVOIR : fermeture du QWidget '''
     app = QApplication(sys.argv)
     widget = MainWindow()
     widget.show()
     sys.exit(app.exec())
+    print("END")
