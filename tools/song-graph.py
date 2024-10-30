@@ -25,23 +25,23 @@ def ScanNotes(file):
     return [times, notes]
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    composer = "none"
-    if len(sys.argv) < 2:  # pas de paramètres
-        print("MODE DEMO - Passer le fichier en paramètre")
-        midi_dir = os.path.expanduser("~/MIDI")
-        composer = "BACH JOHANN SEBASTIAN"
-        file = "Duet in E Minor, BWV 802.mid"
-        midifile = os.path.join(midi_dir, composer, file)
-    else:
-        midifile = sys.argv[1]
+composer = "none"
+if len(sys.argv) < 2:  # pas de paramètres
+    print("MODE DEMO - Passer le fichier en paramètre")
+    midi_dir = os.path.expanduser("~/MIDI")
+    composer = "BACH JOHANN SEBASTIAN"
+    file = "Duet in E Minor, BWV 802.mid"
+    midifile = os.path.join(midi_dir, composer, file)
+else:
+    midifile = sys.argv[1]
 
-    name = Path(midifile).stem
+name = Path(midifile).stem
 
-    times, notes = ScanNotes(midifile)
-    plt.figure().set_figwidth(30)
-    plt.plot(times, notes, 'k.', antialiased=False)
-    plt.legend([composer+" " + name])
-    plt.grid(visible=True)
-    plt.show()
+times, notes = ScanNotes(midifile)
+plt.figure().set_figwidth(30)
+plt.plot(times, notes, 'k.', antialiased=False)
+plt.legend([composer+" " + name])
+plt.grid(visible=True)
+plt.show()
