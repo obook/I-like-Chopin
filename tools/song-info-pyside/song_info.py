@@ -7,7 +7,9 @@ Created on Wed Aug  7 14:17:57 2024
 """
 from mido import MidiFile
 
+
 class MidiSong:
+    '''Class for midi file informations'''
     tracks = []
     duration = 0
     total_notes_on = 0
@@ -21,10 +23,10 @@ class MidiSong:
         self.total_notes_on = 0
         self.channels_notes_on = {}
         self.sustain = 0
-        self.GetInfo()
+        self.get_info()
 
-    def GetInfo(self):
-
+    def get_info(self):
+        ''' Get midi file informations'''
         # Tracks Informations
 
         try:
@@ -48,9 +50,11 @@ class MidiSong:
             if msg.type == "control_change":
                 # The sustain pedal sends CC 64 127
                 # and CC 64 0 messages on channel 1
-                if msg.control == 64: # bug, is not value, but control
+                if msg.control == 64:  # bug, is not value, but control
                     self.sustain += 1
 
         self.channels_notes_on = dict(
             sorted(self.channels_notes_on.items())
         )
+
+        return True
