@@ -77,3 +77,4 @@ __pycache__
 
 # QT User
 song-info-pyside.pyproject.user
+.qtcreator
