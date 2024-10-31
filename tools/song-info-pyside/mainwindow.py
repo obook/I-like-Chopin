@@ -2,7 +2,7 @@
 import sys
 import os
 from pathlib import Path, PurePath
-from PySide6.QtWidgets import QApplication, QWidget, QFileDialog
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PySide6.QtCore import QEvent
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -13,8 +13,9 @@ from song_info import MidiSong
 from song_graph import graph_notes
 
 
-class MainWindow(Ui_MainWindow, QWidget):
+class MainWindow(QMainWindow):
     ''' QT main window '''
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
@@ -61,7 +62,8 @@ class MainWindow(Ui_MainWindow, QWidget):
         parent = PurePath(file).parent.name
         graph_notes(file, parent)
 
-    def eventFilter(self, o, e):  # drop files
+    def eventFilter(self, o, e):
+        ''' intercept files dropped '''
         if e.type() == QEvent.DragEnter:  # remember to accept the enter event
             e.acceptProposedAction()
             return True
@@ -74,18 +76,20 @@ class MainWindow(Ui_MainWindow, QWidget):
         return False  # remember to return false for other event types
 
     def closeEvent(self, event):  # overwritten
+        ''' Windows closed by desktop '''
         print("closeEvent")
         self.quit_application()
 
     def quit_application(self):
+        ''' The end '''
         print("quit_application")
-        self.deleteLater()
+        # self.deleteLater()
         QApplication.quit()
 
+
 if __name__ == "__main__":
-    ''' A REVOIR : fermeture du QWidget '''
+    # BUG : fnot closed under Qt Python virtual env
     app = QApplication(sys.argv)
     widget = MainWindow()
     widget.show()
     sys.exit(app.exec())
-    print("END")
