@@ -2,7 +2,7 @@
     "files": [
         "mainwindow.py",
         "form.ui",
-        "song_info.py",
-        "song_graph.py"
+        "songinfo.py",
+        "songgraph.py"
     ]
 }
