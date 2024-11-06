@@ -5,7 +5,7 @@ Created on Wed Aug  7 14:17:57 2024
 @author: obooklage
 ! Channels are from 0 to 15
 """
-from mido import MidiFile
+from mido import MidiFile, MetaMessage
 
 class MidiSong:
     tracks = []
@@ -21,6 +21,7 @@ class MidiSong:
         self.total_notes_on = 0
         self.channels_notes_on = {}
         self.sustain = 0
+        self.set_tempo = 0
         self.GetInfo()
 
     def GetInfo(self):
@@ -38,6 +39,7 @@ class MidiSong:
 
         # Notes in selected channels (0-15)
         for msg in MidiFile(self.file):
+
             if msg.type == "note_on":
                 if msg.velocity:
                     self.total_notes_on += 1
@@ -45,11 +47,19 @@ class MidiSong:
                     if key not in self.channels_notes_on.keys():
                         self.channels_notes_on[int(key)] = 0
                     self.channels_notes_on[int(key)] += 1
+
             if msg.type == "control_change":
                 # The sustain pedal sends CC 64 127
                 # and CC 64 0 messages on channel 1
-                if msg.control == 64: # bug, is not value, but control
+                if msg.control == 64:  # bug fixed, is not value, but control
                     self.sustain += 1
+
+            elif isinstance(msg, MetaMessage):
+                if msg.type == 'set_tempo':
+                    self.set_tempo += 1
+
+            # meta : set_tempo
+            # elif msg.control == 64:
 
         self.channels_notes_on = dict(
             sorted(self.channels_notes_on.items())
