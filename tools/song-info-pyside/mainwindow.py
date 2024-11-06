@@ -62,10 +62,13 @@ class MainWindow(QMainWindow):
             self.ui.plainTextEdit.appendPlainText(f"{index} {track}")
 
         parent = PurePath(file).parent.name
-        graph_notes(file, parent)
+        # graph_notes(file, parent)
 
     def eventFilter(self, o, e):
         ''' intercept files dropped '''
+        '''
+        Il faut que le QMainWindow soit droppable *MAIS PAS* QPlainTextEdit !
+        '''
         if e.type() == QEvent.DragEnter:  # remember to accept the enter event
             e.acceptProposedAction()
             return True
@@ -93,11 +96,7 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == "__main__":
-<<<<<<< Updated upstream
     # BUG : fnot closed under Qt Python virtual env
-=======
-    # BUG : not closed under Qt Python virtual env
->>>>>>> Stashed changes
     app = QApplication(sys.argv)
     widget = MainWindow()
     widget.show()

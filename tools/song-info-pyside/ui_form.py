@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.0
+## Created by: Qt User Interface Compiler version 6.7.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -32,6 +32,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.plainTextEdit = QPlainTextEdit(self.centralwidget)
         self.plainTextEdit.setObjectName(u"plainTextEdit")
+        self.plainTextEdit.setAcceptDrops(False)
 
         self.verticalLayout.addWidget(self.plainTextEdit)
 
@@ -72,3 +73,4 @@ class Ui_MainWindow(object):
         self.pushButton_Load.setText(QCoreApplication.translate("MainWindow", u"Load", None))
         self.pushButton_Quit.setText(QCoreApplication.translate("MainWindow", u"Quit", None))
     # retranslateUi
+
