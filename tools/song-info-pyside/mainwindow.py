@@ -72,6 +72,9 @@ class MainWindow(QMainWindow):
         if e.type() == QEvent.Drop:
             data = e.mimeData()
             urls = data.urls()
+
+            print("DROP !")
+
             if urls and urls[0].scheme() == "file":
                 self.print_info(urls[0].toLocalFile())
             return True
@@ -90,7 +93,11 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == "__main__":
+<<<<<<< Updated upstream
     # BUG : fnot closed under Qt Python virtual env
+=======
+    # BUG : not closed under Qt Python virtual env
+>>>>>>> Stashed changes
     app = QApplication(sys.argv)
     widget = MainWindow()
     widget.show()
