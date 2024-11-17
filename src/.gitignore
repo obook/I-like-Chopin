@@ -1,5 +1,6 @@
 __pycache__
 .vscode
+.qtcreator
 i-like-chopin.pyproject.user
 i-like-chopin.json
 midiperso
