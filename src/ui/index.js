@@ -26,13 +26,13 @@ function toggleFullScreen() {
 async function PlaySong(song) {
     ShowLoader();
     CleanSongName(true);
-    const response = await fetch('/?play='+song);
+    const response = await fetch('/play?song='+song);
 }
 
 /* Click on navbar button */
-async function OrderDo(order) {
+async function OrderDo(action) {
     ShowLoader();
-    const response = await fetch('/?do='+order);
+    const response = await fetch('/do?action='+action);
     GetStats();
 }
 
@@ -40,7 +40,7 @@ async function OrderDo(order) {
 $('#select-mode').change(function () {
     ShowLoader();
     const mode = $(this).val();
-    const response = fetch('/?mode='+mode);
+    const response = fetch('/player?mode='+mode);
 });
 
 /* Clean songname style */
@@ -81,7 +81,11 @@ async function GetStats() {
         const response = await fetch('/status.json');
         const data = await response.json();
 
-        /* debug console.log(data); */
+        /* debug 
+        
+        console.log("DEBUG GetStats=" + data);
+
+        */
 
         /* uuid */
         song_uuid = data.uuid;

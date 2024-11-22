@@ -1,275 +1,122 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jul 26 07:12:28 2024
+Created on Fri Nov 22 18:30:43 2024
 @author: obooklage
-Custom response code server by Cees Timmerman, 2023-07-11.
 """
-import os
+
 import uuid
-import glob
-import pathlib
 import json
-import qrcode
-import qrcode.image.svg
-import io
-from functools import partial
-
-from PySide6.QtCore import QThread, Signal
-
-from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs, quote
+from bottle import Bottle, static_file, response, request, redirect
+from PySide6.QtCore import QThread
 from web_network import ClassWebNetwork
-from string import Template
 
-'''
-Please debug : (04/10/2024)
-----------------------------------------
-Exception occurred during processing of request from ('127.0.0.1', 41446)
-Traceback (most recent call last):
-  File "/usr/lib/python3.10/socketserver.py", line 683, in process_request_thread
-    self.finish_request(request, client_address)
-  File "/usr/lib/python3.10/socketserver.py", line 360, in finish_request
-    self.RequestHandlerClass(request, client_address, self)
-  File "~/Dev/GitHub/I-like-Chopin/src/web_server.py", line 39, in __init__
-    super().__init__(*args, **kwargs)
-  File "/usr/lib/python3.10/socketserver.py", line 747, in __init__
-    self.handle()
-  File "/usr/lib/python3.10/http/server.py", line 433, in handle
-    self.handle_one_request()
-  File "/usr/lib/python3.10/http/server.py", line 421, in handle_one_request
-    method()
-  File "~/Dev/GitHub/I-like-Chopin/src/web_server.py", line 222, in do_GET
-    self.wfile.write(file.read()) # Read the file and send the contents
-  File "/usr/lib/python3.10/socketserver.py", line 826, in write
-    self._sock.sendall(b)
-BrokenPipeError: [Errno 32] Relais brisé (pipe)
-----------------------------------------
-'''
 
-class RequestHandler(BaseHTTPRequestHandler):
-    uuid = None
-    midisong = None
-    # get from init
-    pParent = None
-    midisong = None
-    midifiles_dict = {}
-
-    def __init__(self, parent, midifiles_dict, *args, **kwargs):
+class BottleServer:
+    def __init__(self, host, port, parent):
         self.uuid = uuid.uuid4()
+        print(f"BottleServer {self.uuid} started")
+        self._host = host
+        self._port = port
         self.pParent = parent
-        self.midisong = parent.Midi.GetMidiSong()
-        self.midifiles_dict = midifiles_dict
-        super().__init__(*args, **kwargs)
+        self._app = Bottle()
+        self._route()
 
-    def do_OPTIONS(self):
-        pass
-        '''
-        self.send_response(200, "ok")
-        self.send_header('Access-Control-Allow-Credentials', 'true')
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header("Access-Control-Allow-Headers", "X-Requested-With, Content-type")
-        self.end_headers()
-        '''
+    def __del__(self):
+        print(f"BottleServer {self.uuid} destroyed")
 
-    def do_POST(self, *args, **kwargs):
-        print("--> do_POST")
+    def _route(self):
+        self._app.route('/', method="GET", callback=self._index)
+        self._app.route('/static/<filepath:path>',callback=self._server_static)
+        self._app.route('/status.json',callback=self._status)
+        self._app.route('/interfaces.json',callback=self._interfaces)
+        self._app.route('/files.json',callback=self._files)
+        self._app.route('/play',callback=self._play)
+        self._app.route('/do',callback=self._do)
+        self._app.route('/player',callback=self._player)
 
-    def do_GET(self):
+    def start(self):
+            self.server = self._app.run(host=self._host, port=self._port, debug=True, quiet=True)
 
-        # json files
-        if self.path == "/status.json":
+    def _index(self):
+        redirect("/static/index.html")
 
-            if self.midisong:
-                data = json.dumps(
-                    {
-                        "uuid":str(self.midisong.Getuuid()),
-                        "played":self.midisong.GetPlayed(),
-                        "duration":round(self.midisong.GetDuration(), 2),
-                        "nameclean":self.midisong.GetCleanName(),
-                        "folder":self.midisong.GetParent(),
-                        "state":self.midisong.GetState(),
-                        "mode":self.midisong.GetMode(),
-                        "tracks":self.midisong.GetTracks(),
-                        "channels":self.midisong.GetChannels(),
-                        "sustain":self.midisong.GetSustain(),
-                    }
-                )
-                self.send_response(200)
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.send_header("Content-Type", "application/json")
-                # print('Content-Length: %d' % len(response))
-                self.end_headers()
-                self.wfile.write(data.encode(encoding="utf_8"))
+    def _server_static(self, filepath):
+        uipath = self.pParent.Settings.GetUIPath()
+        return static_file(filepath, root=uipath)
 
-                if not self.wfile.closed:
-                    self.wfile.flush()
+    def _status(self):
+        midisong = self.pParent.Midi.GetMidiSong()
+        if midisong:
+            status = {
+                     "uuid":str(midisong.Getuuid()),
+                     "played":midisong.GetPlayed(),
+                     "duration":round(midisong.GetDuration(), 2),
+                     "nameclean":midisong.GetCleanName(),
+                     "folder":midisong.GetParent(),
+                     "state":midisong.GetState(),
+                     "mode":midisong.GetMode(),
+                     "tracks":midisong.GetTracks(),
+                     "channels":midisong.GetChannels(),
+                     "sustain":midisong.GetSustain(),
+                 }
+        response.content_type = 'application/json'
+        try:
+            return json.dumps(status)  # crash then pgm shutdown
+        except Exception as error:
+            print(f"|!| BottleServer {self.uuid} error send status {error}")
 
-            return
+    def _interfaces(self):
+        Network = ClassWebNetwork(self.pParent)
+        interfaces = Network.GetWebUrls()
+        response.content_type = 'application/json'
+        return json.dumps(interfaces)
 
-        elif self.path == "/files.json":
-            self.send_response(200)
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.send_header("Content-Type", "application/json")
-            self.end_headers()
+    def _files(self):
+        file_dic = self.pParent.Midifiles.GetFiles()
+        response.content_type = 'application/json'
+        return json.dumps(file_dic)
 
-            file_dic = self.pParent.Midifiles.GetFiles()
-            data = json.dumps(file_dic)
-            self.wfile.write(data.encode(encoding="utf_8"))
+    def _play(self):
+        midifile = request.query.song
+        print(f"BottleServer {self.uuid} request [{midifile}]")
+        if self.pParent:
+             try:
+                 self.pParent.MidifileChange(midifile)  # DANGEROUS ?
+             except:
+                 pass
 
-            ''' NOTICE :
-            file_dic is a dicrionnary as key:[list of complete filepath]
-            {'ABBA': ['C:\...','C:\...'], 'BACH JOHANN SEBASTIAN': [C:\...,C:\...] }
-            '''
-
-            if not self.wfile.closed:
-                self.wfile.flush()
-            return
-
-        elif self.path == "/interfaces.json":
-            self.send_response(200)
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.send_header("Content-Type", "application/json")
-            self.end_headers()
-
-            Network = ClassWebNetwork(self.pParent)
-            url_list = Network.GetWebUrls()
-            data = json.dumps(url_list)
-            self.wfile.write(data.encode(encoding="utf_8"))
-
-            if not self.wfile.closed:
-                self.wfile.flush()
-            return
-
-
-        # Extract query param
-        query_components = parse_qs(urlparse(self.path).query)
-
-        # with parameters (?)
-
-        if "play" in query_components:
-            midifile = query_components["play"][0]
-            print(f"WebServer {self.uuid} request [{midifile}]")
-            if self.pParent:
-                try:
-                    self.pParent.MidifileChange(midifile)  # DANGEROUS ?
-                except:
-                    pass
-            self.send_response(200)
-            self.end_headers()
-            return
-
-        elif "do" in query_components:
-
-            print(f"--> do_GET [{self.path}]")
-
-            action = query_components["do"][0]
-            if self.pParent and action == "stop":
-                try:
-                    self.pParent.Midi.StopPlayer()  # DANGEROUS ?
-                except:
-                    pass
-            elif self.pParent and action == "shuffle":  # ex "next"
-                try:
-                    self.pParent.ShuffleMidifile()  # DANGEROUS ?
-                except:
-                    pass
-            elif self.pParent and action == "replay":
-                try:
-                    self.pParent.MidifileReplay()  # DANGEROUS ?
-                except:
-                    pass
-
-            self.send_response(200)
-            self.end_headers()
-
-            return
-
-        elif "mode" in query_components:
-            mode = query_components["mode"][0]
+    def _do(self):
+        action = request.query.action
+        print(f"REQUEST DO={action}")
+        if self.pParent and action == "stop":
             try:
-                self.pParent.ChangePlayerMode(mode)  # DANGEROUS ?
+                self.pParent.Midi.StopPlayer()  # DANGEROUS ?
             except:
                 pass
-            self.send_response(200)
-            self.end_headers()
-            return
+        elif self.pParent and action == "shuffle":  # ex "next"
+            try:
+                self.pParent.ShuffleMidifile()  # DANGEROUS ?
+            except:
+                pass
+        elif self.pParent and action == "replay":
+            try:
+                self.pParent.MidifileReplay()  # DANGEROUS ?
+            except:
+                pass
 
-        # Other files from web interface
-
-        uipath = self.pParent.Settings.GetUIPath()
-
-        # index.html
-        if self.path == "/" or self.path == "/index.html":
-            index = os.path.join(uipath,'index.html')
-            index_stats = os.stat(index)
-
-            self.send_response(200)
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.send_header("Content-type", "text/html")
-            self.send_header("Content-Length", str(index_stats.st_size))
-            self.end_headers()
-
-            with open(index, 'rb') as file:
-                self.wfile.write(file.read()) # Read the file and send the contents
-
-        else:
-            path = self.path
-            if len(path): # remove first "/" in self.path
-                path = path[1:]
-
-            file = os.path.join(uipath,path)
-            if os.path.isfile(file):
-
-                self.send_response(200)
-                self.send_header('Access-Control-Allow-Origin', '*')
-
-                if(self.path.find(".js") != -1):
-                    self.send_header("Content-type", "text/javascript")
-                elif(self.path.find(".html") != -1):
-                    self.send_header("Content-type", "text/html")
-                elif(self.path.find(".css") != -1):
-                    self.send_header("Content-type", "text/css")
-                elif(self.path.find(".png") != -1):
-                    self.send_header("Content-type", "image/png")
-                elif(self.path.find(".gif") != -1):
-                    self.send_header("Content-type", "image/gif")
-                else:
-                    print(f"missing content-type for [{self.path}]")
-
-                file_stats = os.stat(file)
-                self.send_header("Content-Length", str(file_stats.st_size))
-                self.end_headers()
-
-                with open(file, 'rb') as file: # BUG with os.path.join ??
-                    self.wfile.write(file.read()) # Read the file and send the contents
-
-            else: # 404
-                print(f"|!| WARNING : web file [{file}] DO NOT EXISTS")
-                self.send_response(404)
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                return
-
-        if not self.wfile.closed:
-            self.wfile.flush()
-
-    def log_message(self, format, *args):  # no message in terminal
-        pass
-
+    def _player(self):
+        mode = request.query.mode
+        print(f"REQUEST MODE={mode}")
+        try:
+            self.pParent.ChangePlayerMode(mode)  # DANGEROUS ?
+        except:
+            pass
 
 class ClassWebServer(QThread):
     uuid = None
     pParent = None
     Settings = None
-
-    server = None
-    port = 8888
-
-    midifiles_dict = {}
-    serverURLs = []
-    qrcodes_list = []
 
     def __init__(self, parent):
         QThread.__init__(self)
@@ -277,32 +124,17 @@ class ClassWebServer(QThread):
         self.pParent = parent
         self.Settings = parent.Settings
         self.port = self.Settings.GetServerPort()
-        Network = ClassWebNetwork(self.pParent)
-        serverURLs_list = Network.GetWebUrls()
-        for serverURL in serverURLs_list:
-            print(
-                f"WebServer {self.uuid} serve [{self.pParent.Settings.GetMidiPath()}] on {serverURL}"
-            )
+
     def __del__(self):
         if self.server:
             self.server.server_close()
         print(f"WebServer {self.uuid} destroyed")
 
     def run(self):
-        try:
-            handler = partial(
-                RequestHandler, self.pParent, self.midifiles_dict
-            )
-            self.server = ThreadingHTTPServer(("0.0.0.0", self.port), handler)
-            self.server.allow_reuse_address = True
-            self.server.serve_forever()
-        except Exception as error:
-            print(
-                f"|!| WebServer {self.uuid} CAN NOT SERVE ON PORT {self.port} {error}"
-            )
-            self.pParent.Midi.SendStatusBar(f"WEB SERVER PORT {self.port} BUSY !")
+        self.server = BottleServer(host="0.0.0.0", port=self.port, parent=self.pParent)
+        self.server.start()
+        pass
 
     def stop(self):
-        if self.server:
-            self.server.server_close()
-            self.server.shutdown()
+        self.server = None
+        pass # comment quitter proprement ?
