@@ -7,11 +7,120 @@ Created on Fri Nov 22 18:30:43 2024
 
 import uuid
 import json
+import time
+from multiprocessing import Process
 from bottle import Bottle, static_file, response, request, redirect
 from PySide6.QtCore import QThread
 from web_network import ClassWebNetwork
 
+# Project :
 
+'''
+########################################################################
+# Run a WSGI application in a daemon thread
+
+import bottle
+import threading
+import socket
+import time as _time
+
+class Server(bottle.WSGIRefServer):
+    def run(self, handler): # pragma: no cover
+        from wsgiref.simple_server import make_server, WSGIRequestHandler
+        if self.quiet:
+            base = self.options.get('handler_class', WSGIRequestHandler)
+            class QuietHandler(base):
+                def log_request(*args, **kw): pass
+            self.options['handler_class'] = QuietHandler
+        self.srv = make_server(self.host, self.port, handler, **self.options)
+        self.srv.serve_forever(poll_interval=0.1)
+
+def start_bottle_server(app, port, **kwargs):
+    server_thread = ServerThread(app, port, kwargs)
+    server_thread.daemon = True
+    server_thread.start()
+
+    ok = False
+    for i in range(10):
+        try:
+            conn = socket.create_connection(('127.0.0.1', port), 0.1)
+        except socket.error as e:
+            _time.sleep(0.1)
+        else:
+            conn.close()
+            ok = True
+            break
+    if not ok:
+        import warnings
+        warnings.warn('Server did not start after 1 second')
+
+    return server_thread.server
+
+class ServerThread(threading.Thread):
+    def __init__(self, app, port, server_kwargs):
+        threading.Thread.__init__(self)
+        self.app = app
+        self.port = port
+        self.server_kwargs = server_kwargs
+        self.server = Server(host='localhost', port=self.port, **self.server_kwargs)
+
+    def run(self):
+        bottle.run(self.app, server=self.server, quiet=True)
+
+def app_runner_setup(*specs):
+    Returns setup and teardown methods for running a list of WSGI
+    applications in a daemon thread.
+
+    Each argument is an (app, port) pair.
+
+    Return value is a (setup, teardown) function pair.
+
+    The setup and teardown functions expect to be called with an argument
+    on which server state will be stored.
+
+    Example usage with nose:
+
+    >>> setup_module, teardown_module = \
+        webracer.utils.runwsgi.app_runner_setup((app_module.app, 8050))
+
+
+    def setup(self):
+        self.servers = []
+        for spec in specs:
+            if len(spec) == 2:
+                app, port = spec
+                kwargs = {}
+            else:
+                app, port, kwargs = spec
+            self.servers.append(start_bottle_server(app, port, **kwargs))
+
+    def teardown(self):
+        for server in self.servers:
+            server.srv.shutdown()
+
+    return [setup, teardown]
+
+########################################################################
+# Not used
+class MyWSGIRefServer(ServerAdapter):
+    server = None
+
+    def run(self, handler):
+        from wsgiref.simple_server import make_server, WSGIRequestHandler
+        if self.quiet:
+            class QuietHandler(WSGIRequestHandler):
+                def log_request(*args, **kw): pass
+            self.options['handler_class'] = QuietHandler
+        self.server = make_server(self.host, self.port, handler, **self.options)
+        self.server.serve_forever()
+
+    def stop(self):
+        # self.server.server_close() <--- alternative but causes bad fd exception
+        self.server.shutdown()
+
+'''
+
+# Used, but never stop
 class BottleServer:
     def __init__(self, host, port, parent):
         self.uuid = uuid.uuid4()
@@ -126,15 +235,22 @@ class ClassWebServer(QThread):
         self.port = self.Settings.GetServerPort()
 
     def __del__(self):
-        if self.server:
-            self.server.server_close()
         print(f"WebServer {self.uuid} destroyed")
 
     def run(self):
         self.server = BottleServer(host="0.0.0.0", port=self.port, parent=self.pParent)
         self.server.start()
-        pass
+        '''
+        self.server_process = Process(target=self.startserver)
+        self.server_process.start()
 
+
+    def startserver(self):
+        print(f"WebServer {self.uuid} start")
+        self.server = BottleServer(host="0.0.0.0", port=self.port, parent=self.pParent)
+        self.server.start()
+        print(f"WebServer {self.uuid} stop")
+        '''
     def stop(self):
-        self.server = None
-        pass # comment quitter proprement ?
+        # self.server_process.terminate()
+        pass
