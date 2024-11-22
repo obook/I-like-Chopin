@@ -13,6 +13,7 @@ pyside6 = "^6.7.2"
 requests = "^2.32.3"
 netifaces2 = "^0.0.22"
 qrcode = {extras = ["pil"], version = "^7.4.2"}
+bottle = "^0.13.2"
 
 
 [build-system]
