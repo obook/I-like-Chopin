@@ -102,7 +102,11 @@ async function GetStats() {
         document.title = data.nameclean;
 
         /* Song Score */
-        $('#score').html("<a href='../score?pdf="+data.score+"' target='_blank'>SCORE</a>");
+        $('#score').attr('href', "../score?pdf="+data.score);
+        /*
+        $('#score').html("<a href='../score?pdf="+data.score+"' target='_blank' data-role='button'>SCORE</a>");
+        $('#score').trigger('refresh') ;
+        */
 
         /* Parent folder of MIDIfile */
         $('#folder').text(data.folder);
