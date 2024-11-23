@@ -8,7 +8,7 @@ Created on Fri Nov 22 18:30:43 2024
 import os
 import uuid
 import json
-from bottle import Bottle, static_file, response, request, redirect
+from bottle import Bottle, static_file, response, request, redirect, abort
 from PySide6.QtCore import QThread
 from web_network import ClassWebNetwork
 
@@ -242,6 +242,7 @@ class BottleServer:
             return data
         else:
             print(f"REQUEST SCORE={file} NOT EXISTS")
+            abort(404, "Sorry, file not found.")
 
 class ClassWebServer(QThread):
     uuid = None
