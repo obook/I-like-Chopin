@@ -12,6 +12,7 @@ import os
 import glob
 from pathlib import Path
 from subprocess import call
+from datetime import datetime
 
 
 def MakeScore(filename):
@@ -24,13 +25,15 @@ def MakeScore(filename):
     call(['mscore3', filename, "-o", filename_pdf])
 
 
-root_dir = os.path.expanduser("~/MIDI/ABBA")
+root_dir = os.path.expanduser("~/MIDI")
 files = glob.glob(root_dir + '/**/*.mid', recursive=True)
 print(f"Make score for {len(files)} files in {root_dir}")
 
 maxi = len(files)
 index = 1
 for filename in files:
-    print(f"{index}/{maxi}")
+    now = datetime.now()
+    clock = now.strftime("%H:%M:%S")
+    print(f"{index}/{maxi} {clock}")
     MakeScore(filename)
     index += 1
