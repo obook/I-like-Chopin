@@ -5,10 +5,9 @@ Created on Fri Nov 22 18:30:43 2024
 @author: obooklage
 """
 
+import os
 import uuid
 import json
-import time
-from multiprocessing import Process
 from bottle import Bottle, static_file, response, request, redirect
 from PySide6.QtCore import QThread
 from web_network import ClassWebNetwork
@@ -137,12 +136,14 @@ class BottleServer:
     def _route(self):
         self._app.route('/', method="GET", callback=self._index)
         self._app.route('/static/<filepath:path>',callback=self._server_static)
+        # self._app.route('/midi/<filepath:path>',callback=self._server_midi)
         self._app.route('/status.json',callback=self._status)
         self._app.route('/interfaces.json',callback=self._interfaces)
         self._app.route('/files.json',callback=self._files)
         self._app.route('/play',callback=self._play)
         self._app.route('/do',callback=self._do)
         self._app.route('/player',callback=self._player)
+        self._app.route('/score',callback=self._score)
 
     def start(self):
             # BLOCKING !
@@ -154,7 +155,11 @@ class BottleServer:
     def _server_static(self, filepath):
         uipath = self.pParent.Settings.GetUIPath()
         return static_file(filepath, root=uipath)
-
+    '''
+    def _server_midi(self, filepath):
+        midipath = self.pParent.Settings.GetMidiPath()
+        return static_file(filepath, root=midipath)
+    '''
     def _status(self):
         midisong = self.pParent.Midi.GetMidiSong()
         if midisong:
@@ -162,7 +167,9 @@ class BottleServer:
                      "uuid":str(midisong.Getuuid()),
                      "played":midisong.GetPlayed(),
                      "duration":round(midisong.GetDuration(), 2),
+                     "name":midisong.GetFilename(),
                      "nameclean":midisong.GetCleanName(),
+                     "score":midisong.GetScore(),
                      "folder":midisong.GetParent(),
                      "state":midisong.GetState(),
                      "mode":midisong.GetMode(),
@@ -223,6 +230,19 @@ class BottleServer:
         except:
             pass
 
+    def _score(self):
+        pdf = request.query.pdf
+        file = os.path.join(self.pParent.Settings.GetMidiPath(), pdf)
+        if os.path.isfile(file):
+            print(f"REQUEST SCORE={file} EXISTS")
+            f = open(file, 'rb')
+            data = f.read()
+            f.close
+            response.content_type = 'application/pdf'
+            return data
+        else:
+            print(f"REQUEST SCORE={file} NOT EXISTS")
+
 class ClassWebServer(QThread):
     uuid = None
     pParent = None
@@ -240,7 +260,7 @@ class ClassWebServer(QThread):
 
     def run(self):
         self.server = BottleServer(host="0.0.0.0", port=self.port, parent=self.pParent)
-        print(f"**** DEBUG={self.server}")
+        # print(f"**** DEBUG={self.server}")
         self.server.start()
         '''
         self.server_process = Process(target=self.startserver)

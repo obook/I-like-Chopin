@@ -93,6 +93,11 @@ class ClassMidiSong:
             name = (name[:lenght] + "..") if len(name) > lenght else name
         return name
 
+    def GetScore(self):  # parent/score.pdf
+        folder = self.GetParent()
+        file = self.GetName() + ".pdf"
+        return os.path.join(folder, file)
+
     def SetDuration(self, duration):
         self.__duration = duration  # in minutes
 

@@ -83,10 +83,10 @@ async function GetStats() {
 
         /* debug 
         
-        console.log("DEBUG GetStats=" + data);
+        console.log("DEBUG COUCOU GetStats=" + data.uuid);
+
 
         */
-
         /* uuid */
         song_uuid = data.uuid;
 
@@ -100,6 +100,9 @@ async function GetStats() {
         /* Song Name */
         $('#songname').text(data.nameclean);
         document.title = data.nameclean;
+
+        /* Song Score */
+        $('#score').html("<a href='../score?pdf="+data.score+"' target='_blank'>SCORE</a>");
 
         /* Parent folder of MIDIfile */
         $('#folder').text(data.folder);
