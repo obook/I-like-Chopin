@@ -74,10 +74,3 @@ for filename in files:
     print(f"{index}/{maxi} {clock}")
     MakeScore(filename)
     index += 1
-
-'''
-file = '/home/obooklage/MIDI/ENFANTS CHILD/Alouette.mid'
-if not MidiSongTitle(file):
-    AppendTitle(file)
-MakeScore(file)
-'''
