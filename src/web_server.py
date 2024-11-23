@@ -234,14 +234,13 @@ class BottleServer:
         pdf = request.query.pdf
         file = os.path.join(self.pParent.Settings.GetMidiPath(), pdf)
         if os.path.isfile(file):
-            print(f"REQUEST SCORE={file} EXISTS")
             f = open(file, 'rb')
             data = f.read()
             f.close
             response.content_type = 'application/pdf'
             return data
         else:
-            print(f"REQUEST SCORE={file} NOT EXISTS")
+            print(f"|!| BottleServer {self.uuid} request score {file} note exists")
             abort(404, "Sorry, file not found.")
 
 class ClassWebServer(QThread):
