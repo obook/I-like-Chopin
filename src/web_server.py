@@ -145,6 +145,7 @@ class BottleServer:
         self._app.route('/player',callback=self._player)
 
     def start(self):
+            # BLOCKING !
             self.server = self._app.run(host=self._host, port=self._port, debug=True, quiet=True)
 
     def _index(self):
@@ -239,6 +240,7 @@ class ClassWebServer(QThread):
 
     def run(self):
         self.server = BottleServer(host="0.0.0.0", port=self.port, parent=self.pParent)
+        print(f"**** DEBUG={self.server}")
         self.server.start()
         '''
         self.server_process = Process(target=self.startserver)
@@ -252,5 +254,6 @@ class ClassWebServer(QThread):
         print(f"WebServer {self.uuid} stop")
         '''
     def stop(self):
+        print(f"WebServer {self.uuid} stop")
         # self.server_process.terminate()
         pass
