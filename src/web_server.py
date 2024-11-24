@@ -3,7 +3,6 @@
 """
 Created on Fri Nov 22 18:30:43 2024
 @author: obooklage
-@Todo : quiet do not works
 """
 
 import os
@@ -72,10 +71,12 @@ class MyBottleServer:
         # self._route()
         self.server = MyWSGIRefServer(host=host, port=port)
         Thread(target=self.begin).start()
+        # I NEED TO ADD ROUTES !
 
     def __del__(self):
         print(f"MyBottleServer {self.uuid} destroyed")
 
+    '''
     def _route(self):
         self._app.route('/', callback=self._index)
         self._app.route('/static/<filepath:path>',callback=self._server_static)
@@ -87,6 +88,7 @@ class MyBottleServer:
         self._app.route('/do',callback=self._do)
         self._app.route('/player',callback=self._player)
         self._app.route('/score',callback=self._score)
+    '''
 
     def begin(self):
         run(server=self.server)
