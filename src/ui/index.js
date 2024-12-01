@@ -81,7 +81,7 @@ async function GetStats() {
         const response = await fetch('/status.json');
         const data = await response.json();
 
-        /* debug 
+        /* debug
         console.log("DEBUG COUCOU GetStats=" + data.uuid);
         */
 
@@ -99,8 +99,20 @@ async function GetStats() {
         $('#songname').text(data.nameclean);
         document.title = data.nameclean;
 
-        /* Music sheet */
-        $('#score').attr('href', "../score?pdf="+data.score);
+        /* Music sheet
+        Add +'#option1=value&option2=value...'
+
+        toolbar=1' : title in brave, no effect with firefox
+        toolbar=0' : remove toolbar in brave, no effect with firefox
+
+        pagemode=thumbs : is default for brave, is not per default with firefox
+        pagemode=bookmarks : is default for brave, is not per default with firefox
+        pagemode=none : ?
+
+        view=FitH : ok Brave, notok Firefox
+
+        */
+        $('#score').attr('href', "../score?pdf=" + data.score + '#toolbar=0#pagemode=thumbs#scrollbar=0');
 
         /* Parent folder of MIDIfile */
         $('#folder').text(data.folder);
