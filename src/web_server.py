@@ -103,7 +103,7 @@ class MyBottleServer:
     @route('/static/<filepath:path>')
     def server_static(filepath):
         global _MyBottleServerSetup
-        uipath = "/home/obooklage/Documents/GitHub/I-like-Chopin/src/ui/"
+        uipath = _MyBottleServerSetup['parent'].Settings.GetUIPath()
         return static_file(filepath, root=uipath)
 
     @route('/status.json')
