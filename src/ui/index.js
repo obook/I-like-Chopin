@@ -129,9 +129,9 @@ async function GetStats() {
         const seconds = Math.floor((data.duration - minutes)*60);
         line = minutes+"'"+String(seconds).padStart(2, '0');
         if(data.sustain > 0)
-            line = line + " 🎹"
+            line = line + " 𝄞"
         else
-            line = line + " 💻"
+            line = line + " ❌"
         line = line + " ["+channels+"] ";
         $('#info_line').text(line);
 
