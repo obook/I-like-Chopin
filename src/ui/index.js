@@ -111,8 +111,9 @@ async function GetStats() {
 
         view=FitH : ok Brave, notok Firefox
 
-        */
         $('#score').attr('href', "../score?pdf=" + data.score + '#view=FitH&toolbar=0&pagemode=thumbs');
+        */
+        $('#score').attr('href', "../score?pdf=" + data.score + '#view=FitH');
 
         /* Parent folder of MIDIfile */
         $('#folder').text(data.folder);
