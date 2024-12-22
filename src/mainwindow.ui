@@ -177,7 +177,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>MIDI File</string>
+      <string>MIDI Ready</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>

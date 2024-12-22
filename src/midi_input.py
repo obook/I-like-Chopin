@@ -26,7 +26,7 @@ class ClassThreadInput(QThread):
     running = False
     modulation_start_time = 0
 
-    led_activity = Signal(int)
+    led_input_activity = Signal(int)
     statusbar_activity = Signal(str)
     # nextsong_activity = Signal()
     # previousong_activity = Signal()
@@ -39,7 +39,7 @@ class ClassThreadInput(QThread):
         self.in_device = in_device
         self.keys = keys
         self.running = True
-        self.led_activity.connect(self.pParent.SetLedInput)
+        self.led_input_activity.connect(self.pParent.SetLedInput)
         self.statusbar_activity.connect(self.pParent.SetStatusBar)
         # self.nextsong_activity.connect(self.pParent.NextMidifile)
         # self.previousong_activity.connect(self.pParent.PreviousMidifile)
@@ -63,7 +63,7 @@ class ClassThreadInput(QThread):
             self.statusbar_activity.emit(
                 f"Waiting : {CleanDeviceName(self.in_device)} ..."
             )
-            self.led_activity.emit(0)
+            self.led_input_activity.emit(0)
 
         while self.running:
             self.sleep(1)
@@ -101,15 +101,15 @@ class ClassThreadInput(QThread):
         if msg.type == "note_on":
             if msg.velocity:
                 self.keys["key_on"] += 1
-                self.led_activity.emit(1)
+                self.led_input_activity.emit(1)
             else:
                 # A MIDI Note On with a velocity of 0 is regarded as a Note Off.
                 # That is part of the MIDI Standard
                 self.keys["key_on"] -= 1
-                self.led_activity.emit(0)
+                self.led_input_activity.emit(0)
         elif msg.type == "note_off":
             self.keys["key_on"] -= 1
-            self.led_activity.emit(0)
+            self.led_input_activity.emit(0)
 
         # Rares cases
         if self.keys["key_on"] < 0:

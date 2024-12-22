@@ -3,6 +3,10 @@
 """
 Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
+
+@Todo : si pas de note, se caler à la prochaine,
+ici on a un soucis avec le release du sustain, et avec les notes off/note on avec vélocité nulle.
+
 """
 import time
 import uuid
@@ -87,6 +91,7 @@ class ClassThreadMidiReader(QThread):
             self.channels_notes = {}
             self.star_file_activity.emit(0)
 
+            # counter : notes in channel
             for msg in MidiFile(self.midisong.Getfilepath()):  # PUT IN MIDI_SONG
                 if msg.type == "note_on":  # with velocity or not
                     self.total_notes_on += 1
@@ -102,7 +107,7 @@ class ClassThreadMidiReader(QThread):
                     if msg.control == self.Settings.GetSustainChannel():
                         self.total_sustain += 1
 
-            if self.total_sustain:
+            if self.total_sustain:  # Quality icon
                 self.star_file_activity.emit(2)
             else:
                 self.star_file_activity.emit(-1)
@@ -113,7 +118,7 @@ class ClassThreadMidiReader(QThread):
 
             if self.notes_on_channels:
                 self.midisong.SetState(states["cueing"])
-                self.led_file_activity.emit(0)
+                # self.led_file_activity.emit(0)
             else:
                 print(f"|!| MidiReader {self.uuid} NO NOTE ON MIDI CHANNELS")
                 self.midisong.SetState(states["notracktoplay"])
@@ -169,7 +174,8 @@ class ClassThreadMidiReader(QThread):
                 if msg.control == self.Settings.GetSustainChannel():
                     self.sustain_pedal = msg.value
 
-            # For fun
+            # For fun : not used
+            '''
             if self.midisong.IsState(states["playing"]):
                 if msg.type == "note_on":
                     if msg.velocity:
@@ -178,7 +184,7 @@ class ClassThreadMidiReader(QThread):
                         self.led_file_activity.emit(0)
                 elif msg.type == "note_off":
                     self.led_file_activity.emit(0)
-
+            '''
             # Just a Midi player ############################################################
             if self.midisong.IsMode(modes["player"]) or self.Settings.IsMode(modes["random"]):
 
@@ -210,6 +216,8 @@ class ClassThreadMidiReader(QThread):
                         print(f"MidiReader {self.uuid} player [{self.midisong.GetFilename()}] READY") # Utile ?
                         self.midisong.SetState(states["playing"])
 
+                        self.led_file_activity.emit(1)
+
                     if self.channels[msg.channel]:
                         self.pParent.Midi.SendOutput(msg)
 
@@ -240,6 +248,8 @@ class ClassThreadMidiReader(QThread):
                     and msg.time > self.wait_time
                 ):
 
+                    self.led_file_activity.emit(0)  # NEW
+
                     # Delay : Humanize controlled by knob, see midi_input
                     human = 0
                     if msg.type == "note_on" and self.keys["humanize"]:
@@ -253,7 +263,7 @@ class ClassThreadMidiReader(QThread):
                 if msg.type == "note_on":  # with velocity or not
                     if self.channels[msg.channel] and not self.midisong.IsState(
                         states["playing"]
-                    ):  # First note on channels selected !!
+                    ):  # First note on channels selected : cued and waiting keyboard pressed
                         print(
                             f"MidiReader {self.uuid} playback [{self.midisong.GetFilename()}] READY"
                         )
@@ -266,8 +276,8 @@ class ClassThreadMidiReader(QThread):
                     self.current_notes_on += 1
 
                 if self.midisong.IsState(states["cueing"]):
-                    msg.time = 0
-                ''' Show the next note...
+                    msg.time = 0 # skip time until note on channel
+                ''' Show the next note... not used
                 if msg.type == "note_on" and self.channels[msg.channel]:
                     if msg.velocity:
                         note, octave = number_to_note(msg.note)
@@ -279,17 +289,29 @@ class ClassThreadMidiReader(QThread):
                     start_time = time.time()
                     start_time_loop = time.time()
                     self.pedal_off = False
+                    activity = False
                     while not self.keys["key_on"]:  # Loop waiting keyboard
 
-                        # finished ?
-
+                        # Finished ?
                         if not self.running or not self.midisong or not self.midisong.IsState(states["playing"]):
                             self.stop()
                             return
 
+                        # no velocity (note off)
+                        if msg.type == "note_on" or msg.type == "note_off":
+                            if not msg.velocity:
+                                break
+
+                        # note present but must not be played; skip the pause
                         if not self.channels[msg.channel]:
                             break
 
+                        # Note ready to play
+                        elif msg.type == "note_on" and not activity :
+                            activity = True
+                            self.led_file_activity.emit(1)
+
+                        # Wait long time : release systain pedal if active
                         if (
                             self.sustain_pedal
                             and time.time() - start_time_loop > 1.5
@@ -302,7 +324,6 @@ class ClassThreadMidiReader(QThread):
                             )
                             self.pParent.Midi.SendOutput(msg)
                             self.sustain_pedal_off = True
-                            self.led_file_activity.emit(0)
 
                         time.sleep(0.01)  # NOT SELF !!
 

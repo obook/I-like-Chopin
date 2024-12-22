@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'mainwindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.1
+## Created by: Qt User Interface Compiler version 6.8.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -146,7 +146,7 @@ class Ui_MainWindow(object):
         self.labelStatusOuput.setText(QCoreApplication.translate("MainWindow", u"LED", None))
         self.labelStatusMidifile.setText(QCoreApplication.translate("MainWindow", u"LED", None))
         self.pushButton_Files.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
-        self.label_Ouput_2.setText(QCoreApplication.translate("MainWindow", u"MIDI File", None))
+        self.label_Ouput_2.setText(QCoreApplication.translate("MainWindow", u"MIDI Ready", None))
         self.labelLedQuality.setText(QCoreApplication.translate("MainWindow", u"LED", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"MIDI Channels", None))
         self.pushButton_ChannelsAll.setText(QCoreApplication.translate("MainWindow", u"All", None))
