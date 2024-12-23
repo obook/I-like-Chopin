@@ -149,6 +149,8 @@ class ClassThreadMidiReader(QThread):
 
         self.running = True
 
+        self.led_file_activity.emit(1)  # NEW
+
         # Before play, reset...
         self.pParent.Midi.ResetOutput()
 
@@ -248,7 +250,7 @@ class ClassThreadMidiReader(QThread):
                     and msg.time > self.wait_time
                 ):
 
-                    self.led_file_activity.emit(0)  # NEW
+                    # self.led_file_activity.emit(0)  # NEW
 
                     # Delay : Humanize controlled by knob, see midi_input
                     human = 0
