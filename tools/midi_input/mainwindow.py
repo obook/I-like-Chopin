@@ -1,9 +1,11 @@
 # This Python file uses the following encoding: utf-8
+'''
+Require : PySide6 mido python-rtmidi
+'''
 import sys
 import platform
 from PySide6.QtWidgets import (QApplication, QMainWindow)
 from PySide6.QtCore import Signal
-from PySide6.QtGui import (QTextCursor)
 import mido
 
 # Important:
@@ -12,12 +14,15 @@ import mido
 #     pyside2-uic form.ui -o ui_form.py
 from ui_form import Ui_MainWindow
 
+
 class MainWindow(QMainWindow):
+    """Main class."""
 
     in_port = None
     log_activity = Signal(str)
 
     def __init__(self, parent=None):
+        """Initialise la classe."""
         super().__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -29,7 +34,7 @@ class MainWindow(QMainWindow):
         self.log_activity.connect(self.LogMessage)
 
     def GetDevices(self):
-        """ Liste des devices midi connectés à l'équipement """
+        """Retourne la liste des devices midi connectés à l'équipement."""
         Inputs = []
         Outputs = []
         IOPorts = []
@@ -52,6 +57,7 @@ class MainWindow(QMainWindow):
         return Inputs, Outputs, IOPorts
 
     def InputDeviceChanged(self):
+        """Open the MIDI port selected."""
         in_device = self.ui.InputDeviceCombo.currentText()
         if self.in_port:
             self.in_port.close()
@@ -63,34 +69,39 @@ class MainWindow(QMainWindow):
             self.log_activity.emit(f"{in_device} : {error}")
 
     def callback(self, msg):
-        text = ""
+        """Handle MIDI events from device."""
+        text = f"{msg.type} "
 
         if msg.type == 'note_on' or msg.type == 'note_off':
-            text += f"{msg.type} channel {msg.channel} note {msg.note} velocity {msg.velocity}"
+            text += f"channel {msg.channel} note {msg.note} velocity {msg.velocity}"
 
         elif msg.type == 'control_change':
-             text += f"{msg.type} channel {msg.channel} control {msg.control} value {msg.value} time {msg.time}"
+            text += f"channel {msg.channel} control {msg.control} value {msg.value} time {msg.time}"
 
         elif msg.type == 'pitchwheel':
-            text += f"{msg.type} channel {msg.channel} pitch {msg.pitch} time {msg.time}"
+            text += f"channel {msg.channel} pitch {msg.pitch} time {msg.time}"
 
         elif msg.type == 'polytouch':
-             text += f"{msg.type} channel {msg.channel} note {msg.note} value {msg.value} time {msg.time}"
+            text += f"channel {msg.channel} note {msg.note} value {msg.value} time {msg.time}"
 
         elif msg.type == 'sysex':
-              text += f"{msg.type} data {msg.data}"
+            text += f"data {msg.data}"
 
         else:
             print("---> PLEASE ADD : ", msg)
-            text += f"{msg.type}"
 
         self.log_activity.emit(text)
 
     def LogMessage(self, text):
+        """Print message in QplainTextEdit (Signal)."""
         self.ui.plainTextEdit.appendPlainText(text)
 
+
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+    if not QApplication.instance():
+        app = QApplication(sys.argv)
+    else:
+        app = QApplication.instance()
     widget = MainWindow()
     widget.show()
     sys.exit(app.exec())
