@@ -8,6 +8,7 @@ import json
 import os
 import shutil
 import uuid
+import mido
 from midi_song import modes
 
 
@@ -133,6 +134,22 @@ class ClassSettings:
 
     def SaveOutputDevice(self, value):
         return self.SetSetting("OutputDevice", value)
+
+    def GetControllerDevice(self):
+        return self.GetSetting("ControllertDevice", "(None)")
+
+    def SaveControllerDevice(self, value):
+        return self.SetSetting("ControllertDevice", value)
+
+    def GetMidiApi(self):
+        return self.GetSetting("MidiApi", "LINUX_ALSA")
+
+    def SaveMidiApi(self, value):
+
+        mido.set_backend(f'mido.backends.rtmidi/{value}')
+        print("---> DEBUG", value, mido.backend)
+
+        return self.SetSetting("MidiApi", value)
 
     def GetMidifile(self):
         return self.GetSetting("MidiSong", "(None)")

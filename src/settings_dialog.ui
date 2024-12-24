@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>501</width>
-    <height>240</height>
+    <height>259</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>10</x>
      <y>10</y>
      <width>481</width>
-     <height>101</height>
+     <height>131</height>
     </rect>
    </property>
    <property name="title">
@@ -49,9 +49,9 @@
     <property name="geometry">
      <rect>
       <x>4</x>
-      <y>60</y>
+      <y>65</y>
       <width>91</width>
-      <height>22</height>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
@@ -82,7 +82,7 @@
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>200</y>
+     <y>220</y>
      <width>81</width>
      <height>25</height>
     </rect>
@@ -95,9 +95,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>120</y>
+     <y>146</y>
      <width>481</width>
-     <height>61</height>
+     <height>60</height>
     </rect>
    </property>
    <property name="title">
@@ -106,7 +106,7 @@
    <widget class="QCheckBox" name="checkBox_ForceIntrument0">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>10</x>
       <y>30</y>
       <width>191</width>
       <height>23</height>
@@ -116,6 +116,64 @@
      <string>Force Piano (Prog 0)</string>
     </property>
    </widget>
+   <widget class="QComboBox" name="ApiCombo">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>26</y>
+      <width>131</width>
+      <height>30</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_Ouput_3">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>29</y>
+      <width>100</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>API</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QComboBox" name="ControllerDeviceCombo">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>100</y>
+     <width>331</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Ouput_2">
+   <property name="geometry">
+    <rect>
+     <x>6</x>
+     <y>103</y>
+     <width>100</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Controller</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+   </property>
   </widget>
  </widget>
  <resources/>

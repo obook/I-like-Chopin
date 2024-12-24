@@ -29,7 +29,7 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         self.Midi = parent.Midi
         self.Settings = self.pParent.Settings
         self.setupUi(self)
-        self.setFixedSize(501, 240)
+        self.setFixedSize(501, 259)
         self.setWindowTitle("Settings")
 
         self.pushButton_Close.clicked.connect(self.Quit)
@@ -37,13 +37,23 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         # ComboBoxes Inputs/Outputs
         Input = self.Settings.GetInputDevice()
         Output = self.Settings.GetOutputDevice()
+        Controller = self.Settings.GetControllerDevice()
+        DefaultApi = self.Settings.GetMidiApi()
+
         self.Inputs, self.Outputs, self.InputsOutputs = self.Midi.GetDevices()
+        MidiApis = self.Midi.GetMidiApi()
 
         self.InputDeviceCombo.addItem(Input)
         self.InputDeviceCombo.addItems(self.Inputs)
 
         self.OutputDeviceCombo.addItem(Output)
         self.OutputDeviceCombo.addItems(self.Outputs)
+
+        self.ControllerDeviceCombo.addItem(Controller)
+        self.ControllerDeviceCombo.addItems(self.InputsOutputs)
+
+        self.ApiCombo.addItem(DefaultApi)
+        self.ApiCombo.addItems(MidiApis)
 
         #self.InputDeviceCombo.currentIndexChanged.connect(self.InputDeviceChanged)
         #self.OutputDeviceCombo.currentIndexChanged.connect(self.OuputDeviceChanged)
@@ -54,8 +64,10 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         )
 
     def __del__(self):
+        self.ApiComboChanged()  # first, change API
         self.InputDeviceChanged()
         self.OuputDeviceChanged()
+        self.ControllerDeviceChanged()
         self.Settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
         print(f"SettingsDlg {self.__uuid} destroyed")
 
@@ -72,6 +84,14 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         out_device = self.OutputDeviceCombo.currentText()
         self.Settings.SaveOutputDevice(out_device)
         self.Midi.ConnectOutput(out_device)
+
+    def ControllerDeviceChanged(self):
+        controller_device = self.ControllerDeviceCombo.currentText()
+        self.Settings.SaveControllerDevice(controller_device)
+
+    def ApiComboChanged(self):
+        current_api = self.ApiCombo.currentText()
+        self.Settings.SaveMidiApi(current_api)
 
     def SaveForceIntrument(self):
         self.Settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())

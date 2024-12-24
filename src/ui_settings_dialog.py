@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'settings_dialog.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.1
+## Created by: Qt User Interface Compiler version 6.8.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -23,10 +23,10 @@ class Ui_DialogSettings(object):
     def setupUi(self, DialogSettings):
         if not DialogSettings.objectName():
             DialogSettings.setObjectName(u"DialogSettings")
-        DialogSettings.resize(501, 240)
+        DialogSettings.resize(501, 259)
         self.groupBoxDevices = QGroupBox(DialogSettings)
         self.groupBoxDevices.setObjectName(u"groupBoxDevices")
-        self.groupBoxDevices.setGeometry(QRect(10, 10, 481, 101))
+        self.groupBoxDevices.setGeometry(QRect(10, 10, 481, 131))
         self.InputDeviceCombo = QComboBox(self.groupBoxDevices)
         self.InputDeviceCombo.setObjectName(u"InputDeviceCombo")
         self.InputDeviceCombo.setGeometry(QRect(110, 30, 331, 30))
@@ -35,7 +35,7 @@ class Ui_DialogSettings(object):
         self.OutputDeviceCombo.setGeometry(QRect(110, 60, 331, 30))
         self.label_Ouput = QLabel(self.groupBoxDevices)
         self.label_Ouput.setObjectName(u"label_Ouput")
-        self.label_Ouput.setGeometry(QRect(4, 60, 91, 22))
+        self.label_Ouput.setGeometry(QRect(4, 65, 91, 20))
         self.label_Ouput.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.label_Input = QLabel(self.groupBoxDevices)
         self.label_Input.setObjectName(u"label_Input")
@@ -43,13 +43,29 @@ class Ui_DialogSettings(object):
         self.label_Input.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.pushButton_Close = QPushButton(DialogSettings)
         self.pushButton_Close.setObjectName(u"pushButton_Close")
-        self.pushButton_Close.setGeometry(QRect(210, 200, 81, 25))
+        self.pushButton_Close.setGeometry(QRect(210, 220, 81, 25))
         self.groupBox = QGroupBox(DialogSettings)
         self.groupBox.setObjectName(u"groupBox")
-        self.groupBox.setGeometry(QRect(10, 120, 481, 61))
+        self.groupBox.setGeometry(QRect(10, 146, 481, 60))
         self.checkBox_ForceIntrument0 = QCheckBox(self.groupBox)
         self.checkBox_ForceIntrument0.setObjectName(u"checkBox_ForceIntrument0")
-        self.checkBox_ForceIntrument0.setGeometry(QRect(140, 30, 191, 23))
+        self.checkBox_ForceIntrument0.setGeometry(QRect(10, 30, 191, 23))
+        self.ApiCombo = QComboBox(self.groupBox)
+        self.ApiCombo.setObjectName(u"ApiCombo")
+        self.ApiCombo.setEnabled(False)
+        self.ApiCombo.setGeometry(QRect(310, 26, 131, 30))
+        self.label_Ouput_3 = QLabel(self.groupBox)
+        self.label_Ouput_3.setObjectName(u"label_Ouput_3")
+        self.label_Ouput_3.setEnabled(False)
+        self.label_Ouput_3.setGeometry(QRect(200, 29, 100, 22))
+        self.label_Ouput_3.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.ControllerDeviceCombo = QComboBox(DialogSettings)
+        self.ControllerDeviceCombo.setObjectName(u"ControllerDeviceCombo")
+        self.ControllerDeviceCombo.setGeometry(QRect(120, 100, 331, 30))
+        self.label_Ouput_2 = QLabel(DialogSettings)
+        self.label_Ouput_2.setObjectName(u"label_Ouput_2")
+        self.label_Ouput_2.setGeometry(QRect(6, 103, 100, 22))
+        self.label_Ouput_2.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.retranslateUi(DialogSettings)
 
@@ -64,5 +80,6 @@ class Ui_DialogSettings(object):
         self.pushButton_Close.setText(QCoreApplication.translate("DialogSettings", u"Close", None))
         self.groupBox.setTitle(QCoreApplication.translate("DialogSettings", u"Options", None))
         self.checkBox_ForceIntrument0.setText(QCoreApplication.translate("DialogSettings", u"Force Piano (Prog 0)", None))
+        self.label_Ouput_3.setText(QCoreApplication.translate("DialogSettings", u"API", None))
+        self.label_Ouput_2.setText(QCoreApplication.translate("DialogSettings", u"Controller", None))
     # retranslateUi
-
