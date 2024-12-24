@@ -54,7 +54,7 @@ class signals:
 
     # Some probleme qui raw commands from webserver. So tests here...
 
-    # Signal receiver
+    # Signal receivers
     def SignalShuffleMidifile(self):
         self.ShuffleMidifile()
 
@@ -66,3 +66,9 @@ class signals:
 
     def SignalStop(self):
         self.Midi.StopPlayer()
+
+    def SignalMidifileChange(self, file):
+        self.MidifileChange(midifile)
+
+    def SignalChangePlayerMode(self, mode):
+        self.ChangePlayerMode(mode)

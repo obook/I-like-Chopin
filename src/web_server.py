@@ -64,11 +64,15 @@ class MyBottleServer:
 
     pLauncher = None
     pParent = None
+    Settings = None
+    Midi = None
 
     def __init__(self, host, port, launcher):
         self.uuid = uuid.uuid4()
         self.pLauncher = launcher
         self.pParent = launcher.pParent
+        self.Settings = self.pParent.Settings
+        self.Midi = self.pParent.Midi
         self.server = MyWSGIRefServer(host=host, port=port)
         Thread(target=self.begin).start()
         print(f"MyBottleServer {self.uuid} started")
@@ -90,12 +94,12 @@ class MyBottleServer:
 
         @route('/static/<filepath:path>')
         def server_static(filepath):
-            uipath = self.pParent.Settings.GetUIPath()
+            uipath = self.Settings.GetUIPath()
             return static_file(filepath, root=uipath)
 
         @route('/status.json')
         def _status():
-            midisong = self.pParent.Midi.GetMidiSong()
+            midisong = self.Midi.GetMidiSong()
             if midisong:
                 status = {
                          "uuid":str(midisong.Getuuid()),
@@ -134,19 +138,11 @@ class MyBottleServer:
         def _play():
             midifile = request.query.song
             print(f"BottleServer {self.uuid} request [{midifile}]")
-            if self.pParent:
-                '''
-                 try:
-                     self.pParent.MidifileChange(midifile)  # DANGEROUS ?
-                 except:
-                     pass
-                '''
-                self.pParent.MidifileChange(midifile)  # DANGEROUS ?
+            self.pLauncher.ChangeSong(midifile)
 
         @route('/do')
         def _do():
             action = request.query.action
-
             if self.pParent and action == "stop":
                 self.pLauncher.StopSong()
             elif self.pParent and action == "shuffle":
@@ -157,19 +153,12 @@ class MyBottleServer:
         @route('/player')
         def _player():
             mode = request.query.mode
-            # print(f"REQUEST MODE={mode}")
-            '''
-            try:
-                pParent.ChangePlayerMode(mode)  # DANGEROUS ?
-            except:
-                pass
-            '''
-            self.pParent.ChangePlayerMode(mode)  # DANGEROUS ?
+            self.pLauncher.ChangeMode(mode)
 
         @route('/score')
         def _score():
             pdf = request.query.pdf
-            file = os.path.join(self.pParent.Settings.GetMidiPath(), pdf)
+            file = os.path.join(self.Settings.GetMidiPath(), pdf)
             if os.path.isfile(file):
                 f = open(file, 'rb')
                 data = f.read()
@@ -188,6 +177,8 @@ class ClassWebServer(QThread):
     SignalReplay = Signal()
     SignalShuffle = Signal()
     SignalStop = Signal()
+    SignalMidifileChange = Signal(str)
+    SignalChangePlayerMode = Signal(str)
 
     def __init__(self, parent):
         QThread.__init__(self)
@@ -198,6 +189,8 @@ class ClassWebServer(QThread):
         self.SignalShuffle.connect(self.pParent.SignalShuffleMidifile)
         self.SignalReplay.connect(self.pParent.SignalReplayMidifile)
         self.SignalStop.connect(self.pParent.SignalStop)
+        self.SignalMidifileChange.connect(self.pParent.SignalMidifileChange)
+        self.SignalChangePlayerMode.connect(self.pParent.SignalChangePlayerMode)
 
         print(f"WebServer {self.uuid} started")
 
@@ -215,13 +208,16 @@ class ClassWebServer(QThread):
 
     # Signals to parent
     def ReplaySong(self):
-        print("---> DEBUG ClassWebServer send ReplaySong...")
         self.SignalReplay.emit()
 
+    def ChangeSong(self, file):
+        self.SignalMidifileChange.emit(file)
+
     def ShuffleSong(self):
-        print("---> DEBUG ClassWebServer send ShuffleSong...")
         self.SignalShuffle.emit()
 
     def StopSong(self):
-        print("---> DEBUG ClassWebServer send StopSong...")
         self.SignalStop.emit()
+
+    def ChangeMode(self, mode):
+        self.SignalChangePlayerMode.emit(mode)
