@@ -7,11 +7,10 @@ Created on Wed Jun  5 18:19:14 2024
 import sys
 import os
 
-from PySide6.QtWidgets import QApplication, QMainWindow
-from PySide6.QtGui import QIcon
-from PySide6 import QtGui
+from PySide6.QtWidgets import QApplication, QMainWindow, QSystemTrayIcon, QMenu
+from PySide6.QtGui import QIcon, QAction
 from PySide6.QtCore import QEvent
-from midi_song import modes, ClassMidiSong
+from midi_song import modes
 
 from informations_dialog import ShowInformationDlg
 from settings_dialog import ShowSettingsDlg
@@ -56,6 +55,11 @@ class Mainwindow(
         my_icon = QIcon()
         my_icon.addFile(ICON_APPLICATION)
         self.setWindowIcon(my_icon)
+
+        # tray.show()
+
+
+        # Midi
 
         self._midi_init()
 
@@ -264,7 +268,7 @@ class Mainwindow(
 
     def TooglePlayerMode(self):  # Just player/passthrough, only called by midi_input
 
-        print(f"self.Settings.GetMode={self.Settings.GetMode()}")
+        # print(f"self.Settings.GetMode={self.Settings.GetMode()}")
 
         if self.Settings.IsMode(modes["passthrough"]):
             self.Settings.SaveMode(modes["random"])
@@ -328,5 +332,33 @@ def start():
     widget = Mainwindow()
     # For Linux/Wayland, must be .desktop filename (here org.obook.i-like-chopin.dektop) => Set mainwindow icon
     app.setDesktopFileName("org.obook.i-like-chopin")
+
+
+    # Systray
+    ICON_SYSTRAY = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)), "icons", "svg", "i-like-chopin.svg"
+    )
+
+    icon = QIcon(ICON_SYSTRAY)
+
+    # Create the tray
+    tray = QSystemTrayIcon()
+    tray.setIcon(icon)
+    tray.setVisible(True)
+
+    # Create the menu
+    menu = QMenu()
+    action = QAction("Open Main Window")
+    menu.addAction(action)
+
+    # Add a Quit option to the menu.
+    quit = QAction("Quit")
+    quit.triggered.connect(app.quit)
+    menu.addAction(quit)
+
+    # Add the menu to the tray
+    tray.setContextMenu(menu)
+    tray.setToolTip("I like Chopin")
+
     widget.show()
     sys.exit(app.exec())

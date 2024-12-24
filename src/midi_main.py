@@ -48,6 +48,9 @@ class ClassMidiMain(QObject):
     def __del__(self):
         print(f"MidiMain {self.uuid} destroyed")
 
+    def GetMidiApi(self):
+        return mido.backend.module.get_api_names()
+
     def GetDevices(self):
         Inputs = []
         Outputs = []

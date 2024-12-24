@@ -22,14 +22,14 @@ class ClassThreadOutput(QThread):
     please_wait = False
     running = False
 
-    led_activity = Signal(int)
+    led_out_activity = Signal(int)
 
     def __init__(self, out_device, pParent):
         QThread.__init__(self)
         self.pParent = pParent
         self.Settings = pParent.Settings
         self.out_device = out_device
-        self.led_activity.connect(self.pParent.SetLedOutput)
+        self.led_out_activity.connect(self.pParent.SetLedOutput)
         print(f"MidiOutput {self.uuid} created [{self.out_device}]")
 
     def __del__(self):
@@ -38,7 +38,7 @@ class ClassThreadOutput(QThread):
     def run(self):
         self.please_wait = True
         try:
-            self.outport = open_output(self.out_device, autoreset=True)
+            self.outport = open_output(self.out_device, autoreset=True)  # strange : , client_name='OUTPUT CHOPIN'
         except Exception as error:
             self.outport = None
             print(f"|!| MidiOutput {self.uuid} {error}")
@@ -88,11 +88,11 @@ class ClassThreadOutput(QThread):
 
             if message.type == "note_on":
                 if message.velocity:
-                    self.led_activity.emit(1)
+                    self.led_out_activity.emit(1)
                 else:
-                    self.led_activity.emit(0)
+                    self.led_out_activity.emit(0)
             else:
-                self.led_activity.emit(0)
+                self.led_out_activity.emit(0)
 
     def getport(self):
         if self.running:

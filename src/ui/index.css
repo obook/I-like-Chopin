@@ -8,11 +8,11 @@ body {
     margin-left: 1em; margin-right: 1em;
 }
 
-/* Duration */
-.duration{
+/* Info Line */
+.info_line{
     color:#eee;
-    /*font-size: calc(.5em + 1.5vw);
-    text-indent:10px;*/
+    font-size: calc(.5em + 0.4vw);
+    background-color: rgb(46, 46, 46) !important;
 }
 
 .class_filename a {
@@ -35,7 +35,7 @@ body {
 }
 
 .class_songname_1 { /* Ready+Playing */
-    color: green !important;
+    color: rgb(0, 156, 0) !important;
 }
 
 .class_songname_2 { /* Passthrough */

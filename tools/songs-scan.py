@@ -4,15 +4,20 @@
 Created on Wed Aug  7 14:17:57 2024
 @author: obooklage
 Tool for search nice midifiles regarding tracks and sustain pedal
+Todo : bad tracks number
 """
 
 import os
 import glob
-import os
 from mido import MidiFile
 
 
 def SystainPedalCheck(file):
+    """Analyse un fichier MIDI.
+
+    Retourne la durée en secondes, le nombre de pistes
+    et le nombre d'évenements sustain
+    """
     sustain = 0
     tracks = 0
     duration = 0
@@ -41,9 +46,10 @@ def SystainPedalCheck(file):
 
 print("** START")
 
-root_dir = os.path.expanduser("~/MIDI")
+root_dir = os.path.expanduser("~/MIDI")  # ~/MIDI
 logfile = os.path.join(root_dir, "MIDILIST.csv")
 f = open(logfile, "w")
+f.write("index;filename;duration;tracks;sustain\n")
 
 files = glob.glob(root_dir + '/**/*.mid', recursive=True)
 print(f"Scan for {len(files)} files in {root_dir}")
@@ -53,7 +59,7 @@ for filename in files:
     duration, tracks, sustain = SystainPedalCheck(filename)
     if tracks <= 4 and sustain > 10:
         print(f"tracks={tracks} sustain={sustain} {filename}")
-        f.write(f"{index};{filename};{round(duration)};{tracks};{sustain}"+"\n")
+        f.write(f"{index};\"{filename}\";{round(duration)};{tracks};{sustain}\n")
         index += 1
         f.flush()
 

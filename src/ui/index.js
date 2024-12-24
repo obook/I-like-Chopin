@@ -26,13 +26,13 @@ function toggleFullScreen() {
 async function PlaySong(song) {
     ShowLoader();
     CleanSongName(true);
-    const response = await fetch('/?play='+song);
+    const response = await fetch('/play?song='+song);
 }
 
 /* Click on navbar button */
-async function OrderDo(order) {
+async function OrderDo(action) {
     ShowLoader();
-    const response = await fetch('/?do='+order);
+    const response = await fetch('/do?action='+action);
     GetStats();
 }
 
@@ -40,7 +40,7 @@ async function OrderDo(order) {
 $('#select-mode').change(function () {
     ShowLoader();
     const mode = $(this).val();
-    const response = fetch('/?mode='+mode);
+    const response = fetch('/player?mode='+mode);
 });
 
 /* Clean songname style */
@@ -54,7 +54,7 @@ function CleanSongName(empty_strings=false) {
     if(empty_strings==true) {
         $('#songname').text("...");;
         $('#folder').text("");
-        $('#duration').text("");
+        $('#info_line').text("");
         $('#progressbar').val(0);
     }
 }
@@ -81,7 +81,9 @@ async function GetStats() {
         const response = await fetch('/status.json');
         const data = await response.json();
 
-        /* debug console.log(data); */
+        /* debug
+        console.log("DEBUG COUCOU GetStats=" + data.uuid);
+        */
 
         /* uuid */
         song_uuid = data.uuid;
@@ -96,6 +98,22 @@ async function GetStats() {
         /* Song Name */
         $('#songname').text(data.nameclean);
         document.title = data.nameclean;
+
+        /* Music sheet
+        Add +'#option1=value&option2=value...'
+
+        toolbar=1' : title in brave, no effect with firefox
+        toolbar=0' : remove toolbar in brave, no effect with firefox
+
+        pagemode=thumbs : is default for brave, is not per default with firefox
+        pagemode=bookmarks : is default for brave, is not per default with firefox
+        pagemode=none : ?
+
+        view=FitH : ok Brave, notok Firefox
+
+        $('#score').attr('href', "../score?pdf=" + data.score + '#view=FitH&toolbar=0&pagemode=thumbs');
+        */
+        $('#score').attr('href', "../score?pdf=" + data.score + '#view=FitH');
 
         /* Parent folder of MIDIfile */
         $('#folder').text(data.folder);
@@ -112,21 +130,20 @@ async function GetStats() {
         const seconds = Math.floor((data.duration - minutes)*60);
         line = minutes+"'"+String(seconds).padStart(2, '0');
         if(data.sustain > 0)
-            line = line + " 🎹"
+            line = line + " 𝄞"
         else
-            line = line + " 💻"
+            line = line + " ❌"
         line = line + " ["+channels+"] ";
-        $('#duration').text(line);
+        $('#info_line').text(line);
 
         /* Progress bar */
         $('#progressbar').val(data.played);
 
         /* Handle MIDIfile states and errors */
-
         if (data.state <0) {
             $("#songname").addClass("class_songname_error"); /* Error */
         if  (data.state ==-4)  {/* no track to play */
-            document.getElementById('duration').textContent="! NO ACTIVE TRACK TO PLAY";
+            document.getElementById('info_line').textContent="! NO ACTIVE TRACK TO PLAY";
         }
         }
         else if (data.state <2) /* state 1 or 2 unknown or cueing */
@@ -143,7 +160,6 @@ async function GetStats() {
         }
 
         /* Mode */
-
         if (data.mode == 1)
             $('#select-mode').val("playback").selectmenu('refresh');
         else if (data.mode == 2)
@@ -160,7 +176,7 @@ async function GetStats() {
         $("#songname").addClass("class_songname_error");
         $('#songname').text("OFFLINE");;
         $('#folder').text("");
-        $('#duration').text("");
+        $('#info_line').text("");
         $('#progressbar').val(0);
     }
 }
@@ -176,9 +192,9 @@ async function GetFiles() {
 
         for(var artist in data) {
 
-            html = html + "<div data-role='collapsible'>\n";
-            html = html + "<h2>"+artist+"</h2>\n";
-            html = html + "<ul data-role='listview' data-autodividers='true'>\n";
+            html = html + `<div data-role='collapsible'>\n` +
+            `<h2>${artist}</h2>\n` +
+            `<ul data-role='listview' data-autodividers='true'>\n`;
 
             for (var midifiles in data[artist]) {
                 const filePath = data[artist][midifiles];
@@ -196,7 +212,10 @@ async function GetFiles() {
                 fileNameShort = fileNameShort.replaceAll("_"," ");
                 fileNameShort = fileNameShort.replaceAll("-"," ");
                 fileNameShort = fileNameShort.replaceAll(",","");
-                html = html + " <li class='class_filename' data-theme='a' data-icon='plus'><a href='#' onclick='PlaySong( \""+filePath_URI+"\" );'>"+fileNameShort+"</a><a href='#playlist_add' data-rel='popup' data-position-to='window' data-transition='pop'>Purchase album</a></li>\n";
+                html = html + ` <li class='class_filename' data-theme='a' data-icon='plus'>` +
+                `<a href='#' onclick='PlaySong("${filePath_URI}");'>${fileNameShort}</a>` +
+                /* `<a href='#playlist_add' data-rel='popup' data-position-to='window' data-transition='pop'>Purchase album</a>`+ */
+                `</li>\n`;
             }
 
             html = html +"</ul>\n</div>\n";
