@@ -160,8 +160,6 @@ class ClassThreadMidiReader(QThread):
             while self.midisong.IsMode(modes["passthrough"]):
                 if not self.running:
                     return
-
-                print("----> passthrough!")
                 self.sleep(1)
 
             # Stop while running ?

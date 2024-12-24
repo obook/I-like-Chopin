@@ -52,9 +52,7 @@ class signals:
         else:
             self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_CHECK_RED))
 
-    # Some probleme qui raw commands from webserver. So tests here...
-
-    # Signal receivers
+    # Signal receivers from webserver and midi_input
     def SignalShuffleMidifile(self):
         self.ShuffleMidifile()
 
