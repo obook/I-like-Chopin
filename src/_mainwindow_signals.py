@@ -41,7 +41,7 @@ class signals:
         else:
             self.ui.labelStatusMidifile.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
 
-    # Signal receiver
+    # Signal receiver, Star mean quality
     def SetStarFile(self, value=0):  # -1=red 0=off 2=yellow, 3=green
         if value == 0:
             self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_CHECK_OFF))
@@ -52,3 +52,17 @@ class signals:
         else:
             self.ui.labelLedQuality.setPixmap(QtGui.QPixmap(self.ICON_CHECK_RED))
 
+    # Some probleme qui raw commands from webserver. So tests here...
+
+    # Signal receiver
+    def SignalShuffleMidifile(self):
+        self.ShuffleMidifile()
+
+    def SignalReplayMidifile(self):
+        self.MidifileReplay()
+
+    def SignalTooglePlayerMode(self): # Playback/Passthrough
+        self.TooglePlayerMode()
+
+    def SignalStop(self):
+        self.Midi.StopPlayer()
