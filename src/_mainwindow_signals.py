@@ -67,7 +67,7 @@ class signals:
     def SignalStop(self):
         self.Midi.StopPlayer()
 
-    def SignalMidifileChange(self, file):
+    def SignalMidifileChange(self, midifile):
         self.MidifileChange(midifile)
 
     def SignalChangePlayerMode(self, mode):
