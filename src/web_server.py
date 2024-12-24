@@ -14,7 +14,7 @@ from PySide6.QtCore import QThread, Signal
 from web_network import ClassWebNetwork
 
 '''
-From original bottle.py code
+Class MyWSGIRefServer from original bottle.py code
 Homepage and documentation: http://bottlepy.org/
 Copyright (c) 2009-2024, Marcel Hellkamp.
 License: MIT (see LICENSE for details)
