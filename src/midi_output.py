@@ -38,7 +38,7 @@ class ClassThreadOutput(QThread):
     def run(self):
         self.please_wait = True
         try:
-            self.outport = open_output(self.out_device, autoreset=True)
+            self.outport = open_output(self.out_device, autoreset=True)  # strange : , client_name='OUTPUT CHOPIN'
         except Exception as error:
             self.outport = None
             print(f"|!| MidiOutput {self.uuid} {error}")
