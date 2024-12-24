@@ -209,6 +209,10 @@ class ClassWebServer(QThread):
         self.server = MyBottleServer(host="0.0.0.0", port=server_port, launcher=self)
         self.server.run()
 
+    def stop(self):
+        print(f"WebServer {self.uuid} stop")
+        self.server.end()
+
     # Signals to parent
     def ReplaySong(self):
         print("---> DEBUG ClassWebServer send ReplaySong...")
@@ -221,7 +225,3 @@ class ClassWebServer(QThread):
     def StopSong(self):
         print("---> DEBUG ClassWebServer send StopSong...")
         self.SignalStop.emit()
-
-    def stop(self):
-        print(f"WebServer {self.uuid} stop")
-        self.server.end()
