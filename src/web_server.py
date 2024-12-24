@@ -185,8 +185,8 @@ class ClassWebServer(QThread):
     uuid = None
     pParent = None
 
-    replay_activity = Signal()
-    shuffle_activity = Signal()
+    SignalReplay = Signal()
+    SignalShuffle = Signal()
     SignalStop = Signal()
 
     def __init__(self, parent):
@@ -195,8 +195,8 @@ class ClassWebServer(QThread):
         self.pParent = parent
 
         # Signals
-        self.shuffle_activity.connect(self.pParent.SignalShuffleMidifile)
-        self.replay_activity.connect(self.pParent.SignalReplayMidifile)
+        self.SignalShuffle.connect(self.pParent.SignalShuffleMidifile)
+        self.SignalReplay.connect(self.pParent.SignalReplayMidifile)
         self.SignalStop.connect(self.pParent.SignalStop)
 
         print(f"WebServer {self.uuid} started")
@@ -212,11 +212,11 @@ class ClassWebServer(QThread):
     # Signals to parent
     def ReplaySong(self):
         print("---> DEBUG ClassWebServer send ReplaySong...")
-        self.replay_activity.emit()
+        self.SignalReplay.emit()
 
     def ShuffleSong(self):
         print("---> DEBUG ClassWebServer send ShuffleSong...")
-        self.shuffle_activity.emit()
+        self.SignalShuffle.emit()
 
     def StopSong(self):
         print("---> DEBUG ClassWebServer send StopSong...")
