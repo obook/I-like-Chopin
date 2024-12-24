@@ -268,7 +268,7 @@ class Mainwindow(
 
     def TooglePlayerMode(self):  # Just player/passthrough, only called by midi_input
 
-        print(f"self.Settings.GetMode={self.Settings.GetMode()}")
+        # print(f"self.Settings.GetMode={self.Settings.GetMode()}")
 
         if self.Settings.IsMode(modes["passthrough"]):
             self.Settings.SaveMode(modes["random"])
