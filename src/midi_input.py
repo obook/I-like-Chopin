@@ -28,8 +28,12 @@ class ClassThreadInput(QThread):
 
     led_input_activity = Signal(int)
     statusbar_activity = Signal(str)
-    # nextsong_activity = Signal()
-    # previousong_activity = Signal()
+    shuffle_activity = Signal()
+    replay_activity = Signal()
+    toogle_activity = Signal()
+
+
+
 
     def __init__(self, in_device, keys, pParent):
         QThread.__init__(self)
@@ -41,6 +45,11 @@ class ClassThreadInput(QThread):
         self.running = True
         self.led_input_activity.connect(self.pParent.SetLedInput)
         self.statusbar_activity.connect(self.pParent.SetStatusBar)
+
+        self.shuffle_activity.connect(self.pParent.SignalShuffleMidifile)
+        self.replay_activity.connect(self.pParent.SignalReplayMidifile)
+        self.toogle_activity.connect(self.pParent.SignalTooglePlayerMode)
+
         # self.nextsong_activity.connect(self.pParent.NextMidifile)
         # self.previousong_activity.connect(self.pParent.PreviousMidifile)
         print(f"MidiInput {self.uuid} created [{self.in_device}]")
@@ -54,7 +63,7 @@ class ClassThreadInput(QThread):
     def run(self):
 
         try:
-            self.in_port = open_input(self.in_device, callback=self.callback)
+            self.in_port = open_input(self.in_device, callback=self.callback)  # , client_name='INPUT CHOPIN' = no connexion
             self.running = True
         except Exception as error:
             print(f"|!| MidiInput {self.uuid} {error}")
@@ -83,8 +92,12 @@ class ClassThreadInput(QThread):
             elif msg.control == 76:
                 self.keys["speed"] = msg.value  # 0 to 127
                 self.pParent.PrintSpeed(msg.value)  # PLEASE USE SIGNAL
+
+            ''' Arturia KeyStep 37
             elif msg.control == 51 and msg.value == 127:
-                self.pParent.TooglePlayerMode()  # PLEASE USE SIGNAL
+                self.toogle_activity.emit()
+            '''
+
             """
             elif msg.control == 1:  # modulation
                 diff = time.time() - self.modulation_start_time
@@ -97,8 +110,17 @@ class ClassThreadInput(QThread):
                 self.sleep(0.01)  #  for QT
             """
 
+        # Special Arturia keylab 61 essential
+        elif msg.type == "sysex":
+            if msg.data == (0,32,107,127,66,2,0,0,25,0):  # shuffle with the key '->' released
+                self.shuffle_activity.emit()
+            elif msg.data == (0, 32, 107, 127, 66, 2, 0, 0, 24, 0):  # replay with the key '<-' released
+                self.replay_activity.emit()
+            elif msg.data == (0, 32, 107, 127, 66, 2, 0, 0, 23, 0):  # switch mode playnack/passthrough with the key 'Preset' released
+                self.toogle_activity.emit()
+
         # Keys pressed counter
-        if msg.type == "note_on":
+        elif msg.type == "note_on":
             if msg.velocity:
                 self.keys["key_on"] += 1
                 self.led_input_activity.emit(1)
@@ -107,6 +129,7 @@ class ClassThreadInput(QThread):
                 # That is part of the MIDI Standard
                 self.keys["key_on"] -= 1
                 self.led_input_activity.emit(0)
+
         elif msg.type == "note_off":
             self.keys["key_on"] -= 1
             self.led_input_activity.emit(0)
