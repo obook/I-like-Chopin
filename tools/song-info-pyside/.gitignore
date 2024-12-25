@@ -76,5 +76,5 @@ CMakeLists.txt.user*
 __pycache__
 
 # QT User
-song-info-pyside.pyproject.user
+song-info-pyside.pyproject.user*
 .qtcreator
