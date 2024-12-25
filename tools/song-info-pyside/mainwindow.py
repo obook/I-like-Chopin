@@ -1,4 +1,7 @@
 # This Python file uses the following encoding: utf-8
+'''
+Require : PySide6 mido python-rtmidi matplotlib
+'''
 import sys
 import os
 from pathlib import Path, PurePath
