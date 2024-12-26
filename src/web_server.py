@@ -155,6 +155,11 @@ class MyBottleServer:
             mode = request.query.mode
             self.pLauncher.ChangeMode(mode)
 
+        @route('/add')
+        def _add():
+            quality = request.query.quality
+            self.pLauncher.AddToPlaylist(quality)
+
         @route('/score')
         def _score():
             pdf = request.query.pdf
@@ -179,6 +184,7 @@ class ClassWebServer(QThread):
     SignalStop = Signal()
     SignalMidifileChange = Signal(str)
     SignalChangePlayerMode = Signal(str)
+    SignalAddToPlaylist = Signal(str)
 
     def __init__(self, parent):
         QThread.__init__(self)
@@ -191,6 +197,7 @@ class ClassWebServer(QThread):
         self.SignalStop.connect(self.pParent.SignalStop)
         self.SignalMidifileChange.connect(self.pParent.SignalMidifileChange)
         self.SignalChangePlayerMode.connect(self.pParent.SignalChangePlayerMode)
+        self.SignalAddToPlaylist.connect(self.pParent.SignalAddToPlaylist)
 
         print(f"WebServer {self.uuid} started")
 
@@ -221,3 +228,6 @@ class ClassWebServer(QThread):
 
     def ChangeMode(self, mode):
         self.SignalChangePlayerMode.emit(mode)
+
+    def AddToPlaylist(self, quality):
+        self.SignalAddToPlaylist.emit(quality)

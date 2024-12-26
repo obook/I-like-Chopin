@@ -70,3 +70,8 @@ class signals:
 
     def SignalChangePlayerMode(self, mode):
         self.ChangePlayerMode(mode)
+
+    # The class playlust is not created for instance */
+    def SignalAddToPlaylist(self, quality):
+        # quality = star0, star1, star2, star3 or star 4
+        print(f"SignalAddToPlaylist {quality} {self.midisong.Getfilepath()} : not yet functionnal")

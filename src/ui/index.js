@@ -1,5 +1,10 @@
 
+/* Global variables */
+
 last_song_uuid = "";
+last_song_nameclean = ""; /* Eg "CHIQUITITA" NOT USED */
+last_song_folder = ""; /* Eg "ABBA" NOT USED */
+last_song_name = ""; /* Eg "Chiquitita.mid" NOT USED */
 
 /* Detect Windows */
 function IsWindowsPath(filePath) {
@@ -43,6 +48,13 @@ $('#select-mode').change(function () {
     const response = fetch('/player?mode='+mode);
 });
 
+/* Add to playlist */
+
+function PlayListAdd() {
+    let quality = $('#select-stars').find(":selected").val(); /* Eg 'star4' */
+    const response = fetch('/add?quality='+quality);
+}
+
 /* Clean songname style */
 function CleanSongName(empty_strings=false) {
     $("#songname").removeClass("class_songname_0");
@@ -82,22 +94,27 @@ async function GetStats() {
         const data = await response.json();
 
         /* debug
-        console.log("DEBUG COUCOU GetStats=" + data.uuid);
+        console.log("DEBUG GetStats=");
+        console.log(data);
         */
 
         /* uuid */
         song_uuid = data.uuid;
 
-        if(song_uuid != last_song_uuid)  {
+        if(song_uuid != last_song_uuid)  { /* New song */
             CleanSongName(true);
         }
         else {
-            last_song_uuid =song_uuid;
+            last_song_uuid = song_uuid;
         }
 
         /* Song Name */
         $('#songname').text(data.nameclean);
         document.title = data.nameclean;
+
+        last_song_nameclean = data.nameclean; /* Eg "CHIQUITITA" */
+        last_song_folder = data.folder; /* Eg "ABBA" */
+        last_song_name = data.name; /* Eg "Chiquitita.mid" */
 
         /* Music sheet
         Add +'#option1=value&option2=value...'
@@ -212,10 +229,17 @@ async function GetFiles() {
                 fileNameShort = fileNameShort.replaceAll("_"," ");
                 fileNameShort = fileNameShort.replaceAll("-"," ");
                 fileNameShort = fileNameShort.replaceAll(",","");
+
+                html = html + ` <li class='class_filename' data-theme='a'>` +
+                `<a href='#' onclick='PlaySong("${filePath_URI}");'>${fileNameShort}</a>` +
+                `</li>\n`;
+
+                /* NOT USED : because NEW VOTE BUTTON
                 html = html + ` <li class='class_filename' data-theme='a' data-icon='plus'>` +
                 `<a href='#' onclick='PlaySong("${filePath_URI}");'>${fileNameShort}</a>` +
-                /* `<a href='#playlist_add' data-rel='popup' data-position-to='window' data-transition='pop'>Purchase album</a>`+ */
+                `<a href='#playlist_add' data-rel='popup' data-position-to='window' data-transition='pop'>Purchase album</a>`+
                 `</li>\n`;
+                */
             }
 
             html = html +"</ul>\n</div>\n";
