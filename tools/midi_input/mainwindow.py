@@ -14,6 +14,24 @@ import mido
 #     pyside2-uic form.ui -o ui_form.py
 from ui_form import Ui_MainWindow
 
+NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+OCTAVES = list(range(11))
+NOTES_IN_OCTAVE = len(NOTES)
+ERRORS = {
+    "program": "Bad input, please refer this spec-\n"
+    "http://www.electronics.dit.ie/staff/tscarff/Music_technology/midi/program_change.htm",
+    "notes": "Bad input, please refer this spec-\n"
+    "http://www.electronics.dit.ie/staff/tscarff/Music_technology/midi/midi_note_numbers_for_octaves.htm",
+}
+
+
+def number_to_note(number: int) -> str:
+    octave = number // NOTES_IN_OCTAVE
+    assert octave in OCTAVES, ERRORS["notes"]
+    assert 0 <= number <= 127, ERRORS["notes"]
+    note = NOTES[number % NOTES_IN_OCTAVE]
+    return note + str(octave-1)  # octave start to zero
+
 
 class MainWindow(QMainWindow):
     """Main class."""
@@ -70,10 +88,52 @@ class MainWindow(QMainWindow):
 
     def callback(self, msg):
         """Handle MIDI events from device."""
+
+        """
+        See : https://github.com/NicoG60/TouchMCU/blob/main/doc/mackie_control_protocol.md
+
+        Play 	A#6 	94 	5E
+        Stop 	A6 	93 	5D
+        Record 	B6 	95 	5F
+        Cycle 	D6 	86 	56
+        Rewind 	G6 	91 	5B
+        Forward 	G#6 	92 	5C
+        Save 	G#5 	80 	50
+        Undo 	A5 	81 	51
+        Click 	F6 	89 	59 (metronome)
+
+        Punch is a sequence:
+            note_on channel 0 note D#6 [87,0x57] velocity 127
+            note_on channel 0 note E6 [88,0x58] velocity 127
+            note_on channel 0 note D#6 [87,0x57] velocity 0
+            note_on channel 0 note E6 [88,0x58] velocity 0
+        """
+
         text = f"{msg.type} "
 
         if msg.type == 'note_on' or msg.type == 'note_off':
-            text += f"channel {msg.channel} note {msg.note} velocity {msg.velocity}"
+            text += f"channel {msg.channel} note {number_to_note(msg.note)} [{msg.note},{hex(msg.note)}] velocity {msg.velocity}"
+
+            # For fun
+            if msg.channel == 0:
+                if msg.note == 94 and msg.velocity:
+                    self.log_activity.emit("Play")
+                elif msg.note == 93 and msg.velocity:
+                    self.log_activity.emit("Stop")
+                elif msg.note == 95 and msg.velocity:
+                    self.log_activity.emit("Record")
+                elif msg.note == 86 and msg.velocity:
+                    self.log_activity.emit("Cycle")
+                elif msg.note == 91 and msg.velocity:
+                    self.log_activity.emit("Rewind")
+                elif msg.note == 92 and msg.velocity:
+                    self.log_activity.emit("Forward")
+                elif msg.note == 80 and msg.velocity:
+                    self.log_activity.emit("Save")
+                elif msg.note == 81 and msg.velocity:
+                    self.log_activity.emit("Undo")
+                elif msg.note == 89 and msg.velocity:
+                    self.log_activity.emit("Click")
 
         elif msg.type == 'control_change':
             text += f"channel {msg.channel} control {msg.control} value {msg.value} time {msg.time}"
