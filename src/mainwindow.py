@@ -6,11 +6,13 @@ Created on Wed Jun  5 18:19:14 2024
 """
 import sys
 import os
+import time
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QSystemTrayIcon, QMenu
 from PySide6.QtGui import QIcon, QAction
 from PySide6.QtCore import QEvent
 from midi_song import modes
+from midi_controller import ClassMidiController
 
 from informations_dialog import ShowInformationDlg
 from settings_dialog import ShowSettingsDlg
@@ -58,7 +60,6 @@ class Mainwindow(
 
         # tray.show()
 
-
         # Midi
 
         self._midi_init()
@@ -89,6 +90,11 @@ class Mainwindow(
 
         self.midifiles_dict = self.Midifiles.ScanFiles(self.Settings.GetMidiPath())
 
+        # Controller
+
+        self.midi_controller = ClassMidiController(self)
+        self.midi_controller.start()
+
         self.web_start()
         self.SetTimer()
 
@@ -104,6 +110,7 @@ class Mainwindow(
 
     def MidifileReplay(self):  # ! WARNING ! DO NOT TOUCH INTERFACE (Called by Threads)
         if self.lastmidifile:
+            # self.SetStatusBar("...")  # OBOOK Ne fonctionne pas ?
             self.midisong = self.Midi.SetMidiSong(self.lastmidifile)
 
     """
@@ -145,10 +152,12 @@ class Mainwindow(
         step = int(128 / len(files))
         FilesIndex = min(int(value / step), len(files) - 1)
         if self.lastmidifile != files[FilesIndex]:
+            ''' ???????????
             self.ui.pushButton_FileIndex.setText(
                 f"MidiFile {FilesIndex+1}/{len(files)}"
             )
             # clean_name = self.History.GetCleanName(FilesIndex)
+            '''
 
             self.ui.pushButton_Files.setText(
                 self.History.GetCleanName(FilesIndex)
@@ -310,6 +319,12 @@ class Mainwindow(
     def Quit(self):
 
         self.StopTimers()
+
+        if self.midi_controller:
+            self.midi_controller.stop()
+            while self.midi_controller.isRunning():
+                time.sleep(0.01)
+            self.midi_controller = None
 
         if self.Web_server:
             self.Web_server.stop()

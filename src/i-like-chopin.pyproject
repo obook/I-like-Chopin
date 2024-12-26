@@ -23,6 +23,7 @@
         "_mainwindow_init.py",
         "settings_dialog.ui",
         "settings_dialog.py",
-        "web_network.py"
+        "web_network.py",
+        "midi_controller.py"
     ]
 }

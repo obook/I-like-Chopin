@@ -1,6 +1,7 @@
 # This Python file uses the following encoding: utf-8
 '''
 Require : PySide6 mido python-rtmidi
+Objective : get and send Midi data from Arturia Keylab 61 essential from DAW port
 '''
 import sys
 import platform
@@ -37,6 +38,7 @@ class MainWindow(QMainWindow):
     """Main class."""
 
     in_port = None
+    out_port = None
     log_activity = Signal(str)
 
     def __init__(self, parent=None):
@@ -76,15 +78,34 @@ class MainWindow(QMainWindow):
 
     def InputDeviceChanged(self):
         """Open the MIDI port selected."""
-        in_device = self.ui.InputDeviceCombo.currentText()
+        device = self.ui.InputDeviceCombo.currentText()
+
+        # INPUT-MIDI port
         if self.in_port:
             self.in_port.close()
         self.ui.plainTextEdit.clear()
+
         try:
-            self.in_port = mido.open_input(in_device, callback=self.callback)
-            self.log_activity.emit(f"Listen {in_device}")
+            self.in_port = mido.open_input(device, callback=self.callback)
+            self.log_activity.emit(f"Listen {device}")
         except Exception as error:
-            self.log_activity.emit(f"{in_device} : {error}")
+            self.log_activity.emit(f"FROM {device} : {error}")
+
+        # OUTPUT-MIDI port
+        if self.out_port:
+            self.out_port.close()
+        try:
+            self.out_port = mido.open_output(device)
+        except Exception as error:
+            self.log_activity.emit(f"TO {device} : {error}")
+
+    def ClearSurfaceKeyboard(self):
+        """Shutdown all lights from surface control (Arturia)."""
+        keys = [94, 93, 95, 86, 91, 92, 80, 81, 89]
+        if self.out_port:
+            for key in keys:
+                msg = mido.Message('note_on', note=key, velocity=0)  # note_off do not works
+                self.out_port.send(msg)
 
     def callback(self, msg):
         """Handle MIDI events from device."""
@@ -118,22 +139,84 @@ class MainWindow(QMainWindow):
             if msg.channel == 0:
                 if msg.note == 94 and msg.velocity:
                     self.log_activity.emit("Play")
+
+                    # Clear other
+                    self.ClearSurfaceKeyboard()
+                    # Lite Play key
+                    msg = mido.Message('note_on', note=94)
+                    self.out_port.send(msg)
+
                 elif msg.note == 93 and msg.velocity:
                     self.log_activity.emit("Stop")
+
+                    # Clear other
+                    self.ClearSurfaceKeyboard()
+                    # Lite Stop key
+                    msg = mido.Message('note_on', note=93)
+                    self.out_port.send(msg)
+
                 elif msg.note == 95 and msg.velocity:
                     self.log_activity.emit("Record")
+
+                    # Clear other
+                    self.ClearSurfaceKeyboard()
+                    # Lite Record key
+                    msg = mido.Message('note_on', note=95)
+                    self.out_port.send(msg)
+
                 elif msg.note == 86 and msg.velocity:
                     self.log_activity.emit("Cycle")
+
+                    # Clear other
+                    self.ClearSurfaceKeyboard()
+                    # Lite Cycle key
+                    msg = mido.Message('note_on', note=86)
+                    self.out_port.send(msg)
+
                 elif msg.note == 91 and msg.velocity:
                     self.log_activity.emit("Rewind")
+
+                    # Clear other
+                    self.ClearSurfaceKeyboard()
+                    # Lite Rewind key
+                    msg = mido.Message('note_on', note=91)
+                    self.out_port.send(msg)
+
                 elif msg.note == 92 and msg.velocity:
                     self.log_activity.emit("Forward")
+
+                    # Clear other
+                    self.ClearSurfaceKeyboard()
+                    # Lite Forward key
+                    msg = mido.Message('note_on', note=92)
+                    self.out_port.send(msg)
+
                 elif msg.note == 80 and msg.velocity:
                     self.log_activity.emit("Save")
+
+                    # Clear other
+                    self.ClearSurfaceKeyboard()
+                    # Lite Save key
+                    msg = mido.Message('note_on', note=80)
+                    self.out_port.send(msg)
+
                 elif msg.note == 81 and msg.velocity:
                     self.log_activity.emit("Undo")
+
+                    # Clear other
+                    self.ClearSurfaceKeyboard()
+                    # Lite Undo key
+                    msg = mido.Message('note_on', note=81)
+                    self.out_port.send(msg)
+
                 elif msg.note == 89 and msg.velocity:
                     self.log_activity.emit("Click")
+
+                    # Clear other
+                    self.ClearSurfaceKeyboard()
+                    # Lite Click key
+                    msg = mido.Message('note_on', note=89)
+                    self.out_port.send(msg)
 
         elif msg.type == 'control_change':
             text += f"channel {msg.channel} control {msg.control} value {msg.value} time {msg.time}"

@@ -24,6 +24,7 @@ class midi:
     Inputs = []
     Outputs = []
     InputsOutputs = []
+    midi_controller = None
 
     def _midi_init(self):
         # Midi class
