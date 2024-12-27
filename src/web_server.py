@@ -43,8 +43,14 @@ class MyWSGIRefServer(ServerAdapter):
                 class server_cls(server_cls):
                     address_family = socket.AF_INET6
 
-        self.srv = make_server(self.host, self.port, app, server_cls, handler_cls)
-        self.port = self.srv.server_port  # update port actual port (0 means random)
+        # If port is busy !
+        try:
+            self.srv = make_server(self.host, self.port, app, server_cls, handler_cls)
+            self.port = self.srv.server_port  # update port actual port (0 means random)
+        except Exception as error:
+            print(f"|!| WEBSERVER CAN NOT START : {error}")
+            self.srv= None
+            return
 
         ''' We do not use KeyboardInterrupt
         try:
@@ -57,8 +63,9 @@ class MyWSGIRefServer(ServerAdapter):
         self.srv.serve_forever()
 
     def shutdown(self):  # ADD SHUTDOWN METHOD.
-        self.srv.server_close()
-        self.srv.shutdown()
+        if self.srv:
+            self.srv.server_close()
+            self.srv.shutdown()
 
 class MyBottleServer:
 
