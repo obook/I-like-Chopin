@@ -31,6 +31,7 @@ class ClassSettings:
     config = {
         "InputDevice": "(None)",
         "OutputDevice": "(None)",
+        "ControllertDevice": "(None)",
         "MidiPath": defaultmidipath,
         "ForceInstrument": False,
         "PianoProgram": 0,
@@ -40,6 +41,7 @@ class ClassSettings:
         "SpeedControlChannel": 76,
         "FilesControlChannel": 77,
         "RtMidiBackend": "",  # Empty, LINUX_ALSA or UNIX_JACK
+        "DebugMsg": False,
     }
 
     def __init__(self):
@@ -165,6 +167,12 @@ class ClassSettings:
 
     def SaveForceIntrument(self, value):
         return self.SetSetting("ForceInstrument", value)
+
+    def GetDebugMsg(self):
+        return self.GetSetting("DebugMsg", False)
+
+    def SaveDebugMsg(self, value):
+        return self.SetSetting("DebugMsg", value)
 
     def SavePianoProgram(self, value):  # not used
         return self.SetSetting("PianoProgram", value)

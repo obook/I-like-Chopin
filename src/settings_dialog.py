@@ -63,12 +63,15 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
             f"Force piano (prog {self.Settings.GetPianoProgram()})"
         )
 
+        self.checkBox_DebugMSG.setChecked(self.Settings.GetDebugMsg())
+
     def __del__(self):
         self.ApiComboChanged()  # first, change API
         self.InputDeviceChanged()
         self.OuputDeviceChanged()
         self.ControllerDeviceChanged()
         self.Settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
+        self.Settings.SaveDebugMsg(self.checkBox_DebugMSG.isChecked())
         print(f"SettingsDlg {self.__uuid} destroyed")
 
     def InputDeviceChanged(self):
