@@ -60,8 +60,11 @@ class Mainwindow(
 
         # tray.show()
 
-        # Midi
+        # Controller
+        self.midi_controller = ClassMidiController(self)
+        self.midi_controller.start()
 
+        # Midi
         self._midi_init()
 
         # Force playback mode
@@ -89,11 +92,6 @@ class Mainwindow(
             self.SetFileButtonText()
 
         self.midifiles_dict = self.Midifiles.ScanFiles(self.Settings.GetMidiPath())
-
-        # Controller
-
-        self.midi_controller = ClassMidiController(self)
-        self.midi_controller.start()
 
         self.web_start()
         self.SetTimer()

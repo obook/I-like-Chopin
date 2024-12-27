@@ -10,8 +10,7 @@ Tested with Arturia KeyLab 61 Essential
 
 import uuid
 from mido import (open_input, open_output, Message)
-from PySide6.QtCore import QThread, Signal
-
+from PySide6.QtCore import (QThread, QTimer, Signal)
 
 class ClassMidiController(QThread):
 
@@ -20,7 +19,9 @@ class ClassMidiController(QThread):
     device = None
     from_controller = None
     to_controller = None
+    timer_controller = None
     running = False
+    current_keys_list = []
 
     SignalReplay = Signal()
     SignalShuffle = Signal()
@@ -43,6 +44,11 @@ class ClassMidiController(QThread):
         self.SignalChangePlayerMode.connect(self.pParent.SignalChangePlayerMode)
         self.SignalAddToPlaylist.connect(self.pParent.SignalAddToPlaylist)
 
+        # Timer
+        self.timer_controller = QTimer(self)
+        self.timer_controller.timeout.connect(self.timer)
+        self.timer_controller.start(3000)  # 3 seconds
+
         print(f"ClassMidiController {self.uuid} created [{self.device}]")
 
     def __del__(self):
@@ -62,12 +68,14 @@ class ClassMidiController(QThread):
             self.from_controller.close()
             return
 
-        self.ClearSurfaceKeyboard()
+        self.ClearSurfaceKeyboard(True)
 
         self.running = True
 
         while self.running:
             self.sleep(1)
+
+        self.ClearSurfaceKeyboard(True)
 
         self.from_controller.close()
         self.to_controller.close()
@@ -102,6 +110,7 @@ class ClassMidiController(QThread):
                 # Key : Play = rewind to start and wait
                 if msg.note == 94 and msg.velocity:
                     self.ClearSurfaceKeyboard()
+                    self.current_keys_list.append(msg.note)
                     msg = Message('note_on', note=94)
                     self.to_controller.send(msg)
                     self.SignalReplay.emit()
@@ -111,6 +120,7 @@ class ClassMidiController(QThread):
                 # Key : Stop = stop the song
                 elif msg.note == 93 and msg.velocity:
                     self.ClearSurfaceKeyboard()
+                    self.current_keys_list.append(msg.note)
                     msg = Message('note_on', note=93)
                     self.to_controller.send(msg)
                     self.SignalStop.emit()
@@ -119,7 +129,9 @@ class ClassMidiController(QThread):
 
                 # Key : Cycle : shuffle a new song
                 elif msg.note == 86 and msg.velocity:
+                    self.SignalStop.emit()  # stop first
                     self.ClearSurfaceKeyboard()
+                    self.current_keys_list.append(msg.note)
                     msg = Message('note_on', note=86)
                     self.to_controller.send(msg)
                     self.SignalShuffle.emit()
@@ -128,13 +140,31 @@ class ClassMidiController(QThread):
 
         # print("--> ClassMidiController receive:", msg)
 
-    def ClearSurfaceKeyboard(self):
+    def ClearSurfaceKeyboard(self, force = False):
         """Shutdown all lights from surface control (Arturia)."""
         keys = [94, 93, 95, 86, 91, 92, 80, 81, 89]
         if self.to_controller:
-            for key in keys:
-                msg = Message('note_on', note=key, velocity=0)  # note_off do not works
-                self.to_controller.send(msg)
+            if len(self.current_keys_list):
+                for key in self.current_keys_list:
+                    msg = Message('note_on', note=key, velocity=0)
+                    self.to_controller.send(msg)
+                    self.current_keys_list.remove(key)
+
+            elif force:
+                self.current_keys_list = []
+                for key in keys:
+                    msg = Message('note_on', note=key, velocity=0)  # note_off do not works
+                    self.to_controller.send(msg)
+
+    def timer(self):
+            self.ClearSurfaceKeyboard()
+
+    # Signals
+    def SignalLightPlay(self):
+        if self.to_controller:
+            self.current_keys_list.append(94)
+            msg = Message('note_on', note=(94))
+            self.to_controller.send(msg)
 
     def stop(self):
         self.running = False

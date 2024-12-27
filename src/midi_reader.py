@@ -11,14 +11,13 @@ ici on a un soucis avec le release du sustain, et avec les notes off/note on ave
 import time
 import uuid
 import os
-from mido import Message
+from mido import (MidiFile, Message)
 
-from mido import MidiFile
+from PySide6.QtCore import (QThread, Signal)
+
 from midi_song import ClassMidiSong, states, modes
 from midi_numbers import number_to_note
-
-from PySide6.QtCore import QThread, Signal
-
+# from midi_controller import
 
 class ClassThreadMidiReader(QThread):
     """Read midifile and send to output device"""
@@ -48,6 +47,10 @@ class ClassThreadMidiReader(QThread):
     led_file_activity = Signal(int)
     star_file_activity = Signal(int)
 
+    SignalStop_activity = Signal()
+
+    SignalLightPlay_activity = Signal()
+
     def __init__(self, midifile, keys, channels, pParent):
         QThread.__init__(self)
         self.uuid = uuid.uuid4()
@@ -59,9 +62,13 @@ class ClassThreadMidiReader(QThread):
         self.Settings = self.pParent.Settings
         self.keys = keys
         self.channels = channels
+
         self.statusbar_activity.connect(self.pParent.SetStatusBar)
         self.led_file_activity.connect(self.pParent.SetLedFile)
         self.star_file_activity.connect(self.pParent.SetStarFile)
+
+        self.SignalLightPlay_activity.connect(self.pParent.midi_controller.SignalLightPlay)
+
         print(f"MidiReader {self.uuid} created [{os.path.basename(midifile)}]")
         self.midisong = ClassMidiSong(midifile)
 
@@ -135,6 +142,8 @@ class ClassThreadMidiReader(QThread):
 
     def run(self):
 
+        self.led_file_activity.emit(0)  # OBOOK
+
         if not self.midisong:
             return
 
@@ -155,6 +164,9 @@ class ClassThreadMidiReader(QThread):
         self.pParent.Midi.ResetOutput()
 
         for msg in MidiFile(self.midisong.Getfilepath()):
+
+            if self.Settings.GetDebugMsg():
+                print("----> DEBUG msg = ", msg)
 
             # Is passthrough mode ?
             while self.midisong.IsMode(modes["passthrough"]):
@@ -214,8 +226,8 @@ class ClassThreadMidiReader(QThread):
 
                     if not self.midisong.IsState(states["playing"]): # First note on channels selected
                         print(f"MidiReader {self.uuid} player [{self.midisong.GetFilename()}] READY") # Utile ?
+                        self.statusbar_activity.emit("READY")
                         self.midisong.SetState(states["playing"])
-
                         self.led_file_activity.emit(1)
 
                     if self.channels[msg.channel]:
@@ -261,12 +273,16 @@ class ClassThreadMidiReader(QThread):
                     time.sleep(msg.time + human + self.keys["speed"] / 2000)
 
                 if msg.type == "note_on":  # with velocity or not
-                    if self.channels[msg.channel] and not self.midisong.IsState(
-                        states["playing"]
-                    ):  # First note on channels selected : cued and waiting keyboard pressed
+                    if ( self.channels[msg.channel]
+                        and not self.midisong.IsState(states["playing"])
+                        and msg.time
+                        and msg.velocity ):  # First note on channels selected : cued and waiting keyboard pressed
+
                         print(
                             f"MidiReader {self.uuid} playback [{self.midisong.GetFilename()}] READY"
                         )
+                        self.SignalLightPlay_activity.emit()
+                        self.statusbar_activity.emit("READY")
                         self.midisong.SetState(states["playing"])
 
                     # Stats
@@ -297,9 +313,14 @@ class ClassThreadMidiReader(QThread):
                             self.stop()
                             return
 
-                        # no velocity (note off)
+                        # no velocity (note off) 2025
+                        # Il faudrait le faire au début du morceaux, pas dans la boucle d'attente
+                        # Le problème se pose si en début de morceaux deux notes doivent être jouer en même temps ?
                         if msg.type == "note_on" or msg.type == "note_off":
                             if not msg.velocity:
+                                 # or not msg.time => DANGER:
+                                if self.Settings.GetDebugMsg():
+                                    print("--> DEBUG NOTE OFF PLAYED")
                                 break
 
                         # note present but must not be played; skip the pause
@@ -380,6 +401,7 @@ class ClassThreadMidiReader(QThread):
         self.midisong.SetPlayed(100)
 
     def stop(self):
+
         if self.running:
             if self.midisong:
                 print(f"MidiReader {self.uuid} stop [{self.midisong.GetFilename()}] !")
