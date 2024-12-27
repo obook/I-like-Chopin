@@ -110,7 +110,7 @@ class ClassThreadInput(QThread):
                 self.sleep(0.01)  #  for QT
             """
 
-        # Special Arturia keylab 61 essential
+        # Special Arturia keylab 61 essential, not used if controller present
         elif msg.type == "sysex":
             if msg.data == (0,32,107,127,66,2,0,0,25,0):  # shuffle with the key '->' released
                 self.shuffle_activity.emit()
