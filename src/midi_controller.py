@@ -141,8 +141,7 @@ class ClassMidiController(QThread):
         # print("--> ClassMidiController receive:", msg)
 
     def ClearSurfaceKeyboard(self, force = False):
-        """Shutdown all lights from surface control (Arturia)."""
-        keys = [94, 93, 95, 86, 91, 92, 80, 81, 89]
+        """Shutdown lights from surface control (Arturia)."""
         if self.to_controller:
             if len(self.current_keys_list):
                 for key in self.current_keys_list:
@@ -152,6 +151,7 @@ class ClassMidiController(QThread):
 
             elif force:
                 self.current_keys_list = []
+                keys = [94, 93, 95, 86, 91, 92, 80, 81, 89]
                 for key in keys:
                     msg = Message('note_on', note=key, velocity=0)  # note_off do not works
                     self.to_controller.send(msg)
