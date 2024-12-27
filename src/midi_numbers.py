@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# if __name__ == "__main__":
+"# if __name__ == "__main__":
 #     pass
-
 """
+WARNING : Octave is index 1 (and not 0)
 Dev Aggarwal
 devxpy
 https://gist.github.com/devxpy/063968e0a2ef9b6db0bd6af8079dad2a
