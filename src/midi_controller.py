@@ -110,33 +110,26 @@ class ClassMidiController(QThread):
                 # Key : Play = rewind to start and wait
                 if msg.note == 94 and msg.velocity:
                     self.ClearSurfaceKeyboard()
-                    self.current_keys_list.append(msg.note)
-                    msg = Message('note_on', note=94)
+                    msg = Message('note_on', note=msg.note)
                     self.to_controller.send(msg)
                     self.SignalReplay.emit()
-                    # trop rapide
-                    # self.ClearSurfaceKeyboard()
+                    self.current_keys_list.append(msg.note)
 
                 # Key : Stop = stop the song
                 elif msg.note == 93 and msg.velocity:
                     self.ClearSurfaceKeyboard()
-                    self.current_keys_list.append(msg.note)
-                    msg = Message('note_on', note=93)
+                    msg = Message('note_on', note=msg.note)
                     self.to_controller.send(msg)
                     self.SignalStop.emit()
-                    # trop rapide
-                    # self.ClearSurfaceKeyboard()
+                    self.current_keys_list.append(msg.note)
 
                 # Key : Cycle : shuffle a new song
                 elif msg.note == 86 and msg.velocity:
-                    self.SignalStop.emit()  # stop first
                     self.ClearSurfaceKeyboard()
-                    self.current_keys_list.append(msg.note)
-                    msg = Message('note_on', note=86)
+                    msg = Message('note_on', note=msg.note)
                     self.to_controller.send(msg)
                     self.SignalShuffle.emit()
-                    # trop rapide
-                    # self.ClearSurfaceKeyboard()
+                    self.current_keys_list.append(msg.note)
 
         # print("--> ClassMidiController receive:", msg)
 
