@@ -131,7 +131,7 @@ class ClassMidiController(QThread):
                     self.SignalShuffle.emit()
                     self.current_keys_list.append(msg.note)
 
-        # print("--> ClassMidiController receive:", msg)
+        print("--> ClassMidiController receive:", msg)
 
     def ClearSurfaceKeyboard(self, force = False):
         """Shutdown lights from surface control (Arturia)."""
@@ -157,6 +157,12 @@ class ClassMidiController(QThread):
         if self.to_controller:
             self.current_keys_list.append(94)
             msg = Message('note_on', note=(94))
+            self.to_controller.send(msg)
+
+    def SignalLightStop(self):
+        if self.to_controller:
+            self.current_keys_list.append(93)
+            msg = Message('note_on', note=(93))
             self.to_controller.send(msg)
 
     def stop(self):

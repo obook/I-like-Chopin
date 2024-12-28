@@ -50,6 +50,7 @@ class ClassThreadMidiReader(QThread):
     SignalStop_activity = Signal()
 
     SignalLightPlay_activity = Signal()
+    SignalLightStop_activity = Signal()
 
     def __init__(self, midifile, keys, channels, pParent):
         QThread.__init__(self)
@@ -68,6 +69,7 @@ class ClassThreadMidiReader(QThread):
         self.star_file_activity.connect(self.pParent.SetStarFile)
 
         self.SignalLightPlay_activity.connect(self.pParent.midi_controller.SignalLightPlay)
+        self.SignalLightStop_activity.connect(self.pParent.midi_controller.SignalLightStop)
 
         print(f"MidiReader {self.uuid} created [{os.path.basename(midifile)}]")
         self.midisong = ClassMidiSong(midifile)
@@ -399,6 +401,7 @@ class ClassThreadMidiReader(QThread):
         # self.stop()
         self.midisong.SetState(states["ended"])
         self.midisong.SetPlayed(100)
+        self.SignalLightStop_activity.emit()
 
     def stop(self):
 
