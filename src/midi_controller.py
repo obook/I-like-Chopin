@@ -27,7 +27,7 @@ class ClassMidiController(QThread):
     SignalShuffle = Signal()
     SignalStop = Signal()
     SignalMidifileChange = Signal(str)
-    SignalChangePlayerMode = Signal(str)
+    SignalTooglePlayerMode = Signal()
     SignalAddToPlaylist = Signal(str)
 
     def __init__(self, pParent):
@@ -41,7 +41,7 @@ class ClassMidiController(QThread):
         self.SignalReplay.connect(self.pParent.SignalReplayMidifile)
         self.SignalStop.connect(self.pParent.SignalStop)
         self.SignalMidifileChange.connect(self.pParent.SignalMidifileChange)
-        self.SignalChangePlayerMode.connect(self.pParent.SignalChangePlayerMode)
+        self.SignalTooglePlayerMode.connect(self.pParent.SignalTooglePlayerMode)
         self.SignalAddToPlaylist.connect(self.pParent.SignalAddToPlaylist)
 
         # Timer
@@ -131,7 +131,16 @@ class ClassMidiController(QThread):
                     self.SignalShuffle.emit()
                     self.current_keys_list.append(msg.note)
 
-        print("--> ClassMidiController receive:", msg)
+                # Key : Record : switch Playback/Passthrough
+                elif msg.note == 95 and msg.velocity:
+                    self.ClearSurfaceKeyboard()
+                    msg = Message('note_on', note=msg.note)
+                    self.to_controller.send(msg)
+                    self.SignalTooglePlayerMode.emit()
+                    self.current_keys_list.append(msg.note)
+
+                if self.pParent.Settings.GetDebugMsg():
+                    print("--> ClassMidiController receive:", msg)
 
     def ClearSurfaceKeyboard(self, force = False):
         """Shutdown lights from surface control (Arturia)."""
@@ -144,7 +153,7 @@ class ClassMidiController(QThread):
 
             elif force:
                 self.current_keys_list = []
-                keys = [94, 93, 95, 86, 91, 92, 80, 81, 89]
+                keys = [94, 93, 95, 86, 91, 92, 80, 81, 89, 95]
                 for key in keys:
                     msg = Message('note_on', note=key, velocity=0)  # note_off do not works
                     self.to_controller.send(msg)
