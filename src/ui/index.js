@@ -48,8 +48,7 @@ $('#select-mode').change(function () {
     const response = fetch('/player?mode='+mode);
 });
 
-/* Add to playlist */
-
+/* Add current song to playlist */
 function PlayListAdd() {
     let quality = $('#select-stars').find(":selected").val(); /* Eg 'star4' */
     const response = fetch('/add?quality='+quality);
@@ -79,6 +78,17 @@ function ShowLoader() {
         theme: "a",
         html: ""
       });
+}
+
+/* Tools */
+
+function NameShort(filepath) { /* not used */
+
+    var fileNameShort=filepath.substring(0,filepath.lastIndexOf("."));
+    fileNameShort = fileNameShort.replaceAll("_"," ");
+    fileNameShort = fileNameShort.replaceAll("-"," ");
+    fileNameShort = fileNameShort.replaceAll(",","");
+    return(fileNameShort);
 }
 
 /* API */
@@ -215,7 +225,7 @@ async function GetFiles() {
 
             for (var midifiles in data[artist]) {
                 const filePath = data[artist][midifiles];
-                const filePath_URI = encodeURIComponent(filePath).replace(/'/g, "%27");
+                const filePath_URI = encodeURIComponent(filePath).replace(/'/g, "%27"); // Encode for make an URL
 
                 if ( IsWindowsPath(filePath) == true) {
                     var pathStrSplit= filePath.split('\\').pop().split('/'); // Windows
@@ -255,6 +265,27 @@ async function GetFiles() {
 
 }
 
+async function GetPlaylist(){
+
+    try {
+        const response = await fetch('/playlist.json');
+        const data = await response.json();
+
+        $.each(data,function(index,item){
+            console.log("artist = " + item.artist);
+            console.log("title = " + item.title);
+            console.log("path = " + item.path);
+            console.log("**************");
+        });
+
+    } catch (error) {
+            console.error('---> NETWORK ERROR : ', error);
+    }
+
+}
+
+
+/* QRCode */
 async function SetQRCode(){
 
     // console.log("SetQRCode")
@@ -280,4 +311,5 @@ async function SetQRCode(){
 SetQRCode();
 GetFiles();
 GetStats();
+GetPlaylist();
 setInterval(GetStats, 2000);
