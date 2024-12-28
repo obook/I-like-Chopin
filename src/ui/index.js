@@ -271,12 +271,25 @@ async function GetPlaylist(){
         const response = await fetch('/playlist.json');
         const data = await response.json();
 
+        html = `<ul data-role='listview' data-theme='b' data-autodividers='false'>\n`;
+
         $.each(data,function(index,item){
+            /*
             console.log("artist = " + item.artist);
             console.log("title = " + item.title);
             console.log("path = " + item.path);
             console.log("**************");
+            */
+            const filePath_URI = encodeURIComponent(item.path).replace(/'/g, "%27"); // Encode for make an URL
+
+            html = html + ` <li class='class_filename' data-theme='a'>` +
+            `<a href='#' onclick='PlaySong("${filePath_URI}");'>${item.title}</a>` +
+            `</li>\n`;
         });
+
+        html = html + "</ul>\n";
+
+        $("#files_playlist").append(html).trigger( "create" );
 
     } catch (error) {
             console.error('---> NETWORK ERROR : ', error);

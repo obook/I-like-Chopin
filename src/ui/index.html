@@ -51,9 +51,19 @@
 
       <!-- Left panel -->
       <div data-role="panel" id="panel_left" data-display="overlay" data-position="left" data-theme="b">
-        <a id="score" href='../score?pdf="+data.score+"' target='_blank' data-role='button'>SCORE</a>
+        <!-- files in playlist -->
+        <span id="files_playlist"></span>
         <hr>
-        <a href="#" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-mini ui-btn-inline ui-icon-delete ui-btn-icon-right">Close</a>
+        <a href="#" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-icon-delete ui-btn-icon-right">Close</a>
+      </div><!-- /panel -->
+
+      <!-- Right panel -->
+      <div data-role="panel" id="panel_right" data-display="overlay" data-position="right" data-theme="b">
+        <!-- <a href="#" class="ui-btn ui-btn-right ui-icon-grid ui-btn-icon-notext ui-corner-all" onclick="toggleFullScreen();">No text</a> -->
+        <a href='../score?pdf="+data.score+"' id="score" target='_blank' data-role='button'>SCORE</a>
+        <a href="#" data-role='button' onclick="toggleFullScreen();">FULLSCREEN</a>
+        <hr>
+        <a href="#" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-icon-delete ui-btn-icon-right">Close</a>
       </div><!-- /panel -->
 
       <!-- Header -->
@@ -63,7 +73,7 @@
         <h2><div class="info_line"><span id='folder'></span>&nbsp;<span id='info_line'></span></div></h2>
 
         <a href="#panel_left" data-icon="carat-r" data-iconpos="notext" data-shadow="false" data-iconshadow="false" class="ui-nodisc-icon">Open left panel</a>
-        <a href="#" class="ui-btn ui-btn-right ui-icon-grid ui-btn-icon-notext ui-corner-all" onclick="toggleFullScreen();">No text</a>
+        <a href="#panel_right" data-icon="carat-l" data-iconpos="notext" data-shadow="false" data-iconshadow="false" class="ui-nodisc-icon">Open right panel</a>
 
         <div data-role="navbar"> <!-- Buttons -->
           <ul data-theme="a">
