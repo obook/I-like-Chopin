@@ -141,6 +141,12 @@ class MyBottleServer:
             response.content_type = 'application/json'
             return json.dumps(file_dic)
 
+        @route('/playlist.json')
+        def _files():
+            file_dic = self.pParent.Playlist.GetPlayList()
+            response.content_type = 'application/json'
+            return json.dumps(file_dic)
+
         @route('/play')
         def _play():
             midifile = request.query.song

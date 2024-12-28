@@ -24,6 +24,7 @@
         "settings_dialog.ui",
         "settings_dialog.py",
         "web_network.py",
-        "midi_controller.py"
+        "midi_controller.py",
+        "playlist.py"
     ]
 }

@@ -11,7 +11,7 @@ from PySide6.QtWidgets import QPushButton
 
 from settings import ClassSettings
 from history import ClassHistory
-
+from playlist import ClassPlaylist
 
 class _init:
     """Interface initialization"""
@@ -35,6 +35,7 @@ class _init:
     # Classes used
     Settings = None
     History = None
+    Playlist = None
 
     # Channels buttons
     ChannelsButtonsList = []
@@ -44,6 +45,7 @@ class _init:
         # print("---> _initialize __init__")
         self.Settings = ClassSettings()
         self.History = ClassHistory()
+        self.Playlist = ClassPlaylist()
 
     def _SetInterface(self):
 
