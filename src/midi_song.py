@@ -64,7 +64,7 @@ class ClassMidiSong:
     def GetParent(self):  # A/B/C/D.mid return C
         return PurePath(self.__filepath).parent.name
 
-    def GetParentShort(self, lenght=None):  # A/B/C/D.mid return C
+    def GetParentShort(self, lenght=None):  # A/B/C/D.mid return C but limit lenght
         parent = PurePath(self.__filepath).parent.name
         if lenght:
             parent = (parent[:lenght] + "..") if len(parent) > lenght else parent
