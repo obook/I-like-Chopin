@@ -25,6 +25,8 @@ function toggleFullScreen() {
         document.exitFullscreen();
         localStorage.setItem('fullscreen',false);
     }
+
+    $('#panel_right').panel("close");
 }
 
 /* Click on file */
@@ -32,6 +34,9 @@ async function PlaySong(song) {
     ShowLoader();
     CleanSongName(true);
     const response = await fetch('/play?song='+song);
+    /* Close all panels */
+    $('#panel_left').panel("close");
+    $('#panel_right').panel("close");
 }
 
 /* Click on navbar button */
@@ -271,7 +276,8 @@ async function GetPlaylist(){
         const response = await fetch('/playlist.json');
         const data = await response.json();
 
-        html = `<ul data-role='listview' data-theme='b' data-autodividers='false'>\n`;
+        html = `<ul data-role='listview' data-theme='b'>\n`;
+        html = html + `<li data-role="list-divider" data-theme='a'>PLAYLIST</li>\n`;
 
         $.each(data,function(index,item){
             /*
@@ -282,7 +288,7 @@ async function GetPlaylist(){
             */
             const filePath_URI = encodeURIComponent(item.path).replace(/'/g, "%27"); // Encode for make an URL
 
-            html = html + ` <li class='class_filename' data-theme='a'>` +
+            html = html + `<li data-icon='false'>` +
             `<a href='#' onclick='PlaySong("${filePath_URI}");'>${item.title}</a>` +
             `</li>\n`;
         });

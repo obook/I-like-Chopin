@@ -11,7 +11,7 @@ body {
 /* Info Line */
 .info_line{
     color:#eee;
-    font-size: calc(.5em + 0.4vw);
+    font-size: calc(.5em + 0.8vw);
     background-color: rgb(46, 46, 46) !important;
 }
 
