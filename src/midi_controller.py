@@ -54,18 +54,31 @@ class ClassMidiController(QThread):
     def __del__(self):
         print(f"ClassMidiController {self.uuid} destroyed [{self.device}]")
 
-    def run(self):
+    def open_controller(self):
+
+        if self.from_controller:
+            self.from_controller.close()
+        if self.to_controller:
+            self.to_controller.close()
+
         try:
             self.from_controller = open_input(self.device, callback=self.callback)
         except Exception as error:
             print(f"|!| ClassMidiController {self.uuid} open_input {error}")
-            return
+            return False
 
         try:
             self.to_controller = open_output(self.device)
         except Exception as error:
             print(f"|!| ClassMidiController {self.uuid} open_input {error}")
             self.from_controller.close()
+            return False
+
+        return True
+
+    def run(self):
+
+        if not self.open_controller():
             return
 
         self.ClearSurfaceKeyboard(True)
