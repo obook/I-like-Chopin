@@ -15,24 +15,24 @@ class timers:
     ConnectInputState = False
     ConnectOutputState = False
 
-    window_title = []
-    title_rotation = 0
+    window_title = []  # not used
+    title_rotation = 0  # not used
 
     def SetTimer(self):
 
         self.timer1 = QTimer(self)
-        self.timer1.timeout.connect(self.timer)
+        self.timer1.timeout.connect(self.timer_song)
         self.timer1.start(2000)
-        """
+
         self.timer2 = QTimer(self)
         self.timer2.timeout.connect(self.timer_title)
         self.timer2.start(8000)
-        """
+
         self.timer3 = QTimer(self)
         self.timer3.timeout.connect(self.timer_random_song)
         self.timer3.start(25000)
 
-    def timer(self):
+    def timer_song(self):
         if self.Midi.GetInputPort() and not self.ConnectInputState:
             self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
             self.ConnectInputState = True
@@ -78,21 +78,27 @@ class timers:
             if self.Midi.GetOuputPort():
                 self.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
 
-    """
+
     def timer_title(self):
         # if not window_title:
         self.window_title = ["I LIKE CHOPIN"]
+
+        if self.midisong:
+            self.setWindowTitle(self.midisong.GetParent())
+
+        '''
         if self.Web_server:
             for url in self.Web_server.GetServerURLs():
                 if not "127.0.0.1" in url:
                     self.window_title.append(url)
+
         if self.midisong:
             self.window_title.append(self.midisong.GetParent())
         self.setWindowTitle(self.window_title[self.title_rotation])
         self.title_rotation += 1
         if self.title_rotation >= len(self.window_title):
             self.title_rotation = 0
-    """
+        '''
 
     def timer_random_song(self):
         self.midisong = self.Midi.GetMidiSong()
@@ -103,5 +109,5 @@ class timers:
 
     def StopTimers(self):
         self.timer1.stop()
-        # self.timer2.stop()
+        self.timer2.stop()
         self.timer3.stop()

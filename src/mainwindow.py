@@ -285,8 +285,14 @@ class Mainwindow(
 
     def SetFileButtonText(self):
         if self.midisong:
-            self.ui.pushButton_Files.setText(self.midisong.GetCleanNameShort(32))
+            self.ui.pushButton_Files.setText(self.midisong.GetCleanNameShort(52))
+            self.setWindowTitle(self.midisong.GetParent())
+        '''
+        Now Artist is in Window Title
+        if self.midisong:
+            self.ui.pushButton_Files.setText(self.midisong.GetCleanNameShort(52))
             self.ui.label_File.setText(self.midisong.GetParentShort(10))
+        '''
 
     def SettingsDlg(self):
         ShowSettingsDlg(self)
