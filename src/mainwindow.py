@@ -18,6 +18,7 @@ from informations_dialog import ShowInformationDlg
 from settings_dialog import ShowSettingsDlg
 
 import _mainwindow_init
+import _mainwindow_menu
 import _mainwindow_signals
 import _mainwindow_timers
 import _mainwindow_web
@@ -32,6 +33,7 @@ from ui_mainwindow import Ui_MainWindow
 class Mainwindow(
     QMainWindow,
     _mainwindow_init._init,
+    _mainwindow_menu.menu,
     _mainwindow_midi.midi,
     _mainwindow_signals.signals,
     _mainwindow_web.web,
@@ -43,11 +45,12 @@ class Mainwindow(
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
-        self.setFixedSize(504, 400)
+        self.setFixedSize(504, 424)
         self.ui.setupUi(self)
 
         # Imported methods
         self._SetInterface()
+        self._SetMenu()
 
         ICON_APPLICATION = os.path.join(
             self.application_path, "icons", "svg", "i-like-chopin.svg"
@@ -57,8 +60,6 @@ class Mainwindow(
         my_icon = QIcon()
         my_icon.addFile(ICON_APPLICATION)
         self.setWindowIcon(my_icon)
-
-        # tray.show()
 
         # Controller
         self.midi_controller = ClassMidiController(self)

@@ -11,20 +11,23 @@
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
 from PySide6.QtWidgets import (QApplication, QGridLayout, QGroupBox, QLabel,
-    QMainWindow, QProgressBar, QPushButton, QSizePolicy,
-    QStatusBar, QWidget)
+    QMainWindow, QMenu, QMenuBar, QProgressBar,
+    QPushButton, QSizePolicy, QStatusBar, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(504, 400)
+        MainWindow.resize(504, 424)
         MainWindow.setAcceptDrops(False)
+        self.actionQuit = QAction(MainWindow)
+        self.actionQuit.setObjectName(u"actionQuit")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.pushButton_Quit = QPushButton(self.centralwidget)
@@ -122,6 +125,18 @@ class Ui_MainWindow(object):
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        self.menuBar = QMenuBar(MainWindow)
+        self.menuBar.setObjectName(u"menuBar")
+        self.menuBar.setGeometry(QRect(0, 0, 504, 22))
+        self.mainMenu = QMenu(self.menuBar)
+        self.mainMenu.setObjectName(u"mainMenu")
+        self.menuFavorites = QMenu(self.menuBar)
+        self.menuFavorites.setObjectName(u"menuFavorites")
+        MainWindow.setMenuBar(self.menuBar)
+
+        self.menuBar.addAction(self.mainMenu.menuAction())
+        self.menuBar.addAction(self.menuFavorites.menuAction())
+        self.mainMenu.addAction(self.actionQuit)
 
         self.retranslateUi(MainWindow)
 
@@ -133,6 +148,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"I LIKE CHOPIN", None))
+        self.actionQuit.setText(QCoreApplication.translate("MainWindow", u"Quit", None))
         self.pushButton_Quit.setText(QCoreApplication.translate("MainWindow", u"Quit", None))
         self.groupBoxDevices.setTitle(QCoreApplication.translate("MainWindow", u"MIDI Devices", None))
         self.label_Ouput.setText(QCoreApplication.translate("MainWindow", u"MIDI Out", None))
@@ -155,4 +171,6 @@ class Ui_MainWindow(object):
         self.pushButton_Mode.setText(QCoreApplication.translate("MainWindow", u"Playback", None))
         self.pushButton_Info.setText(QCoreApplication.translate("MainWindow", u"More", None))
         self.pushButton_Settings.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
+        self.mainMenu.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
+        self.menuFavorites.setTitle(QCoreApplication.translate("MainWindow", u"Favorites", None))
     # retranslateUi

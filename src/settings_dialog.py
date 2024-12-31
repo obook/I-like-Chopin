@@ -27,6 +27,7 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         print(f"SettingsDlg {self.__uuid} created")
         self.pParent = parent
         self.Midi = parent.Midi
+        self.Controller = self.pParent.midi_controller
         self.Settings = self.pParent.Settings
         self.setupUi(self)
         self.setFixedSize(501, 259)
@@ -91,6 +92,7 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
     def ControllerDeviceChanged(self):
         controller_device = self.ControllerDeviceCombo.currentText()
         self.Settings.SaveControllerDevice(controller_device)
+        self.Controller.open_controller()
 
     def ApiComboChanged(self):
         current_api = self.ApiCombo.currentText()

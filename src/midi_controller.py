@@ -61,6 +61,8 @@ class ClassMidiController(QThread):
         if self.to_controller:
             self.to_controller.close()
 
+        self.device = self.pParent.Settings.GetControllerDevice()
+
         try:
             self.from_controller = open_input(self.device, callback=self.callback)
         except Exception as error:
