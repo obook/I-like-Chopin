@@ -11,6 +11,7 @@ import time
 from PySide6.QtWidgets import QApplication, QMainWindow, QSystemTrayIcon, QMenu
 from PySide6.QtGui import QIcon, QAction
 from PySide6.QtCore import QEvent
+
 from midi_song import modes
 from midi_controller import ClassMidiController
 
@@ -375,6 +376,19 @@ def start():
     quit = QAction("Quit")
     quit.triggered.connect(app.quit)
     menu.addAction(quit)
+
+    ''' A voir
+    menu_favorites = QMenu()
+
+    file_dic = widget.Playlist.GetPlayList()
+    for dict in file_dic:
+        title = dict['title']
+        path = dict['path']
+        action_favorite = QAction(title)
+        action = menu_favorites.addAction(action_favorite)
+        action.setData(path)
+    action_favorite.triggered.connect(widget.TriggeredFavorite)
+    '''
 
     # Add the menu to the tray
     tray.setContextMenu(menu)
