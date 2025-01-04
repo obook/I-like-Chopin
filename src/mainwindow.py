@@ -8,9 +8,9 @@ import sys
 import os
 import time
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QSystemTrayIcon, QMenu
-from PySide6.QtGui import QIcon, QAction
-from PySide6.QtCore import QEvent
+from PySide6.QtWidgets import (QApplication, QMainWindow, QSystemTrayIcon, QMenu)
+from PySide6.QtGui import (QIcon, QAction)
+from PySide6.QtCore import (QEvent)
 
 from midi_song import modes
 from midi_controller import ClassMidiController
@@ -345,6 +345,9 @@ class Mainwindow(
 
 
 def start():
+    def TriggeredFavorite(action):  # Systray callback
+        widget.MidifileChange(action.data())
+
     if not QApplication.instance():
         app = QApplication(sys.argv)
         app.setStyle("Fusion")  # Windows dark theme
@@ -362,11 +365,12 @@ def start():
 
     icon = QIcon(ICON_SYSTRAY)
 
-    # Create the tray
+    # Create the systray
     tray = QSystemTrayIcon()
     tray.setIcon(icon)
     tray.setVisible(True)
 
+    '''
     # Create the menu
     menu = QMenu()
     action = QAction("Open Main Window")
@@ -376,21 +380,20 @@ def start():
     quit = QAction("Quit")
     quit.triggered.connect(app.quit)
     menu.addAction(quit)
-
-    ''' A voir
-    menu_favorites = QMenu()
-
-    file_dic = widget.Playlist.GetPlayList()
-    for dict in file_dic:
-        title = dict['title']
-        path = dict['path']
-        action_favorite = QAction(title)
-        action = menu_favorites.addAction(action_favorite)
-        action.setData(path)
-    action_favorite.triggered.connect(widget.TriggeredFavorite)
     '''
 
-    # Add the menu to the tray
+    # Create the menu
+    menu = QMenu()
+
+    file_dic = widget.Playlist.GetPlayList()
+    actions = []
+    for dict in file_dic:
+        action = QAction(dict['title'])
+        menu.addAction(action)
+        action.setData(dict['path'])
+        actions.append(action)
+    menu.triggered.connect(TriggeredFavorite)
+
     tray.setContextMenu(menu)
     tray.setToolTip("I like Chopin")
 
