@@ -27,6 +27,7 @@ class ClassMidiFiles:
         print(f"MidiFiles {self.uuid} destroyed")
 
     def ScanFiles(self, defaultmidipath):
+
         self.defaultmidipath = defaultmidipath
         for file in sorted(
             glob.glob(
@@ -35,15 +36,18 @@ class ClassMidiFiles:
             )
         ):
             path = pathlib.PurePath(file)
-            if not any(
-                path.parent.name in keys for keys in self.midifiles_dict
-            ):  # not in dictionnary
-                self.midifiles_dict[path.parent.name] = [file]
-            else:  # in dictionnary
-                list = self.midifiles_dict[path.parent.name]
-                list.append(file)
-            self.midifiles_raw.append(file)
-            self.midifiles_count += 1
+            try: # Windows filenames do not accept " and some UTF8 chars
+                if not any(
+                    path.parent.name in keys for keys in self.midifiles_dict
+                ):  # not in dictionnary
+                    self.midifiles_dict[path.parent.name] = [file]
+                else:  # in dictionnary
+                    list = self.midifiles_dict[path.parent.name]
+                    list.append(file)
+                self.midifiles_raw.append(file)
+                self.midifiles_count += 1
+            except Exception as error:
+                print(f"|!| MidiFiles {self.uuid} BAD NAME or FILENAME :", error)
 
         print(
             f"MidiFiles {self.uuid} {self.midifiles_count} files in [{self.defaultmidipath}]"
