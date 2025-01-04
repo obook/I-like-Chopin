@@ -64,8 +64,12 @@ class MyWSGIRefServer(ServerAdapter):
 
     def shutdown(self):  # ADD SHUTDOWN METHOD.
         if self.srv:
-            self.srv.server_close()
-            self.srv.shutdown()
+            try:  # bug under Windows, sometimes...
+                self.srv.server_close()
+                self.srv.shutdown()
+            except:
+                pass
+
 
 class MyBottleServer:
 
