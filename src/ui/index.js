@@ -57,6 +57,7 @@ $('#select-mode').change(function () {
 function PlayListAdd() {
     let quality = $('#select-stars').find(":selected").val(); /* Eg 'star4' */
     const response = fetch('/add?quality='+quality);
+    GetPlaylist();
 }
 
 /* Clean songname style */
