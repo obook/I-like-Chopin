@@ -18,6 +18,7 @@ class ClassMidiFiles:
     midifiles_dict = {} # files by artist key
     midifiles_raw = [] # All files list
     midifiles_count = 0
+    windows_forbiden = ["<", ">", ":", "\"", "/", "\\", "|", "?", "*"]
 
     def __init__(self):
         self.uuid = uuid.uuid4()
@@ -36,13 +37,26 @@ class ClassMidiFiles:
             )
         ):
             path = pathlib.PurePath(file)
+
             try: # Windows filenames do not accept " and some UTF8 chars
+
+                # Check windows folder name compatibility
+                if len([e for e in self.windows_forbiden if e in path.parent.name]):
+                    print(f"MidiFiles {self.uuid} ==> WARNING path name not windows compatible : {path.parent.name}")
+
                 if not any(
                     path.parent.name in keys for keys in self.midifiles_dict
                 ):  # not in dictionnary
                     self.midifiles_dict[path.parent.name] = [file]
                 else:  # in dictionnary
                     list = self.midifiles_dict[path.parent.name]
+
+                    # Check windows folder name compatibility
+                    filename = os.path.basename(file)
+                    check_windows = [e for e in self.windows_forbiden if e in filename]
+                    if len(check_windows):
+                        print(f"MidiFiles {self.uuid} ==> WARNING file name not windows compatible in {path.parent.name} : {filename} {check_windows}")
+
                     list.append(file)
                 self.midifiles_raw.append(file)
                 self.midifiles_count += 1
