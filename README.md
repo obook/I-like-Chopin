@@ -26,7 +26,8 @@ poetry install
 ```
 -->
 ## Install libraries
-The Python tool <b>[poetry](https://python-poetry.org)</b> is assumed to be already installed on your machine.
+
+<b>[Python3](https://www.python.org/)</b> and the Python tool <b>[Poetry](https://python-poetry.org)</b> are assumed to be already installed on your machine.
 
 ```bash
 cd src/
