@@ -43,7 +43,7 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
 
         text += f"<p{style}>WEB SERVER</p>"
         for interface in server_urls:  # UGLY
-            text += f"<div>{interface}</div>"
+            text += f"<div><a href='{interface}'>{interface}</a></div>\n"
 
         for qrcode in qrcodes_list:
             svgWidget = QSvgWidget()
