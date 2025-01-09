@@ -69,7 +69,7 @@ No native virtual MIDI driver is provided with Windows, but there are a number o
 * [MIDI Yoke](https://www.midiox.com/) which is part of the MIDI OX utility (32 bits only).
 
 # Tested with...
-* Raspberry Pi 4 Model B / Linux Debian 12 (bookworm)
+* Linux Debian 12 on Raspberry Pi 4 Model B
 * Linux Ubuntu 24.04 LTS ALSA/JACK
 * Linux Mint 22 Cinnamon
 * Windows 10 / RTP loopMIDI / [OmniMIDI](https://github.com/KeppySoftware/OmniMIDI) (load and play soundfonts) / VirtualMIDISynth
