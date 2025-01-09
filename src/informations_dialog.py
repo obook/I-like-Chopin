@@ -11,7 +11,7 @@ import mido
 
 from PySide6.QtCore import QByteArray, QSize
 from PySide6.QtWidgets import QDialog, QLabel
-from PySide6.QtGui import QImage
+from PySide6.QtGui import (QImage, QDesktopServices)
 from PySide6.QtSvgWidgets import QSvgWidget
 
 from ui_informations import Ui_DialogInformation
@@ -56,10 +56,10 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
             self.formLayout.addRow(QLabel(""))
 
         text += f"<p{style}>CONFIG FILE</p>"
-        text += f"{self.Settings.GetConfigPath()}"
+        text += f"<p style='color:#FF8888;'><a href='{self.Settings.GetConfigPath()}'>{self.Settings.GetConfigPath()}</a></p>"
 
         text += f"<p{style}>MIDIFILES LIBRARY PATH</p>"
-        text += f"{self.Settings.GetMidiPath()}"
+        text += f"<p style='color:#FF8888;'><a href='{self.Settings.GetMidiPath()}'>{self.Settings.GetMidiPath()}</a></p>"
 
         text += f"<p{style}>BACKEND USED</p>"
         text += f"{mido.backend.name}\n"
@@ -101,8 +101,13 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         text += "control_change:control 51 (set your midi-device)"
 
         text += "<p style='color:#FF8888;'>PROJECT : <a href='https://github.com/obook/I-like-Chopin'>https://github.com/obook/I-like-Chopin</a></p>"
+
         self.textBrowser.setAcceptRichText(True)
         self.textBrowser.setOpenLinks(False)
+        self.textBrowser.setOpenExternalLinks(False);
+        self.textBrowser.setReadOnly(True)
+        self.textBrowser.anchorClicked.connect(QDesktopServices.openUrl)
+
         self.textBrowser.insertHtml(text)
 
         cursor = self.textBrowser.textCursor()

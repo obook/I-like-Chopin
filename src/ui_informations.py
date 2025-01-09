@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'informations.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.1
+## Created by: Qt User Interface Compiler version 6.8.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -29,6 +29,7 @@ class Ui_DialogInformation(object):
         self.textBrowser = QTextBrowser(DialogInformation)
         self.textBrowser.setObjectName(u"textBrowser")
         self.textBrowser.setGeometry(QRect(10, 10, 301, 281))
+        self.textBrowser.setOpenExternalLinks(True)
         self.formLayoutWidget = QWidget(DialogInformation)
         self.formLayoutWidget.setObjectName(u"formLayoutWidget")
         self.formLayoutWidget.setGeometry(QRect(320, 10, 141, 281))
@@ -45,4 +46,3 @@ class Ui_DialogInformation(object):
         DialogInformation.setWindowTitle(QCoreApplication.translate("DialogInformation", u"Dialog", None))
         self.pushButton_Close.setText(QCoreApplication.translate("DialogInformation", u"Close", None))
     # retranslateUi
-
