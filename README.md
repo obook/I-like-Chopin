@@ -26,11 +26,16 @@ poetry install
 ```
 -->
 ## Install libraries
-The Python tool <b>poetry</b> is assumed to be already installed on your machine.
+The Python tool <b>[poetry](https://python-poetry.org)</b> is assumed to be already installed on your machine.
 
 ```bash
 cd src/
 poetry install
+```
+On non Qt Linux systems, you need libxcb-cursor0 or xcb-cursor0 :
+
+```bash
+apt install libxcb-cursor0
 ```
 
 ## Run
