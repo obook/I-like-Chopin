@@ -32,7 +32,7 @@ The Python tool <b>[poetry](https://python-poetry.org)</b> is assumed to be alre
 cd src/
 poetry install
 ```
-On non Qt Linux systems, you need libxcb-cursor0 or xcb-cursor0 :
+On Linux, you need utility libraries for X C Binding libxcb-cursor0 or xcb-cursor0.
 
 ```bash
 apt install libxcb-cursor0
