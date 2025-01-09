@@ -57,7 +57,7 @@ With a Virtual Synth       |With Piano in Daw Mode     | With Rack Synth
 * PySide6 6.7.1
 * mido 1.2.10
 * python-rtmidi 1.4.7
-* netifaces 2 0.0.22
+* netifaces2 0.0.22
 * qrcode 7.4.2
 * pillow 10.4.0
 * bottle 0.13.2
