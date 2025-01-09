@@ -70,7 +70,7 @@ No native virtual MIDI driver is provided with Windows, but there are a number o
 
 # Tested with...
 * Linux Debian 12 on Raspberry Pi 4 Model B
-* Linux Ubuntu 24.04 LTS ALSA/JACK
+* Linux Ubuntu 24.04 LTS
 * Linux Mint 22 Cinnamon
 * Windows 10 / RTP loopMIDI / [OmniMIDI](https://github.com/KeppySoftware/OmniMIDI) (load and play soundfonts) / VirtualMIDISynth
 * MacOS 14.6.1
