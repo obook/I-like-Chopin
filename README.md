@@ -27,7 +27,7 @@ poetry install
 -->
 ## Install libraries
 
-<b>[Python3](https://www.python.org/)</b> and the Python tool <b>[Poetry](https://python-poetry.org)</b> are assumed to be already installed on your machine.
+<b>[Python3](https://www.python.org/)</b> and the Python dependency manager <b>[python-poetry](https://python-poetry.org)</b> are assumed to be already installed on your machine.
 
 ```bash
 cd src/
