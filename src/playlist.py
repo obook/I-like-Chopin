@@ -48,6 +48,9 @@ class ClassPlaylist:
         self.SavePlaylist()
         print(f"ClassPlaylist {self.uuid} destroyed [{self.playlistfile}]")
 
+    def GetFilename(self):
+        return self.playlistfile
+
     def LoadPlaylist(self):
         try:
             with open(self.playlistfile, "r") as f:
@@ -58,9 +61,9 @@ class ClassPlaylist:
 
     def SavePlaylist(self):
         try:
-            with open(self.playlistfile, "w") as f:
-                json.dump(self.playlist, f)
-                f.close
+            with open(self.playlistfile, "w", encoding="utf-8", newline='\r\n') as outfile:
+                json.dump(self.playlist, outfile, indent=4, sort_keys=True, ensure_ascii=False)
+                outfile.close
         except:
             return False
         return True
