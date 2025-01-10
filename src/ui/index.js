@@ -273,11 +273,15 @@ async function GetFiles() {
 
 async function GetPlaylist(){
 
+    if (document.getElementById('playlisy_ul')) {
+        $('#files_playlist').empty().trigger( "create" );
+    }
+
     try {
         const response = await fetch('/playlist.json');
         const data = await response.json();
 
-        html = `<ul data-role='listview' data-theme='b'>\n`;
+        html = `<ul data-role='listview' data-theme='b' id='playlisy_ul'>\n`;
         html = html + `<li data-role="list-divider" data-theme='a'>PLAYLIST</li>\n`;
 
         $.each(data,function(index,item){
