@@ -84,7 +84,7 @@ class timers:
         self.window_title = ["I LIKE CHOPIN"]
 
         if self.midisong:
-            self.setWindowTitle(self.midisong.GetParent())
+            self.setWindowTitle(self.midisong.GetParent() + " " + str(round(self.midisong.GetDuration(), 2)) + "'")
 
         '''
         if self.Web_server:

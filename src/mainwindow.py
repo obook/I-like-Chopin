@@ -288,7 +288,7 @@ class Mainwindow(
     def SetFileButtonText(self):
         if self.midisong:
             self.ui.pushButton_Files.setText(self.midisong.GetCleanNameShort(52))
-            self.setWindowTitle(self.midisong.GetParent())
+            self.timer_title()  # Set window title (author+duration)
         '''
         Now Artist is in Window Title
         if self.midisong:
