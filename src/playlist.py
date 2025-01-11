@@ -56,6 +56,14 @@ class ClassPlaylist:
             with open(self.playlistfile, "r") as f:
                 self.playlist = json.load(f)
                 f.close
+
+            # Check is file exists
+            for dic in self.playlist:
+                artist = dic['artist']
+                filepath = dic['path']
+                if not os.path.isfile(filepath):
+                    self.RemovePlaylist(filepath)
+
         except Exception as error:  # not yet exists
             print(f"ClassPlaylist {self.uuid} exception {error}")
 
@@ -83,3 +91,11 @@ class ClassPlaylist:
         if len(self.playlist) > 20:  # limit to 20 titles
             self.playlist.pop(0)
         self.SavePlaylist()
+
+    def RemovePlaylist(self, filepath):
+        for i in range(len(self.playlist)):
+            if self.playlist[i]['path'] == filepath:
+                print(f"ClassPlaylist {self.uuid} file [filepath] not found removed")
+                del self.playlist[i]
+                self.SavePlaylist()
+                break
