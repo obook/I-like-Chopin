@@ -86,19 +86,19 @@ class ClassThreadInput(QThread):
 
         # Control change - Midi commands
         if msg.type == "control_change":
-            if msg.control == 71:
+            if msg.control == self.Settings.GetHumanizeChannel():  # default : 71
                 self.keys["humanize"] = msg.value  # 0 to 127
                 self.pParent.PrintHumanize(msg.value)  # PLEASE USE SIGNAL
-            elif msg.control == 76:
+            elif msg.control == self.Settings.GetSpeedChannel():  # default : 76
                 self.keys["speed"] = msg.value  # 0 to 127
                 self.pParent.PrintSpeed(msg.value)  # PLEASE USE SIGNAL
 
-            ''' Arturia KeyStep 37
+            """
+            Arturia KeyStep 37
+
             elif msg.control == 51 and msg.value == 127:
                 self.toogle_activity.emit()
-            '''
 
-            """
             elif msg.control == 1:  # modulation
                 diff = time.time() - self.modulation_start_time
                 if diff > 3:

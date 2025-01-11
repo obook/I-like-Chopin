@@ -203,6 +203,16 @@ class ClassSettings:
             "SustainChannel", 64
         )  # The sustain pedal sends CC 64 127 and CC 64 0 messages on channel 1
 
+    def GetHumanizeChannel(self):
+        return self.GetSetting(
+            "HumanizeChannel", 71
+        )
+
+    def GetSpeedChannel(self):
+        return self.GetSetting(
+            "SpeedControlChannel", 76
+        )
+
     """
     Not ditable
     """
