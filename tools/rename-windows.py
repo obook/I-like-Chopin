@@ -9,7 +9,7 @@ import os
 import glob
 
 path = os.path.expanduser("~/MIDI")
-windows_forbiden = ["<", ">", ":", "\"", "/", "\\", "|", "?", "*", "“", "”"]
+windows_forbiden = ["<", ">", ":", "\"", "/", "\\", "|", "?", "*", "'", "“", "”"]
 
 for file in sorted(
     glob.glob(

@@ -18,7 +18,7 @@ class ClassMidiFiles:
     midifiles_dict = {} # files by artist key
     midifiles_raw = [] # All files list
     midifiles_count = 0
-    windows_forbiden = ["<", ">", ":", "\"", "/", "\\", "|", "?", "*", "“", "”"]
+    windows_forbiden = ["<", ">", ":", "\"", "/", "\\", "|", "?", "*", "'", "“", "”"]
 
     def __init__(self):
         self.uuid = uuid.uuid4()
