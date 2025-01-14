@@ -157,16 +157,9 @@ class ClassMidiSong:
     def HumanizeDuration(
         self, duration, value
     ):
-        # do not work for instance
-        return 0  # buggy delay # for calculate new_time = msg.time+delay
-
-        if duration:
-            original_duration = duration
-        else:
-            original_duration = random.uniform(0,value/127)
-
-        new_duration = random.uniform(-1*duration*value, duration*value)/127
-
-        delta = duration-new_duration
-        print(f"HumanizeDuration delta={original_duration-new_duration} midi value={value}")
-        return 0  # buggy delay # for calculate new_time = msg.time+delay
+        # 0.030 c'est trop ou c'est le max
+        delay = random.uniform(-0.03*value/50, 0.03*value/50)
+        if duration+delay < 0:
+            delay = 0
+        # print(f"HumanizeDuration delta={delay}")
+        return delay
