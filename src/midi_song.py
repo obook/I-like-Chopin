@@ -158,7 +158,7 @@ class ClassMidiSong:
         self, duration, value
     ):
         # 0.030 c'est trop ou c'est le max
-        delay = random.uniform(-0.03*value/50, 0.03*value/50)
+        delay = random.uniform(-0.03*value/50, 0.03*value/50)  # random.standard_normal(-0.03*value/50, 0.03*value/50) n'existe pas
         if duration+delay < 0:
             delay = 0
         # print(f"HumanizeDuration delta={delay}")
