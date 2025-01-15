@@ -116,3 +116,6 @@ class timers:
         self.timer1.stop()
         self.timer2.stop()
         self.timer3.stop()
+
+        if self.midi_controller:
+            self.midi_controller.LCD_Message("I Like Chopin", "See you ;)")
