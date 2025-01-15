@@ -83,8 +83,12 @@ class ClassThreadOutput(QThread):
 
             try:
                 self.outport.send(message)
-            except:
-                pass
+            except Exception as error:
+                if self.Settings.GetDebugMsg():
+                    print(
+                        f"|!| MidiOutput {self.uuid} self.outport.send ERROR {error}"
+                    )
+                return
 
             if message.type == "note_on":
                 if message.velocity:
