@@ -30,6 +30,10 @@ class ClassMidiController(QThread):
     SignalTooglePlayerMode = Signal()
     SignalAddToPlaylist = Signal(str)
 
+    KEYLAB_LCD_PRE = [0x00, 0x20, 0x6B, 0x7F, 0x42, 0x04, 0x00, 0x60, 0x01]
+    KEYLAB_LCD_SEP = [0x00, 0x02]
+    KEYLAB_LCD_END = [0x00]
+
     def __init__(self, pParent):
         QThread.__init__(self)
         self.pParent = pParent
@@ -172,6 +176,27 @@ class ClassMidiController(QThread):
                 for key in keys:
                     msg = Message('note_on', note=key, velocity=0)  # note_off do not works
                     self.to_controller.send(msg)
+
+    def LCD_StringToDec(self, line):
+        dec = []
+        for c in line:
+            if ord(c) > 127:  # only ASCII please...
+                c=" "
+            dec.append(int(ord(c)))
+            if len(dec) > 15:  # no more 16 chars please...
+                break
+        return dec
+
+    def LCD_Message(self, line1, line2):
+        if self.to_controller:
+            msg = Message('sysex', data=[])
+            msg.data += self.KEYLAB_LCD_PRE
+            msg.data += self.LCD_StringToDec(line1)
+            msg.data += self.KEYLAB_LCD_SEP
+            msg.data += self.LCD_StringToDec(line2)
+            msg.data += self.KEYLAB_LCD_END
+
+            self.to_controller.send(msg)
 
     def timer(self):
             self.ClearSurfaceKeyboard()

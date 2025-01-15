@@ -86,6 +86,11 @@ class timers:
         if self.midisong:
             self.setWindowTitle(self.midisong.GetParent() + " " + str(round(self.midisong.GetDuration(), 2)) + "'")
 
+            # print to LCD
+            # BUG : ONE note is send from main midi channel !! -> not now , why ???
+            if self.midi_controller:
+                self.midi_controller.LCD_Message(self.midisong.GetCleanName(), self.midisong.GetParent())
+
         '''
         if self.Web_server:
             for url in self.Web_server.GetServerURLs():
