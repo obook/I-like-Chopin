@@ -168,7 +168,7 @@ class ClassThreadMidiReader(QThread):
         for msg in MidiFile(self.midisong.Getfilepath()):
 
             if self.Settings.GetDebugMsg():
-                print("----> DEBUG msg = ", msg)
+                print(f"----> DEBUG MidiReader {self.uuid} msg =", msg)
 
             # Is passthrough mode ?
             while self.midisong.IsMode(modes["passthrough"]):
