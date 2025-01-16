@@ -149,7 +149,8 @@ class ClassSettings:
     def SaveMidiApi(self, value):
 
         mido.set_backend(f'mido.backends.rtmidi/{value}')
-        print("---> DEBUG", value, mido.backend)
+        if self.GetDebugMsg():
+            print("---> DEBUG", value, mido.backend)
 
         return self.SetSetting("MidiApi", value)
 
