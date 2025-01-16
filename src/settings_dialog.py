@@ -51,7 +51,7 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         self.OutputDeviceCombo.addItems(self.Outputs)
 
         self.ControllerDeviceCombo.addItem(Controller)
-        self.ControllerDeviceCombo.addItems(self.InputsOutputs)
+        self.ControllerDeviceCombo.addItems(self.Inputs)
 
         self.ApiCombo.addItem(DefaultApi)
         self.ApiCombo.addItems(MidiApis)
