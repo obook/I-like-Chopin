@@ -71,6 +71,16 @@ class ClassMidiMain(QObject):
                 port_name = port_name[: port_name.rfind(" ")]
             IOPorts.append(port_name)
 
+
+        print("*************** Outputs")
+        print(Outputs)
+
+        print("*************** Inputs")
+        print(Inputs)
+
+        print("*************** IOPorts")
+        print(IOPorts)
+
         return Inputs, Outputs, IOPorts
 
     def ConnectInput(self, in_device):
