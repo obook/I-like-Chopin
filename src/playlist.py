@@ -38,6 +38,7 @@ class ClassPlaylist:
     playlistfile = os.path.join(settingspath, "i-like-chopin-playlist.json")
     playlist = [] # All files list
     playlist_count = 0
+    playlist_position = -1
 
     def __init__(self):
         self.uuid = uuid.uuid4()
@@ -78,6 +79,16 @@ class ClassPlaylist:
 
     def GetPlayList(self):
         return self.playlist
+
+    def GetNextFavorite(self):
+        if len(self.playlist) and self.playlist_position < len(self.playlist)-1 :
+            self.playlist_position += 1
+            print(f"--> DEBUG GetNextFavorite", self.playlist[self.playlist_position]['path'])
+
+    def GetPreviousFavorite(self):
+        if len(self.playlist) and self.playlist_position > 0 :
+            self.playlist_position -= 1
+            print(f"--> DEBUG GetPreviousFavorite", self.playlist[self.playlist_position]['path'])
 
     # Midi files
     def AddPlaylist(self, midifile): # no quality for instance

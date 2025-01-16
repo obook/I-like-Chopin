@@ -29,6 +29,8 @@ class ClassMidiController(QThread):
     SignalMidifileChange = Signal(str)
     SignalTooglePlayerMode = Signal()
     SignalAddToPlaylist = Signal(str)
+    SignalNextFavorite = Signal()
+    SignalPreviousFavorite = Signal()
 
     KEYLAB_LCD_PRE = [0x00, 0x20, 0x6B, 0x7F, 0x42, 0x04, 0x00, 0x60, 0x01]
     KEYLAB_LCD_SEP = [0x00, 0x02]
@@ -47,6 +49,8 @@ class ClassMidiController(QThread):
         self.SignalMidifileChange.connect(self.pParent.SignalMidifileChange)
         self.SignalTooglePlayerMode.connect(self.pParent.SignalTooglePlayerMode)
         self.SignalAddToPlaylist.connect(self.pParent.SignalAddToPlaylist)
+        self.SignalNextFavorite.connect(self.pParent.Playlist.GetNextFavorite)
+        # self.SignalPreviousFavorite.connect(self.pParent.XXXXXXX)
 
         # Timer
         self.timer_controller = QTimer(self)
@@ -130,7 +134,7 @@ class ClassMidiController(QThread):
                 if msg.note == 94 and msg.velocity:
                     self.ClearSurfaceKeyboard()
                     msg = Message('note_on', note=msg.note)
-                    self.to_controller.send(msg)
+                    self.SendController(msg)
                     self.SignalReplay.emit()
                     self.current_keys_list.append(msg.note)
 
@@ -138,7 +142,7 @@ class ClassMidiController(QThread):
                 elif msg.note == 93 and msg.velocity:
                     self.ClearSurfaceKeyboard()
                     msg = Message('note_on', note=msg.note)
-                    self.to_controller.send(msg)
+                    self.SendController(msg)
                     self.SignalStop.emit()
                     self.current_keys_list.append(msg.note)
 
@@ -146,7 +150,7 @@ class ClassMidiController(QThread):
                 elif msg.note == 86 and msg.velocity:
                     self.ClearSurfaceKeyboard()
                     msg = Message('note_on', note=msg.note)
-                    self.to_controller.send(msg)
+                    self.SendController(msg)
                     self.SignalShuffle.emit()
                     self.current_keys_list.append(msg.note)
 
@@ -154,12 +158,35 @@ class ClassMidiController(QThread):
                 elif msg.note == 95 and msg.velocity:
                     self.ClearSurfaceKeyboard()
                     msg = Message('note_on', note=msg.note)
-                    self.to_controller.send(msg)
+                    self.SendController(msg)
                     self.SignalTooglePlayerMode.emit()
+                    self.current_keys_list.append(msg.note)
+
+                # Key forward : next favorite
+                elif msg.note == 92 and msg.velocity:
+                    self.ClearSurfaceKeyboard()
+                    msg = Message('note_on', note=msg.note)
+                    self.SendController(msg)
+                    self.SignalNextFavorite.emit()
+                    self.current_keys_list.append(msg.note)
+
+                # Key rewind : previous favorite
+                elif msg.note == 91 and msg.velocity:
+                    self.ClearSurfaceKeyboard()
+                    msg = Message('note_on', note=msg.note)
+                    self.SendController(msg)
+                    self.pParent.Playlist.GetPreviousFavorite()
                     self.current_keys_list.append(msg.note)
 
                 if self.pParent.Settings.GetDebugMsg():
                     print("--> ClassMidiController receive:", msg)
+
+    def SendController(self, msg):
+        if self.to_controller:
+            try:
+                self.to_controller.send(msg)
+            except Exception as error:
+                print(f"|!| SendController {self.uuid} : {error}")
 
     def ClearSurfaceKeyboard(self, force = False):
         """Shutdown lights from surface control (Arturia)."""
@@ -167,17 +194,18 @@ class ClassMidiController(QThread):
             if len(self.current_keys_list):
                 for key in self.current_keys_list:
                     msg = Message('note_on', note=key, velocity=0)
-                    self.to_controller.send(msg)
+                    self.SendController(msg)
                     self.current_keys_list.remove(key)
 
             elif force:
                 self.current_keys_list = []
-                keys = [94, 93, 95, 86, 91, 92, 80, 81, 89, 95]
+                keys = [91, 92, 94, 93, 95, 86, 91, 92, 80, 81, 89, 95]
                 for key in keys:
                     msg = Message('note_on', note=key, velocity=0)  # note_off do not works
-                    self.to_controller.send(msg)
+                    self.SendController(msg)
 
     def LCD_StringToDec(self, line):
+        line = " ".join(line.split())  # clean double spaces, tab, etc
         dec = []
         for c in line:
             if ord(c) > 127:  # only ASCII please...
@@ -213,6 +241,13 @@ class ClassMidiController(QThread):
             self.current_keys_list.append(93)
             msg = Message('note_on', note=(93))
             self.to_controller.send(msg)
+
+    # not used
+    def SignalLightNextFavorite(self):
+        print("--> DEBUG NEXT FAVORITE")
+
+    def SignalPreviousFavorite(self):
+        print("--> DEBUG PREVIOUS FAVORITE")
 
     def stop(self):
         self.running = False
