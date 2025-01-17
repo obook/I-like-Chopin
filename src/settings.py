@@ -29,10 +29,10 @@ class ClassSettings:
     uipath = os.path.join(applicationpath, "ui")
 
     config = {
-        "InputDevice": "(None)",
-        "OutputDevice": "(None)",
-        "ControllertDeviceIN": "(None)",
-        "ControllertDeviceOUT": "(None)",
+        "InputDevice": None,
+        "OutputDevice": None,
+        "ControllertDeviceIN": None,
+        "ControllertDeviceOUT": None,
         "MidiPath": defaultmidipath,
         "ForceInstrument": False,
         "PianoProgram": 0,
@@ -127,25 +127,25 @@ class ClassSettings:
     """
 
     def GetInputDevice(self):
-        return self.GetSetting("InputDevice", "(None)")
+        return self.GetSetting("InputDevice", None)
 
     def SaveInputDevice(self, value):
         return self.SetSetting("InputDevice", value)
 
     def GetOutputDevice(self):
-        return self.GetSetting("OutputDevice", "(None)")
+        return self.GetSetting("OutputDevice", None)
 
     def SaveOutputDevice(self, value):
         return self.SetSetting("OutputDevice", value)
 
     def GetControllertDeviceIN(self):
-        return self.GetSetting("ControllertDeviceIN", "(None)")
+        return self.GetSetting("ControllertDeviceIN", None)
 
     def SaveControllertDeviceIN(self, value):
         return self.SetSetting("ControllertDeviceIN", value)
 
     def GetControllertDeviceOUT(self):
-        return self.GetSetting("ControllertDeviceOUT", "(None)")
+        return self.GetSetting("ControllertDeviceOUT", None)
 
     def SaveControllertDeviceOUT(self, value):
         return self.SetSetting("ControllertDeviceOUT", value)

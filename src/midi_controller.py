@@ -85,7 +85,7 @@ class ClassMidiController(QThread):
             self.to_controller.close()
 
         self.device_in = self.pParent.Settings.GetControllertDeviceIN()
-        if self.device_in != '(None)':
+        if self.device_in and self.device_in != '(None)':
             try:
                 self.from_controller = open_input(self.device_in, callback=self.callback)
             except Exception as error:
@@ -94,12 +94,13 @@ class ClassMidiController(QThread):
             print(f"ClassMidiController {self.uuid} input [{self.device_in}]")
 
         self.device_out = self.pParent.Settings.GetControllertDeviceOUT()
-        if self.device_out != '(None)':
+        if self.device_out and self.device_out != '(None)':
             try:
                 self.to_controller = open_output(self.device_out)
             except Exception as error:
                 print(f"|!| ClassMidiController {self.uuid} open_output {error}")
-                self.from_controller.close()
+                if self.from_controller :
+                    self.from_controller.close()
                 return False
             print(f"ClassMidiController {self.uuid} ouput [{self.device_out}]")
 

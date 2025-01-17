@@ -82,6 +82,8 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         # self.pParent.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
         self.ConnectInputState = False
         in_device = self.InputDeviceCombo.currentText()
+        if in_device == "":
+            in_device = None
         self.Settings.SaveInputDevice(in_device)
         self.Midi.ConnectInput(in_device)
 
@@ -89,16 +91,22 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         # self.pParent.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
         self.ConnectOutputState = False
         out_device = self.OutputDeviceCombo.currentText()
+        if out_device == "":
+            out_device = None
         self.Settings.SaveOutputDevice(out_device)
         self.Midi.ConnectOutput(out_device)
 
     def ControllerDeviceINChanged(self):
         controller_deviceIN = self.ControllerDeviceComboIN.currentText()
+        if controller_deviceIN == "":
+            controller_deviceIN = None
         self.Settings.SaveControllertDeviceIN(controller_deviceIN)
         self.Controller.open_controller()
 
     def ControllerDeviceOUTChanged(self):
         controller_deviceOUT = self.ControllerDeviceComboOUT.currentText()
+        if controller_deviceOUT == "":
+            controller_deviceOUT = None
         self.Settings.SaveControllertDeviceOUT(controller_deviceOUT)
         self.Controller.open_controller()
 
@@ -115,9 +123,10 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         self.deleteLater()
 
 def CleanDeviceName(device):
-    if ":" in device:
-        device_explode = device.split(":")
-        max_length, device = max([(len(x), x) for x in (device_explode)])
+    if device:
+        if ":" in device:
+            device_explode = device.split(":")
+            max_length, device = max([(len(x), x) for x in (device_explode)])
     return device
 
 
