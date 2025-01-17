@@ -48,11 +48,21 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         self.OutputDeviceCombo.addItem(Output)
         self.OutputDeviceCombo.addItems(self.Outputs)
 
-        self.ControllerDeviceComboIN.addItem(ControllerIN)
-        self.ControllerDeviceComboIN.addItems(self.Inputs)
+        if ControllerOUT: # to controller INPUT
+            self.ControllerDeviceComboOUT.addItem(ControllerOUT)
+            self.ControllerDeviceComboOUT.addItem("")
+        else:
+            self.ControllerDeviceComboOUT.addItem("")
 
-        self.ControllerDeviceComboOUT.addItem(ControllerOUT)
         self.ControllerDeviceComboOUT.addItems(self.Outputs)
+
+        if ControllerIN: # from controller OUTPUT
+            self.ControllerDeviceComboIN.addItem(ControllerIN)
+            self.ControllerDeviceComboIN.addItem("")
+        else:
+            self.ControllerDeviceComboIN.addItem("")
+
+        self.ControllerDeviceComboIN.addItems(self.Inputs)
 
         self.ApiCombo.addItem(DefaultApi)
         self.ApiCombo.addItems(MidiApis)
@@ -84,8 +94,9 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         in_device = self.InputDeviceCombo.currentText()
         if in_device == "":
             in_device = None
+        else:
+            self.Midi.ConnectInput(in_device)
         self.Settings.SaveInputDevice(in_device)
-        self.Midi.ConnectInput(in_device)
 
     def OuputDeviceChanged(self):
         # self.pParent.ui.labelStatusOuput.setPixmap(QtGui.QPixmap(self.ICON_RED_LED))
@@ -93,22 +104,25 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         out_device = self.OutputDeviceCombo.currentText()
         if out_device == "":
             out_device = None
+        else:
+            self.Midi.ConnectOutput(out_device)
         self.Settings.SaveOutputDevice(out_device)
-        self.Midi.ConnectOutput(out_device)
 
     def ControllerDeviceINChanged(self):
         controller_deviceIN = self.ControllerDeviceComboIN.currentText()
         if controller_deviceIN == "":
             controller_deviceIN = None
+        else:
+            self.Controller.open_controller()
         self.Settings.SaveControllertDeviceIN(controller_deviceIN)
-        self.Controller.open_controller()
 
     def ControllerDeviceOUTChanged(self):
         controller_deviceOUT = self.ControllerDeviceComboOUT.currentText()
         if controller_deviceOUT == "":
             controller_deviceOUT = None
+        else:
+            self.Controller.open_controller()
         self.Settings.SaveControllertDeviceOUT(controller_deviceOUT)
-        self.Controller.open_controller()
 
     def ApiComboChanged(self):
         current_api = self.ApiCombo.currentText()
