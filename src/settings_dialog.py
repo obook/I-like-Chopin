@@ -6,14 +6,12 @@ Created on Wed Jun  5 18:19:14 2024
 """
 
 import uuid
-from PySide6.QtWidgets import QDialog, QLabel
-from PySide6 import QtGui
+from PySide6.QtWidgets import QDialog
 from ui_settings_dialog import Ui_DialogSettings
 
 
 class SettingsDlg(Ui_DialogSettings, QDialog):
     __uuid = None
-    pParent = None
     Midi = None
     Settings = None
 
@@ -25,10 +23,9 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         super().__init__(parent)
         self.__uuid = uuid.uuid4()
         print(f"SettingsDlg {self.__uuid} created")
-        self.pParent = parent
         self.Midi = parent.Midi
-        self.Controller = self.pParent.midi_controller  # Class Controller
-        self.Settings = self.pParent.Settings
+        self.Controller = parent.midi_controller  # Class Controller
+        self.Settings = parent.Settings
         self.setupUi(self)
         self.setFixedSize(501, 289)
         self.setWindowTitle("Settings")
@@ -60,6 +57,7 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         self.ApiCombo.addItem(DefaultApi)
         self.ApiCombo.addItems(MidiApis)
 
+        # not used, we use 'Save' action
         #self.InputDeviceCombo.currentIndexChanged.connect(self.InputDeviceChanged)
         #self.OutputDeviceCombo.currentIndexChanged.connect(self.OuputDeviceChanged)
 
