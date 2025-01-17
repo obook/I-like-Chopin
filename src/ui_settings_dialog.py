@@ -92,7 +92,7 @@ class Ui_DialogSettings(object):
         self.checkBox_ForceIntrument0.setText(QCoreApplication.translate("DialogSettings", u"Force Piano (Prog 0)", None))
         self.label_Ouput_3.setText(QCoreApplication.translate("DialogSettings", u"API", None))
         self.checkBox_DebugMSG.setText(QCoreApplication.translate("DialogSettings", u"Debug MSG", None))
-        self.label_Ouput_2.setText(QCoreApplication.translate("DialogSettings", u"Controller IN", None))
-        self.label_Ouput_4.setText(QCoreApplication.translate("DialogSettings", u"Controller OUT", None))
+        self.label_Ouput_2.setText(QCoreApplication.translate("DialogSettings", u"Controller Input", None))
+        self.label_Ouput_4.setText(QCoreApplication.translate("DialogSettings", u"Controller Ouput", None))
     # retranslateUi
 
