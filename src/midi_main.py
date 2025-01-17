@@ -71,15 +71,15 @@ class ClassMidiMain(QObject):
                 port_name = port_name[: port_name.rfind(" ")]
             IOPorts.append(port_name)
 
+        if self.Settings.GetDebugMsg():
+            print("*************** Outputs")  # from Python to device
+            print(Outputs)
 
-        print("*************** Outputs")
-        print(Outputs)
+            print("*************** Inputs")  # from device to Python
+            print(Inputs)
 
-        print("*************** Inputs")
-        print(Inputs)
-
-        print("*************** IOPorts")
-        print(IOPorts)
+            print("*************** IOPorts")
+            print(IOPorts)
 
         return Inputs, Outputs, IOPorts
 
