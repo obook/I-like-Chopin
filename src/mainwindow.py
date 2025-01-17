@@ -279,8 +279,10 @@ class Mainwindow(
 
         if not self.Settings.IsMode(modes["passthrough"]):
             self.Settings.SaveMode(modes["passthrough"])
+            self.midi_controller.LCD_Message("Mode","PASSTHROUGH")
         else:
             self.Settings.SaveMode(modes["playback"])
+            self.midi_controller.LCD_Message("Mode","PLAYBACK")
 
         self.SetPlayerModeButtons()
         self.Midi.ChangeMidiMode(self.Settings.GetMode())

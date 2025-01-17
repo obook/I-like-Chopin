@@ -72,10 +72,10 @@ class ClassMidiController(QThread):
         self.timer_controller.timeout.connect(self.timer)
         self.timer_controller.start(3000)  # 3 seconds
 
-        print(f"ClassMidiController {self.uuid} created from [{self.device_out}] to [{self.device_in}] ")
+        print(f"ClassMidiController {self.uuid} created")
 
     def __del__(self):
-        print(f"ClassMidiController {self.uuid} destroyed from [{self.device_out}] to [{self.device_in}] ")
+        print(f"ClassMidiController {self.uuid} destroyed")
 
     def open_controller(self):
 
@@ -91,6 +91,7 @@ class ClassMidiController(QThread):
             except Exception as error:
                 print(f"|!| ClassMidiController {self.uuid} open_input {error}")
                 self.from_controller = None
+            print(f"ClassMidiController {self.uuid} input [{self.device_in}]")
 
         self.device_out = self.pParent.Settings.GetControllertDeviceOUT()
         if self.device_out != '(None)':
@@ -100,6 +101,7 @@ class ClassMidiController(QThread):
                 print(f"|!| ClassMidiController {self.uuid} open_output {error}")
                 self.from_controller.close()
                 return False
+            print(f"ClassMidiController {self.uuid} ouput [{self.device_out}]")
 
         return True
 
