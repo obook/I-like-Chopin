@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>501</width>
-    <height>259</height>
+    <height>289</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>10</x>
      <y>10</y>
      <width>481</width>
-     <height>131</height>
+     <height>161</height>
     </rect>
    </property>
    <property name="title">
@@ -82,7 +82,7 @@
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>220</y>
+     <y>250</y>
      <width>81</width>
      <height>25</height>
     </rect>
@@ -95,7 +95,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>146</y>
+     <y>176</y>
      <width>481</width>
      <height>60</height>
     </rect>
@@ -162,7 +162,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QComboBox" name="ControllerDeviceCombo">
+  <widget class="QComboBox" name="ControllerDeviceComboIN">
    <property name="geometry">
     <rect>
      <x>120</x>
@@ -182,7 +182,33 @@
     </rect>
    </property>
    <property name="text">
-    <string>Controller</string>
+    <string>Controller Input</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="ControllerDeviceComboOUT">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>130</y>
+     <width>331</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Ouput_4">
+   <property name="geometry">
+    <rect>
+     <x>7</x>
+     <y>133</y>
+     <width>100</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Controller Ouput</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>

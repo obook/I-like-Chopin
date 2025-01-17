@@ -27,10 +27,10 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         print(f"SettingsDlg {self.__uuid} created")
         self.pParent = parent
         self.Midi = parent.Midi
-        self.Controller = self.pParent.midi_controller
+        # self.Controller = self.pParent.midi_controller  # ?????
         self.Settings = self.pParent.Settings
         self.setupUi(self)
-        self.setFixedSize(501, 259)
+        self.setFixedSize(501, 289)
         self.setWindowTitle("Settings")
 
         self.pushButton_Close.clicked.connect(self.Quit)
@@ -38,7 +38,8 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         # ComboBoxes Inputs/Outputs
         Input = self.Settings.GetInputDevice()
         Output = self.Settings.GetOutputDevice()
-        Controller = self.Settings.GetControllerDevice()
+        ControllerIN = self.Settings.GetControllertDeviceIN()
+        ControllerOUT = self.Settings.GetControllertDeviceOUT()
         DefaultApi = self.Settings.GetMidiApi()
 
         self.Inputs, self.Outputs, self.InputsOutputs = self.Midi.GetDevices()
@@ -50,8 +51,11 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         self.OutputDeviceCombo.addItem(Output)
         self.OutputDeviceCombo.addItems(self.Outputs)
 
-        self.ControllerDeviceCombo.addItem(Controller)
-        self.ControllerDeviceCombo.addItems(self.Inputs)
+        self.ControllerDeviceComboIN.addItem(ControllerIN)
+        self.ControllerDeviceComboIN.addItems(self.Inputs)
+
+        self.ControllerDeviceComboOUT.addItem(ControllerOUT)
+        self.ControllerDeviceComboOUT.addItems(self.Outputs)
 
         self.ApiCombo.addItem(DefaultApi)
         self.ApiCombo.addItems(MidiApis)
@@ -70,7 +74,8 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         self.ApiComboChanged()  # first, change API
         self.InputDeviceChanged()
         self.OuputDeviceChanged()
-        self.ControllerDeviceChanged()
+        self.ControllerDeviceINChanged()
+        self.ControllerDeviceOUTChanged()
         self.Settings.SaveForceIntrument(self.checkBox_ForceIntrument0.isChecked())
         self.Settings.SaveDebugMsg(self.checkBox_DebugMSG.isChecked())
         print(f"SettingsDlg {self.__uuid} destroyed")
@@ -89,10 +94,21 @@ class SettingsDlg(Ui_DialogSettings, QDialog):
         self.Settings.SaveOutputDevice(out_device)
         self.Midi.ConnectOutput(out_device)
 
-    def ControllerDeviceChanged(self):
-        controller_device = self.ControllerDeviceCombo.currentText()
-        self.Settings.SaveControllerDevice(controller_device)
-        self.Controller.open_controller()
+
+
+
+    def ControllerDeviceINChanged(self):
+        controller_deviceIN = self.ControllerDeviceComboIN.currentText()
+        self.Settings.SaveControllertDeviceIN(controller_deviceIN)
+        # self.Controller.open_controller() # ??
+
+
+    def ControllerDeviceOUTChanged(self):
+        controller_deviceOUT = self.ControllerDeviceComboOUT.currentText()
+        self.Settings.SaveControllertDeviceOUT(controller_deviceOUT)
+        # self.Controller.open_controller() # ??
+
+
 
     def ApiComboChanged(self):
         current_api = self.ApiCombo.currentText()
@@ -116,4 +132,3 @@ def CleanDeviceName(device):
 def ShowSettingsDlg(pParent):
     dlg = SettingsDlg(pParent)
     dlg.show()
-    # dlg.deleteLater()

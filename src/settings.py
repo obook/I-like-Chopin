@@ -31,7 +31,8 @@ class ClassSettings:
     config = {
         "InputDevice": "(None)",
         "OutputDevice": "(None)",
-        "ControllertDevice": "(None)",
+        "ControllertDeviceIN": "(None)",
+        "ControllertDeviceOUT": "(None)",
         "MidiPath": defaultmidipath,
         "ForceInstrument": False,
         "PianoProgram": 0,
@@ -137,11 +138,17 @@ class ClassSettings:
     def SaveOutputDevice(self, value):
         return self.SetSetting("OutputDevice", value)
 
-    def GetControllerDevice(self):
-        return self.GetSetting("ControllertDevice", "(None)")
+    def GetControllertDeviceIN(self):
+        return self.GetSetting("ControllertDeviceIN", "(None)")
 
-    def SaveControllerDevice(self, value):
-        return self.SetSetting("ControllertDevice", value)
+    def SaveControllertDeviceIN(self, value):
+        return self.SetSetting("ControllertDeviceIN", value)
+
+    def GetControllertDeviceOUT(self):
+        return self.GetSetting("ControllertDeviceOUT", "(None)")
+
+    def SaveControllertDeviceOUT(self, value):
+        return self.SetSetting("ControllertDeviceOUT", value)
 
     def GetMidiApi(self):
         return self.GetSetting("MidiApi", "LINUX_ALSA")

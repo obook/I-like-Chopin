@@ -5,7 +5,20 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 For MIDI Controler, see settings
 Tested with Arturia KeyLab 61 Essential
-(port [Arturia KeyLab Essential 61:Arturia KeyLab Essential 61 DAW] )
+
+Controller (DAW)
+----------------
+Linux use same port name for send and receive :
+open_input and open_output : [Arturia KeyLab Essential 61:Arturia KeyLab Essential 61 DAW]
+
+Windows use 2 differents ports for DAW :
+    Listen open_input [MIDIIN2 (Arturia KeyLab Essenti 2]
+    Send open_output [MIDIOUT2 (Arturia KeyLab Essent 4]
+
+LCD
+---
+Linux : [Arturia KeyLab Essential 61:Arturia KeyLab Essential 61 DAW] or [Arturia KeyLab Essential 61:Arturia KeyLab Essential 61 MID]
+Windows port to LCD : open_output to [MIDIIN2 (Arturia KeyLab Essenti 2] or [Arturia KeyLab Essential 61 3]
 """
 
 import uuid
@@ -16,7 +29,8 @@ class ClassMidiController(QThread):
 
     uuid = None
     pParent = None
-    device = None
+    device_in = None
+    device_out = None
     from_controller = None
     to_controller = None
     timer_controller = None
@@ -39,7 +53,8 @@ class ClassMidiController(QThread):
     def __init__(self, pParent):
         QThread.__init__(self)
         self.pParent = pParent
-        self.device = pParent.Settings.GetControllerDevice()
+        self.device_in = pParent.Settings.GetControllertDeviceIN()
+        self.device_out = pParent.Settings.GetControllertDeviceOUT()
         self.uuid = uuid.uuid4()
 
         # Signals
@@ -57,10 +72,10 @@ class ClassMidiController(QThread):
         self.timer_controller.timeout.connect(self.timer)
         self.timer_controller.start(3000)  # 3 seconds
 
-        print(f"ClassMidiController {self.uuid} created [{self.device}]")
+        print(f"ClassMidiController {self.uuid} created from [{self.device_out}] to [{self.device_in}] ")
 
     def __del__(self):
-        print(f"ClassMidiController {self.uuid} destroyed [{self.device}]")
+        print(f"ClassMidiController {self.uuid} destroyed from [{self.device_out}] to [{self.device_in}] ")
 
     def open_controller(self):
 
@@ -69,18 +84,20 @@ class ClassMidiController(QThread):
         if self.to_controller:
             self.to_controller.close()
 
-        self.device = self.pParent.Settings.GetControllerDevice()
+        self.device_in = self.pParent.Settings.GetControllertDeviceIN()
 
         try:
-            self.from_controller = open_input(self.device, callback=self.callback)
+            self.from_controller = open_input(self.device_in, callback=self.callback)
         except Exception as error:
             print(f"|!| ClassMidiController {self.uuid} open_input {error}")
-            return False
+            self.from_controller = None
+
+        self.device_out = self.pParent.Settings.GetControllertDeviceOUT()
 
         try:
-            self.to_controller = open_output(self.device)
+            self.to_controller = open_output(self.device_out)
         except Exception as error:
-            print(f"|!| ClassMidiController {self.uuid} open_input {error}")
+            print(f"|!| ClassMidiController {self.uuid} open_output {error}")
             self.from_controller.close()
             return False
 
@@ -100,8 +117,10 @@ class ClassMidiController(QThread):
 
         self.ClearSurfaceKeyboard(True)
 
-        self.from_controller.close()
-        self.to_controller.close()
+        if self.from_controller :
+            self.from_controller.close()
+        if self.to_controller :
+            self.to_controller.close()
 
     def callback(self, msg):
 
@@ -216,6 +235,7 @@ class ClassMidiController(QThread):
         return dec
 
     def LCD_Message(self, line1, line2):
+
         if self.to_controller:
             msg = Message('sysex', data=[])
             msg.data += self.KEYLAB_LCD_PRE
@@ -246,7 +266,7 @@ class ClassMidiController(QThread):
     def SignalLightNextFavorite(self):
         print("--> DEBUG NEXT FAVORITE")
 
-    def SignalPreviousFavorite(self):
+    def SignaLightlPreviousFavorite(self):
         print("--> DEBUG PREVIOUS FAVORITE")
 
     def stop(self):
