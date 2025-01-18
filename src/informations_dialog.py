@@ -56,13 +56,13 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
             self.formLayout.addRow(QLabel(""))
 
         text += f"<p{style}>CONFIG FILE</p>"
-        text += f"<p style='color:#FF8888;'><a href='{self.Settings.GetConfigPath()}'>{self.Settings.GetConfigPath()}</a></p>"
+        text += f"<p style='color:#FF8888;'><a href='file:///{self.Settings.GetConfigPath()}'>{self.Settings.GetConfigPath()}</a></p>"
 
         text += f"<p{style}>MIDIFILES LIBRARY PATH</p>"
-        text += f"<p style='color:#FF8888;'><a href='{self.Settings.GetMidiPath()}'>{self.Settings.GetMidiPath()}</a></p>"
+        text += f"<p style='color:#FF8888;'><a href='file:///{self.Settings.GetMidiPath()}'>{self.Settings.GetMidiPath()}</a></p>"
 
         text += f"<p{style}>FAVORITES FILE</p>"
-        text += f"<p style='color:#FF8888;'><a href='{self.pParent.Playlist.GetFilename()}'>{self.pParent.Playlist.GetFilename()}</a></p>"
+        text += f"<p style='color:#FF8888;'><a href='file:///{self.pParent.Playlist.GetFilename()}'>{self.pParent.Playlist.GetFilename()}</a></p>"
 
         text += f"<p{style}>BACKEND USED</p>"
         text += f"{mido.backend.name}\n"
