@@ -45,7 +45,7 @@ class _init:
         # print("---> _initialize __init__")
         self.Settings = ClassSettings()
         self.History = ClassHistory()
-        self.Playlist = ClassPlaylist()
+        self.Playlist = ClassPlaylist(self)
 
     def _SetInterface(self):
 

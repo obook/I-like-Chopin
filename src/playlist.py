@@ -30,7 +30,7 @@ playlist = [
         }
 ]
 '''
-class ClassPlaylist:
+class ClassPlaylist():
 
     uuid = None
     applicationpath = os.path.dirname(os.path.realpath(__file__))
@@ -39,9 +39,11 @@ class ClassPlaylist:
     playlist = [] # All files list
     playlist_count = 0
     playlist_position = -1
+    pParent = None
 
-    def __init__(self):
+    def __init__(self, parent):
         self.uuid = uuid.uuid4()
+        self.pParent = parent
         self.LoadPlaylist()
         print(f"ClassPlaylist {self.uuid} read [{self.playlistfile}]")
 
@@ -83,12 +85,14 @@ class ClassPlaylist:
     def GetNextFavorite(self):
         if len(self.playlist) and self.playlist_position < len(self.playlist)-1 :
             self.playlist_position += 1
-            print(f"--> DEBUG GetNextFavorite", self.playlist[self.playlist_position]['path'])
+            # print(f"--> DEBUG GetNextFavorite", self.playlist[self.playlist_position]['path'])
+            self.pParent.MidifileChange(self.playlist[self.playlist_position]['path'])
 
     def GetPreviousFavorite(self):
         if len(self.playlist) and self.playlist_position > 0 :
             self.playlist_position -= 1
-            print(f"--> DEBUG GetPreviousFavorite", self.playlist[self.playlist_position]['path'])
+            # print(f"--> DEBUG GetPreviousFavorite", self.playlist[self.playlist_position]['path'])
+            self.pParent.MidifileChange(self.playlist[self.playlist_position]['path'])
 
     # Midi files
     def AddPlaylist(self, midifile): # no quality for instance
