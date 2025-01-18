@@ -57,3 +57,29 @@ Exec=/home/.............../I-like-Chopin/i-like-chopin.sh
 /!\ i-like-chopin.sh MUST have absolute path also.
 
 Copy and modify i-like-chopin.sh.sample to I-like-Chopin/i-like-chopin.sh
+
+Sample : i-like-chopin.sh
+-------------------------
+
+#!/bin/sh
+if ! hash python3; then
+    echo "python3 is not installed"
+    exit 1
+fi
+
+# Wait Wifi ?
+sleep 5
+
+# Lauch MidiNet (ABSOLUTE src path)
+nohup /bin/qmidinet&
+
+# Update program
+cd /home/username/I-like-Chopin
+/bin/git pull
+
+# Update MIDI lib
+cd /home/username/Music/midi
+/bin/git pull
+
+cd /home/username/I-like-Chopin/src
+poetry run python i-like-chopin.py
