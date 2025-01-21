@@ -319,11 +319,15 @@ class ClassThreadMidiReader(QThread):
                         # Il faudrait le faire au début du morceaux, pas dans la boucle d'attente
                         # Le problème se pose si en début de morceaux deux notes doivent être jouer en même temps ?
                         if msg.type == "note_on" or msg.type == "note_off":
+
+
+
                             if not msg.velocity:
                                  # or not msg.time => DANGER:
                                 if self.Settings.GetDebugMsg():
                                     print("--> DEBUG NOTE OFF PLAYED")
                                 break
+
 
                         # note present but must not be played; skip the pause
                         if not self.channels[msg.channel]:
