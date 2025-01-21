@@ -86,7 +86,7 @@ class ClassThreadOutput(QThread):
             except Exception as error:
                 if self.Settings.GetDebugMsg():
                     print(
-                        f"|!| MidiOutput {self.uuid} self.outport.send ERROR {error}"
+                        f"|!| MidiOutput {self.uuid} self.outport.send ERROR {error} on", message
                     )
                 return
 
