@@ -314,27 +314,29 @@ class ClassThreadMidiReader(QThread):
                         if not self.running or not self.midisong or not self.midisong.IsState(states["playing"]):
                             self.stop()
                             return
-                        ''' Trop de problemes ?? ....                        '''
-                        # no velocity (note off) 2025
-                        # Il faudrait le faire au début du morceaux, pas dans la boucle d'attente
-                        # Le problème se pose si en début de morceaux deux notes doivent être jouer en même temps ?
-                        if msg.type == "note_on" or msg.type == "note_off":
-
-
-
-                            if not msg.velocity:
-                                 # or not msg.time => DANGER:
-                                if self.Settings.GetDebugMsg():
-                                    print("--> DEBUG NOTE OFF PLAYED")
-                                break
-
-
                         # note present but must not be played; skip the pause
                         if not self.channels[msg.channel]:
                             break
 
+                        """
+                        En pause, on laisse passer les notes_off
+                        et les note_on sans vélocité
+
+                        Trop de problemes ?
+                        no velocity (note off) 2025
+                        Il faudrait le faire au début du morceaux,
+                        pas dans la boucle d'attente
+                        Le problème se pose si en début de morceaux deux notes
+                        doivent être jouer en même temps ?
+                        """
+                        if msg.type == "note_on" or msg.type == "note_off":
+                            if not msg.velocity: # or not msg.time => DANGER:
+                                if self.Settings.GetDebugMsg():
+                                    print("--> DEBUG NOTE OFF PLAYED")
+                                break
+
                         # Note ready to play
-                        elif msg.type == "note_on" and not activity :
+                        if msg.type == "note_on" and not activity:
                             activity = True
                             self.led_file_activity.emit(1)
 
