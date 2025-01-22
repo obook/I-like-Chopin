@@ -1,6 +1,13 @@
 # This Python file uses the following encoding: utf-8
 '''
 Require : PySide6 mido python-rtmidi matplotlib
+
+!!
+
+Was required :
+
+pip install --upgrade --force-reinstall matplotlib
+
 '''
 import sys
 import os
