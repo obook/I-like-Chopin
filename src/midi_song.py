@@ -8,26 +8,8 @@ import os
 from pathlib import Path, PurePath
 import uuid
 import random
-
-states = {
-    "notracktoplay": -4,
-    "bad": -3,
-    "notfound": -2,
-    "ended": -1,
-    "unknown": 0,
-    "cueing": 1,
-    "ready": 2,  # wait a first keyboard key
-    "playing": 3,
-}
-
-modes = {
-    "error": -1,
-    "unknown": 0,
-    "playback": 1,
-    "passthrough": 2,
-    "player": 3,
-    "random": 4,
-}
+from midi_modes import modes
+from midi_states import states
 
 
 class ClassMidiSong:

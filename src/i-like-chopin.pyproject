@@ -26,6 +26,8 @@
         "web_network.py",
         "midi_controller.py",
         "playlist.py",
-        "_mainwindow_menu.py"
+        "_mainwindow_menu.py",
+        "midi_modes.py",
+        "midi_states.py"
     ]
 }
