@@ -46,7 +46,7 @@ def SystainPedalCheck(file):
 
 print("** START")
 
-root_dir = os.path.expanduser("~/MIDI")  # ~/MIDI
+root_dir = os.path.expanduser("~/obooklage@gmail.com/ownCloud.CAP/MUSIQUE/adl-piano-midi-A ANALYSER/")  # ~/MIDI
 logfile = os.path.join(root_dir, "MIDILIST.csv")
 f = open(logfile, "w")
 f.write("index;filename;duration;tracks;sustain\n")

@@ -33,6 +33,10 @@ class timers:
         self.timer3.start(25000)
 
     def timer_song(self):
+
+
+        # print("--> DEBUG GetMode = ", self.Settings.GetMode() )
+
         if self.Midi.GetInputPort() and not self.ConnectInputState:
             self.ui.labelStatusInput.setPixmap(QtGui.QPixmap(self.ICON_GREEN_LED))
             self.ConnectInputState = True

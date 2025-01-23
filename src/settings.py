@@ -11,6 +11,16 @@ import uuid
 import mido
 from midi_song import modes
 
+"""
+modes = {
+    "error": -1,
+    "unknown": 0,
+    "playback": 1,
+    "passthrough": 2,
+    "player": 3,
+    "random": 4,
+}
+"""
 
 class ClassSettings:
     """Class for recall and store preferences and settings"""
@@ -186,6 +196,17 @@ class ClassSettings:
 
     def GetMode(self):
         return self.GetSetting("Mode", modes["playback"])
+
+
+    """ à faire
+
+    def GetModeText(self):
+        mode  = self.GetMode()
+
+        return self.GetSetting("Mode", modes["playback"])
+
+    """
+
 
     def IsMode(self, mode):  # EG IsMode(modes['playback'])
         if self.GetMode() == mode:
