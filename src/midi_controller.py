@@ -178,6 +178,20 @@ class ClassMidiController(QThread):
 
                 # Key : Record : switch Playback/Passthrough
                 elif msg.note == 95 and msg.velocity:
+
+
+
+
+                    '''
+                    import datetime
+                    now = datetime.datetime.now()
+                    print(now.time())
+                    '''
+
+                    print("----> DEBUG ClassMidiController received Record")
+
+
+
                     self.ClearSurfaceKeyboard()
                     msg = Message('note_on', note=msg.note)
                     self.SendController(msg)
