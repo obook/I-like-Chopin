@@ -119,6 +119,36 @@ class ClassThreadInput(QThread):
             elif msg.data == (0, 32, 107, 127, 66, 2, 0, 0, 23, 0):  # switch mode playnack/passthrough with the key 'Preset' released
                 self.toogle_activity.emit()
 
+                # Test Transposition
+
+                '''
+
+                Arturia Keylab 61 Essential : Transposition midi keys
+
+                Octave +
+                sysex data (0, 32, 107, 127, 66, 2, 0, 0, 17, 127)
+                sysex data (0, 32, 107, 127, 66, 2, 0, 0, 17, 0)
+
+                Octave -
+                sysex data (0, 32, 107, 127, 66, 2, 0, 0, 16, 127)
+                sysex data (0, 32, 107, 127, 66, 2, 0, 0, 16, 0)
+
+                Reset octave sequence :
+                sysex data (0, 32, 107, 127, 66, 2, 0, 0, 17, 127)
+                sysex data (0, 32, 107, 127, 66, 2, 0, 0, 16, 127)
+                sysex data (0, 32, 107, 127, 66, 2, 0, 0, 16, 0)
+                sysex data (0, 32, 107, 127, 66, 2, 0, 0, 17, 0)
+
+                Notice : octave up is note + 12
+
+                '''
+
+            elif msg.data == (0, 32, 107, 127, 66, 2, 0, 0, 17, 0):  # octave +
+                print("--> DEBUG TRANSPOSE OCTAVE +")
+            elif msg.data == (0, 32, 107, 127, 66, 2, 0, 0, 16, 0):  # octave -
+                print("--> DEBUG TRANSPOSE OCTAVE -")
+
+
         # Keys pressed counter
         elif msg.type == "note_on":
             if msg.velocity:
