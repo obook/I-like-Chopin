@@ -81,13 +81,22 @@
             <!-- <li><a href="#" class="class_top_button ui-btn ui-icon-star ui-btn-icon-bottom" onclick="OrderDo('score');">Vote</a></li> -->
             <li><a href='#playlist_add' class="class_top_button ui-btn ui-icon-star ui-btn-icon-bottom" data-rel='popup' data-position-to='window' data-transition='pop'>Vote</a></li>
             <li><a href="#popupDialog" class="class_top_button ui-btn ui-icon-action ui-btn-icon-bottom" data-rel="popup" data-position-to="window" data-transition="pop">Share</a></li>
-          </ul>
+            <!-- no more 5 buttons in nav please
+              <li><a href="#page2" class="class_top_button ui-btn ui-icon-action ui-btn-icon-bottom" data-rel="popup" data-position-to="window" data-transition="pop">Page2</a></li>
+            -->
+            </ul>
         </div><!-- /navbar -->
         <progress id="progressbar" class="custom-progress" max="100"></progress>
       </div><!-- /Header -->
 
       <!-- Content -->
       <div role="main" class="ui-content">
+
+        <!-- TEST = OK
+
+        <p>View internal page called <a href="#page2">page2</a></p>
+
+         -->
 
         <!-- files list-->
         <span id="files_list"></span>
@@ -113,6 +122,19 @@
         </div><!-- /Footer-->
 
     </div> <!-- /Page -->
+
+
+    <!-- Page 2 -->
+    <div data-role="page" id="page2" data-theme="b">
+
+      <div data-role="header">header</div>
+      <div role="main" class="ui-content">
+        <p>View internal main page called <a href="#main">main</a></p>
+      </div>
+      <div data-role="footer">footer</div>
+
+    </div> <!-- /Page 2 -->
+
 
     <script src="index.js"></script>
 
