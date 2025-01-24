@@ -92,10 +92,10 @@ class timers:
             text += " "
             text += str(round(self.midisong.GetDuration(), 2)) + "'"
             if self.Midi.keys["offset"]:
-                text += " ["
+                text += " PITCH "
                 if self.Midi.keys["offset"] > 0:
                     text += "+"
-                text += str(self.Midi.keys["offset"]) + "]"
+                text += str(self.Midi.keys["offset"])
 
             self.setWindowTitle(text)
 

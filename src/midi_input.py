@@ -120,7 +120,7 @@ class ClassThreadInput(QThread):
             elif msg.data == (0, 32, 107, 127, 66, 2, 0, 0, 23, 0):  # switch mode playnack/passthrough with the key 'Preset' released
                 self.toogle_activity.emit()
 
-                # Test Transposition
+                # Adjustment of the pitch of the  by keyboard
 
                 '''
 
@@ -147,19 +147,19 @@ class ClassThreadInput(QThread):
 
             elif msg.data == (0, 32, 107, 127, 66, 2, 0, 0, 17, 127):  # offset +
 
-                if round(time.time() - self.start_key_offset,2) == 0 :  # two keys pressed = reset
+                if round(time.time() - self.start_key_offset, 1) == 0 :  # two keys pressed = reset
                     self.keys["offset"] = 0
                 else:
-                    self.keys["offset"] += 1
+                    self.keys["offset"] += 1  # pitch +1
 
                 self.start_key_offset = time.time()  # in seconds
 
             elif msg.data == (0, 32, 107, 127, 66, 2, 0, 0, 16, 127):  # offset -
 
-                if round(time.time() - self.start_key_offset,2) == 0 :  # two keys pressed = reset
+                if round(time.time() - self.start_key_offset, 1) == 0 :  # two keys pressed = reset
                     self.keys["offset"] = 0
                 else:
-                    self.keys["offset"] -= 1
+                    self.keys["offset"] -= 1  # pitch -1
 
                 self.start_key_offset = time.time()  # in seconds
 
