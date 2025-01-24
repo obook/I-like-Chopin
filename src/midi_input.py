@@ -25,6 +25,7 @@ class ClassThreadInput(QThread):
     Settings = None
     running = False
     modulation_start_time = 0
+    start_key_offset = time.time()
 
     led_input_activity = Signal(int)
     statusbar_activity = Signal(str)
@@ -125,11 +126,11 @@ class ClassThreadInput(QThread):
 
                 Arturia Keylab 61 Essential : Transposition midi keys
 
-                Octave +
+                Key Octave +
                 sysex data (0, 32, 107, 127, 66, 2, 0, 0, 17, 127)
                 sysex data (0, 32, 107, 127, 66, 2, 0, 0, 17, 0)
 
-                Octave -
+                Key Octave -
                 sysex data (0, 32, 107, 127, 66, 2, 0, 0, 16, 127)
                 sysex data (0, 32, 107, 127, 66, 2, 0, 0, 16, 0)
 
@@ -140,14 +141,27 @@ class ClassThreadInput(QThread):
                 sysex data (0, 32, 107, 127, 66, 2, 0, 0, 17, 0)
 
                 Notice : octave up is note + 12
+                ------
 
                 '''
 
-            elif msg.data == (0, 32, 107, 127, 66, 2, 0, 0, 17, 0):  # octave +
-                print("--> DEBUG TRANSPOSE OCTAVE +")
-            elif msg.data == (0, 32, 107, 127, 66, 2, 0, 0, 16, 0):  # octave -
-                print("--> DEBUG TRANSPOSE OCTAVE -")
+            elif msg.data == (0, 32, 107, 127, 66, 2, 0, 0, 17, 127):  # offset +
 
+                if round(time.time() - self.start_key_offset,2) == 0 :  # two keys pressed = reset
+                    self.keys["offset"] = 0
+                else:
+                    self.keys["offset"] += 1
+
+                self.start_key_offset = time.time()  # in seconds
+
+            elif msg.data == (0, 32, 107, 127, 66, 2, 0, 0, 16, 127):  # offset -
+
+                if round(time.time() - self.start_key_offset,2) == 0 :  # two keys pressed = reset
+                    self.keys["offset"] = 0
+                else:
+                    self.keys["offset"] -= 1
+
+                self.start_key_offset = time.time()  # in seconds
 
         # Keys pressed counter
         elif msg.type == "note_on":

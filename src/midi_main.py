@@ -20,9 +20,12 @@ from PySide6.QtCore import QObject, Signal
 
 
 class ClassMidiMain(QObject):
-    """Main Midi Class"""
+    """Main Midi Class
+    key_on = a key from keybaord is pressed
+    offset = change note ...
+    """
 
-    keys = {"key_on": 0, "speed": 0, "humanize": 0}
+    keys = {"key_on": 0, "speed": 0, "humanize": 0, "offset": 0}
 
     # Threads
     ThreadInput = None

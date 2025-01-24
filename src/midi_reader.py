@@ -199,6 +199,15 @@ class ClassThreadMidiReader(QThread):
                 elif msg.type == "note_off":
                     self.led_file_activity.emit(0)
             '''
+
+            # Transpose
+
+            if self.keys["offset"]:
+                if msg.type == "note_on" or msg.type == "note_off":
+                    msg.note = msg.note + self.keys["offset"]
+                if self.Settings.GetDebugMsg():
+                    print("---> DEBUG OFFSET = ", self.keys )
+
             # Just a Midi player ############################################################
             if self.midisong.IsMode(modes["player"]) or self.Settings.IsMode(modes["random"]):
 

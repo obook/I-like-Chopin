@@ -88,7 +88,16 @@ class timers:
         self.window_title = ["I LIKE CHOPIN"]
 
         if self.midisong:
-            self.setWindowTitle(self.midisong.GetParent() + " " + str(round(self.midisong.GetDuration(), 2)) + "'")
+            text = self.midisong.GetParent()
+            text += " "
+            text += str(round(self.midisong.GetDuration(), 2)) + "'"
+            if self.Midi.keys["offset"]:
+                text += " ["
+                if self.Midi.keys["offset"] > 0:
+                    text += "+"
+                text += str(self.Midi.keys["offset"]) + "]"
+
+            self.setWindowTitle(text)
 
             # print to LCD
             # BUG : ONE note is send from main midi channel !! -> not now , why ???
