@@ -120,6 +120,11 @@
     <div data-role="page" id="page2" data-theme="b">
 
       <div data-role="header">
+        
+        <h1 class="filename"><span id="songname_page2" class="class_songname_0">I like Chopin</span></h1>
+
+        <h2><div class="info_line"><span id='folder_page2'></span>&nbsp;<span id='info_line_page2'></span></div></h2>
+
         <div data-role="navbar"> <!-- Buttons !-- no more 5 buttons in nav please -->
           <ul data-theme="a">
             <li><a href="#" class="class_top_button ui-btn ui-icon-delete ui-btn-icon-bottom" onclick="OrderDo('stop');">Stop</a></li>
@@ -129,6 +134,7 @@
             <li><a href="#main" class="class_top_button ui-btn ui-icon-arrow-l ui-btn-icon-bottom" data-transition="pop">Return</a></li>
           </ul>
         </div><!-- /navbar -->
+        <progress id="progressbar_page2" class="custom-progress" max="100"></progress>
       </div><!-- /header -->
 
       <div role="main" class="ui-content">

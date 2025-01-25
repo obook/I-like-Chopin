@@ -70,6 +70,21 @@ function CleanSongName(empty_strings=false) {
         $('#info_line').text("");
         $('#progressbar').val(0);
     }
+
+    /* Page 2 */
+
+    $("#songname_page2").removeClass("class_songname_0");
+    $("#songname_page2").removeClass("class_songname_1");
+    $("#songname_page2").removeClass("class_songname_2");
+    $("#songname_page2").removeClass("class_songname_3");
+    $("#songname_page2").removeClass("class_songname_unknown");
+    $("#songname_page2").removeClass("class_songname_error");
+    if(empty_strings==true) {
+        $('#songname_page2').text("...");;
+        $('#folder_page2').text("");
+        $('#info_line_page2').text("");
+        $('#progressbar_page2').val(0);
+    }
 }
 
 function ShowLoader() {
@@ -137,6 +152,10 @@ async function TimerGetStats() {
 
         /* Song Name */
         $('#songname').text(data.nameclean);
+
+        /* Song name page 2 */
+        $('#songname_page2').text(data.nameclean);
+
         document.title = data.nameclean;
 
         last_song_nameclean = data.nameclean; /* Eg "CHIQUITITA" */
@@ -162,6 +181,9 @@ async function TimerGetStats() {
         /* Parent folder of MIDIfile */
         $('#folder').text(data.folder);
 
+        /* Page 2 */
+        $('#folder_page2').text(data.folder);
+
         /* Actives MIDI channels of MIDIfile */
         channels = " ";
         for (const [key, value] of Object.entries(data.channels)) {
@@ -178,29 +200,47 @@ async function TimerGetStats() {
         else
             line = line + " ❌"
         line = line + " ["+channels+"] ";
+        
         $('#info_line').text(line);
+        /* Page 2 */
+        $('#info_line_page2').text(line);
 
         /* Progress bar */
         $('#progressbar').val(data.played);
+        /* Page 2 */
+        $('#progressbar_page2').val(data.played);
 
         /* Handle MIDIfile states and errors */
         if (data.state <0) {
             $("#songname").addClass("class_songname_error"); /* Error */
+            $("#songname_page2").addClass("class_songname_error");
+        }
+
         if  (data.state ==-4)  {/* no track to play */
-            document.getElementById('info_line').textContent="! NO ACTIVE TRACK TO PLAY";
+            /* document.getElementById('info_line').textContent="! NO ACTIVE TRACK TO PLAY"; */
+            $('#info_line').text("! NO ACTIVE TRACK TO PLAY");
         }
-        }
-        else if (data.state <2) /* state 1 or 2 unknown or cueing */
+        else if (data.state <2) { /* state 1 or 2 unknown or cueing */
             $("#songname").addClass("class_songname_unknown"); /* Unknown */
+            $("#songname_page2").addClass("class_songname_unknown");
+        }
         else { /* state 2,3 = ready or playing */
-            if (data.mode == 2)
-            $("#songname").addClass("class_songname_2"); /* Passthrough */
-            else if (data.mode == 3)
-            $("#songname").addClass("class_songname_3"); /* Player Playing*/
-            else if (data.mode == 4)
-            $("#songname").addClass("class_songname_0"); /* Random Playing */
-            else
-            $("#songname").addClass("class_songname_1");/* Ready/Playing */
+            if (data.mode == 2) {
+                $("#songname").addClass("class_songname_2"); /* Passthrough */
+                $("#songname_page2").addClass("class_songname_2");
+            }
+            else if (data.mode == 3) {
+                $("#songname").addClass("class_songname_3"); /* Player Playing*/
+                $("#songname_page2").addClass("class_songname_3");
+            }
+            else if (data.mode == 4) {
+                $("#songname").addClass("class_songname_0"); /* Random Playing */
+                $("#songname_page2").addClass("class_songname_0");
+            }
+            else {
+                $("#songname").addClass("class_songname_1");/* Ready/Playing */
+                $("#songname_page2").addClass("class_songname_1");
+            }
         }
 
         /* Mode */
@@ -216,12 +256,26 @@ async function TimerGetStats() {
             $('#select-mode').val("playback").selectmenu('refresh');
 
     } catch (error) {
-        console.error('---> NETWORK ERROR : ', error);
+        /* 
+        
+        WARNING : Triggeted under Chrome, some bad code upper ...
+        
+        */
+
+        console.log('---> NETWORK ERROR : ', error);
         $("#songname").addClass("class_songname_error");
         $('#songname').text("OFFLINE");;
         $('#folder').text("");
         $('#info_line').text("");
         $('#progressbar').val(0);
+
+        /* Page 2
+        $("#songname_page2").addClass("class_songname_error");
+        $('#songname_page2').text("OFFLINE");;
+        $('#folder_page2').text("");
+        $('#info_line_page2').text("");
+        $('#progressbar_page2').val(0);
+         */
     }
 }
 
