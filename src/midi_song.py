@@ -23,9 +23,10 @@ class ClassMidiSong:
     __sustain = 0
     __state = states["unknown"]
     __mode = modes["playback"]
-    __uuid = uuid.uuid4()
+    __uuid = None
 
     def __init__(self, filepath):
+        self.__uuid = uuid.uuid4()
         self.__state = states["unknown"]
         text = ""
         if not os.path.isfile(filepath):
