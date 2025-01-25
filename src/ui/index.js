@@ -1,10 +1,6 @@
+/* Init */
 
-/* Global variables */
-
-last_song_uuid = "";
-last_song_nameclean = ""; /* Eg "CHIQUITITA" NOT USED */
-last_song_folder = ""; /* Eg "ABBA" NOT USED */
-last_song_name = ""; /* Eg "Chiquitita.mid" NOT USED */
+localStorage.setItem("last_song_uuid", 0);
 
 /* Detect Windows */
 function IsWindowsPath(filePath) {
@@ -43,7 +39,7 @@ async function PlaySong(song) {
 async function OrderDo(action) {
     ShowLoader();
     const response = await fetch('/do?action='+action);
-    GetStats();
+    TimerGetStats();
 }
 
 /* Select mode changed */
@@ -98,7 +94,7 @@ function NameShort(filepath) { /* not used */
 }
 
 /* API */
-async function GetStats() {
+async function TimerGetStats() {
 
     $.mobile.loading( "hide" );
 
@@ -110,18 +106,33 @@ async function GetStats() {
         const data = await response.json();
 
         /* debug
+
         console.log("DEBUG GetStats=");
         console.log(data);
+
         */
+
 
         /* uuid */
         song_uuid = data.uuid;
+        last_song_uuid = localStorage.getItem("last_song_uuid");
 
         if(song_uuid != last_song_uuid)  { /* New song */
+
+            localStorage.setItem("last_song_uuid", song_uuid);
+
             CleanSongName(true);
-        }
-        else {
-            last_song_uuid = song_uuid;
+
+            /* change score on page2 *
+
+            See :
+
+            <a href='../score?pdf="+data.score+"' id="score" target='_blank' data-role='button'>SCORE</a>
+
+            */
+
+            SetScore(data.score);
+
         }
 
         /* Song Name */
@@ -300,7 +311,7 @@ async function GetPlaylist(){
 
         html = html + "</ul>\n";
 
-        $("#files_playlist").append(html).trigger( "create" );
+        $("#files_playlist").append(html).trigger("create");
 
     } catch (error) {
             console.error('---> NETWORK ERROR : ', error);
@@ -311,8 +322,6 @@ async function GetPlaylist(){
 
 /* QRCode */
 async function SetQRCode(){
-
-    // console.log("SetQRCode")
 
     try {
         const response = await fetch('/interfaces.json');
@@ -327,13 +336,18 @@ async function SetQRCode(){
     } catch (error) {
             console.error('---> NETWORK ERROR : ', error);
     }
-    /* QRCode */
 
 }
+
+/* Music Score */
+async function SetScore(scorefile){
+    $("#pdftarget embed").attr("src","../score?pdf="+scorefile).trigger("create");
+}
+
 
 /* Main script */
 SetQRCode();
 GetFiles();
-GetStats();
 GetPlaylist();
-setInterval(GetStats, 2000);
+TimerGetStats();
+setInterval(TimerGetStats, 2000);

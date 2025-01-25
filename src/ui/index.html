@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="icon.png" type="image/icon">
     <link rel="stylesheet" href="vendor/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" />
-    <script src="vendor/jquery-1.11.2.min.js"></script>
     <link rel="stylesheet" href="index.css" />
+    <script src="vendor/jquery-1.11.2.min.js"></script>
     <script src="vendor/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script src="vendor/qrcodejs/qrcode.min.js"></script>
   </head>
@@ -49,19 +49,20 @@
 
       <!-- Left panel -->
       <div data-role="panel" id="panel_left" data-display="overlay" data-position="left" data-theme="b">
+        <a href="#" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-icon-delete ui-btn-icon-right">Close</a>
+        <hr>
+        <a href='#playlist_add' class="class_top_button ui-btn ui-icon-star ui-btn-icon-right" data-rel='popup' data-position-to='window' data-transition='pop'>Add current song</a>
         <!-- files in playlist -->
         <span id="files_playlist"></span>
-        <hr>
-        <a href="#" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-icon-delete ui-btn-icon-right">Close</a>
       </div><!-- /panel -->
 
       <!-- Right panel -->
       <div data-role="panel" id="panel_right" data-display="overlay" data-position="right" data-theme="b">
         <!-- <a href="#" class="ui-btn ui-btn-right ui-icon-grid ui-btn-icon-notext ui-corner-all" onclick="toggleFullScreen();">No text</a> -->
+        <a href="#" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-icon-delete ui-btn-icon-right">Close</a>
+        <hr>
         <a href='../score?pdf="+data.score+"' id="score" target='_blank' data-role='button'>SCORE</a>
         <a href="#" data-role='button' onclick="toggleFullScreen();">FULLSCREEN</a>
-        <hr>
-        <a href="#" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-icon-delete ui-btn-icon-right">Close</a>
       </div><!-- /panel -->
 
       <!-- Header -->
@@ -73,17 +74,15 @@
         <a href="#panel_left" data-icon="carat-r" data-iconpos="notext" data-shadow="false" data-iconshadow="false" class="ui-nodisc-icon">Open left panel</a>
         <a href="#panel_right" data-icon="carat-l" data-iconpos="notext" data-shadow="false" data-iconshadow="false" class="ui-nodisc-icon">Open right panel</a>
 
-        <div data-role="navbar"> <!-- Buttons -->
+        <div data-role="navbar"> <!-- Buttons ! no more 5 buttons in nav please -->
           <ul data-theme="a">
             <li><a href="#" class="class_top_button ui-btn ui-icon-delete ui-btn-icon-bottom" onclick="OrderDo('stop');">Stop</a></li>
             <li><a href="#" class="class_top_button ui-btn ui-icon-refresh ui-btn-icon-bottom" onclick="OrderDo('replay');">Replay</a></li>
             <li><a href="#" class="class_top_button ui-btn ui-icon-recycle ui-btn-icon-bottom" onclick="OrderDo('shuffle');">Shuffle</a></li>
             <!-- <li><a href="#" class="class_top_button ui-btn ui-icon-star ui-btn-icon-bottom" onclick="OrderDo('score');">Vote</a></li> -->
-            <li><a href='#playlist_add' class="class_top_button ui-btn ui-icon-star ui-btn-icon-bottom" data-rel='popup' data-position-to='window' data-transition='pop'>Vote</a></li>
             <li><a href="#popupDialog" class="class_top_button ui-btn ui-icon-action ui-btn-icon-bottom" data-rel="popup" data-position-to="window" data-transition="pop">Share</a></li>
-            <!-- no more 5 buttons in nav please
-              <li><a href="#page2" class="class_top_button ui-btn ui-icon-action ui-btn-icon-bottom" data-rel="popup" data-position-to="window" data-transition="pop">Page2</a></li>
-            -->
+            <li><a href="#page2" class="class_top_button ui-btn ui-icon-arrow-r ui-btn-icon-bottom" data-position-to="window" data-transition="pop">Score</a></li>
+
             </ul>
         </div><!-- /navbar -->
         <progress id="progressbar" class="custom-progress" max="100"></progress>
@@ -91,12 +90,6 @@
 
       <!-- Content -->
       <div role="main" class="ui-content">
-
-        <!-- TEST = OK
-
-        <p>View internal page called <a href="#page2">page2</a></p>
-
-         -->
 
         <!-- files list-->
         <span id="files_list"></span>
@@ -121,20 +114,30 @@
 
         </div><!-- /Footer-->
 
-    </div> <!-- /Page -->
+    </div> <!-- /Page main -->
 
-
-    <!-- Page 2 -->
+    <!-- Page page2 = music score automatically updated -->
     <div data-role="page" id="page2" data-theme="b">
 
-      <div data-role="header">header</div>
+      <div data-role="header">
+        <div data-role="navbar"> <!-- Buttons !-- no more 5 buttons in nav please -->
+          <ul data-theme="a">
+            <li><a href="#" class="class_top_button ui-btn ui-icon-delete ui-btn-icon-bottom" onclick="OrderDo('stop');">Stop</a></li>
+            <li><a href="#" class="class_top_button ui-btn ui-icon-refresh ui-btn-icon-bottom" onclick="OrderDo('replay');">Replay</a></li>
+            <li><a href="#" class="class_top_button ui-btn ui-icon-recycle ui-btn-icon-bottom" onclick="OrderDo('shuffle');">Shuffle</a></li>
+            <li><a href="#popupDialog" class="class_top_button ui-btn ui-icon-action ui-btn-icon-bottom" data-rel="popup" data-position-to="window" data-transition="pop">Share</a></li>
+            <li><a href="#main" class="class_top_button ui-btn ui-icon-arrow-l ui-btn-icon-bottom" data-transition="pop">Return</a></li>
+          </ul>
+        </div><!-- /navbar -->
+      </div><!-- /header -->
+
       <div role="main" class="ui-content">
-        <p>View internal main page called <a href="#main">main</a></p>
+        <div id="pdftarget">
+          <embed src="" width="100%" height="9000">
+        </div>
       </div>
-      <div data-role="footer">footer</div>
 
-    </div> <!-- /Page 2 -->
-
+    </div> <!-- /Page page2 -->
 
     <script src="index.js"></script>
 
