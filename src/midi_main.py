@@ -34,7 +34,7 @@ class ClassMidiMain(QObject):
 
     midisong = None
     channels = None
-    uuid = uuid.uuid4()
+    uuid = None
     statusbar_activity = Signal(str)
     readerstop_activity = Signal()
 
@@ -42,6 +42,7 @@ class ClassMidiMain(QObject):
 
     def __init__(self, pParent, channels):
         QObject.__init__(self)
+        self.uuid = uuid.uuid4()
         self.pParent = pParent
         self.Settings = self.pParent.Settings
         self.channels = channels

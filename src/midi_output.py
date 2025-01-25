@@ -14,7 +14,7 @@ from PySide6.QtCore import QThread, Signal
 class ClassThreadOutput(QThread):
     """Class for output midi to device"""
 
-    uuid = uuid.uuid4()
+    uuid = None
     pParent = None
     out_device = None
     outport = None
@@ -26,6 +26,7 @@ class ClassThreadOutput(QThread):
 
     def __init__(self, out_device, pParent):
         QThread.__init__(self)
+        self. uuid = uuid.uuid4()
         self.pParent = pParent
         self.Settings = pParent.Settings
         self.out_device = out_device
