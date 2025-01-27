@@ -4,7 +4,7 @@
 # Date : 23/01/2025
 # Desc1 : check names compatibles for Windows
 # Desc2 : create music score from midifiles
-# A venv must be created
+# A venv must be created with libraries : mido python-rtmidi
 
 midipath=$HOME"/Documents/GitHub/midi/"
 
