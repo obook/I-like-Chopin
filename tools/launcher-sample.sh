@@ -20,9 +20,12 @@ cd $midipath
 /usr/bin/git pull
 
 # Kill the applications that consume too much CPU or too much memory.
-killall insync
-killall AppRun.wrapped  # NextCloud
-killall pcloud
+# killall insync
+# killall AppRun.wrapped  # NextCloud
+# killall pcloud
+
+# Set all CPU to performance governor
+sudo cpufreq-set -r -g performance
 
 # Launch virtual piano synth
 "$synth" &
@@ -32,6 +35,5 @@ cd $applicationpath/src
 poetry run python i-like-chopin.py &
 
 # Launch brave-browser
-sleep 8
-/usr/bin/brave-browser "http://127.0.0.1:8888" &
-
+# sleep 8
+# /usr/bin/brave-browser "http://127.0.0.1:8888" &
