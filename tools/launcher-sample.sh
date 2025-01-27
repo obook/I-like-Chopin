@@ -10,10 +10,12 @@ midipath=$HOME"/Documents/GitHub/midi"
 synth=$HOME"/Musique/Pianoteq 8 STAGE/x86-64bit/Pianoteq 8 STAGE"
 
 # update application
+echo "Update "$applicationpath
 cd $applicationpath
 /usr/bin/git pull
 
 # update midilib
+echo "Update "$midipath
 cd $midipath
 /usr/bin/git pull
 
