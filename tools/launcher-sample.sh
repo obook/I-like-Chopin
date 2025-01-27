@@ -7,6 +7,7 @@
 
 applicationpath=$HOME"/Documents/GitHub/I-like-Chopin"
 midipath=$HOME"/Documents/GitHub/midi"
+synth=$HOME"/Musique/Pianoteq 8 STAGE/x86-64bit/Pianoteq 8 STAGE"
 
 # update application
 cd $applicationpath
@@ -18,11 +19,11 @@ cd $midipath
 
 # Kill the applications that consume too much CPU or too much memory.
 killall insync
-killall AppRun.wrapped
+killall AppRun.wrapped  # NextCloud
 killall pcloud
 
 # Launch virtual piano synth
-$HOME"/Musique/Pianoteq\ 8\ STAGE/x86-64bit/Pianoteq\ 8\ STAGE" &
+"$synth" &
 
 # Launch i-love-chopin
 cd $applicationpath/src
@@ -30,6 +31,5 @@ poetry run python i-like-chopin.py &
 
 # Launch brave-browser
 sleep 8
-# /usr/bin/brave-browser --start-fullscreen "http://127.0.0.1:8888" &
 /usr/bin/brave-browser "http://127.0.0.1:8888" &
 
