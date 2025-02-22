@@ -14,7 +14,7 @@ A funny program to play like Chopin.
 
 Bring your piano back to life and impress your friends with this musical magic trick!
 
-# Recommanded usage
+# Usage
 <!--
 ## Install poetry and libraries
 
@@ -26,9 +26,9 @@ poetry install
 ```
 -->
 
-## Install libraries
+## Installation
 
-<b>[Python3](https://www.python.org/)</b> and the Python dependency manager <b>[UV](https://docs.astral.sh/uv/)</b> are assumed to be already installed on your computer.
+<b>[Python3](https://www.python.org/)</b> and the Python package and project manager <b>[uv](https://docs.astral.sh/uv/)</b> are assumed to be already installed on your computer.
 
 <!--
 ```bash
@@ -45,6 +45,7 @@ apt install libxcb-cursor0
 ## Run
 
 ```bash
+cd ./src
 uv run i-like-chopin.py
 ```
 
