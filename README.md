@@ -25,13 +25,14 @@ cd src
 poetry install
 ```
 -->
+
 ## Install libraries
 
-<b>[Python3](https://www.python.org/)</b> and the Python dependency manager <b>[python-poetry](https://python-poetry.org)</b> are assumed to be already installed on your machine.
+<b>[Python3](https://www.python.org/)</b> and the Python dependency manager <b>[UV](https://docs.astral.sh/uv/)</b> are assumed to be already installed on your computer.
 
 ```bash
 cd src/
-poetry install
+uv run i-like-chopin.py
 ```
 On Linux, you need utility libraries for X C Binding libxcb-cursor0 or xcb-cursor0.
 
