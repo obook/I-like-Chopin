@@ -22,6 +22,7 @@ Windows port to LCD : open_output to [MIDIIN2 (Arturia KeyLab Essenti 2] or [Art
 """
 
 import uuid
+from unidecode import unidecode
 from mido import (open_input, open_output, Message)
 from PySide6.QtCore import (QThread, QTimer, Signal)
 
@@ -241,7 +242,7 @@ class ClassMidiController(QThread):
                     self.SendController(msg)
 
     def LCD_StringToDec(self, line):
-        line = " ".join(line.split())  # clean double spaces, tab, etc
+        line = " ".join(unidecode(line).split())  # clean double spaces, tab, etc
         dec = []
         for c in line:
             if ord(c) > 127:  # only ASCII please...

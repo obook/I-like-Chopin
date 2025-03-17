@@ -65,6 +65,7 @@ With a Virtual Synth       |With Piano in Daw Mode     | With Rack Synth
 * qrcode 7.4.2
 * pillow 10.4.0
 * bottle 0.13.2
+* unidecode 1.3.8
 
 # Utilities
 
