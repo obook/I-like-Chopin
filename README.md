@@ -57,7 +57,7 @@ With a Virtual Synth       |With Piano in Daw Mode     | With Rack Synth
 
 # Programs and libraries used
 
-* Python 3.10.12
+* Python >=3.10, <3.13
 * PySide6 6.7.1
 * mido 1.2.10
 * python-rtmidi 1.4.7
