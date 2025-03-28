@@ -44,6 +44,7 @@ class ClassSettings:
         "ControllertDeviceIN": None,
         "ControllertDeviceOUT": None,
         "MidiPath": defaultmidipath,
+        "MidiSong": None,
         "ForceInstrument": False,
         "PianoProgram": 0,
         "Mode": modes["playback"],
