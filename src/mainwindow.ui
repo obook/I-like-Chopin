@@ -129,7 +129,7 @@
       <bool>true</bool>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>Push Me</string>
      </property>
      <property name="flat">
       <bool>false</bool>
