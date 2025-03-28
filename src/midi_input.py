@@ -177,6 +177,8 @@ class ClassThreadInput(QThread):
         elif msg.type == "note_off":
             self.keys["key_on"] -= 1
             self.led_input_activity.emit(0)
+            if self.keys["key_on"] < 0:
+                self.keys["key_on"] = 0
 
         # Rares cases
         if self.keys["key_on"] < 0:
