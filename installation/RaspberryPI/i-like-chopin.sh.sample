@@ -1,8 +1,7 @@
 #!/bin/sh
-if ! hash python3; then
-    echo "python3 is not installed"
-    exit 1
-fi
-# The ABSOLUTE src path
-cd /home/.../I-like-Chopin/src
-poetry run python i-like-chopin.py
+# Wait taskbar and wifi
+sleep 20
+/usr/bin/qmidinet&
+sleep 5
+cd ~/I-like-Chopin/src
+~/.local/bin/uv run ~/I-like-Chopin/src/i-like-chopin.py
