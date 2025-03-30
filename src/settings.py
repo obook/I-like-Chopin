@@ -215,7 +215,10 @@ class ClassSettings:
         return False
 
     def SaveMode(self, value):
-        return self.SetSetting("Mode", value)
+        # We don't really save on config file, only on memory
+        # return self.SetSetting("Mode", value)
+        self.config["Mode"] = value
+        return True
 
     """
     Only manual editing
