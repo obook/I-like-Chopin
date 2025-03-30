@@ -72,6 +72,7 @@ class ClassSettings:
                 )
 
         self.LoadConfig()
+        self.config['Mode'] = modes["playback"]  # force playback at startup
 
     def __del__(self):
         print(f"Settings {self.uuid} destroyed [{self.settingsfile}]")
@@ -196,8 +197,7 @@ class ClassSettings:
         return self.SetSetting("PianoProgram", value)
 
     def GetMode(self):
-        # return self.GetSetting("Mode", modes["playback"])
-        return modes["playback"]
+        return self.GetSetting("Mode", modes["playback"])
 
     """ à faire
 
