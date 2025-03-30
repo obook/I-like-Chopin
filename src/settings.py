@@ -208,7 +208,6 @@ class ClassSettings:
 
     """
 
-
     def IsMode(self, mode):  # EG IsMode(modes['playback'])
         if self.GetMode() == mode:
             return True
@@ -216,9 +215,9 @@ class ClassSettings:
 
     def SaveMode(self, value):
         # We don't really save on config file, only on memory
-        # return self.SetSetting("Mode", value)
-        self.config["Mode"] = value
-        return True
+        # self.config["Mode"] = value
+        # return True
+        return self.SetSetting("Mode", value)
 
     """
     Only manual editing

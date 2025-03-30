@@ -69,7 +69,7 @@ class Mainwindow(
         # Midi
         self._midi_init()
 
-        # Force playback mode
+        # Force playback mode at startup
         self.Settings.SaveMode(modes["playback"])
         self.SetPlayerModeButtons()
 
