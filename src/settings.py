@@ -196,8 +196,8 @@ class ClassSettings:
         return self.SetSetting("PianoProgram", value)
 
     def GetMode(self):
-        return self.GetSetting("Mode", modes["playback"])
-
+        # return self.GetSetting("Mode", modes["playback"])
+        return modes["playback"]
 
     """ à faire
 
