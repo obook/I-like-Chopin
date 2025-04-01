@@ -86,7 +86,7 @@ class ClassThreadInput(QThread):
     def callback(self, msg):
 
         # Keys pressed counter
-        elif msg.type == "note_on":
+        if msg.type == "note_on":
             if msg.velocity:
                 self.keys["key_on"] += 1
                 self.led_input_activity.emit(1)
