@@ -20,7 +20,7 @@ Copyright (c) 2009-2024, Marcel Hellkamp.
 License: MIT (see LICENSE for details)
 '''
 class MyWSGIRefServer(ServerAdapter):
-    quiet = True  # ADD SILENT MODE.
+    # quiet = True  ADD SILENT MODE.
     def run(self, app):  # pragma: no cover
         from wsgiref.simple_server import make_server
         from wsgiref.simple_server import WSGIRequestHandler, WSGIServer
@@ -146,7 +146,7 @@ class MyBottleServer:
             return json.dumps(file_dic)
 
         @route('/playlist.json')
-        def _files():
+        def _playlist():
             file_dic = self.pParent.Playlist.GetPlayList()
             response.content_type = 'application/json'
             return json.dumps(file_dic)
