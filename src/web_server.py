@@ -20,7 +20,7 @@ Copyright (c) 2009-2024, Marcel Hellkamp.
 License: MIT (see LICENSE for details)
 '''
 class MyWSGIRefServer(ServerAdapter):
-    # quiet = True  ADD SILENT MODE.
+    quiet = True  # ADD SILENT MODE.
     def run(self, app):  # pragma: no cover
         from wsgiref.simple_server import make_server
         from wsgiref.simple_server import WSGIRequestHandler, WSGIServer
