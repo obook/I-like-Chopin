@@ -92,6 +92,7 @@ class ClassMidiMain(QObject):
             self.ThreadInput.stop()
             while self.ThreadInput.isRunning():
                 time.sleep(0.01)
+        self.keys["key_on"] = 0
         self.ThreadInput = ClassThreadInput(in_device, self.keys, self.pParent)
         self.ThreadInput.start()
 
@@ -128,7 +129,7 @@ class ClassMidiMain(QObject):
             self.ThreadMidiReader.stop()  # test
             while self.ThreadMidiReader.isRunning():
                 time.sleep(0.01)
-
+        self.keys["key_on"] = 0
         self.ThreadMidiReader = ClassThreadMidiReader(
             midifile, self.keys, self.channels, self.pParent
         )
@@ -152,6 +153,7 @@ class ClassMidiMain(QObject):
         return self.midisong
 
     def ChangeMidiMode(self, mode):
+        self.keys["key_on"] = 0
         self.midisong.SetMode(mode)
 
     def GetMidiSong(self):
@@ -160,6 +162,7 @@ class ClassMidiMain(QObject):
         return self.ThreadMidiReader.midisong
 
     def Playback(self):
+        self.keys["key_on"] = 0
         self.ThreadMidiReader.start()
 
     def Mode(self, playback=True):
@@ -172,12 +175,14 @@ class ClassMidiMain(QObject):
         self.statusbar_activity.emit(msg)
 
     def StopPlayer(self):
+        self.keys["key_on"] = 0
         if self.ThreadMidiReader:
             self.ThreadMidiReader.stop()  # test
             # self.ThreadMidiReader = None
         self.readerstop_activity.emit()
 
     def Stop(self):
+        self.keys["key_on"] = 0
         if self.ThreadMidiReader:
             self.ThreadMidiReader.stop()
             self.ThreadMidiReader = None
@@ -189,6 +194,7 @@ class ClassMidiMain(QObject):
         self.statusbar_activity.emit("")
 
     def ResetOutput(self):
+        self.keys["key_on"] = 0
         if self.ThreadOutput:
             self.ThreadOutput.reset()
 

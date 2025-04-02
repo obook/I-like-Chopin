@@ -12,6 +12,7 @@ from PySide6.QtWidgets import QPushButton
 from settings import ClassSettings
 from history import ClassHistory
 from playlist import ClassPlaylist
+from midi_song import modes
 
 class _init:
     """Interface initialization"""
@@ -44,6 +45,9 @@ class _init:
         # OK
         # print("---> _initialize __init__")
         self.Settings = ClassSettings()
+        # Force playback mode at startup
+        self.Settings.SaveMode(modes["playback"])
+
         self.History = ClassHistory()
         self.Playlist = ClassPlaylist(self)
 

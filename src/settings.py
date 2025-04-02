@@ -44,6 +44,7 @@ class ClassSettings:
         "ControllertDeviceIN": None,
         "ControllertDeviceOUT": None,
         "MidiPath": defaultmidipath,
+        "MidiSong": None,
         "ForceInstrument": False,
         "PianoProgram": 0,
         "Mode": modes["playback"],
@@ -71,6 +72,7 @@ class ClassSettings:
                 )
 
         self.LoadConfig()
+        self.config['Mode'] = modes["playback"]  # force playback at startup
 
     def __del__(self):
         print(f"Settings {self.uuid} destroyed [{self.settingsfile}]")
@@ -197,7 +199,6 @@ class ClassSettings:
     def GetMode(self):
         return self.GetSetting("Mode", modes["playback"])
 
-
     """ à faire
 
     def GetModeText(self):
@@ -207,13 +208,15 @@ class ClassSettings:
 
     """
 
-
     def IsMode(self, mode):  # EG IsMode(modes['playback'])
         if self.GetMode() == mode:
             return True
         return False
 
     def SaveMode(self, value):
+        # We don't really save on config file, only on memory
+        # self.config["Mode"] = value
+        # return True
         return self.SetSetting("Mode", value)
 
     """

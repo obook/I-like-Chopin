@@ -85,6 +85,27 @@ class ClassThreadInput(QThread):
 
     def callback(self, msg):
 
+        # Keys pressed counter
+        if msg.type == "note_on":
+            if msg.velocity:
+                self.keys["key_on"] += 1
+                self.led_input_activity.emit(1)
+            else:
+                # A MIDI Note On with a velocity of 0 is regarded as a Note Off.
+                # That is part of the MIDI Standard
+                self.keys["key_on"] -= 1
+                self.led_input_activity.emit(0)
+
+        elif msg.type == "note_off":
+            self.keys["key_on"] -= 1
+            self.led_input_activity.emit(0)
+            if self.keys["key_on"] < 0:
+                self.keys["key_on"] = 0
+
+        # Rares cases
+        if self.keys["key_on"] < 0:
+            self.keys["key_on"] = 0
+
         # Control change - Midi commands
         if msg.type == "control_change":
             if msg.control == self.Settings.GetHumanizeChannel():  # default : 71
@@ -162,25 +183,6 @@ class ClassThreadInput(QThread):
                     self.keys["offset"] -= 1  # pitch -1
 
                 self.start_key_offset = time.time()  # in seconds
-
-        # Keys pressed counter
-        elif msg.type == "note_on":
-            if msg.velocity:
-                self.keys["key_on"] += 1
-                self.led_input_activity.emit(1)
-            else:
-                # A MIDI Note On with a velocity of 0 is regarded as a Note Off.
-                # That is part of the MIDI Standard
-                self.keys["key_on"] -= 1
-                self.led_input_activity.emit(0)
-
-        elif msg.type == "note_off":
-            self.keys["key_on"] -= 1
-            self.led_input_activity.emit(0)
-
-        # Rares cases
-        if self.keys["key_on"] < 0:
-            self.keys["key_on"] = 0
 
         # Passthrough mode
         if self.Settings.IsMode(modes["passthrough"]):

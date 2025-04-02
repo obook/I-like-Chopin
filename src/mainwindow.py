@@ -69,8 +69,7 @@ class Mainwindow(
         # Midi
         self._midi_init()
 
-        # Force playback mode
-        self.Settings.SaveMode(modes["playback"])
+        # Play mode
         self.SetPlayerModeButtons()
 
         # ComboBoxes Inputs/Outputs

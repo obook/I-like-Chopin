@@ -156,7 +156,7 @@ class Ui_MainWindow(object):
         self.labelStatusInput.setText(QCoreApplication.translate("MainWindow", u"LED", None))
         self.labelStatusOuput.setText(QCoreApplication.translate("MainWindow", u"LED", None))
         self.labelStatusMidifile.setText(QCoreApplication.translate("MainWindow", u"LED", None))
-        self.pushButton_Files.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
+        self.pushButton_Files.setText(QCoreApplication.translate("MainWindow", u"Push Me", None))
         self.label_Ouput_2.setText(QCoreApplication.translate("MainWindow", u"MIDI Ready", None))
         self.labelLedQuality.setText(QCoreApplication.translate("MainWindow", u"LED", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"MIDI Channels", None))

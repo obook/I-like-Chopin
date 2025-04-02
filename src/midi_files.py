@@ -17,6 +17,7 @@ class ClassMidiFiles:
     defaultmidipath = None
     midifiles_dict = {} # files by artist key
     midifiles_raw = [] # All files list
+    midifiles_raw_random = [] # All files list
     midifiles_count = 0
     windows_forbiden = ["<", ">", ":", "\"", "/", "\\", "|", "?", "*", "“", "”"]  # removed : , "'"
 
@@ -63,13 +64,27 @@ class ClassMidiFiles:
             except Exception as error:
                 print(f"|!| MidiFiles {self.uuid} BAD NAME or FILENAME :", error)
 
+        # Random
+        self.MakeRandomPlaylist()
+
         print(
             f"MidiFiles {self.uuid} {self.midifiles_count} files in [{self.defaultmidipath}]"
         )
         return self.midifiles_dict
 
+    def MakeRandomPlaylist(self):
+        self.midifiles_raw_random = self.midifiles_raw.copy()
+        random.shuffle(self.midifiles_raw_random)
+
     def GetRandomSong(self):
-        return self.midifiles_raw[random.randrange(len(self.midifiles_raw))]
+        next_random = ""
+
+        if len(self.midifiles_raw_random):
+            next_random = self.midifiles_raw_random.pop()
+        else:
+            MakeRandomPlaylist()
+
+        return next_random
 
     def GetFiles(self):
         return self.midifiles_dict

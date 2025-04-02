@@ -36,10 +36,24 @@ cd src/
 uv run i-like-chopin.py
 ```
 -->
-On Linux, you need utility libraries for X C Binding libxcb-cursor0 or xcb-cursor0.
+### On Linux, you need utility libraries for X C Binding libxcb-cursor0 or xcb-cursor0.
 
 ```bash
 apt install libxcb-cursor0
+```
+### On Linux, you need to use rt-audio.
+
+```bash
+usermod -a -G audio $USER
+```
+
+Edit /etc/security/limits.conf and add at the end:
+
+```bash
+# rt-audio
+@audio - rtprio 90
+@audio - nice -10
+@audio - memlock 500000
 ```
 
 ## Run

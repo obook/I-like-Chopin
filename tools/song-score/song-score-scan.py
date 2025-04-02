@@ -59,7 +59,8 @@ def MakeScore(filename):
     filename_without_ext = Path(filename).stem
     filename_pdf = os.path.join(filepath, filename_without_ext + '.pdf')
     # filename_png = os.path.join(filepath, filename_without_ext + '.png')
-    call(['mscore3', filename, "-o", filename_pdf])
+    if not os.path.exists(filename_pdf):
+        call(['mscore3', filename, "-o", filename_pdf])
 
 
 root_dir = os.path.expanduser("~/MIDI")

@@ -126,11 +126,11 @@ class MyBottleServer:
                          "channels":midisong.GetChannels(),
                          "sustain":midisong.GetSustain(),
                      }
-            response.content_type = 'application/json'
-            try:
-                return json.dumps(status)  # crash then pgm shutdown
-            except Exception as error:
-                print(f"|!| BottleServer {self.uuid} error send status {error}")
+                response.content_type = 'application/json'
+                try:
+                    return json.dumps(status)  # crash then pgm shutdown
+                except Exception as error:
+                    print(f"|!| BottleServer {self.uuid} error send status {error}")
 
         @route('/interfaces.json')
         def _interfaces():
