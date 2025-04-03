@@ -6,7 +6,7 @@ Created on Thu Apr  3 09:49:16 2025
 
 Test USB3 midi input for raspberry pi5 and Arturia Keylab 61 :
 
-    -> missing keys (USB3 midi event) with QT6/QThread
+    -> missing keys (USB3 midi event) with QT6/QThread (throttle)
     -> NO missing keys with this program
 
 A USB bug with QT6 and pi5 (8Go) ?
