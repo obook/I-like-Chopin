@@ -3,7 +3,14 @@
 """
 Created on Thu Apr  3 09:49:16 2025
 @author: obooklage
-Test midi input for pi5 and Arturia Keylab 61
+
+Test USB3 midi input for raspberry pi5 and Arturia Keylab 61 :
+
+    -> missing keys (USB3 midi event) with QT6/QThread
+    -> NO missing keys with this program
+
+A USB bug with QT6 and pi5 (8Go) ?
+
 """
 import platform
 import mido
