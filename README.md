@@ -88,8 +88,11 @@ No native virtual MIDI driver is provided with Windows, but there are a number o
 * [RTP loopMIDI](https://www.tobias-erichsen.de/) developed by Tobias Erichsen, who also programmed a version of the Network MIDI driver for Windows.
 * [MIDI Yoke](https://www.midiox.com/) which is part of the MIDI OX utility (32 bits only).
 
+# Raspberry Pi5
+The USB 2.0 port has issues detecting keyboard keys. This problem does not occur when using the USB 3.0 port.
+
 # Tested with...
-* Linux Debian 12 on Raspberry Pi 4 Model B
+* Linux Debian 12 on Raspberry Pi 4 Model B and Raspberry Pi 5 8Go
 * Linux Ubuntu 24.04 LTS
 * Linux Mint 22 Cinnamon
 * Windows 10 / [VirtualMIDISynth](http://coolsoft.altervista.org/en/virtualmidisynth) (load and play soundfonts) + [MIDIMapper](http://coolsoft.altervista.org/en/virtualmidisynth) (Midi mapper)
@@ -100,7 +103,6 @@ No native virtual MIDI driver is provided with Windows, but there are a number o
 * Keyboard Arturia Keystep 37
 * Keyboard Arturia Keylab 61 Essential
 * Piano Yamaha Clavinova CLP-123 -> LOCAL OFF = press MIDI/TRANSPOSE then PIANO1 (must lite)
-
 
 # Thanks
 
