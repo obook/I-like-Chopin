@@ -4,15 +4,10 @@
 Created on Thu Apr  3 09:49:16 2025
 @author: obooklage
 
-Test USB3 midi input for raspberry pi5 and Arturia Keylab 61 :
+Test USB1/USB3 midi input for raspberry pi5 and Arturia Keylab 61 :
 
-    -> missing keys (USB3 midi event) with QT6/QThread (throttle)
-    -> NO missing keys with this program
-
-A USB bug with QT6 and pi5 (8Go) ?
-
-Notice ; with this simple program : usb events missed !
-So is NOT QThread problem, but is on mido or/and rtmidi
+    -> USB1 missing keys off
+    -> USB3 NO missing keys
 
 """
 from threading import Thread
