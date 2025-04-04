@@ -383,8 +383,9 @@ async function SetQRCode(){
 
         for(var interface in data) {
             url = data[interface]
-            if(!url.includes("127.0.0.1"))
+            if(!url.includes("127.0.0.1")) {
                 new QRCode(document.getElementById("qrcode"), url);
+            }
         }
 
     } catch (error) {
