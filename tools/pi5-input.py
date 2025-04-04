@@ -11,6 +11,9 @@ Test USB3 midi input for raspberry pi5 and Arturia Keylab 61 :
 
 A USB bug with QT6 and pi5 (8Go) ?
 
+Notice ; with this simple program : usb events missed !
+So is NOT QThread problem, but is on mido or/and rtmidi
+
 """
 from threading import Thread
 import platform
@@ -19,10 +22,11 @@ import time
 import mido
 
 key_on = 0
-# device = "Arturia KeyLab Essential 61 MID"
+# device_from = "Arturia KeyLab Essential 61 MID"
 device_from = "out"  # VMPK
 device_to = "Midi Through Port-0"
 midisong = os.path.expanduser("~/Documents/GitHub/midi/MOZART WOLFGANG AMADEUS/Piano Sonata No. 11 in A major, KV 331_3_Alla turca-Allegretto.mid")
+
 
 # Au moyen d'une classe
 class LoopThread(Thread):
@@ -34,12 +38,31 @@ class LoopThread(Thread):
         print(self.loop)
 
 
+def send(port, msg):
+    try:
+        port.send(msg)
+        print(msg)
+    except:
+        pass
+
+
 # Thread direct
 def threaded_output(name):
     global midisong, out_port
     started = False
+    start_message = False
 
     for msg in mido.MidiFile(midisong):
+
+        # skip begining
+        if not started and msg.type != "note_on" and msg.type != "note_off":
+            send(out_port, msg)
+            continue
+        else:
+            if not start_message:
+                print("Ready !")
+                start_message = True
+            started = True
 
         # Wait keyboard
         start_time_loop = time.time()
@@ -49,16 +72,16 @@ def threaded_output(name):
 
         wait_time = time.time() - start_time_loop
 
-        # Changer le temps à zéro si boucle attente suppérieure à msg.time
+        # Changer le temps à zéro si boucle attente supérieure à msg.time
         if wait_time < msg.time:
             time.sleep(msg.time)
 
         try:
             if msg.type == "note_on" or msg.type == "note_off":
                 if msg.channel == 0:
-                    out_port.send(msg)
+                    send(out_port, msg)
             else:
-                out_port.send(msg)
+                send(out_port, msg)
         except:
            pass
 
@@ -88,6 +111,9 @@ def keyboard(msg):
     # print(f"Keys PRESSED = [{key_on}]", msg)
 
 
+# rtmidi = mido.Backend('mido.backends.rtmidi')  # rtmidi is default
+# portmidi = mido.Backend('mido.backends.portmidi')  # same problem
+
 print("********* DEVICES OUTPUT")
 for i, port_name in enumerate(mido.get_input_names()):
     if platform.system() == "Linux":  # cleanup linux ports
@@ -99,9 +125,6 @@ for i, port_name in enumerate(mido.get_output_names()):
         port_name = port_name[: port_name.rfind(" ")]
     print(port_name)
 print("*********")
-
-x = Thread(target=threaded_output, args=(1,))
-x.start()
 
 try:
     print(f"Connect from {device_from}")
@@ -116,7 +139,11 @@ except Exception as error:
     in_port.close()
     raise f"ERROR OUTPUT {error}"
 
-print("Ready...")
+x = Thread(target=threaded_output, args=(1,))
+x.start()
+
+print("Cueing...")
+
 while True:
     pass
 
