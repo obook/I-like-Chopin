@@ -21,14 +21,16 @@ import os
 import time
 import mido
 
-key_on = 0
 # device_from = "Arturia KeyLab Essential 61 MID"
 device_from = "out"  # VMPK
 device_to = "Midi Through Port-0"
 midisong = os.path.expanduser("~/Documents/GitHub/midi/MOZART WOLFGANG AMADEUS/Piano Sonata No. 11 in A major, KV 331_3_Alla turca-Allegretto.mid")
 
+key_on = 0
+running = True
 
-# Au moyen d'une classe
+
+# Au moyen d'une classe, à faire
 class LoopThread(Thread):
     def __init__(self, loop=1):
         super().__init__()
@@ -40,15 +42,14 @@ class LoopThread(Thread):
 
 def send(port, msg):
     try:
-        port.send(msg)
-        print(msg)
+        port.send(msg)  # bug : missing input keys => NOT NOW... Why ?
     except:
         pass
 
 
 # Thread direct
 def threaded_output(name):
-    global midisong, out_port
+    global midisong, out_port, running
     started = False
     start_message = False
 
@@ -68,6 +69,9 @@ def threaded_output(name):
         start_time_loop = time.time()
 
         while not key_on:
+            if not running:
+                print(f"\rthreaded_output {name}:interrupted.")
+                return
             pass
 
         wait_time = time.time() - start_time_loop
@@ -85,7 +89,7 @@ def threaded_output(name):
         except:
            pass
 
-    print("threaded_player %s: finishing", name)
+    print(f"\rthreaded_output {name}: finishing")
 
 
 def keyboard(msg):
@@ -101,14 +105,11 @@ def keyboard(msg):
 
     elif msg.type == "note_off":
         key_on -= 1
-        if key_on < 0:
-            key_on = 0
 
-    # Rares cases
     if key_on < 0:
         key_on = 0
 
-    # print(f"Keys PRESSED = [{key_on}]", msg)
+    print(f"Keys PRESSED = [{key_on}]", msg)
 
 
 # rtmidi = mido.Backend('mido.backends.rtmidi')  # rtmidi is default
@@ -139,12 +140,21 @@ except Exception as error:
     in_port.close()
     raise f"ERROR OUTPUT {error}"
 
-x = Thread(target=threaded_output, args=(1,))
+print(mido.backend)
+
+x = Thread(target=threaded_output, args=("A",))
 x.start()
 
 print("Cueing...")
 
-while True:
-    pass
+try:
+    while True:
+        pass
+except KeyboardInterrupt:
+    running = False
+    time.sleep(1)
+    x.join()
+    in_port.close()
+    out_port.close()
 
-# x.join()
+print("\rFinished.")
