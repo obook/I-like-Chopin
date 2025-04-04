@@ -109,7 +109,7 @@ def keyboard(msg):
     if key_on < 0:
         key_on = 0
 
-    print(f"Keys PRESSED = [{key_on}]", msg)
+    print(f"Keys PRESSED = [{key_on}]")
 
 
 # rtmidi = mido.Backend('mido.backends.rtmidi')  # rtmidi is default
