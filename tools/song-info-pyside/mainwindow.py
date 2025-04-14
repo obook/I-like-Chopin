@@ -38,8 +38,6 @@ class MainWindow(QMainWindow):
         self.setAcceptDrops(True)
         self.installEventFilter(self)  # drop files on readonly PlainTextEdit
 
-        print(sys.argv)
-
         if len(sys.argv) > 1:
             self.print_info(sys.argv[1])
 
