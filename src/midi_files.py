@@ -62,9 +62,10 @@ class ClassMidiFiles:
                 self.midifiles_raw.append(file)
                 self.midifiles_count += 1
             except Exception as error:
-                print(f"|!| MidiFiles {self.uuid} BAD NAME or FILENAME :", error)
+                 # print(f"|!| MidiFiles {self.uuid} BAD NAME or FILENAME : {error}")
+                pass
 
-        # Random
+            # Random
         self.MakeRandomPlaylist()
 
         print(

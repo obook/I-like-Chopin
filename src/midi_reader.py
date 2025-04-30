@@ -285,12 +285,12 @@ class ClassThreadMidiReader(QThread):
 
                 if msg.type == "note_on":  # with velocity or not
                     # First note on channels selected : cued and waiting keyboard pressed
-                    if ( self.channels[msg.channel]
+                    if (self.channels[msg.channel]
                         and not self.midisong.IsState(states["playing"])
                         and msg.velocity ):  # removed : and msg.time
 
                         print(
-                            f"MidiReader {self.uuid} playback [{self.midisong.GetFilename()}] READY"
+                            f"MidiReader {self.uuid} playback [{self.midisong.GetFilename()}] READY {msg}"
                         )
                         self.SignalLightPlay_activity.emit()
                         self.statusbar_activity.emit("READY")
@@ -303,16 +303,17 @@ class ClassThreadMidiReader(QThread):
                     self.current_notes_on += 1
 
                 if self.midisong.IsState(states["cueing"]):
-                    msg.time = 0 # skip time until note on channel
-                ''' Show the next note... not used
-                if msg.type == "note_on" and self.channels[msg.channel]:
-                    if msg.velocity:
-                        note, octave = number_to_note(msg.note)
-                        text = f"[{msg.note}]\t\t{note} {octave-1}"
-                        self.statusbar_activity.emit(text)
-                '''
+                    msg.time = 0  # skip time until note on channel
+                    ''' Show the next note... not used
+                    if msg.type == "note_on" and self.channels[msg.channel]:
+                        if msg.velocity:
+                            note, octave = number_to_note(msg.note)
+                            text = f"[{msg.note}]\t\t{note} {octave-1}"
+                            self.statusbar_activity.emit(text)
+                    '''
                 # Pause ?
-                if msg.type == "note_on" and self.midisong.IsState(states["playing"]):
+                # Some file use note_off+velocity for pause
+                if (msg.type == "note_on" or (msg.type == "note_off" and msg.velocity)) and self.midisong.IsState(states["playing"]):
                     start_time = time.time()
                     start_time_loop = time.time()
                     self.pedal_off = False
