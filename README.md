@@ -89,7 +89,7 @@ No native virtual MIDI driver is provided with Windows, but there are a number o
 * [MIDI Yoke](https://www.midiox.com/) which is part of the MIDI OX utility (32 bits only).
 
 # Raspberry Pi5
-The USB 2.0 port has issues detecting keyboard keys. This problem does not occur when using the USB 3.0 port.
+> ❗ The Raspberry USB 2.0 port has issues detecting MIDI keyboard keys. This problem does not occur when using the USB 3.0 port.
 
 # Tested with...
 * Linux Debian 12 on Raspberry Pi 4 Model B and Raspberry Pi 5 8Go
