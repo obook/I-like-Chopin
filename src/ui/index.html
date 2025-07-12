@@ -68,7 +68,7 @@
       <!-- Header -->
       <div data-role="header" data-position="fixed" data-tap-toggle="false">
 
-        <h1 class="filename"><span id="songname" class="class_songname_0">I like Chopin</span></h1>
+        <h1 class="filename" id="id_songname"><span id="songname" class="class_songname_0">I like Chopin</span></h1>
         <h2><div class="info_line"><span id='folder'></span>&nbsp;<span id='info_line'></span></div></h2>
 
         <a href="#panel_left" data-icon="carat-r" data-iconpos="notext" data-shadow="false" data-iconshadow="false" class="ui-nodisc-icon">Open left panel</a>
@@ -76,12 +76,12 @@
 
         <div data-role="navbar"> <!-- Buttons ! no more 5 buttons in nav please -->
           <ul data-theme="a">
-            <li><a href="#" class="class_top_button ui-btn ui-icon-delete ui-btn-icon-bottom" onclick="OrderDo('stop');">Stop</a></li>
-            <li><a href="#" class="class_top_button ui-btn ui-icon-refresh ui-btn-icon-bottom" onclick="OrderDo('replay');">Replay</a></li>
-            <li><a href="#" class="class_top_button ui-btn ui-icon-recycle ui-btn-icon-bottom" onclick="OrderDo('shuffle');">Shuffle</a></li>
+            <li><a href="#" id="id_button-stop" class="class_top_button ui-btn ui-icon-delete ui-btn-icon-bottom" onclick="OrderDo('stop');">Stop</a></li>
+            <li><a href="#" id="id_button-replay" class="class_top_button ui-btn ui-icon-refresh ui-btn-icon-bottom" onclick="OrderDo('replay');">Replay</a></li>
+            <li><a href="#" id="id_button-shuffle" class="class_top_button ui-btn ui-icon-recycle ui-btn-icon-bottom" onclick="OrderDo('shuffle');">Shuffle</a></li>
             <!-- <li><a href="#" class="class_top_button ui-btn ui-icon-star ui-btn-icon-bottom" onclick="OrderDo('score');">Vote</a></li> -->
-            <li><a href="#popupDialog" class="class_top_button ui-btn ui-icon-action ui-btn-icon-bottom" data-rel="popup" data-position-to="window" data-transition="pop">Share</a></li>
-            <li><a href="#page2" class="class_top_button ui-btn ui-icon-arrow-r ui-btn-icon-bottom" data-position-to="window" data-transition="slide">Score</a></li>
+            <li><a href="#popupDialog" id="id_button-share" class="class_top_button ui-btn ui-icon-action ui-btn-icon-bottom" data-rel="popup" data-position-to="window" data-transition="pop">Share</a></li>
+            <li><a href="#page2" id="id_button-score" class="class_top_button ui-btn ui-icon-arrow-r ui-btn-icon-bottom" data-position-to="window" data-transition="slide">Score</a></li>
 
             </ul>
         </div><!-- /navbar -->

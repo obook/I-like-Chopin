@@ -87,7 +87,28 @@ function CleanSongName(empty_strings=false) {
     }
 }
 
+/* Buttons Colors */
+
+function SetButtonColors(ready=true) {
+    if (ready == true) {
+        /*
+        $("#id_button-stop").css("background", "red");
+        $("#id_button-replay").css("background", "green");
+        */
+        $("#id_songname").css("background", "green");
+        /* $("#id_button-shuffle").css("background", "green"); */
+    } else {
+        /*
+        $("#id_button-stop").css("background", "grey");
+        $("#id_button-replay").css("background", "grey");
+        */
+        $("#id_songname").css("background", "red");
+    }
+
+}
+
 function ShowLoader() {
+    SetButtonColors(false);
     $.mobile.loading( "show", {
         text: "Loading...",
         textonly: false,
@@ -134,6 +155,8 @@ async function TimerGetStats() {
 
         if(song_uuid != last_song_uuid)  { /* New song */
 
+            console.log("New song uuid="+song_uuid);
+
             localStorage.setItem("last_song_uuid", song_uuid);
 
             CleanSongName(true);
@@ -147,6 +170,10 @@ async function TimerGetStats() {
             */
 
             SetScore(data.score);
+
+            /* Test */
+
+            SetButtonColors(true);
 
         }
 
@@ -200,7 +227,7 @@ async function TimerGetStats() {
         else
             line = line + " ❌"
         line = line + " ["+channels+"] ";
-        
+
         $('#info_line').text(line);
         /* Page 2 */
         $('#info_line_page2').text(line);
@@ -219,12 +246,15 @@ async function TimerGetStats() {
         if  (data.state ==-4)  {/* no track to play */
             /* document.getElementById('info_line').textContent="! NO ACTIVE TRACK TO PLAY"; */
             $('#info_line').text("! NO ACTIVE TRACK TO PLAY");
+            SetButtonColors(false);
         }
         else if (data.state <2) { /* state 1 or 2 unknown or cueing */
             $("#songname").addClass("class_songname_unknown"); /* Unknown */
             $("#songname_page2").addClass("class_songname_unknown");
+            SetButtonColors(false);
         }
         else { /* state 2,3 = ready or playing */
+            SetButtonColors(true);
             if (data.mode == 2) {
                 $("#songname").addClass("class_songname_2"); /* Passthrough */
                 $("#songname_page2").addClass("class_songname_2");
@@ -256,10 +286,10 @@ async function TimerGetStats() {
             $('#select-mode').val("playback").selectmenu('refresh');
 
     } catch (error) {
-        /* 
-        
+        /*
+
         WARNING : Triggeted under Chrome, some bad code upper ...
-        
+
         */
 
         console.log('---> NETWORK ERROR : ', error);
@@ -384,6 +414,7 @@ async function SetQRCode(){
         for(var interface in data) {
             url = data[interface]
             if(!url.includes("127.0.0.1")) {
+                $("#qrcode").append( "<p>"+url+"</p>" );
                 new QRCode(document.getElementById("qrcode"), url);
             }
         }
@@ -404,5 +435,6 @@ async function SetScore(scorefile){
 SetQRCode();
 GetFiles();
 GetPlaylist();
+SetButtonColors(false);
 TimerGetStats();
 setInterval(TimerGetStats, 2000);
