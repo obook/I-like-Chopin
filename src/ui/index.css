@@ -30,6 +30,13 @@ body {
     color: white !important;
 }
 
+/*
+*/
+.ui-header .ui-title, .ui-footer .ui-title
+{
+    padding: 0.2em !important;
+}
+
 .class_songname_0 {
     color: white !important;
 }
