@@ -85,7 +85,7 @@ With a Virtual Synth       |With Piano in Daw Mode     | With Rack Synth
 
 No native virtual MIDI driver is provided with Windows, but there are a number of them available for free:
 
-* [RTP loopMIDI](https://www.tobias-erichsen.de/) developed by Tobias Erichsen, who also programmed a version of the Network MIDI driver for Windows.
+* [loopMIDI](https://www.tobias-erichsen.de/) developed by Tobias Erichsen, who also programmed a version of the Network MIDI driver for Windows.
 * [MIDI Yoke](https://www.midiox.com/) which is part of the MIDI OX utility (32 bits only).
 
 # Raspberry Pi5
