@@ -95,7 +95,7 @@ No native virtual MIDI driver is provided with Windows, but there are a number o
 * Linux Debian 12 on Raspberry Pi 4 Model B and Raspberry Pi 5 8Go
 * Linux Ubuntu 24.04 LTS
 * Linux Mint 22 Cinnamon
-* Windows 10 / [VirtualMIDISynth](http://coolsoft.altervista.org/en/virtualmidisynth) (load and play soundfonts) + [MIDIMapper](http://coolsoft.altervista.org/en/virtualmidisynth) (Midi mapper)
+* Windows 10 / [VirtualMIDISynth](http://coolsoft.altervista.org/en/virtualmidisynth) (load and play soundfonts, but very slow) + [MIDIMapper](http://coolsoft.altervista.org/en/virtualmidisynth) (Midi mapper)
 * MacOS 14.6.1
 * USB to Midi CME U2MIDI Pro
 * Steinberg UR22mkII
