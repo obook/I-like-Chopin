@@ -49,8 +49,8 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
             svgWidget = QSvgWidget()
             svgWidget.setStyleSheet("QSvgWidget {background-color:white;}")
             svgWidget.load(QByteArray(qrcode.encode()))
-            svgWidget.setFixedWidth(134)
-            svgWidget.setFixedHeight(134)
+            svgWidget.setFixedWidth(120)  # 134 = trop gros pour Raspberry ?
+            svgWidget.setFixedHeight(120)  # 134 = trop gros pour Raspberry ?
 
             self.formLayout.addRow(svgWidget)
             self.formLayout.addRow(QLabel(""))
