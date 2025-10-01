@@ -57,25 +57,11 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
             svgWidget.setFixedWidth(90)
             svgWidget.setFixedHeight(90)  # 134 = trop gros pour Raspberry ? là c'est très petit et pas centré...
 
-            separator = QLabel("HELLO1\nHELLO2\nHELLO3")
+            separator = QLabel("---HELLO1---\n---HELLO2---\n---HELLO3---")
             separator.setWordWrap(True)
 
-            self.formLayout.addRow(svgWidget)
             self.formLayout.addRow(separator)
-            # self.formLayout.addRow(QLabel("\n"))  # Il faudrait mettre l'IP, mais pas bien placé
-            # self.formLayout.addRow(QLabel("\n"))
-
-            # Pour tests
             self.formLayout.addRow(svgWidget)
-            self.formLayout.addRow(separator)
-            # self.formLayout.addRow(QLabel("\n"))
-            # self.formLayout.addRow(QLabel("\n"))  # Il faudrait mettre l'IP, mais pas bien placé
-            # self.formLayout.addRow(QLabel("\n"))
-
-            # Pour tests
-            self.formLayout.addRow(svgWidget)
-            self.formLayout.addRow(separator)
-            # self.formLayout.addRow(QLabel("\n"))
             # self.formLayout.addRow(QLabel("\n"))  # Il faudrait mettre l'IP, mais pas bien placé
             # self.formLayout.addRow(QLabel("\n"))
 
