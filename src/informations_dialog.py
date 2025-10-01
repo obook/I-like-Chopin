@@ -54,6 +54,8 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
 
             self.formLayout.addRow(svgWidget)
             self.formLayout.addRow(QLabel(""))
+            self.formLayout.addRow(QLabel("-------------"))  # Il faudrait mettre l'IP
+            self.formLayout.addRow(QLabel(""))
 
         text += f"<p{style}>CONFIG FILE</p>"
         text += f"<p style='color:#FF8888;'><a href='file:///{self.Settings.GetConfigPath()}'>{self.Settings.GetConfigPath()}</a></p>"
