@@ -57,10 +57,27 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
             svgWidget.setFixedWidth(90)
             svgWidget.setFixedHeight(90)  # 134 = trop gros pour Raspberry ? là c'est très petit et pas centré...
 
+            separator = QLabel("HELLO1\nHELLO2\nHELLO3")
+            separator.setWordWrap(True)
+
             self.formLayout.addRow(svgWidget)
-            self.formLayout.addRow(QLabel(""))
-            self.formLayout.addRow(QLabel(""))  # Il faudrait mettre l'IP, mais pas bien placé
-            self.formLayout.addRow(QLabel(""))
+            self.formLayout.addRow(separator)
+            # self.formLayout.addRow(QLabel("\n"))  # Il faudrait mettre l'IP, mais pas bien placé
+            # self.formLayout.addRow(QLabel("\n"))
+
+            # Pour tests
+            self.formLayout.addRow(svgWidget)
+            self.formLayout.addRow(separator)
+            # self.formLayout.addRow(QLabel("\n"))
+            # self.formLayout.addRow(QLabel("\n"))  # Il faudrait mettre l'IP, mais pas bien placé
+            # self.formLayout.addRow(QLabel("\n"))
+
+            # Pour tests
+            self.formLayout.addRow(svgWidget)
+            self.formLayout.addRow(separator)
+            # self.formLayout.addRow(QLabel("\n"))
+            # self.formLayout.addRow(QLabel("\n"))  # Il faudrait mettre l'IP, mais pas bien placé
+            # self.formLayout.addRow(QLabel("\n"))
 
         text += f"<p{style}>CONFIG FILE</p>"
         text += f"<p style='color:#FF8888;'><a href='file:///{self.Settings.GetConfigPath()}'>{self.Settings.GetConfigPath()}</a></p>"
