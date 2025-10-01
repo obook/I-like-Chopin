@@ -10,7 +10,7 @@ import platform
 import mido
 
 from PySide6.QtCore import QByteArray, QSize
-from PySide6.QtWidgets import QDialog, QLabel
+from PySide6.QtWidgets import QDialog, QLabel, QSizePolicy
 from PySide6.QtGui import (QImage, QDesktopServices)
 from PySide6.QtSvgWidgets import QSvgWidget
 
@@ -45,6 +45,11 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         for interface in server_urls:  # UGLY
             text += f"<div><a href='{interface}'>{interface}</a></div>\n"
 
+        # policy =self.formLayout.sizePolicy()
+        # policy.setVerticalStretch(1)
+        # self.formLayout.setSizePolicy(policy)
+        self.formLayout.size_policy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
         for qrcode in qrcodes_list:
             svgWidget = QSvgWidget()
             svgWidget.setStyleSheet("QSvgWidget {background-color:white;}")
@@ -57,10 +62,9 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
             svgWidget.setFixedWidth(90)
             svgWidget.setFixedHeight(90)  # 134 = trop gros pour Raspberry ? là c'est très petit et pas centré...
 
-            separator = QLabel("---HELLO1---\n---HELLO2---\n---HELLO3---")
-            separator.setWordWrap(True)
-
-            self.formLayout.addRow(separator)
+            # PAS BIEN separator = QLabel("---HELLO1---\n---HELLO2---\n---HELLO3---")
+            # separator.setWordWrap(True)
+            #  self.formLayout.addRow(separator)
             self.formLayout.addRow(svgWidget)
             # self.formLayout.addRow(QLabel("\n"))  # Il faudrait mettre l'IP, mais pas bien placé
             # self.formLayout.addRow(QLabel("\n"))
