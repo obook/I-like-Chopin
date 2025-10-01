@@ -49,12 +49,16 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
             svgWidget = QSvgWidget()
             svgWidget.setStyleSheet("QSvgWidget {background-color:white;}")
             svgWidget.load(QByteArray(qrcode.encode()))
-            svgWidget.setFixedWidth(80)  # 134 = trop gros pour Raspberry ?
-            svgWidget.setFixedHeight(80)  # 134 = trop gros pour Raspberry ?
+
+            # setFixed 134 = trop gros pour Raspberry ?
+            # avec 80 là c'est très petit et pas centré...
+
+            svgWidget.setFixedWidth(90)
+            svgWidget.setFixedHeight(90)  # 134 = trop gros pour Raspberry ? là c'est très petit et pas centré...
 
             self.formLayout.addRow(svgWidget)
             self.formLayout.addRow(QLabel(""))
-            self.formLayout.addRow(QLabel("-------------"))  # Il faudrait mettre l'IP
+            self.formLayout.addRow(QLabel(""))  # Il faudrait mettre l'IP, mais pas bien placé
             self.formLayout.addRow(QLabel(""))
 
         text += f"<p{style}>CONFIG FILE</p>"
