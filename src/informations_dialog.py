@@ -48,6 +48,7 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         # policy =self.formLayout.sizePolicy()
         # policy.setVerticalStretch(1)
         # self.formLayout.setSizePolicy(policy)
+        # ne fait rien, à revoir :
         self.formLayout.size_policy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         for qrcode in qrcodes_list:
