@@ -52,6 +52,7 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
 
             # setFixed 134 = trop gros pour Raspberry ?
             # avec 80 là c'est très petit et pas centré...
+            # Il faudrait plus les séparer verticalement.
 
             svgWidget.setFixedWidth(90)
             svgWidget.setFixedHeight(90)  # 134 = trop gros pour Raspberry ? là c'est très petit et pas centré...
