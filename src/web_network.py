@@ -24,7 +24,7 @@ class ClassWebNetwork:
         for interface in interfaces_list:
             url = f"http://{interface['ip']}:{self.Settings.GetServerPort()}"
             self.serverURLs_list.append(url)
-
+            '''
             #print(
             #    f"WebServer {self.__uuid} {url} serve [{self.pParent.Settings.GetMidiPath()}]"
             #)
@@ -37,6 +37,7 @@ class ClassWebNetwork:
                 buffer.seek(0)
                 buffer_img = buffer.getvalue().decode("utf-8")
                 self.qrcodes_list.append(buffer_img)
+            '''
         print(f"ClassWebNetwork {self.__uuid} created")
 
     def __del__(self):
@@ -44,6 +45,7 @@ class ClassWebNetwork:
 
     def GetWebUrls(self):
         return self.serverURLs_list
-
+    '''
     def GetWebQRCodes(self):
         return self.qrcodes_list
+    '''

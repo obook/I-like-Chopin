@@ -9,13 +9,23 @@ import uuid
 import platform
 import mido
 
-from PySide6.QtCore import QByteArray, QSize
-from PySide6.QtWidgets import QDialog, QLabel, QSizePolicy
-from PySide6.QtGui import (QImage, QDesktopServices)
-from PySide6.QtSvgWidgets import QSvgWidget
+from PIL.ImageQt import ImageQt
+import qrcode
+
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (QDialog, QLabel, QListWidgetItem, QWidget, QVBoxLayout)
+from PySide6.QtGui import (QDesktopServices, QPixmap)
 
 from ui_informations import Ui_DialogInformation
 from web_network import ClassWebNetwork
+
+
+def make_qr_pixmap(url: str) -> QPixmap:
+    """Generate a QR code as QPixmap from a URL."""
+    img = qrcode.make(url)
+    qimage = ImageQt(img)
+    return QPixmap.fromImage(qimage)
+
 
 class InformationsDlg(Ui_DialogInformation, QDialog):
     __uuid = None
@@ -29,7 +39,7 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.pParent = parent
         self.Settings = self.pParent.Settings
         self.setupUi(self)
-        self.setFixedSize(481, 361)
+        self.setFixedSize(623, 350)
         self.setWindowTitle("Informations")
         self.pushButton_Close.clicked.connect(self.quit)
         style = " style='color:#FFFFFF;background-color:#333333;'"
@@ -39,36 +49,38 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
 
         Network = ClassWebNetwork(self.pParent)
         server_urls = Network.GetWebUrls()
-        qrcodes_list = Network.GetWebQRCodes()
-
         text += f"<p{style}>WEB SERVER</p>"
+
+        self.listWidget.setSpacing(12)  # << adds space between items
+
         for interface in server_urls:  # UGLY
             text += f"<div><a href='{interface}'>{interface}</a></div>\n"
+            if "127.0.0.1" not in interface:
+                # --- make QR pixmap ---
+                img = qrcode.make(interface)
+                qimage = ImageQt(img)
+                pix = QPixmap.fromImage(qimage).scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
 
-        # policy =self.formLayout.sizePolicy()
-        # policy.setVerticalStretch(1)
-        # self.formLayout.setSizePolicy(policy)
-        # ne fait rien, à revoir :
-        self.formLayout.size_policy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+                # --- small widget with QR + text ---
+                w = QWidget()
+                layout = QVBoxLayout(w)
+                layout.setContentsMargins(5, 5, 5, 5)
+                layout.setSpacing(3)
 
-        for qrcode in qrcodes_list:
-            svgWidget = QSvgWidget()
-            svgWidget.setStyleSheet("QSvgWidget {background-color:white;}")
-            svgWidget.load(QByteArray(qrcode.encode()))
+                qr_label = QLabel()
+                qr_label.setPixmap(pix)
+                qr_label.setAlignment(Qt.AlignCenter)
 
-            # setFixed 134 = trop gros pour Raspberry ?
-            # avec 80 là c'est très petit et pas centré...
-            # Il faudrait plus les séparer verticalement.
+                text_label = QLabel(interface)
+                text_label.setAlignment(Qt.AlignCenter)
 
-            svgWidget.setFixedWidth(90)
-            svgWidget.setFixedHeight(90)  # 134 = trop gros pour Raspberry ? là c'est très petit et pas centré...
+                layout.addWidget(qr_label)
+                layout.addWidget(text_label)
 
-            # PAS BIEN separator = QLabel("---HELLO1---\n---HELLO2---\n---HELLO3---")
-            # separator.setWordWrap(True)
-            #  self.formLayout.addRow(separator)
-            self.formLayout.addRow(svgWidget)
-            # self.formLayout.addRow(QLabel("\n"))  # Il faudrait mettre l'IP, mais pas bien placé
-            # self.formLayout.addRow(QLabel("\n"))
+                item = QListWidgetItem()
+                item.setSizeHint(w.sizeHint())
+                self.listWidget.addItem(item)
+                self.listWidget.setItemWidget(item, w)
 
         text += f"<p{style}>CONFIG FILE</p>"
         text += f"<p style='color:#FF8888;'><a href='file:///{self.Settings.GetConfigPath()}'>{self.Settings.GetConfigPath()}</a></p>"
@@ -122,7 +134,7 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
 
         self.textBrowser.setAcceptRichText(True)
         self.textBrowser.setOpenLinks(False)
-        self.textBrowser.setOpenExternalLinks(False);
+        self.textBrowser.setOpenExternalLinks(False)
         self.textBrowser.setReadOnly(True)
         self.textBrowser.anchorClicked.connect(QDesktopServices.openUrl)
 
