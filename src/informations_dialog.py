@@ -151,6 +151,7 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
         self.close()
         self.deleteLater()
 
+
 def ShowInformationDlg(pParent):
     dlg = InformationsDlg(pParent)
     dlg.show()
