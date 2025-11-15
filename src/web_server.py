@@ -119,12 +119,17 @@ class MyBottleServer:
 
         @route('/')
         def index():
+            response.headers.pop('Content-Security-Policy-Report-Only', None)
+            response.headers['Content-Security-Policy'] = csp
             redirect("/static/index.html")
 
         @route('/static/<filepath:path>')
         def server_static(filepath):
             uipath = self.Settings.GetUIPath()
-            return static_file(filepath, root=uipath)
+            result = static_file(filepath, root=uipath)
+            response.headers.pop('Content-Security-Policy-Report-Only', None)
+            response.headers['Content-Security-Policy'] = csp
+            return result
 
         @route('/status.json')
         def _status():
