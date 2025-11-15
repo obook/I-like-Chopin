@@ -124,8 +124,6 @@
             if (song_uuid !== last_song_uuid) {
                 console.log(`New song uuid=${song_uuid}`);
                 localStorage.setItem('last_song_uuid', song_uuid);
-                removeSongnameClasses('#songname');
-                removeSongnameClasses('#songname_page2');
                 setPageTextEmpty();
 
                 SetScore(data.score);
@@ -158,6 +156,9 @@
             $('#progressbar').val(data.played);
             $('#progressbar_page2').val(data.played);
 
+            removeSongnameClasses('#songname');
+            removeSongnameClasses('#songname_page2');
+
             if (data.state < 0) {
                 $('#songname').addClass('class_songname_error');
                 $('#songname_page2').addClass('class_songname_error');
@@ -173,16 +174,25 @@
             } else {
                 SetButtonColors(true);
                 const mode = data.mode;
-                if (mode === 2) {
-                    $('#songname').addClass('class_songname_2');
-                    $('#songname_page2').addClass('class_songname_2');
-                } else if (mode === 3) {
-                    $('#songname').addClass('class_songname_3');
-                    $('#songname_page2').addClass('class_songname_3');
-                } else if (mode === 4) {
+                if (mode === 0) { /* Stopped */
+                    console.log('Setting songname to class_songname_0');
                     $('#songname').addClass('class_songname_0');
                     $('#songname_page2').addClass('class_songname_0');
-                } else {
+                }
+                if (mode === 2) { /* Passthrough */
+                    console.log('Setting songname to class_songname_2');
+                    $('#songname').addClass('class_songname_2');
+                    $('#songname_page2').addClass('class_songname_2');
+                } else if (mode === 3) { /* Player Playing*/
+                    console.log('Setting songname to class_songname_3');
+                    $('#songname').addClass('class_songname_3');
+                    $('#songname_page2').addClass('class_songname_3');
+                } else if (mode === 4) { /* Random */
+                    console.log('Setting songname to class_songname_4');
+                    $('#songname').addClass('class_songname_4');
+                    $('#songname_page2').addClass('class_songname_4');
+                } else { /* Normal playback */
+                    console.log('Setting songname to class_songname_1');
                     $('#songname').addClass('class_songname_1');
                     $('#songname_page2').addClass('class_songname_1');
                 }

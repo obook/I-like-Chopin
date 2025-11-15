@@ -9,7 +9,7 @@ import os
 import uuid
 import json
 from threading import Thread
-from bottle import run, route, static_file, response, request, redirect, abort, ServerAdapter
+from bottle import run, route, static_file, response, request, redirect, abort, ServerAdapter, hook
 from PySide6.QtCore import QThread, Signal
 from web_network import ClassWebNetwork
 
@@ -85,8 +85,9 @@ class MyBottleServer:
         self.Settings = self.pParent.Settings
         self.Midi = self.pParent.Midi
         self.server = MyWSGIRefServer(host=host, port=port)
-        Thread(target=self.begin).start()
-        print(f"MyBottleServer {self.uuid} started")
+        # Ne pas démarrer le serveur ici : run() enregistrera d'abord routes/hooks puis lancera le serveur.
+        # Thread(target=self.begin).start()
+        # print(f"MyBottleServer {self.uuid} started")
 
     def __del__(self):
         print(f"MyBottleServer {self.uuid} destroyed")
@@ -98,6 +99,23 @@ class MyBottleServer:
         self.server.shutdown()
 
     def run(self):
+
+        # Appliquer une CSP sur toutes les réponses
+        @hook('after_request')
+        def apply_csp():
+            # Supprimer un éventuel header report-only provenant d'ailleurs
+            response.headers.pop('Content-Security-Policy-Report-Only', None)
+
+            # Politique réelle : autoriser scripts depuis self et éléments <script>
+            csp = (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
+                "script-src-elem 'self'; "
+                "style-src 'self' 'unsafe-inline'; "
+                "img-src 'self' data:; "
+                "connect-src 'self' http: https: ws:;"
+            )
+            response.headers['Content-Security-Policy'] = csp
 
         @route('/')
         def index():
@@ -190,6 +208,10 @@ class MyBottleServer:
             else:
                 print(f"|!| BottleServer {self.uuid} request score {file} note exists")
                 abort(404, "Sorry, file not found.")
+
+        # Démarrer le serveur APRÈS enregistrement des routes/hooks (bloquant)
+        self.begin()
+        print(f"MyBottleServer {self.uuid} started")
 
 class ClassWebServer(QThread):
 

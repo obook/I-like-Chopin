@@ -2,6 +2,10 @@ body {
     text-transform: uppercase;
     font-family: Helvetica, Arial, sans-serif;
 }
+/* Change header/footer font size */
+.ui-header .ui-title, .ui-footer .ui-title {
+    font-size: calc(1em + 0.5vw);
+}
 
 /* Change title clipping */
 .ui-header .ui-title {
@@ -12,7 +16,7 @@ body {
 .info_line{
     color:#eee;
     font-size: calc(.5em + 0.8vw);
-    background-color: rgb(46, 46, 46) !important;
+    /* background-color: rgb(46, 46, 46) !important; */
 }
 
 .class_filename a {
@@ -38,37 +42,51 @@ body {
 }
 
 .class_songname_0 {
-    color: white !important;
+    color: rgb(133, 133, 133) !important;
+    background-color: rgb(46, 46, 46) !important;
+    padding: 0 1em 0 1em;
 }
 
 .class_songname_1 { /* Ready+Playing */
-    color: rgb(0, 231, 0) !important;
+    color: rgb(255, 255, 255) !important;
+    background-color: rgb(46, 46, 46) !important;
+    padding: 0 1em 0 1em;
 }
 
 .class_songname_2 { /* Passthrough */
     color: #ff00ff !important;
+    background-color: rgb(46, 46, 46) !important;
+    padding: 0 1em 0 1em;
 }
 
 .class_songname_3 { /* Player Playing*/
-    color: #8498fa !important;
+    color: #28e1ee !important;
+    background-color: rgb(46, 46, 46) !important;
+    padding: 0 1em 0 1em;
 }
 
 .class_songname_4 { /* Random */
     color: #8498fa !important;
+    background-color: rgb(46, 46, 46) !important;
+    padding: 0 1em 0 1em;
 }
 
 .class_songname_unknown {
     color: #ffff00 !important;
+    background-color: rgb(46, 46, 46) !important;
+    padding: 0 1em 0 1em;
 }
 
 .class_songname_error {
     color: red !important;
+    background-color: rgb(46, 46, 46) !important;
+    padding: 0 1em 0 1em;
 }
 
 /* not working */
 .class_qrcode {
     background-color: white !important;
-    color: red !important;
+    /* color: red !important; */
 }
 
 /* New progress */
@@ -162,3 +180,68 @@ body {
           #053510 20px
       );
   }
+
+/* Marquee */
+
+/* Marquee right-to-left for #id_songname */
+#id_songname {
+    overflow: hidden;
+    position: relative;
+}
+
+/* Le span #songname défile horizontalement */
+#id_songname #songname {
+    display: inline-block;
+    white-space: nowrap;
+    will-change: transform;
+    /* Durée = ajustez (s) pour vitesse */
+    animation: marquee 12s linear infinite;
+}
+
+/* Pause au survol
+#id_songname:hover #songname {
+    animation-play-state: paused;
+}
+*/
+
+/* Respect user's reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    #id_songname #songname {
+        animation: none;
+    }
+}
+
+@keyframes marquee {
+    0%   { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* Faire remplir toute la largeur l'élément titre (classe filename ui-title) */
+.ui-header .filename.ui-title {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    /* padding: 0 2.5em !important;  espace pour les boutons à gauche/droite */
+    overflow: hidden !important; /* nécessaire pour le marquee */
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    position: relative !important;
+    left: 0 !important;
+}
+
+/* Assurer que le span marquee occupe tout l'espace disponible */
+.ui-header .filename.ui-title #songname {
+    display: inline-block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+/* Même chose pour la page 2 */
+.ui-header .filename.ui-title #songname_page2 {
+    display: inline-block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
