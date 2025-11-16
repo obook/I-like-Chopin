@@ -132,19 +132,20 @@ body {
   /* Outer bar */
   .custom-progress::-webkit-progress-bar {
       border-radius: 18px;
-      background-color: #4fa153;
+      background-color: #424242; /* fond*/
   }
 
   /* Inner bar */
   .custom-progress::-webkit-progress-value {
       border-radius: 18px;
+      /* plus de zebra
       background: repeating-linear-gradient(
           135deg,
           #4fa153,
           #4fa153 10px,
           #053510 10px,
           #053510 20px
-      );
+      ); */
   }
 
   /**
