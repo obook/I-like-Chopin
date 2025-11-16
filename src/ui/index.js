@@ -294,7 +294,7 @@
             for (const iface in data) {
                 const url = data[iface];
                 if (!url.includes('127.0.0.1')) {
-                    $('#qrcode').append(`<p>${url}</p>`);
+                    $('#qrcode').append(`<p class="class_qrcode">${url}</p>`);
                     /* QRCode global assumed available */
                     /* eslint-disable-next-line no-undef */
                     new QRCode(document.getElementById('qrcode'), url);

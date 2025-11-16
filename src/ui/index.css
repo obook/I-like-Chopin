@@ -86,7 +86,7 @@ body {
 /* not working */
 .class_qrcode {
     background-color: white !important;
-    /* color: red !important; */
+    color: black !important;
 }
 
 /* New progress */
