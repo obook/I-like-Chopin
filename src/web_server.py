@@ -20,7 +20,7 @@ License: MIT (see LICENSE for details)
 '''
 class MyWSGIRefServer(ServerAdapter):
     quiet = True  # ADD SILENT MODE.
-    def run(self, app):  # pragma: no cover
+    def run(self, handler):  # pragma: no cover
         from wsgiref.simple_server import make_server
         from wsgiref.simple_server import WSGIRequestHandler, WSGIServer
         import socket
@@ -76,10 +76,10 @@ class MyWSGIRefServer(ServerAdapter):
 
 class MyBottleServer:
 
-    pLauncher = None
-    pParent = None
-    Settings = None
-    Midi = None
+    # pLauncher = None
+    # pParent = None
+    # Settings = None
+    # Midi = None
 
     def __init__(self, host, port, launcher):
         self.uuid = uuid.uuid4()
@@ -96,7 +96,7 @@ class MyBottleServer:
         print(f"MyBottleServer {self.uuid} destroyed")
 
     def begin(self):
-        run(server=self.server)
+        run(server=self.server)  # type: ignore[arg-type]
 
     def end(self):
         self.server.shutdown()
@@ -226,8 +226,8 @@ class MyBottleServer:
 
 class ClassWebServer(QThread):
 
-    uuid = None
-    pParent = None
+    # uuid = None
+    # pParent = None
 
     SignalReplay = Signal()
     SignalShuffle = Signal()
