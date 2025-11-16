@@ -48,7 +48,7 @@ class MyWSGIRefServer(ServerAdapter):
 
         # If port is busy !
         try:
-            self.srv = make_server(self.host, self.port, app, server_cls, handler_cls)
+            self.srv = make_server(self.host, self.port, handler, server_cls, handler_cls)
             self.port = self.srv.server_port  # update port actual port (0 means random)
         except Exception as error:
             print(f"|!| WEBSERVER CAN NOT START : {error}")
@@ -274,6 +274,7 @@ class ClassWebServer(QThread):
         self.SignalShuffle.emit()
 
     def StopSong(self):
+        print(f"WebServer {self.uuid} StopSong signal emitted")
         self.SignalStop.emit()
 
     def ChangeMode(self, mode):
