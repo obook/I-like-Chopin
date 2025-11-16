@@ -1,0 +1,2 @@
+# évite les erreurs pylint
+extension-pkg-whitelist=PySide6
