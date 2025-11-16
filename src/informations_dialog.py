@@ -91,37 +91,6 @@ class InformationsDlg(Ui_DialogInformation, QDialog):
                 print(f"Error generating QR code for {interface}: {e}")
                 continue
 
-
-        ''' c'est nouveau : crash
-        for interface in server_urls:  # UGLY
-            text += f"<div><a href='{interface}'>{interface}</a></div>\n"
-            if "127.0.0.1" not in interface:
-                # --- make QR pixmap ---
-                img = qrcode.make(interface)
-                qimage = ImageQt(img)
-                pix = QPixmap.fromImage(qimage).scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-
-                # --- small widget with QR + text ---
-                w = QWidget()
-                layout = QVBoxLayout(w)
-                layout.setContentsMargins(5, 5, 5, 5)
-                layout.setSpacing(3)
-
-                qr_label = QLabel()
-                qr_label.setPixmap(pix)
-                qr_label.setAlignment(Qt.AlignCenter)
-
-                text_label = QLabel(interface)
-                text_label.setAlignment(Qt.AlignCenter)
-
-                layout.addWidget(qr_label)
-                layout.addWidget(text_label)
-
-                item = QListWidgetItem()
-                item.setSizeHint(w.sizeHint())
-                self.listWidget.addItem(item)
-                self.listWidget.setItemWidget(item, w)
-    '''
         text += f"<p{style}>CONFIG FILE</p>"
         text += f"<p style='color:#FF8888;'><a href='file:///{self.Settings.GetConfigPath()}'>{self.Settings.GetConfigPath()}</a></p>"
 
