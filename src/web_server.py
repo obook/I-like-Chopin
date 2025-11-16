@@ -8,9 +8,8 @@ Created on Fri Nov 22 18:30:43 2024
 import os
 import uuid
 import json
-from threading import Thread
-from bottle import run, route, static_file, response, request, redirect, abort, ServerAdapter, hook
 from PySide6.QtCore import QThread, Signal
+from bottle import run, route, static_file, response, request, redirect, abort, ServerAdapter, hook
 from web_network import ClassWebNetwork
 
 '''
@@ -27,12 +26,15 @@ class MyWSGIRefServer(ServerAdapter):
         import socket
 
         class FixedHandler(WSGIRequestHandler):
+
             def address_string(self):  # Prevent reverse DNS lookups please.
                 return self.client_address[0]
 
-            def log_request(*args, **kw):
-                if not self.quiet:
+            def log_request(self, *args, **kw):
+                if not MyWSGIRefServer.quiet:
                     return WSGIRequestHandler.log_request(*args, **kw)
+                else:
+                    return None
 
         handler_cls = self.options.get('handler_class', FixedHandler)
         server_cls = self.options.get('server_class', WSGIServer)
