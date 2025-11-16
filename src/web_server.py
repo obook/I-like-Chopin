@@ -42,8 +42,9 @@ class MyWSGIRefServer(ServerAdapter):
         if ':' in self.host:  # Fix wsgiref for IPv6 addresses.
             if getattr(server_cls, 'address_family') == socket.AF_INET:
 
-                class server_cls(server_cls):
+                class _IPv6Server(server_cls):
                     address_family = socket.AF_INET6
+                server_cls = _IPv6Server
 
         # If port is busy !
         try:
@@ -121,16 +122,14 @@ class MyBottleServer:
 
         @route('/')
         def index():
-            response.headers.pop('Content-Security-Policy-Report-Only', None)
-            response.headers['Content-Security-Policy'] = csp
+            apply_csp()
             redirect("/static/index.html")
 
         @route('/static/<filepath:path>')
         def server_static(filepath):
             uipath = self.Settings.GetUIPath()
             result = static_file(filepath, root=uipath)
-            response.headers.pop('Content-Security-Policy-Report-Only', None)
-            response.headers['Content-Security-Policy'] = csp
+            apply_csp()
             return result
 
         @route('/status.json')
@@ -153,6 +152,7 @@ class MyBottleServer:
                      }
                 response.content_type = 'application/json'
                 try:
+                    apply_csp()
                     return json.dumps(status)  # crash then pgm shutdown
                 except Exception as error:
                     print(f"|!| BottleServer {self.uuid} error send status {error}")
@@ -162,18 +162,21 @@ class MyBottleServer:
             Network = ClassWebNetwork(self.pParent)
             interfaces = Network.GetWebUrls()
             response.content_type = 'application/json'
+            apply_csp()
             return json.dumps(interfaces)
 
         @route('/files.json')
         def _files():
             file_dic = self.pParent.Midifiles.GetFiles()
             response.content_type = 'application/json'
+            apply_csp()
             return json.dumps(file_dic)
 
         @route('/playlist.json')
         def _playlist():
             file_dic = self.pParent.Playlist.GetPlayList()
             response.content_type = 'application/json'
+            apply_csp()
             return json.dumps(file_dic)
 
         @route('/play')
@@ -211,6 +214,7 @@ class MyBottleServer:
                 data = f.read()
                 f.close
                 response.content_type = 'application/pdf'
+                apply_csp()
                 return data
             else:
                 print(f"|!| BottleServer {self.uuid} request score {file} note exists")
