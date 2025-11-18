@@ -1,0 +1,9 @@
+{
+    "python.defaultInterpreterPath": "/home/obooklage/Documents/GitHub/I-like-Chopin/src/.venv/bin/python3",  // Chemin vers l'interpréteur (Linux/MacOS)
+    "python.analysis.extraPaths": ["/home/obooklage/Documents/GitHub/I-like-Chopin/src/.venv/lib/python3.12/site-packages"],  // Remplacez X.Y par votre version de Python (ex: 3.11)
+    "python.analysis.typeCheckingMode": "basic",  // Optionnel : ajustez le niveau de vérification de type
+    "python.linting.pylintEnabled": true,  // Optionnel : activez pylint si nécessaire
+    "python.formatting.provider": "black",  // Optionnel : configurez un formateur
+    "python.terminal.activateEnvironment": true,
+    "python.envFile": "${workspaceFolder}/.env"  // Optionnel : spécifiez un fichier d'environnement
+}
