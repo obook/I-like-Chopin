@@ -5,5 +5,9 @@
     "python.linting.pylintEnabled": true,  // Optionnel : activez pylint si nécessaire
     "python.formatting.provider": "black",  // Optionnel : configurez un formateur
     "python.terminal.activateEnvironment": true,
-    "python.envFile": "${workspaceFolder}/.env"  // Optionnel : spécifiez un fichier d'environnement
+    "python.envFile": "${workspaceFolder}/.env",  // Optionnel : spécifiez un fichier d'environnement
+    "cSpell.words": [
+        "mido",
+        "velocity"
+    ]
 }

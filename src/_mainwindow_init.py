@@ -5,6 +5,7 @@ Created on Wed Jun  5 18:19:14 2024
 @author: obooklage
 """
 import os
+from typing import TYPE_CHECKING
 from PySide6.QtGui import QIcon
 from PySide6 import QtGui
 from PySide6.QtWidgets import QPushButton
@@ -14,8 +15,13 @@ from history import ClassHistory
 from playlist import ClassPlaylist
 from midi_song import modes
 
+if TYPE_CHECKING:
+    from ui_mainwindow import Ui_MainWindow
+
 class _init:
     """Interface initialization"""
+
+    ui: "Ui_MainWindow"  # type: ignore
 
     application_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -34,9 +40,9 @@ class _init:
     ICON_CHECK_RED = os.path.join(ICON_PATH,"check-red.png")
 
     # Classes used
-    Settings = None
-    History = None
-    Playlist = None
+    # Settings = None
+    # History = None
+    # Playlist = None
 
     # Channels buttons
     ChannelsButtonsList = []

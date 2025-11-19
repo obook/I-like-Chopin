@@ -20,14 +20,18 @@ Windows port to LCD : open_output to [MIDIIN2 (Arturia KeyLab Essenti 2] or [Art
 """
 
 import uuid
+from typing import TYPE_CHECKING
 from unidecode import unidecode
-from mido import (open_input, open_output, Message)
+from mido import (open_input, open_output, Message)  # type: ignore
 from PySide6.QtCore import (QThread, QTimer, Signal)
+
+if TYPE_CHECKING:
+    from mainwindow import Mainwindow
 
 class ClassMidiController(QThread):
 
     uuid = None
-    pParent = None
+    pParent: "Mainwindow"
     device_in = None
     device_out = None
     from_controller = None
@@ -49,11 +53,11 @@ class ClassMidiController(QThread):
     KEYLAB_LCD_SEP = [0x00, 0x02]
     KEYLAB_LCD_END = [0x00]
 
-    def __init__(self, pParent):
+    def __init__(self, pParent: "Mainwindow"):
         QThread.__init__(self)
         self.pParent = pParent
-        self.device_in = pParent.Settings.GetControllertDeviceIN()
-        self.device_out = pParent.Settings.GetControllertDeviceOUT()
+        self.device_in = pParent.Settings.GetControllertDeviceIN()  # type: ignore
+        self.device_out = pParent.Settings.GetControllertDeviceOUT()  # type: ignore
         self.uuid = uuid.uuid4()
 
         # Signals
@@ -63,7 +67,7 @@ class ClassMidiController(QThread):
         self.SignalMidifileChange.connect(self.pParent.SignalMidifileChange)
         self.SignalTooglePlayerMode.connect(self.pParent.SignalTooglePlayerMode)
         self.SignalAddToPlaylist.connect(self.pParent.SignalAddToPlaylist)
-        self.SignalNextFavorite.connect(self.pParent.Playlist.GetNextFavorite)
+        self.SignalNextFavorite.connect(self.pParent.Playlist.GetNextFavorite)  # type: ignore
         # self.SignalPreviousFavorite.connect(self.pParent.XXXXXXX)
 
         # Timer
@@ -83,7 +87,7 @@ class ClassMidiController(QThread):
         if self.to_controller:
             self.to_controller.close()
 
-        self.device_in = self.pParent.Settings.GetControllertDeviceIN()
+        self.device_in = self.pParent.Settings.GetControllertDeviceIN()  # type: ignore
         if self.device_in and self.device_in != '(None)':
             try:
                 self.from_controller = open_input(self.device_in, callback=self.callback)
@@ -92,7 +96,7 @@ class ClassMidiController(QThread):
                 self.from_controller = None
             print(f"ClassMidiController {self.uuid} input [{self.device_in}]")
 
-        self.device_out = self.pParent.Settings.GetControllertDeviceOUT()
+        self.device_out = self.pParent.Settings.GetControllertDeviceOUT()  # type: ignore
         if self.device_out and self.device_out != '(None)':
             try:
                 self.to_controller = open_output(self.device_out)
@@ -210,10 +214,10 @@ class ClassMidiController(QThread):
                     self.ClearSurfaceKeyboard()
                     msg = Message('note_on', note=msg.note)
                     self.SendController(msg)
-                    self.pParent.Playlist.GetPreviousFavorite()
+                    self.pParent.Playlist.GetPreviousFavorite()  # type: ignore
                     self.current_keys_list.append(msg.note)
 
-                if self.pParent.Settings.GetDebugMsg():
+                if self.pParent.Settings.GetDebugMsg():  # type: ignore
                     print("--> ClassMidiController receive:", msg)
 
     def SendController(self, msg):
