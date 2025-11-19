@@ -8,6 +8,7 @@ Created on Fri Nov 22 18:30:43 2024
 import os
 import uuid
 import json
+from typing import Any, cast
 from PySide6.QtCore import QThread, Signal
 from bottle import run, route, static_file, response, request, redirect, abort, ServerAdapter, hook
 from web_network import ClassWebNetwork
@@ -181,13 +182,15 @@ class MyBottleServer:
 
         @route('/play')
         def _play():
-            midifile = request.query.song
+            query_params = cast(Any, request.query)
+            midifile = query_params.get('song')
             print(f"BottleServer {self.uuid} request [{midifile}]")
             self.pLauncher.ChangeSong(midifile)
 
         @route('/do')
         def _do():
-            action = request.query.action
+            query_params = cast(Any, request.query)
+            action = query_params.get('action')
             if self.pParent and action == "stop":
                 self.pLauncher.StopSong()
             elif self.pParent and action == "shuffle":
@@ -197,17 +200,20 @@ class MyBottleServer:
 
         @route('/player')
         def _player():
-            mode = request.query.mode
+            query_params = cast(Any, request.query)
+            mode = query_params.get('mode')
             self.pLauncher.ChangeMode(mode)
 
         @route('/add')
         def _add():
-            quality = request.query.quality
+            query_params = cast(Any, request.query)
+            quality = query_params.get('quality')
             self.pLauncher.AddToPlaylist(quality)
 
         @route('/score')
         def _score():
-            pdf = request.query.pdf
+            query_params = cast(Any, request.query)
+            pdf = query_params.get('pdf')
             file = os.path.join(self.Settings.GetMidiPath(), pdf)
             if os.path.isfile(file):
                 f = open(file, 'rb')
@@ -242,12 +248,12 @@ class ClassWebServer(QThread):
         self.pParent = parent
 
         # Signals
-        self.SignalShuffle.connect(self.pParent.SignalShuffleMidifile)
-        self.SignalReplay.connect(self.pParent.SignalReplayMidifile)
-        self.SignalStop.connect(self.pParent.SignalStop)
-        self.SignalMidifileChange.connect(self.pParent.SignalMidifileChange)
-        self.SignalChangePlayerMode.connect(self.pParent.SignalChangePlayerMode)
-        self.SignalAddToPlaylist.connect(self.pParent.SignalAddToPlaylist)
+        self.SignalShuffle.connect(self.pParent.SignalShuffleMidifile)  # type: ignore
+        self.SignalReplay.connect(self.pParent.SignalReplayMidifile)  # type: ignore
+        self.SignalStop.connect(self.pParent.SignalStop)  # type: ignore
+        self.SignalMidifileChange.connect(self.pParent.SignalMidifileChange)  # type: ignore
+        self.SignalChangePlayerMode.connect(self.pParent.SignalChangePlayerMode)  # type: ignore
+        self.SignalAddToPlaylist.connect(self.pParent.SignalAddToPlaylist)  # type: ignore
 
         print(f"WebServer {self.uuid} started")
 
@@ -255,7 +261,7 @@ class ClassWebServer(QThread):
         print(f"WebServer {self.uuid} destroyed")
 
     def run(self):
-        server_port = self.pParent.Settings.GetServerPort()
+        server_port = self.pParent.Settings.GetServerPort()  # type: ignore
         self.server = MyBottleServer(host="0.0.0.0", port=server_port, launcher=self)
         self.server.run()
 
