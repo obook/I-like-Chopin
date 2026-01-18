@@ -170,6 +170,10 @@ class ClassThreadMidiReader(QThread):
 
         for msg in MidiFile(self.midisong.Getfilepath()):
 
+            # Stop while running ?
+            if not self.running:
+                return
+
             if self.Settings.GetDebugMsg():
                 print(f"----> DEBUG MidiReader {self.uuid} msg =", msg)
 
@@ -183,10 +187,6 @@ class ClassThreadMidiReader(QThread):
                 if passthrough_check_count > 600:  # Timeout after ~60 seconds
                     print(f"|!| Warning: MidiReader passthrough mode timeout")
                     return
-
-            # Stop while running ?
-            if not self.running:
-                return
 
             if self.midisong.GetState() < states["cueing"]:  # not used
                 return
