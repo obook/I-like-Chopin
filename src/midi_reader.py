@@ -68,8 +68,11 @@ class ClassThreadMidiReader(QThread):
         self.led_file_activity.connect(self.pParent.SetLedFile)
         self.star_file_activity.connect(self.pParent.SetStarFile)
 
-        self.SignalLightPlay_activity.connect(self.pParent.midi_controller.SignalLightPlay)
-        self.SignalLightStop_activity.connect(self.pParent.midi_controller.SignalLightStop)
+        if self.pParent.midi_controller:
+            self.SignalLightPlay_activity.connect(self.pParent.midi_controller.SignalLightPlay)
+            self.SignalLightStop_activity.connect(self.pParent.midi_controller.SignalLightStop)
+        else:
+            print(f"|!| Warning: midi_controller is None, cannot connect signals")
 
         print(f"MidiReader {self.uuid} created [{os.path.basename(midifile)}]")
         self.midisong = ClassMidiSong(midifile)
@@ -171,10 +174,15 @@ class ClassThreadMidiReader(QThread):
                 print(f"----> DEBUG MidiReader {self.uuid} msg =", msg)
 
             # Is passthrough mode ?
+            passthrough_check_count = 0
             while self.midisong.IsMode(modes["passthrough"]):
                 if not self.running:
                     return
-                self.sleep(1)
+                self.sleep(0.1)  # Check more frequently (100ms instead of 1s)
+                passthrough_check_count += 1
+                if passthrough_check_count > 600:  # Timeout after ~60 seconds
+                    print(f"|!| Warning: MidiReader passthrough mode timeout")
+                    return
 
             # Stop while running ?
             if not self.running:
@@ -318,7 +326,14 @@ class ClassThreadMidiReader(QThread):
                     start_time_loop = time.time()
                     self.pedal_off = False
                     activity = False
+                    keyboard_wait_timeout = 300.0  # 5 minutes timeout for keyboard wait
                     while not self.keys["key_on"]:  # Loop waiting keyboard
+
+                        # Timeout check - prevent infinite wait
+                        if time.time() - start_time > keyboard_wait_timeout:
+                            print(f"|!| Warning: Keyboard wait timeout after {keyboard_wait_timeout}s, stopping")
+                            self.stop()
+                            return
 
                         # Finished ?
                         if not self.running or not self.midisong or not self.midisong.IsState(states["playing"]):
@@ -409,8 +424,15 @@ class ClassThreadMidiReader(QThread):
                 """
 
                 # Loop until passthrough mode active
+                passthrough_wait_count = 0
                 while self.midisong.IsMode(modes["passthrough"]):
-                    self.sleep(0.5)
+                    if not self.running:
+                        return
+                    self.sleep(0.1)  # Check more frequently (100ms instead of 500ms)
+                    passthrough_wait_count += 1
+                    if passthrough_wait_count > 600:  # Timeout after ~60 seconds
+                        print(f"|!| Warning: MidiReader passthrough wait timeout")
+                        return
 
         # End of song
         # NO do not kill midisong

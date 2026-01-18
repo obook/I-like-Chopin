@@ -90,7 +90,12 @@ class ClassMidiMain(QObject):
     def ConnectInput(self, in_device):
         if self.ThreadInput:
             self.ThreadInput.stop()
+            timeout = 5.0  # 5 seconds timeout
+            start_time = time.time()
             while self.ThreadInput.isRunning():
+                if time.time() - start_time > timeout:
+                    print(f"|!| Warning: ThreadInput did not stop within timeout")
+                    break
                 time.sleep(0.01)
         self.keys["key_on"] = 0
         self.ThreadInput = ClassThreadInput(in_device, self.keys, self.pParent)
@@ -105,7 +110,12 @@ class ClassMidiMain(QObject):
         if self.ThreadOutput:
             self.ThreadOutput.reset()
             self.ThreadOutput.stop()
+            timeout = 5.0  # 5 seconds timeout
+            start_time = time.time()
             while self.ThreadOutput.isRunning():
+                if time.time() - start_time > timeout:
+                    print(f"|!| Warning: ThreadOutput did not stop within timeout")
+                    break
                 time.sleep(0.01)
         self.ThreadOutput = ClassThreadOutput(out_device, self.pParent)
         self.ThreadOutput.start()
@@ -127,7 +137,12 @@ class ClassMidiMain(QObject):
         if self.ThreadMidiReader:
             self.readerstop_activity.emit()
             self.ThreadMidiReader.stop()  # test
+            timeout = 5.0  # 5 seconds timeout
+            start_time = time.time()
             while self.ThreadMidiReader.isRunning():
+                if time.time() - start_time > timeout:
+                    print(f"|!| Warning: ThreadMidiReader did not stop within timeout")
+                    break
                 time.sleep(0.01)
         self.keys["key_on"] = 0
         self.ThreadMidiReader = ClassThreadMidiReader(
@@ -203,19 +218,34 @@ class ClassMidiMain(QObject):
         if self.ThreadMidiReader:
             self.readerstop_activity.emit() # ????
             self.ThreadMidiReader.stop()
+            timeout = 5.0  # 5 seconds timeout
+            start_time = time.time()
             while self.ThreadMidiReader.isRunning():
+                if time.time() - start_time > timeout:
+                    print(f"|!| Warning: ThreadMidiReader did not stop within timeout during quit")
+                    break
                 time.sleep(0.01)
             self.ThreadMidiReader = None
 
         if self.ThreadInput:
             self.ThreadInput.stop()
+            timeout = 5.0  # 5 seconds timeout
+            start_time = time.time()
             while self.ThreadInput.isRunning():
+                if time.time() - start_time > timeout:
+                    print(f"|!| Warning: ThreadInput did not stop within timeout during quit")
+                    break
                 time.sleep(0.01)
             self.ThreadInput = None
 
         if self.ThreadOutput:
             self.ThreadOutput.reset()
             self.ThreadOutput.stop()
+            timeout = 5.0  # 5 seconds timeout
+            start_time = time.time()
             while self.ThreadOutput.isRunning():
+                if time.time() - start_time > timeout:
+                    print(f"|!| Warning: ThreadOutput did not stop within timeout during quit")
+                    break
                 time.sleep(0.01)
             self.ThreadOutput = None

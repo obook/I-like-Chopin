@@ -71,8 +71,8 @@ class MyWSGIRefServer(ServerAdapter):
             try:  # bug under Windows, sometimes...
                 self.srv.server_close()
                 self.srv.shutdown()
-            except:
-                pass
+            except Exception as error:
+                print(f"|!| WEBSERVER shutdown error: {error}")
 
 
 class MyBottleServer:
@@ -154,9 +154,11 @@ class MyBottleServer:
                 response.content_type = 'application/json'
                 try:
                     apply_csp()
-                    return json.dumps(status)  # crash then pgm shutdown
+                    return json.dumps(status)
                 except Exception as error:
                     print(f"|!| BottleServer {self.uuid} error send status {error}")
+                    response.status = 500
+                    return json.dumps({"error": "Internal server error"})
 
         @route('/interfaces.json')
         def _interfaces():
@@ -218,7 +220,7 @@ class MyBottleServer:
             if os.path.isfile(file):
                 f = open(file, 'rb')
                 data = f.read()
-                f.close
+                f.close()
                 response.content_type = 'application/pdf'
                 apply_csp()
                 return data

@@ -329,7 +329,12 @@ class Mainwindow(
 
         if self.midi_controller:
             self.midi_controller.stop()
+            timeout = 5.0  # 5 seconds timeout
+            start_time = time.time()
             while self.midi_controller.isRunning():
+                if time.time() - start_time > timeout:
+                    print("|!| Warning: midi_controller thread did not stop within timeout")
+                    break
                 time.sleep(0.01)
             self.midi_controller = None
 

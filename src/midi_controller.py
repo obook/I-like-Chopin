@@ -70,11 +70,6 @@ class ClassMidiController(QThread):
         self.SignalNextFavorite.connect(self.pParent.Playlist.GetNextFavorite)  # type: ignore
         # self.SignalPreviousFavorite.connect(self.pParent.XXXXXXX)
 
-        # Timer
-        self.timer_controller = QTimer(self)
-        self.timer_controller.timeout.connect(self.timer)
-        self.timer_controller.start(3000)  # 3 seconds
-
         print(f"ClassMidiController {self.uuid} created")
 
     def __del__(self):
@@ -116,10 +111,20 @@ class ClassMidiController(QThread):
 
         self.ClearSurfaceKeyboard(True)
 
+        # Timer (must be created in the thread's run method for thread safety)
+        self.timer_controller = QTimer()
+        self.timer_controller.timeout.connect(self.timer)
+        self.timer_controller.start(3000)  # 3 seconds
+
         self.running = True
 
         while self.running:
             self.sleep(1)
+
+        # Stop and clean up timer
+        if self.timer_controller:
+            self.timer_controller.stop()
+            self.timer_controller = None
 
         self.ClearSurfaceKeyboard(True)
 

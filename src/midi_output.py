@@ -101,7 +101,12 @@ class ClassThreadOutput(QThread):
 
     def getport(self):
         if self.running:
+            timeout = 5.0  # 5 seconds timeout
+            start_time = time.time()
             while self.please_wait == True:
+                if time.time() - start_time > timeout:
+                    print(f"|!| Warning: MidiOutput getport timeout waiting for port initialization")
+                    return None
                 time.sleep(0.01)
             return self.outport
         return None

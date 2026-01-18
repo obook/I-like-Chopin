@@ -83,7 +83,7 @@ class ClassMidiFiles:
         if len(self.midifiles_raw_random):
             next_random = self.midifiles_raw_random.pop()
         else:
-            MakeRandomPlaylist()
+            self.MakeRandomPlaylist()
 
         return next_random
 
