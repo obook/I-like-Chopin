@@ -63,7 +63,7 @@ def MakeScore(filename):
         call(['mscore3', filename, "-o", filename_pdf])
 
 
-root_dir = os.path.expanduser("~/Documents/GitHub/midi")
+root_dir = os.path.expanduser("~/midi")
 files = glob.glob(root_dir + '/**/*.mid', recursive=True)
 print(f"Make score for {len(files)} files in {root_dir}")
 
